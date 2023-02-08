@@ -1,0 +1,25 @@
+### macOS ###
+.DS_Store
+.AppleDouble
+.LSOverride
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+out/
+!**/src/main/**/out/
+!**/src/test/**/out/
+
+### Proejct settings ###
+.gradle
+build/
+!gradle/wrapper/gradle-wrapper.jar
+!**/src/main/**/build/
+!**/src/test/**/build/
+**/src/**/resources/*.properties
+
+### Querydsl ###
+/src/main/generated/
+/src/test/generated_tests/
