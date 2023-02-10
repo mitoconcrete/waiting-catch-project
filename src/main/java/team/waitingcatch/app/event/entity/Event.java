@@ -19,15 +19,15 @@ public class Event {
     private Long id;
 
     @Column
-    private Long restaurant_id;
+    private Long restaurantId;
 
     @Column(nullable = false)
     private String name;
 
     @Column(nullable = false)
-    private LocalDateTime event_start_date;
+    private LocalDateTime eventStartDate;
 
     @Column(nullable = false)
-    private LocalDateTime event_end_date;
+    private LocalDateTime eventEndDate;
 
 }

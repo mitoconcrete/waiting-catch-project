@@ -29,11 +29,11 @@ public class CouponCreator {
     private int discount_price;
 
     @Column(nullable = false)
-    private CouponRoleEnum discount_type;
+    private CouponRoleEnum discountType;
 
     @Column(nullable = false)
     private int quantity;
 
     @Column(nullable = false)
-    private LocalDateTime expire_date;
+    private LocalDateTime expireDate;
 }

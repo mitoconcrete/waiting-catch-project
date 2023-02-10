@@ -17,13 +17,13 @@ public class UserCoupon {
     private Long id;
 
     @Column(nullable = false)
-    private Long user_id;
+    private Long userId;
 
     @Column(nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
-    private CouponCreator coupon_creator_id;
+    private CouponCreator couponCreatorId;
 
     @Column(nullable = false)
-    private boolean is_used;
+    private boolean isUsed;
 
 }
