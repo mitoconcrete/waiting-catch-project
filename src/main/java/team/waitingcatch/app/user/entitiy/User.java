@@ -17,7 +17,7 @@ import team.waitingcatch.app.common.entity.TimeStamped;
 public class User extends TimeStamped {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "user_id", nullable = false)
+	@Column(name = "user_id")
 	private Long id;
 
 	@Column(nullable = false)
@@ -38,6 +38,7 @@ public class User extends TimeStamped {
 	@Column(nullable = false)
 	private String businessLicenseNo;
 
+	@Column(nullable = false)
 	@Enumerated(EnumType.STRING)
 	private UserRoleEnum role;
 
