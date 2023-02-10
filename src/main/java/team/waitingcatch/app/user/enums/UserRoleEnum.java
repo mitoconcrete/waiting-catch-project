@@ -1,4 +1,4 @@
-package team.waitingcatch.app.user.entitiy;
+package team.waitingcatch.app.user.enums;
 
 public enum UserRoleEnum {
 	USER(Authority.USER),
