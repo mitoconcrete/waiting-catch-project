@@ -3,6 +3,7 @@ package team.waitingcatch.app.event.entity;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import team.waitingcatch.app.event.enums.CouponRoleEnum;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -28,7 +29,7 @@ public class CouponCreator {
     private int discount_price;
 
     @Column(nullable = false)
-    private String discount_type;
+    private CouponRoleEnum discount_type;
 
     @Column(nullable = false)
     private int quantity;

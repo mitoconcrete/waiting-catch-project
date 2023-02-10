@@ -13,7 +13,7 @@ public class UserCoupon {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "coupon_coupon_id")
+    @Column(name = "user_coupon_id")
     private Long id;
 
     @Column(nullable = false)
