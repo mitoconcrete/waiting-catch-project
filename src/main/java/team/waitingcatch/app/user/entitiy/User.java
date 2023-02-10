@@ -10,11 +10,11 @@ import javax.persistence.Id;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import team.waitingcatch.app.common.entity.TimeStamp;
+import team.waitingcatch.app.common.entity.TimeStamped;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class User extends TimeStamp {
+public class User extends TimeStamped {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "user_id", nullable = false)
