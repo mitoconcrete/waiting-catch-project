@@ -8,6 +8,7 @@ import team.waitingcatch.app.event.enums.CouponRoleEnum;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
+//
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
