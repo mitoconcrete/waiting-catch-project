@@ -21,7 +21,7 @@ import team.waitingcatch.app.lineup.enums.ArrivalStatusEnum;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class LineupHistory extends TimeStamp {
+public class LineupHistory extends TimeStamped {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
