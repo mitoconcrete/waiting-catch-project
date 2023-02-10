@@ -29,11 +29,11 @@ public class LineupHistory extends TimeStamped {
 	private Long id;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "user_id")
+	@JoinColumn(name = "user_id", nullable = false)
 	private User user;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "restaurant_id")
+	@JoinColumn(name = "restaurant_id", nullable = false)
 	private Restaurant restaurant;
 
 	@Enumerated(EnumType.STRING)

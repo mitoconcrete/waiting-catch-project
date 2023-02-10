@@ -24,7 +24,7 @@ public class Review extends TimeStamped {
 	private Long id;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn("restaurant_id")
+	@JoinColumn(name = "restaurant_id", nullable = false)
 	private Restaurant restaurant;
 
 	@Column(nullable = false)
