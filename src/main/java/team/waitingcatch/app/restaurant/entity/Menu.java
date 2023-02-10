@@ -16,7 +16,7 @@ public class Menu extends TimeStamped {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "restaurant_id")
+    @JoinColumn(name = "restaurant_id", nullable = false)
     private Restaurant restaurant;
 
     @Column(nullable = false)
