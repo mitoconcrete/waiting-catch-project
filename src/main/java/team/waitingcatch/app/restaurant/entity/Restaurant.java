@@ -1,9 +1,9 @@
 package team.waitingcatch.app.restaurant.entity;
 
 import lombok.AccessLevel;
-import lombok.Generated;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import team.waitingcatch.app.common.Address;
 
 import javax.persistence.*;
 
