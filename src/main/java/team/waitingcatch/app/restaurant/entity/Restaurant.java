@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import team.waitingcatch.app.common.Address;
+import team.waitingcatch.app.common.Position;
 
 import javax.persistence.*;
 
@@ -20,6 +21,9 @@ public class Restaurant extends TimeStamped {
     private String name;
 
     private String images;
+
+    @Embedded
+    private Position position;
 
     @Embedded
     private Address address;
