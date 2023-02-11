@@ -1,4 +1,4 @@
 package team.waitingcatch.app.restaurant.service;
 
-public interface InnerSellerManagementService {
+public interface InternalBlackListService {
 }
