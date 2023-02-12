@@ -13,7 +13,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 
 import lombok.RequiredArgsConstructor;
-import team.waitingcatch.app.common.utils.JwtUtil;
+import team.waitingcatch.app.common.util.JwtUtil;
 import team.waitingcatch.app.security.service.AccessDeniedHandlerImpl;
 import team.waitingcatch.app.security.service.AuthenticationEntryPointImpl;
 import team.waitingcatch.app.security.service.JwtAuthFilter;

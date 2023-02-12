@@ -11,7 +11,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
 
-import team.waitingcatch.app.security.utils.SecurityExceptionUtil;
+import team.waitingcatch.app.security.util.SecurityExceptionUtil;
 
 @Component
 public class AuthenticationEntryPointImpl implements AuthenticationEntryPoint {

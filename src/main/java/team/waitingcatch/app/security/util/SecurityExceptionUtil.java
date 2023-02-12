@@ -1,4 +1,4 @@
-package team.waitingcatch.app.security.utils;
+package team.waitingcatch.app.security.util;
 
 import java.io.IOException;
 import java.io.OutputStream;

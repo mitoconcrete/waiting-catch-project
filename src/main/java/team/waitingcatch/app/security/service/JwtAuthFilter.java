@@ -18,8 +18,8 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
-import team.waitingcatch.app.common.utils.JwtUtil;
-import team.waitingcatch.app.security.utils.SecurityExceptionUtil;
+import team.waitingcatch.app.common.util.JwtUtil;
+import team.waitingcatch.app.security.util.SecurityExceptionUtil;
 
 @RequiredArgsConstructor
 public class JwtAuthFilter extends OncePerRequestFilter {

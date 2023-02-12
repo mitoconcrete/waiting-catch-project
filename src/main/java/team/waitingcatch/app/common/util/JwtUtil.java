@@ -1,4 +1,4 @@
-package team.waitingcatch.app.common.utils;
+package team.waitingcatch.app.common.util;
 
 import java.security.Key;
 import java.util.Base64;
