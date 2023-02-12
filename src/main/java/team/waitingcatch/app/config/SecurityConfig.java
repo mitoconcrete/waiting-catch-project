@@ -13,7 +13,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 
 import lombok.RequiredArgsConstructor;
-import team.waitingcatch.app.common.utils.JwtUtils;
+import team.waitingcatch.app.common.utils.JwtUtil;
 import team.waitingcatch.app.security.service.AccessDeniedHandlerImpl;
 import team.waitingcatch.app.security.service.AuthenticationEntryPointImpl;
 import team.waitingcatch.app.security.service.JwtAuthFilter;
@@ -23,7 +23,7 @@ import team.waitingcatch.app.user.service.UserDetailsServiceImpl;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
-	private final JwtUtils jwtUtils;
+	private final JwtUtil jwtUtil;
 	private final UserDetailsServiceImpl userDetailsService;
 	private AccessDeniedHandlerImpl accessDeniedHandler;
 	private AuthenticationEntryPointImpl authenticationEntryPoint;
@@ -56,7 +56,7 @@ public class SecurityConfig {
 		http.formLogin().disable();
 
 		// Custom Filter 등록하기
-		http.addFilterBefore(new JwtAuthFilter(jwtUtils, userDetailsService),
+		http.addFilterBefore(new JwtAuthFilter(jwtUtil, userDetailsService),
 			UsernamePasswordAuthenticationFilter.class);
 
 		// 401 Error 처리, Authorization 즉, 인증과정에서 실패할 시 처리
