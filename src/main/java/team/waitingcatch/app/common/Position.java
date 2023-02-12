@@ -8,9 +8,9 @@ import javax.persistence.Embeddable;
 @Embeddable
 @Getter
 public class Position {
-    @Column(nullable = false)
-    private float latitude;
+	@Column(nullable = false)
+	private float latitude;
 
-    @Column(nullable = false)
-    private float longitude;
+	@Column(nullable = false)
+	private float longitude;
 }
