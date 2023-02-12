@@ -6,6 +6,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import lombok.AccessLevel;
@@ -22,12 +23,13 @@ public class UserCoupon {
 	@Column(name = "user_coupon_id")
 	private Long id;
 
-	@Column(nullable = false)
-	private Long userId;
-
-	@Column(nullable = false)
 	@ManyToOne(fetch = FetchType.LAZY)
-	private CouponCreator couponCreatorId;
+	@JoinColumn(name = "user_id", nullable = false)
+	private User user;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "coupon_creator_id", nullable = false)
+	private CouponCreator couponCreator;
 
 	@Column(nullable = false)
 	private boolean isUsed;

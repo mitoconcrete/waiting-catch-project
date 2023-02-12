@@ -8,6 +8,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import lombok.AccessLevel;
@@ -25,9 +26,9 @@ public class CouponCreator {
 	@Column(name = "coupon_creator_id")
 	private Long id;
 
-	@Column(nullable = false)
 	@ManyToOne(fetch = FetchType.LAZY)
-	private Event event_id;
+	@JoinColumn(name = "event_id", nullable = false)
+	private Event event;
 
 	@Column(nullable = false)
 	private String name;
