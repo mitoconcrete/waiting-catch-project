@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -14,7 +16,7 @@ import javax.persistence.ManyToOne;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import team.waitingcatch.app.event.enums.CouponRoleEnum;
+import team.waitingcatch.app.event.enums.CouponTypeEnum;
 
 @Entity
 @Getter
@@ -37,7 +39,8 @@ public class CouponCreator {
 	private int discount_price;
 
 	@Column(nullable = false)
-	private CouponRoleEnum discountType;
+	@Enumerated(value = EnumType.STRING)
+	private CouponTypeEnum discountType;
 
 	@Column(nullable = false)
 	private int quantity;

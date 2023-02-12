@@ -1,6 +1,6 @@
 package team.waitingcatch.app.event.enums;
 
-public enum CouponRoleEnum {
+public enum CouponTypeEnum {
 	PRICE, PERCENT;
 
 }
