@@ -21,7 +21,7 @@ import team.waitingcatch.app.event.enums.CouponTypeEnum;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class CouponCreator {
+public class CouponCreator extends TimeStamped {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
