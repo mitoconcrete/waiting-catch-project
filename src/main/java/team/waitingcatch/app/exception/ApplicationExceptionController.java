@@ -1,4 +1,4 @@
-package team.waitingcatch.app.exception.controller;
+package team.waitingcatch.app.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
