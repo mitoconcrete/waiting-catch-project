@@ -23,6 +23,7 @@ public class SecurityExceptionUtil {
 		BasicExceptionResponse exceptionResponse = new BasicExceptionResponse(status, message);
 
 		// 서블릿에 필요값들 셋팅
+		response.setCharacterEncoding("UTF-8");
 		response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 		response.setStatus(exceptionResponse.getStatus().value());
 
