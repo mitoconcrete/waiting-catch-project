@@ -39,9 +39,6 @@ public class User extends TimeStamped {
 	private String name;
 
 	@Column(nullable = false)
-	private String businessLicenseNo;
-
-	@Column(nullable = false)
 	@Enumerated(EnumType.STRING)
 	private UserRoleEnum role;
 

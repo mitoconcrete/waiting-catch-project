@@ -48,4 +48,7 @@ public class Restaurant extends TimeStamped {
 
 	@Column(nullable = false)
 	private String capacity;
+
+	@Column(nullable = false)
+	private String businessLicenseNo;
 }
