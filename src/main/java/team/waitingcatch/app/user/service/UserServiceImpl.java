@@ -56,10 +56,17 @@ public class UserServiceImpl implements UserService, InternalUserService {
 				payload.getEmail(),
 				payload.getUsername(),
 				payload.getPassword(),
-				payload.getNickname()
+				payload.getNickname(),
+				payload.getPhoneNumber()
 			);
 
 		userRepository.save(newUser);
+	}
+
+	@Override
+	public void updateUser(UpdateUserServiceRequest payload) {
+		// 중복되면 안되는 값(이메일, 전화번호, 닉네임)들을 체크해준다.
+
 	}
 
 }

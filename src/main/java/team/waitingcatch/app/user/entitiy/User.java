@@ -36,11 +36,13 @@ public class User extends TimeStamped {
 	@Column(nullable = false)
 	private String email;
 
-	@Column(nullable = false)
 	private String nickname;
 
 	@Column(nullable = false)
 	private String name;
+
+	@Column(nullable = false)
+	private String phoneNumber;
 
 	@Column(nullable = false)
 	@Enumerated(EnumType.STRING)
@@ -52,12 +54,14 @@ public class User extends TimeStamped {
 	@Column(nullable = false)
 	private Boolean isDeleted;
 
-	public User(UserRoleEnum role, String name, String email, String username, String password, String nickname) {
+	public User(UserRoleEnum role, String name, String email, String username, String password, String nickname,
+		String phoneNumber) {
 		this.role = role;
 		this.name = name;
 		this.email = email;
 		this.username = username;
 		this.nickname = nickname;
+		this.phoneNumber = phoneNumber;
 
 		// 패스워드를 변환하여 저장합니다. 패스워드의 저장과 검증은 엔티티의 책임이라고 생각하여 이곳에 배치하였습니다.
 		PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
