@@ -1,7 +1,5 @@
 package team.waitingcatch.app.event.entity;
 
-import java.time.LocalDateTime;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -15,6 +13,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import team.waitingcatch.app.common.entity.TimeStamped;
+import team.waitingcatch.app.event.dto.event.CreateEventControllerRequest;
 import team.waitingcatch.app.restaurant.entity.Restaurant;
 
 @Entity
@@ -28,16 +27,28 @@ public class Event extends TimeStamped {
 	private Long id;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "restaurant_id", nullable = false)
+	@JoinColumn(name = "restaurant_id")
 	private Restaurant restaurant;
 
 	@Column(nullable = false)
 	private String name;
 
 	@Column(nullable = false)
-	private LocalDateTime eventStartDate;
+	private String eventStartDate;
 
 	@Column(nullable = false)
-	private LocalDateTime eventEndDate;
+	private String eventEndDate;
 
+	public Event(CreateEventControllerRequest createEventControllerRequest) {
+		this.name = createEventControllerRequest.getName();
+		this.eventStartDate = createEventControllerRequest.getEventStartDate();
+		this.eventEndDate = createEventControllerRequest.getEventEndDate();
+	}
+
+	public Event(CreateEventControllerRequest createEventControllerRequest, Restaurant restaurant) {
+		this.name = createEventControllerRequest.getName();
+		this.eventStartDate = createEventControllerRequest.getEventStartDate();
+		this.eventEndDate = createEventControllerRequest.getEventEndDate();
+		this.restaurant = restaurant;
+	}
 }

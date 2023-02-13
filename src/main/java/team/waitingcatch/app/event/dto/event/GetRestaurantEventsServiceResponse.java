@@ -1,4 +1,4 @@
 package team.waitingcatch.app.event.dto.event;
 
-public class getGlobalEventsServiceResponse {
+public class GetRestaurantEventsServiceResponse {
 }

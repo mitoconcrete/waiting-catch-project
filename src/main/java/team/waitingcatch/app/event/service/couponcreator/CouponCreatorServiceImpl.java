@@ -5,20 +5,21 @@ import javax.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
-import team.waitingcatch.app.event.dto.couponcreator.createCouponCreatorControllerRequest;
-import team.waitingcatch.app.event.dto.couponcreator.putCouponCreatorControllerRequest;
+import team.waitingcatch.app.event.dto.couponcreator.CreateCouponCreatorControllerRequest;
+import team.waitingcatch.app.event.dto.couponcreator.PutCouponCreatorControllerRequest;
 
 @Service
 @RequiredArgsConstructor
 @Transactional
 public class CouponCreatorServiceImpl implements CouponCreatorService, InternalCouponCreatorService {
 	@Override
-	public void createCouponCreator(createCouponCreatorControllerRequest createCouponCreatorControllerRequest) {
+	public String createCouponCreator(CreateCouponCreatorControllerRequest createCouponCreatorControllerRequest) {
 
+		return "";
 	}
 
 	@Override
-	public void putCouponCreator(putCouponCreatorControllerRequest putCouponCreatorControllerRequest) {
-
+	public String putCouponCreator(PutCouponCreatorControllerRequest putCouponCreatorControllerRequest) {
+		return "";
 	}
 }

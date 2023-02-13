@@ -1,4 +1,4 @@
 package team.waitingcatch.app.event.dto.couponcreator;
 
-public class putCouponCreatorControllerRequest {
+public class CreateCouponCreatorControllerRequest {
 }

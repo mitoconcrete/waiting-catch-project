@@ -1,4 +1,4 @@
 package team.waitingcatch.app.event.dto.event;
 
-public class putEventControllerRequest {
+public class GetGlobalEventsServiceResponse {
 }
