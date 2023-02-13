@@ -43,6 +43,12 @@ public class UserController {
 	}
 
 	// seller
+	@PostMapping("/seller/withdraw")
+	public void withdrawSeller(@AuthenticationPrincipal UserDetails userDetails) {
+		DeleteUserRequest payload = new DeleteUserRequest(userDetails.getUsername());
+		userService.deleteUser(payload);
+	}
+
 	@PutMapping("/seller/info")
 	public void updateSellerInfo(@AuthenticationPrincipal UserDetails userDetails, @RequestBody
 	UpdateUserControllerRequest controllerRequest) {
