@@ -1,5 +1,7 @@
 package team.waitingcatch.app.restaurant.service.category;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -15,6 +17,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import team.waitingcatch.app.restaurant.dto.CreateCategoryRequest;
+import team.waitingcatch.app.restaurant.dto.DeleteCategoryRequest;
 import team.waitingcatch.app.restaurant.dto.UpdateCategoryServiceRequest;
 import team.waitingcatch.app.restaurant.entity.Category;
 import team.waitingcatch.app.restaurant.repository.CategoryRepository;
@@ -68,5 +71,37 @@ class CategoryServiceImplTest {
 
 		// then
 		verify(categoryRepository, times(1)).save(category);
+	}
+
+	@Test
+	@DisplayName("카테고리 삭제")
+	void deleteCategory() {
+		// given
+		DeleteCategoryRequest request = new DeleteCategoryRequest(any(Long.class));
+		Category category = new Category(null, "한식");
+
+		when(categoryRepository.findById(request.getCategoryId())).thenReturn(Optional.of(category));
+
+		// when
+		categoryService.deleteCategory(request);
+
+		// then
+		verify(categoryRepository, times(1)).delete(category);
+	}
+
+	@Test
+	@DisplayName("Internal 카테고리 조회")
+	void _getCategory() {
+		// given
+		Category category = new Category(null, "한식");
+
+		when(categoryRepository.findById(any(Long.class))).thenReturn(Optional.of(category));
+
+		// when
+		categoryService._getCategory(any(Long.class));
+
+		// then
+		assertNull(category.getId());
+		assertEquals("한식", category.getName());
 	}
 }
