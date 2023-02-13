@@ -22,6 +22,12 @@ public class UserController {
 	private final UserService userService;
 
 	// customer
+	@PostMapping("/customer/signup")
+	@ResponseStatus(HttpStatus.CREATED)
+	public void createCustomer(@RequestBody UserCreateControllerRequest controllerRequest) {
+		_createUserService(UserRoleEnum.USER, controllerRequest);
+	}
+
 	// seller
 	// admin
 	@GetMapping("/admin/customers")
