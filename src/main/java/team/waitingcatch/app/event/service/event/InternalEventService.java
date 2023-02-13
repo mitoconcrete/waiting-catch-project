@@ -7,4 +7,6 @@ import team.waitingcatch.app.event.entity.Event;
 public interface InternalEventService {
 
 	public Optional<Event> _getEventFindByName(String name);
+
+	public Event _getEventFindById(Long id);
 }

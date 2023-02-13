@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.event.dto.event.CreateEventControllerRequest;
 import team.waitingcatch.app.event.dto.event.CreateEventServiceRequest;
-import team.waitingcatch.app.event.dto.event.DeleteEventControllerRequest;
 import team.waitingcatch.app.event.dto.event.GetEventServiceResponse;
 import team.waitingcatch.app.event.dto.event.GetGlobalEventsServiceResponse;
 import team.waitingcatch.app.event.dto.event.GetRestaurantEventControllerRequest;
@@ -50,16 +49,16 @@ public class EventServiceImpl implements EventService, InternalEventService {
 
 	@Override
 	public String updateAdminEvent(UpdateEventServiceRequest updateEventServiceRequest) {
-		Event events = eventServiceRepository.findById(updateEventServiceRequest.getEventId()).orElseThrow(
-			() -> new IllegalArgumentException("존재하지 않는 이벤트 입니다.")
-		);
+		Event events = _getEventFindById(updateEventServiceRequest.getEventId());
 		events.updateEvent(updateEventServiceRequest);
 		return "이벤트 수정 완료";
 	}
 
 	@Override
-	public String deleteEvent(DeleteEventControllerRequest deleteEventControllerRequest) {
-		return "";
+	public String deleteAdminEvent(Long eventId) {
+		Event events = _getEventFindById(eventId);
+		eventServiceRepository.deleteById(eventId);
+		return "이벤트가 삭제되었습니다.";
 	}
 
 	@Override
@@ -83,6 +82,14 @@ public class EventServiceImpl implements EventService, InternalEventService {
 		if (events.isPresent()) {
 			throw new IllegalArgumentException("이미 존재하는 이벤트입니다.");
 		}
+		return events;
+	}
+
+	@Override
+	public Event _getEventFindById(Long id) {
+		Event events = eventServiceRepository.findById(id).orElseThrow(
+			() -> new IllegalArgumentException("존재하지 않는 이벤트 입니다.")
+		);
 		return events;
 	}
 }

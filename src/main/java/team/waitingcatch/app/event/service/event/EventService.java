@@ -2,7 +2,6 @@ package team.waitingcatch.app.event.service.event;
 
 import team.waitingcatch.app.event.dto.event.CreateEventControllerRequest;
 import team.waitingcatch.app.event.dto.event.CreateEventServiceRequest;
-import team.waitingcatch.app.event.dto.event.DeleteEventControllerRequest;
 import team.waitingcatch.app.event.dto.event.GetEventServiceResponse;
 import team.waitingcatch.app.event.dto.event.GetGlobalEventsServiceResponse;
 import team.waitingcatch.app.event.dto.event.GetRestaurantEventControllerRequest;
@@ -22,8 +21,8 @@ public interface EventService {
 
 	//레스토랑 이벤트를 수정한다
 
-	//이벤트를 삭제한다.
-	public String deleteEvent(DeleteEventControllerRequest deleteEventControllerRequest);
+	//광역 이벤트를 삭제한다.
+	public String deleteAdminEvent(Long eventId);
 
 	//모든 이벤트 목록을 가져온다.
 	public GetGlobalEventsServiceResponse getGlobalEvents();

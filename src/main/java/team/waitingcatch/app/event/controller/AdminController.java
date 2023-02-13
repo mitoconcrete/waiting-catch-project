@@ -2,6 +2,7 @@ package team.waitingcatch.app.event.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -31,12 +32,18 @@ public class AdminController {
 	}
 
 	@PutMapping("/events/{eventId}")
-	public ResponseEntity<String> createAdminEvent(
+	public ResponseEntity<String> updateAdminEvent(
 		@RequestBody UpdateEventControllerRequest updateEventControllerRequest, @PathVariable Long eventId) {
 		UpdateEventServiceRequest updateEventServiceRequest = new UpdateEventServiceRequest(
 			updateEventControllerRequest, eventId);
 		return ResponseEntity.status(HttpStatus.OK)
 			.body(eventService.updateAdminEvent(updateEventServiceRequest));
+	}
+
+	@DeleteMapping("/events/{eventId}")
+	public ResponseEntity<String> deleteAdminEvent(@PathVariable Long eventId) {
+		return ResponseEntity.status(HttpStatus.OK)
+			.body(eventService.deleteAdminEvent(eventId));
 	}
 
 }
