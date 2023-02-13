@@ -71,4 +71,22 @@ public class User extends TimeStamped {
 	public Boolean hasSameRole(UserRoleEnum role) {
 		return this.role.equals(role);
 	}
+
+	public void updateBasicInfo(String nickname, String name, String phoneNumber, String email) {
+		if (!(nickname == null)) {
+			this.nickname = nickname;
+		}
+
+		if (!(name == null)) {
+			this.name = name;
+		}
+
+		if (!(phoneNumber == null)) {
+			this.phoneNumber = phoneNumber;
+		}
+
+		if (!(email == null)) {
+			this.email = email;
+		}
+	}
 }

@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.user.dto.CustomerResponse;
 import team.waitingcatch.app.user.dto.GetCustomerByIdAndRoleServiceRequest;
+import team.waitingcatch.app.user.dto.UpdateUserServiceRequest;
 import team.waitingcatch.app.user.dto.UserCreateServiceRequest;
 import team.waitingcatch.app.user.entitiy.User;
 import team.waitingcatch.app.user.repository.UserRepository;
@@ -25,17 +26,17 @@ public class UserServiceImpl implements UserService, InternalUserService {
 	}
 
 	@Override
-	public CustomerResponse getByUserIdAndRole(GetCustomerByIdAndRoleServiceRequest requestPayload) {
+	public CustomerResponse getByUserIdAndRole(GetCustomerByIdAndRoleServiceRequest payload) {
 		// 유저의 존재여부를 판단한다.
-		User user = userRepository.findById(requestPayload.getUserId()).orElseThrow(
+		User user = userRepository.findById(payload.getUserId()).orElseThrow(
 			() -> new IllegalArgumentException("유저가 존재하지 않습니다.")
 		);
 
 		// 입력받은 롤과 동일한 롤을 지니고 있는지 확인한다.
-		if (!user.hasSameRole(requestPayload.getRole())) {
+		if (!user.hasSameRole(payload.getRole())) {
 			throw new IllegalArgumentException("유저가 존재하지 않습니다.");
 		}
-		
+
 		return new CustomerResponse(user);
 	}
 
@@ -66,8 +67,16 @@ public class UserServiceImpl implements UserService, InternalUserService {
 	@Override
 	public void updateUser(UpdateUserServiceRequest payload) {
 		// 중복되면 안되는 값(이메일, 전화번호, 닉네임)들을 체크해준다.
-
+		User user = _getUserByUsername(payload.getUsername());
+		user.updateBasicInfo(payload.getNickName(), payload.getName(), payload.getPhoneNumber(), payload.getEmail());
+		userRepository.save(user);
 	}
 
+	@Override
+	public User _getUserByUsername(String username) {
+		return userRepository.findByUsername(username).orElseThrow(
+			() -> new IllegalArgumentException("유저가 존재하지 않습니다.")
+		);
+	}
 }
 
