@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.user.dto.CustomerResponse;
+import team.waitingcatch.app.user.dto.DeleteUserRequest;
 import team.waitingcatch.app.user.dto.GetCustomerByIdAndRoleServiceRequest;
 import team.waitingcatch.app.user.dto.UpdateUserControllerRequest;
 import team.waitingcatch.app.user.dto.UpdateUserServiceRequest;
@@ -29,6 +30,12 @@ public class UserController {
 	private final UserService userService;
 
 	// customer
+	@GetMapping("/customer/withdraw")
+	public void withdrawCustomer(@AuthenticationPrincipal UserDetails userDetails) {
+		DeleteUserRequest payload = new DeleteUserRequest(userDetails.getUsername());
+		userService.deleteUser(payload);
+	}
+
 	@PostMapping("/customer/signup")
 	@ResponseStatus(HttpStatus.CREATED)
 	public void createCustomer(@RequestBody UserCreateControllerRequest controllerRequest) {

@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.user.dto.CustomerResponse;
+import team.waitingcatch.app.user.dto.DeleteUserRequest;
 import team.waitingcatch.app.user.dto.GetCustomerByIdAndRoleServiceRequest;
 import team.waitingcatch.app.user.dto.UpdateUserServiceRequest;
 import team.waitingcatch.app.user.dto.UserCreateServiceRequest;
@@ -69,6 +70,13 @@ public class UserServiceImpl implements UserService, InternalUserService {
 		// 중복되면 안되는 값(이메일, 전화번호, 닉네임)들을 체크해준다.
 		User user = _getUserByUsername(payload.getUsername());
 		user.updateBasicInfo(payload.getNickName(), payload.getName(), payload.getPhoneNumber(), payload.getEmail());
+		userRepository.save(user);
+	}
+
+	@Override
+	public void deleteUser(DeleteUserRequest payload) {
+		User user = _getUserByUsername(payload.getUsername());
+		user.remove();
 		userRepository.save(user);
 	}
 

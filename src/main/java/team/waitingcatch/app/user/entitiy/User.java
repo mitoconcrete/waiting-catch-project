@@ -92,4 +92,8 @@ public class User extends TimeStamped {
 			this.email = email;
 		}
 	}
+
+	public void remove() {
+		this.isDeleted = true;
+	}
 }
