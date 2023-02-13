@@ -21,6 +21,6 @@ public class Category {
 
 	private Long parentId;
 
-	@Column(nullable = false)
+	@Column(nullable = false, unique = true)
 	private String name;
 }

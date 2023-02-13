@@ -12,6 +12,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import team.waitingcatch.app.common.Address;
 import team.waitingcatch.app.common.Position;
+import team.waitingcatch.app.common.entity.TimeStamped;
 
 @Entity
 @Getter
