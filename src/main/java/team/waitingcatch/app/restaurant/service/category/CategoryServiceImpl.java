@@ -5,6 +5,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.restaurant.dto.CreateCategoryRequest;
+import team.waitingcatch.app.restaurant.dto.DeleteCategoryRequest;
 import team.waitingcatch.app.restaurant.dto.UpdateCategoryServiceRequest;
 import team.waitingcatch.app.restaurant.entity.Category;
 import team.waitingcatch.app.restaurant.repository.CategoryRepository;
@@ -26,6 +27,12 @@ public class CategoryServiceImpl implements CategoryService, InternalCategorySer
 		Category category = this._getCategory(serviceRequest.getCategoryId());
 		category.update(serviceRequest);
 		categoryRepository.save(category);
+	}
+
+	@Override
+	public void deleteCategory(DeleteCategoryRequest request) {
+		Category category = this._getCategory(request.getCategoryId());
+		categoryRepository.delete(category);
 	}
 
 	@Override
