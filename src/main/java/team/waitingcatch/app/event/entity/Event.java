@@ -16,6 +16,7 @@ import team.waitingcatch.app.common.entity.TimeStamped;
 import team.waitingcatch.app.event.dto.event.CreateEventControllerRequest;
 import team.waitingcatch.app.event.dto.event.CreateEventServiceRequest;
 import team.waitingcatch.app.event.dto.event.UpdateEventServiceRequest;
+import team.waitingcatch.app.event.dto.event.UpdateSellerEventServiceRequest;
 import team.waitingcatch.app.restaurant.entity.Restaurant;
 
 @Entity
@@ -54,9 +55,15 @@ public class Event extends TimeStamped {
 		this.restaurant = restaurant;
 	}
 
-	public void updateEvent(UpdateEventServiceRequest updateEventServiceRequest) {
+	public void updateAdminEvent(UpdateEventServiceRequest updateEventServiceRequest) {
 		this.name = updateEventServiceRequest.getName();
 		this.eventStartDate = updateEventServiceRequest.getEventStartDate();
 		this.eventEndDate = updateEventServiceRequest.getEventEndDate();
+	}
+
+	public void updateSellerEvent(UpdateSellerEventServiceRequest updateSellerEventServiceRequest) {
+		this.name = updateSellerEventServiceRequest.getName();
+		this.eventStartDate = updateSellerEventServiceRequest.getEventStartDate();
+		this.eventEndDate = updateSellerEventServiceRequest.getEventEndDate();
 	}
 }

@@ -14,6 +14,7 @@ import team.waitingcatch.app.event.dto.event.GetGlobalEventsServiceResponse;
 import team.waitingcatch.app.event.dto.event.GetRestaurantEventControllerRequest;
 import team.waitingcatch.app.event.dto.event.GetRestaurantEventsServiceResponse;
 import team.waitingcatch.app.event.dto.event.UpdateEventServiceRequest;
+import team.waitingcatch.app.event.dto.event.UpdateSellerEventServiceRequest;
 import team.waitingcatch.app.event.entity.Event;
 import team.waitingcatch.app.event.repository.EventServiceRepository;
 import team.waitingcatch.app.restaurant.entity.Restaurant;
@@ -46,16 +47,30 @@ public class EventServiceImpl implements EventService, InternalEventService {
 		return "레스토랑 이벤트 생성 완료";
 	}
 
-	//어드민은 모든 사람의 이벤트를 수정할수있다.
 	@Override
 	public String updateAdminEvent(UpdateEventServiceRequest updateEventServiceRequest) {
 		Event events = _getEventFindById(updateEventServiceRequest.getEventId());
-		events.updateEvent(updateEventServiceRequest);
-		return "이벤트 수정 완료";
+		events.updateAdminEvent(updateEventServiceRequest);
+		return "관리자 이벤트 수정 완료";
 	}
 
+	@Override
+	public String updateSellerEvent(UpdateSellerEventServiceRequest updateSellerEventServiceRequest) {
+		//셀러는 자신의 이벤트만 수정할수있다.(레스토랑 검색 필요)
+		Restaurant restaurant = restaurantRepository.findByUsername(updateSellerEventServiceRequest.getUsername())
+			.orElseThrow(
+				() -> new IllegalArgumentException("레스토랑을 보유한 유저가 아닙니다.")
+			);
+		Event ev = _getEventFindById(updateSellerEventServiceRequest.getEventId());
 
-	
+		Event events = eventServiceRepository.findByIdAndRestaurant(updateSellerEventServiceRequest.getEventId(),
+			restaurant).orElseThrow(
+			() -> new IllegalArgumentException("매장에 해당 이벤트가 존재하지 않습니다.")
+		);
+
+		events.updateSellerEvent(updateSellerEventServiceRequest);
+		return "레스토랑 이벤트 수정 완료";
+	}
 
 	@Override
 	public String deleteAdminEvent(Long eventId) {
