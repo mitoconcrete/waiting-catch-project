@@ -19,8 +19,10 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import team.waitingcatch.app.restaurant.dto.CategoryResponse;
+import team.waitingcatch.app.restaurant.dto.ChildCategoryResponse;
 import team.waitingcatch.app.restaurant.dto.CreateCategoryRequest;
 import team.waitingcatch.app.restaurant.dto.DeleteCategoryRequest;
+import team.waitingcatch.app.restaurant.dto.GetChildCategoryRequest;
 import team.waitingcatch.app.restaurant.dto.UpdateCategoryServiceRequest;
 import team.waitingcatch.app.restaurant.entity.Category;
 import team.waitingcatch.app.restaurant.repository.CategoryRepository;
@@ -78,6 +80,35 @@ class CategoryServiceImplTest {
 		// then
 		assertEquals("한식", responses.get(0).getName());
 		assertEquals("양식", responses.get(1).getName());
+	}
+
+	@Test
+	@DisplayName("하위 카테고리 조회")
+	void getChildCategories() {
+		// given
+		GetChildCategoryRequest request = new GetChildCategoryRequest(1L);
+
+		List<Category> categories = new ArrayList<>();
+		// Category category1 = new Category(1L, null, "한식");
+		// Category category2 = new Category(2L, 1L, "떡갈비");
+		// Category category3 = new Category(3L, 1L, "한정식");
+		// Category category4 = new Category(4L, 1L, "찌개류");
+		// categories.add(category1);
+		// categories.add(category2);
+		// categories.add(category3);
+		// categories.add(category4);
+
+		when(categoryRepository.findAll()).thenReturn(categories);
+
+		// when
+		ChildCategoryResponse categoryResponse = categoryService.getChildCategories(request);
+
+		// then
+		// assertEquals(null, categoryResponse.getName());
+		// assertEquals(null, categoryResponse.getChildCategories().get(0).getName());
+		assertEquals("", categoryResponse.getName());
+		assertEquals(1L, categoryResponse.getCategoryId());
+		assertEquals(categories, categoryResponse.getChildCategories());
 	}
 
 	@Test
