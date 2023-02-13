@@ -44,7 +44,7 @@ public class SellerManagement extends Timestamped {
 	private AcceptedStatusEnum status;
 	@Column(nullable = false)
 	private String categories;
-	@Column(name = "search_key_words", nullable = false)
+	@Column(name = "search_keywords", nullable = false)
 	private String searchKeyWords;
 
 }
