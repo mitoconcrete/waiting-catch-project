@@ -33,15 +33,16 @@ public class User extends TimeStamped {
 	@Column(nullable = false)
 	private String password;
 
-	@Column(nullable = false)
+	@Column(nullable = false, unique = true)
 	private String email;
 
+	@Column(unique = true)
 	private String nickname;
 
 	@Column(nullable = false)
 	private String name;
 
-	@Column(nullable = false)
+	@Column(nullable = false, unique = true)
 	private String phoneNumber;
 
 	@Column(nullable = false)
@@ -62,6 +63,8 @@ public class User extends TimeStamped {
 		this.username = username;
 		this.nickname = nickname;
 		this.phoneNumber = phoneNumber;
+		this.isBanned = false;
+		this.isDeleted = false;
 
 		// 패스워드를 변환하여 저장합니다. 패스워드의 저장과 검증은 엔티티의 책임이라고 생각하여 이곳에 배치하였습니다.
 		PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
