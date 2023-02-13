@@ -41,6 +41,11 @@ public class Category {
 	}
 
 	public void update(UpdateCategoryServiceRequest serviceRequest) {
+		if (serviceRequest.getName() == null)
+			throw new IllegalArgumentException("카테고리명을 입력하세요.");
+		if (serviceRequest.getName().equals(""))
+			throw new IllegalArgumentException("카테고리명에 빈값을 입력할 수 없습니다.");
+
 		this.name = serviceRequest.getName();
 	}
 }
