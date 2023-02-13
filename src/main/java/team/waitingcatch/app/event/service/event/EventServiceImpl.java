@@ -29,30 +29,33 @@ public class EventServiceImpl implements EventService, InternalEventService {
 
 	@Override
 	public String createAdminEvent(CreateEventControllerRequest createEventControllerRequest) {
-
-		Optional<Event> events = _getEventFindByName(createEventControllerRequest.getName());
 		Event event = new Event(createEventControllerRequest);
+		eventServiceRepository.save(event);
 		return "어드민 이벤트 생성 완료";
 	}
 
 	@Override
 	public String createSellerEvent(CreateEventServiceRequest createEventServiceRequest) {
 
-		Optional<Event> events = _getEventFindByName(createEventServiceRequest.getName());
 		Restaurant restaurants = restaurantRepository.findById(createEventServiceRequest.getRestaurantId()).orElseThrow(
 			() -> new IllegalArgumentException("잘못된 레스토랑 Id 입니다.")
 		);
 
 		Event event = new Event(createEventServiceRequest, restaurants);
+		eventServiceRepository.save(event);
 		return "레스토랑 이벤트 생성 완료";
 	}
 
+	//어드민은 모든 사람의 이벤트를 수정할수있다.
 	@Override
 	public String updateAdminEvent(UpdateEventServiceRequest updateEventServiceRequest) {
 		Event events = _getEventFindById(updateEventServiceRequest.getEventId());
 		events.updateEvent(updateEventServiceRequest);
 		return "이벤트 수정 완료";
 	}
+
+
+	
 
 	@Override
 	public String deleteAdminEvent(Long eventId) {
