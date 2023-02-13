@@ -113,7 +113,7 @@ public class UserServiceImpl implements UserService, InternalUserService {
 	@Override
 	@Transactional(readOnly = true)
 	public User _getUserByUsername(String username) {
-		return userRepository.findByUsername(username).orElseThrow(
+		return userRepository.findByUsernameAndDeletedFalse(username).orElseThrow(
 			() -> new IllegalArgumentException("유저가 존재하지 않습니다.")
 		);
 	}
