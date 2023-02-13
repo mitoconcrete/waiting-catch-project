@@ -1,15 +1,16 @@
 package team.waitingcatch.app.user.dto;
 
+import javax.validation.constraints.NotNull;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 
 @Getter
 @NoArgsConstructor
 public class FindPasswordRequest {
-	@NonNull
+	@NotNull
 	private String username;
 
-	@NonNull
+	@NotNull
 	private String email;
 }

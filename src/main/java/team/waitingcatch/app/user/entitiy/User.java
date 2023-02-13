@@ -7,6 +7,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.NotNull;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -27,33 +28,41 @@ public class User extends TimeStamped {
 	private Long id;
 
 	// 아이디는 고유해야하므로, unique 값으로 둡니다.
+	@NotNull
 	@Column(nullable = false, unique = true)
 	private String username;
 
+	@NotNull
 	@Column(nullable = false)
 	private String password;
 
+	@NotNull
 	@Column(nullable = false, unique = true)
 	private String email;
 
 	@Column(unique = true)
 	private String nickname;
 
+	@NotNull
 	@Column(nullable = false)
 	private String name;
 
+	@NotNull
 	@Column(nullable = false, unique = true)
 	private String phoneNumber;
 
+	@NotNull
 	@Column(nullable = false)
 	@Enumerated(EnumType.STRING)
 	private UserRoleEnum role;
 
+	@NotNull
 	@Column(nullable = false)
-	private Boolean isBanned;
+	private boolean isBanned;
 
+	@NotNull
 	@Column(nullable = false)
-	private Boolean isDeleted;
+	private boolean isDeleted;
 
 	public User(UserRoleEnum role, String name, String email, String username, String password, String nickname,
 		String phoneNumber) {
@@ -70,24 +79,24 @@ public class User extends TimeStamped {
 		updatePassword(password);
 	}
 
-	public Boolean hasSameRole(UserRoleEnum role) {
+	public boolean hasSameRole(UserRoleEnum role) {
 		return this.role.equals(role);
 	}
 
 	public void updateBasicInfo(String nickname, String name, String phoneNumber, String email) {
-		if (!(nickname == null)) {
+		if (nickname != null) {
 			this.nickname = nickname;
 		}
 
-		if (!(name == null)) {
+		if (name != null) {
 			this.name = name;
 		}
 
-		if (!(phoneNumber == null)) {
+		if (phoneNumber != null) {
 			this.phoneNumber = phoneNumber;
 		}
 
-		if (!(email == null)) {
+		if (email != null) {
 			this.email = email;
 		}
 	}
@@ -100,4 +109,5 @@ public class User extends TimeStamped {
 	public void remove() {
 		this.isDeleted = true;
 	}
+	
 }

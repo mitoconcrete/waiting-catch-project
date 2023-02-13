@@ -31,11 +31,13 @@ public class UserServiceImpl implements UserService, InternalUserService {
 	private String smtpSenderEmail;
 
 	@Override
+	@Transactional(readOnly = true)
 	public List<UserInfoResponse> getCustomers() {
 		return userRepository.findAll().stream().map(UserInfoResponse::new).collect(Collectors.toList());
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public UserInfoResponse getByUserIdAndRole(GetCustomerByIdAndRoleServiceRequest payload) {
 		// 유저의 존재여부를 판단한다.
 		User user = userRepository.findById(payload.getUserId()).orElseThrow(
@@ -53,7 +55,7 @@ public class UserServiceImpl implements UserService, InternalUserService {
 	@Override
 	public void createUser(CreateUserServiceRequest payload) {
 		// 이미 존재하는 유저인지 검증합니다.
-		Boolean isExistUser = userRepository.existsByUsername(payload.getUsername());
+		boolean isExistUser = userRepository.existsByUsername(payload.getUsername());
 
 		if (isExistUser) {
 			throw new IllegalArgumentException("이미 존재하는 유저입니다.");
@@ -90,6 +92,7 @@ public class UserServiceImpl implements UserService, InternalUserService {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public void findUserAndSendEmail(FindPasswordRequest payload) {
 		User user = userRepository.findByUsernameAndEmail(payload.getUsername(), payload.getEmail()).orElseThrow(
 			() -> new IllegalArgumentException("유저가 존재하지 않습니다.")
@@ -111,6 +114,7 @@ public class UserServiceImpl implements UserService, InternalUserService {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public User _getUserByUsername(String username) {
 		return userRepository.findByUsername(username).orElseThrow(
 			() -> new IllegalArgumentException("유저가 존재하지 않습니다.")
