@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.user.dto.CustomerResponse;
 import team.waitingcatch.app.user.dto.DeleteUserRequest;
+import team.waitingcatch.app.user.dto.FindPasswordRequest;
 import team.waitingcatch.app.user.dto.GetCustomerByIdAndRoleServiceRequest;
 import team.waitingcatch.app.user.dto.UpdateUserControllerRequest;
 import team.waitingcatch.app.user.dto.UpdateUserServiceRequest;
@@ -40,6 +41,11 @@ public class UserController {
 	@ResponseStatus(HttpStatus.CREATED)
 	public void createCustomer(@RequestBody UserCreateControllerRequest controllerRequest) {
 		_createUserService(UserRoleEnum.USER, controllerRequest);
+	}
+
+	@PostMapping("/customer/find-password")
+	public void findCustomerPassword(@RequestBody FindPasswordRequest findPasswordRequest) {
+		userService.findUserAndSendEmail(findPasswordRequest);
 	}
 
 	// seller

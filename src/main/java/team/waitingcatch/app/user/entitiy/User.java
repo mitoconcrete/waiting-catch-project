@@ -67,8 +67,7 @@ public class User extends TimeStamped {
 		this.isDeleted = false;
 
 		// 패스워드를 변환하여 저장합니다. 패스워드의 저장과 검증은 엔티티의 책임이라고 생각하여 이곳에 배치하였습니다.
-		PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-		this.password = passwordEncoder.encode(password);
+		updatePassword(password);
 	}
 
 	public Boolean hasSameRole(UserRoleEnum role) {
@@ -91,6 +90,11 @@ public class User extends TimeStamped {
 		if (!(email == null)) {
 			this.email = email;
 		}
+	}
+
+	public void updatePassword(String password) {
+		PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+		this.password = passwordEncoder.encode(password);
 	}
 
 	public void remove() {
