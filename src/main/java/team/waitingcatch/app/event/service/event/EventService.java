@@ -6,7 +6,7 @@ import team.waitingcatch.app.event.dto.event.GetEventServiceResponse;
 import team.waitingcatch.app.event.dto.event.GetGlobalEventsServiceResponse;
 import team.waitingcatch.app.event.dto.event.GetRestaurantEventControllerRequest;
 import team.waitingcatch.app.event.dto.event.GetRestaurantEventsServiceResponse;
-import team.waitingcatch.app.event.dto.event.PutEventControllerRequest;
+import team.waitingcatch.app.event.dto.event.UpdateEventControllerRequest;
 
 public interface EventService {
 
@@ -16,8 +16,10 @@ public interface EventService {
 	//새로운 레스토랑 이벤트를 생성한다.
 	public String createSellerEvent(CreateEventControllerRequest createEventControllerRequest, Long restaurant_id);
 
-	//이벤트를 수정한다
-	public String putEvent(PutEventControllerRequest putEventControllerRequest);
+	//광역 이벤트를 수정한다
+	public String updateAdminEvent(UpdateEventControllerRequest putEventControllerRequest, Long eventId);
+
+	//레스토랑 이벤트를 수정한다
 
 	//이벤트를 삭제한다.
 	public String deleteEvent(DeleteEventControllerRequest deleteEventControllerRequest);

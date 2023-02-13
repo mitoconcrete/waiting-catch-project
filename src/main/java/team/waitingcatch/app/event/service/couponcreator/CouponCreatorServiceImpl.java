@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.event.dto.couponcreator.CreateCouponCreatorControllerRequest;
-import team.waitingcatch.app.event.dto.couponcreator.PutCouponCreatorControllerRequest;
+import team.waitingcatch.app.event.dto.couponcreator.UpdateCouponCreatorControllerRequest;
 
 @Service
 @RequiredArgsConstructor
@@ -19,7 +19,7 @@ public class CouponCreatorServiceImpl implements CouponCreatorService, InternalC
 	}
 
 	@Override
-	public String putCouponCreator(PutCouponCreatorControllerRequest putCouponCreatorControllerRequest) {
+	public String updateCouponCreator(UpdateCouponCreatorControllerRequest putCouponCreatorControllerRequest) {
 		return "";
 	}
 }
