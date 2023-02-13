@@ -81,14 +81,12 @@ public class UserServiceImpl implements UserService, InternalUserService {
 		// 중복되면 안되는 값(이메일, 전화번호, 닉네임)들을 체크해준다.
 		User user = _getUserByUsername(payload.getUsername());
 		user.updateBasicInfo(payload.getNickName(), payload.getName(), payload.getPhoneNumber(), payload.getEmail());
-		userRepository.save(user);
 	}
 
 	@Override
 	public void deleteUser(DeleteUserRequest payload) {
 		User user = _getUserByUsername(payload.getUsername());
 		user.remove();
-		userRepository.save(user);
 	}
 
 	@Override
@@ -101,7 +99,6 @@ public class UserServiceImpl implements UserService, InternalUserService {
 		// 유저가 존재하면 임시 비밀번호를 생성하고, 저장한다.
 		String temporaryPassword = UUID.randomUUID().toString().substring(0, 10);
 		user.updatePassword(temporaryPassword);
-		userRepository.save(user);
 
 		// 저장된 번호를 유저에게 메일로 전달한다.
 		SimpleMailMessage message = new SimpleMailMessage();
