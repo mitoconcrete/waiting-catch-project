@@ -9,6 +9,7 @@ import javax.persistence.Id;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import team.waitingcatch.app.restaurant.dto.CreateCategoryRequest;
 
 @Entity
 @Getter
@@ -23,4 +24,19 @@ public class Category {
 
 	@Column(nullable = false)
 	private String name;
+
+	public Category(Long parentId, String name) {
+		if (name == null)
+			throw new IllegalArgumentException("카테고리명을 입력하세요.");
+		if (name.equals(""))
+			throw new IllegalArgumentException("카테고리명에 빈값을 입력할 수 없습니다.");
+
+		this.parentId = parentId;
+		this.name = name;
+	}
+
+	public static Category create(CreateCategoryRequest request) {
+		return new Category(request.getParentId(), request.getName());
+	}
+
 }
