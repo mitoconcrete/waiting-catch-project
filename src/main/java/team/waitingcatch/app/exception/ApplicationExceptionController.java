@@ -11,7 +11,7 @@ import team.waitingcatch.app.exception.dto.BasicExceptionResponse;
 public class ApplicationExceptionController {
 	@ExceptionHandler({IllegalArgumentException.class})
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	public BasicExceptionResponse handleApiRequestException(IllegalArgumentException ex) {
+	public BasicExceptionResponse IllegalArgumentExceptionHandler(IllegalArgumentException ex) {
 		return new BasicExceptionResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
 	}
 }
