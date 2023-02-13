@@ -5,6 +5,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.restaurant.dto.CreateCategoryRequest;
+import team.waitingcatch.app.restaurant.dto.UpdateCategoryServiceRequest;
 import team.waitingcatch.app.restaurant.entity.Category;
 import team.waitingcatch.app.restaurant.repository.CategoryRepository;
 
@@ -20,4 +21,17 @@ public class CategoryServiceImpl implements CategoryService, InternalCategorySer
 		categoryRepository.save(category);
 	}
 
+	@Override
+	public void updateCategory(UpdateCategoryServiceRequest serviceRequest) {
+		Category category = this._getCategory(serviceRequest.getCategoryId());
+		category.update(serviceRequest);
+		categoryRepository.save(category);
+	}
+
+	@Override
+	public Category _getCategory(Long categoryId) {
+		return categoryRepository.findById(categoryId).orElseThrow(
+			() -> new IllegalArgumentException("존재하지 않는 카테고리입니다.")
+		);
+	}
 }

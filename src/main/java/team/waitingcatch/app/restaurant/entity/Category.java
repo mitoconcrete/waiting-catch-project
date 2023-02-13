@@ -10,6 +10,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import team.waitingcatch.app.restaurant.dto.CreateCategoryRequest;
+import team.waitingcatch.app.restaurant.dto.UpdateCategoryServiceRequest;
 
 @Entity
 @Getter
@@ -39,4 +40,7 @@ public class Category {
 		return new Category(request.getParentId(), request.getName());
 	}
 
+	public void update(UpdateCategoryServiceRequest serviceRequest) {
+		this.name = serviceRequest.getName();
+	}
 }
