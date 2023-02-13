@@ -9,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.annotations.SQLDelete;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -20,6 +21,7 @@ import team.waitingcatch.app.user.enums.UserRoleEnum;
 
 @Entity
 @Getter
+@SQLDelete(sql = "UPDATE user SET is_deleted = true WHERE id = ?")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User extends TimeStamped {
 	@Id
@@ -105,9 +107,4 @@ public class User extends TimeStamped {
 		PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 		this.password = passwordEncoder.encode(password);
 	}
-
-	public void remove() {
-		this.isDeleted = true;
-	}
-	
 }
