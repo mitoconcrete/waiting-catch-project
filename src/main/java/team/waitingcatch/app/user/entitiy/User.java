@@ -41,7 +41,7 @@ public class User extends TimeStamped {
 
 	@Column(nullable = false)
 	private String name;
-	
+
 	@Column(nullable = false)
 	@Enumerated(EnumType.STRING)
 	private UserRoleEnum role;
@@ -62,5 +62,9 @@ public class User extends TimeStamped {
 		// 패스워드를 변환하여 저장합니다. 패스워드의 저장과 검증은 엔티티의 책임이라고 생각하여 이곳에 배치하였습니다.
 		PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 		this.password = passwordEncoder.encode(password);
+	}
+
+	public Boolean hasSameRole(UserRoleEnum role) {
+		return this.role.equals(role);
 	}
 }

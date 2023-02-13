@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.user.dto.CustomerResponse;
+import team.waitingcatch.app.user.dto.GetCustomerByIdAndRoleServiceRequest;
 import team.waitingcatch.app.user.dto.UserCreateServiceRequest;
 import team.waitingcatch.app.user.entitiy.User;
 import team.waitingcatch.app.user.repository.UserRepository;
@@ -21,6 +22,21 @@ public class UserServiceImpl implements UserService, InternalUserService {
 	@Override
 	public List<CustomerResponse> getCustomers() {
 		return userRepository.findAll().stream().map(CustomerResponse::new).collect(Collectors.toList());
+	}
+
+	@Override
+	public CustomerResponse getByUserIdAndRole(GetCustomerByIdAndRoleServiceRequest requestPayload) {
+		// 유저의 존재여부를 판단한다.
+		User user = userRepository.findById(requestPayload.getUserId()).orElseThrow(
+			() -> new IllegalArgumentException("유저가 존재하지 않습니다.")
+		);
+
+		// 입력받은 롤과 동일한 롤을 지니고 있는지 확인한다.
+		if (!user.hasSameRole(requestPayload.getRole())) {
+			throw new IllegalArgumentException("유저가 존재하지 않습니다.");
+		}
+		
+		return new CustomerResponse(user);
 	}
 
 	@Override

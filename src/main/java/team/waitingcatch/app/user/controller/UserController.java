@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.user.dto.CustomerResponse;
+import team.waitingcatch.app.user.dto.GetCustomerByIdAndRoleServiceRequest;
 import team.waitingcatch.app.user.dto.UserCreateControllerRequest;
 import team.waitingcatch.app.user.dto.UserCreateServiceRequest;
 import team.waitingcatch.app.user.enums.UserRoleEnum;
@@ -33,6 +35,17 @@ public class UserController {
 	@GetMapping("/admin/customers")
 	public List<CustomerResponse> getCustomers() {
 		return userService.getCustomers();
+	}
+
+	@GetMapping("/admin/customers/{customerId}")
+	public CustomerResponse getCustomer(@PathVariable Long customerId) {
+		GetCustomerByIdAndRoleServiceRequest requestPayload =
+			new GetCustomerByIdAndRoleServiceRequest(
+				customerId,
+				UserRoleEnum.USER
+			);
+		
+		return userService.getByUserIdAndRole(requestPayload);
 	}
 
 	@PostMapping("/admin/signup")
