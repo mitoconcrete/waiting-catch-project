@@ -3,6 +3,7 @@ package team.waitingcatch.app.restaurant.controller;
 import java.util.List;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -10,6 +11,8 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.common.Address;
 import team.waitingcatch.app.common.Position;
+import team.waitingcatch.app.restaurant.dto.ApproveSignUpSellerResponse;
+import team.waitingcatch.app.restaurant.dto.ApproveSignUpSellerServiceRequest;
 import team.waitingcatch.app.restaurant.dto.DemandSignUpSellerControllerRequest;
 import team.waitingcatch.app.restaurant.dto.DemandSignUpSellerServiceRequest;
 import team.waitingcatch.app.restaurant.dto.GetDemandSignUpSellerResponse;
@@ -48,6 +51,14 @@ public class SellerManagementController {
 	public List<GetDemandSignUpSellerResponse> getDemandSignUpSellers() {
 		return sellerManagementService.getDemandSignUpSellers();
 	}
+
+	@PostMapping(path = "/admin/seller-managements/{sellerManagementId}")
+	public ApproveSignUpSellerResponse approveSignUpSeller(@PathVariable Long sellerManagementId) {
+		ApproveSignUpSellerServiceRequest approveSignUpSellerServiceRequest = new ApproveSignUpSellerServiceRequest(
+			sellerManagementId);
+		return sellerManagementService.approveSignUpSeller(approveSignUpSellerServiceRequest);
+	}
+
 }
 
 

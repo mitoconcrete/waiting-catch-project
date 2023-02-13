@@ -7,6 +7,7 @@ import team.waitingcatch.app.restaurant.entity.SellerManagement;
 @Getter
 @NoArgsConstructor
 public class GetDemandSignUpSellerResponse {
+	private Long id;
 	private String username;
 	private String email;
 	private String phoneNumber;
@@ -19,8 +20,11 @@ public class GetDemandSignUpSellerResponse {
 	private String city;
 	private String street;
 	private String searchKeyWords;
+	private String businessLicenseNo;
+	private String name;
 
 	public GetDemandSignUpSellerResponse(SellerManagement sellerManagement) {
+		this.id = sellerManagement.getId();
 		this.username = sellerManagement.getUsername();
 		this.email = sellerManagement.getEmail();
 		this.phoneNumber = sellerManagement.getPhoneNumber();
@@ -33,5 +37,7 @@ public class GetDemandSignUpSellerResponse {
 		this.city = sellerManagement.getAddress().getCity();
 		this.street = sellerManagement.getAddress().getStreet();
 		this.searchKeyWords = sellerManagement.getSearchKeyWords();
+		this.businessLicenseNo = sellerManagement.getBusinessLicenseNo();
+		this.name = sellerManagement.getName();
 	}
 }

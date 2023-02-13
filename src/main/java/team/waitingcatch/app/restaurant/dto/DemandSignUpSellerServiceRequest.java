@@ -9,6 +9,7 @@ import team.waitingcatch.app.common.Position;
 @NoArgsConstructor
 public class DemandSignUpSellerServiceRequest {
 	private String username;
+	private String name;
 	private String email;
 	private String phoneNumber;
 	private String restaurantName;
@@ -19,6 +20,7 @@ public class DemandSignUpSellerServiceRequest {
 	private Address address;
 
 	private String searchKeyWords;
+	private String businessLicenseNo;
 
 	public DemandSignUpSellerServiceRequest(DemandSignUpSellerControllerRequest demandSignUpSellerControllerRequest,
 		Address address, Position position) {
@@ -31,5 +33,7 @@ public class DemandSignUpSellerServiceRequest {
 		this.position = position;
 		this.address = address;
 		this.searchKeyWords = demandSignUpSellerControllerRequest.getSearchKeyWords();
+		this.businessLicenseNo = demandSignUpSellerControllerRequest.getBusinessLicenseNo();
+		this.name = demandSignUpSellerControllerRequest.getName();
 	}
 }

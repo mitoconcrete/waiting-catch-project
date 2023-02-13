@@ -8,6 +8,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,9 +33,11 @@ public class User extends TimeStamped {
 	private String password;
 
 	@Column(nullable = false)
-	private String email;
+	private String phoneNumber;
 
 	@Column(nullable = false)
+	private String email;
+
 	private String nickname;
 
 	@Column(nullable = false)
@@ -43,8 +48,20 @@ public class User extends TimeStamped {
 	private UserRoleEnum role;
 
 	@Column(nullable = false)
-	private Boolean isBanned;
+	private boolean isBanned;
 
 	@Column(nullable = false)
-	private Boolean isDeleted;
+	private boolean isDeleted;
+
+	public User(UserRoleEnum role, String username, String password, String phonenumber, String email, String name) {
+		this.username = username;
+		PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+		this.password = passwordEncoder.encode(password);
+		this.phoneNumber = phonenumber;
+		this.email = email;
+		this.role = role;
+		this.name = name;
+
+	}
+
 }

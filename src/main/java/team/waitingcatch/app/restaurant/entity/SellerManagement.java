@@ -30,6 +30,8 @@ public class SellerManagement extends TimeStamped {
 	@Column(nullable = false)
 	private String username;
 	@Column(nullable = false)
+	private String name;
+	@Column(nullable = false)
 	private String email;
 	@Column(name = "phone_number", nullable = false)
 	private String phoneNumber;
@@ -49,6 +51,8 @@ public class SellerManagement extends TimeStamped {
 	private String categories;
 	@Column(name = "search_keywords", nullable = false)
 	private String searchKeyWords;
+	@Column(name = "business_license_no", nullable = false)
+	private String businessLicenseNo;
 
 	public SellerManagement(DemandSignUpSellerServiceRequest demandSignupSellerServiceRequest) {
 		this.username = demandSignupSellerServiceRequest.getUsername();
@@ -61,5 +65,11 @@ public class SellerManagement extends TimeStamped {
 		this.status = AcceptedStatusEnum.WAIT;
 		this.categories = demandSignupSellerServiceRequest.getCategories();
 		this.searchKeyWords = demandSignupSellerServiceRequest.getSearchKeyWords();
+		this.businessLicenseNo = demandSignupSellerServiceRequest.getBusinessLicenseNo();
+		this.name = demandSignupSellerServiceRequest.getName();
+	}
+
+	public void approveUpdateStatus() {
+		this.status = AcceptedStatusEnum.APPROVAL;
 	}
 }

@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 import team.waitingcatch.app.common.Address;
 import team.waitingcatch.app.common.Position;
 import team.waitingcatch.app.common.entity.TimeStamped;
+import team.waitingcatch.app.restaurant.dto.ApproveSignUpSellerManagementEntityPassToRestaurantEntityRequest;
 
 @Entity
 @Getter
@@ -45,10 +46,22 @@ public class Restaurant extends TimeStamped {
 
 	@Column(nullable = false)
 	private String description;
-
 	@Column(nullable = false)
-	private String capacity;
+	private Integer capacity;
 
 	@Column(nullable = false)
 	private String businessLicenseNo;
+
+	public Restaurant(ApproveSignUpSellerManagementEntityPassToRestaurantEntityRequest
+		approveSignUpSellerManagementEntityPassToRestaurantEntityRequest) {
+		this.name = approveSignUpSellerManagementEntityPassToRestaurantEntityRequest.getRestaurantName();
+		this.position = approveSignUpSellerManagementEntityPassToRestaurantEntityRequest.getPosition();
+		this.address = approveSignUpSellerManagementEntityPassToRestaurantEntityRequest.getAddress();
+		this.phoneNumber = approveSignUpSellerManagementEntityPassToRestaurantEntityRequest.getPhoneNumber();
+		this.isDeleted = false;
+		this.searchKeywords = approveSignUpSellerManagementEntityPassToRestaurantEntityRequest.getSearchKeyWords();
+		this.description = approveSignUpSellerManagementEntityPassToRestaurantEntityRequest.getDescription();
+		this.businessLicenseNo = approveSignUpSellerManagementEntityPassToRestaurantEntityRequest.getBusinessLicenseNo();
+		this.capacity = 0;
+	}
 }

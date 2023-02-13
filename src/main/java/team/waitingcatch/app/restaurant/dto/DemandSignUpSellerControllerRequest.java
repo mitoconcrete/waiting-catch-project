@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 public class DemandSignUpSellerControllerRequest {
 
 	private String username;
+	private String name;
 	private String email;
 	private String phoneNumber;
 	private String restaurantName;
@@ -19,6 +20,7 @@ public class DemandSignUpSellerControllerRequest {
 	private String city;
 	private String street;
 
+	private String businessLicenseNo;
 	private String searchKeyWords;
 
 }
