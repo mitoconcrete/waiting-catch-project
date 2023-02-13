@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.event.dto.event.CreateEventControllerRequest;
 import team.waitingcatch.app.event.dto.event.UpdateEventControllerRequest;
+import team.waitingcatch.app.event.dto.event.UpdateEventServiceRequest;
 import team.waitingcatch.app.event.service.event.EventService;
 
 @RequiredArgsConstructor
@@ -32,8 +33,10 @@ public class AdminController {
 	@PutMapping("/events/{eventId}")
 	public ResponseEntity<String> createAdminEvent(
 		@RequestBody UpdateEventControllerRequest updateEventControllerRequest, @PathVariable Long eventId) {
+		UpdateEventServiceRequest updateEventServiceRequest = new UpdateEventServiceRequest(
+			updateEventControllerRequest, eventId);
 		return ResponseEntity.status(HttpStatus.OK)
-			.body(eventService.updateAdminEvent(updateEventControllerRequest, eventId));
+			.body(eventService.updateAdminEvent(updateEventServiceRequest));
 	}
 
 }

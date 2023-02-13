@@ -13,7 +13,7 @@ import team.waitingcatch.app.event.dto.event.GetEventServiceResponse;
 import team.waitingcatch.app.event.dto.event.GetGlobalEventsServiceResponse;
 import team.waitingcatch.app.event.dto.event.GetRestaurantEventControllerRequest;
 import team.waitingcatch.app.event.dto.event.GetRestaurantEventsServiceResponse;
-import team.waitingcatch.app.event.dto.event.UpdateEventControllerRequest;
+import team.waitingcatch.app.event.dto.event.UpdateEventServiceRequest;
 import team.waitingcatch.app.event.entity.Event;
 import team.waitingcatch.app.event.repository.EventServiceRepository;
 import team.waitingcatch.app.restaurant.entity.Restaurant;
@@ -48,11 +48,11 @@ public class EventServiceImpl implements EventService, InternalEventService {
 	}
 
 	@Override
-	public String updateAdminEvent(UpdateEventControllerRequest updateEventControllerRequest, Long eventId) {
-		Event events = eventServiceRepository.findById(eventId).orElseThrow(
+	public String updateAdminEvent(UpdateEventServiceRequest updateEventServiceRequest) {
+		Event events = eventServiceRepository.findById(updateEventServiceRequest.getEventId()).orElseThrow(
 			() -> new IllegalArgumentException("존재하지 않는 이벤트 입니다.")
 		);
-		events.updateEvent(updateEventControllerRequest);
+		events.updateEvent(updateEventServiceRequest);
 		return "이벤트 수정 완료";
 	}
 
