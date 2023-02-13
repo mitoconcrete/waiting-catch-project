@@ -1,6 +1,7 @@
 package team.waitingcatch.app.event.service.event;
 
 import team.waitingcatch.app.event.dto.event.CreateEventControllerRequest;
+import team.waitingcatch.app.event.dto.event.CreateEventServiceRequest;
 import team.waitingcatch.app.event.dto.event.DeleteEventControllerRequest;
 import team.waitingcatch.app.event.dto.event.GetEventServiceResponse;
 import team.waitingcatch.app.event.dto.event.GetGlobalEventsServiceResponse;
@@ -14,7 +15,7 @@ public interface EventService {
 	public String createAdminEvent(CreateEventControllerRequest createEventControllerRequest);
 
 	//새로운 레스토랑 이벤트를 생성한다.
-	public String createSellerEvent(CreateEventControllerRequest createEventControllerRequest, Long restaurant_id);
+	public String createSellerEvent(CreateEventServiceRequest createEventServiceRequest);
 
 	//광역 이벤트를 수정한다
 	public String updateAdminEvent(UpdateEventServiceRequest updateEventServiceRequest);

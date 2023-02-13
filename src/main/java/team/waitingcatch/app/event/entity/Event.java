@@ -14,6 +14,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import team.waitingcatch.app.common.entity.TimeStamped;
 import team.waitingcatch.app.event.dto.event.CreateEventControllerRequest;
+import team.waitingcatch.app.event.dto.event.CreateEventServiceRequest;
 import team.waitingcatch.app.event.dto.event.UpdateEventServiceRequest;
 import team.waitingcatch.app.restaurant.entity.Restaurant;
 
@@ -46,10 +47,10 @@ public class Event extends TimeStamped {
 		this.eventEndDate = createEventControllerRequest.getEventEndDate();
 	}
 
-	public Event(CreateEventControllerRequest createEventControllerRequest, Restaurant restaurant) {
-		this.name = createEventControllerRequest.getName();
-		this.eventStartDate = createEventControllerRequest.getEventStartDate();
-		this.eventEndDate = createEventControllerRequest.getEventEndDate();
+	public Event(CreateEventServiceRequest createEventServiceRequest, Restaurant restaurant) {
+		this.name = createEventServiceRequest.getName();
+		this.eventStartDate = createEventServiceRequest.getEventStartDate();
+		this.eventEndDate = createEventServiceRequest.getEventEndDate();
 		this.restaurant = restaurant;
 	}
 

@@ -4,8 +4,7 @@ import lombok.Getter;
 
 @Getter
 public class CreateEventControllerRequest {
-
-	private Long restaurantId;
+	
 	private String name;
 	private String eventStartDate;
 	private String eventEndDate;

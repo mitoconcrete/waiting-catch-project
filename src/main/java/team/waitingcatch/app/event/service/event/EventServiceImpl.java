@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.event.dto.event.CreateEventControllerRequest;
+import team.waitingcatch.app.event.dto.event.CreateEventServiceRequest;
 import team.waitingcatch.app.event.dto.event.DeleteEventControllerRequest;
 import team.waitingcatch.app.event.dto.event.GetEventServiceResponse;
 import team.waitingcatch.app.event.dto.event.GetGlobalEventsServiceResponse;
@@ -36,14 +37,14 @@ public class EventServiceImpl implements EventService, InternalEventService {
 	}
 
 	@Override
-	public String createSellerEvent(CreateEventControllerRequest createEventControllerRequest, Long restaurant_id) {
+	public String createSellerEvent(CreateEventServiceRequest createEventServiceRequest) {
 
-		Optional<Event> events = _getEventFindByName(createEventControllerRequest.getName());
-		Restaurant restaurants = restaurantRepository.findById(restaurant_id).orElseThrow(
+		Optional<Event> events = _getEventFindByName(createEventServiceRequest.getName());
+		Restaurant restaurants = restaurantRepository.findById(createEventServiceRequest.getRestaurantId()).orElseThrow(
 			() -> new IllegalArgumentException("잘못된 레스토랑 Id 입니다.")
 		);
 
-		Event event = new Event(createEventControllerRequest, restaurants);
+		Event event = new Event(createEventServiceRequest, restaurants);
 		return "레스토랑 이벤트 생성 완료";
 	}
 
