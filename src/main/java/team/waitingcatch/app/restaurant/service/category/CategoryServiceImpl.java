@@ -8,8 +8,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.restaurant.dto.CategoryResponse;
+import team.waitingcatch.app.restaurant.dto.ChildCategoryResponse;
 import team.waitingcatch.app.restaurant.dto.CreateCategoryRequest;
 import team.waitingcatch.app.restaurant.dto.DeleteCategoryRequest;
+import team.waitingcatch.app.restaurant.dto.GetChildCategoryRequest;
 import team.waitingcatch.app.restaurant.dto.UpdateCategoryServiceRequest;
 import team.waitingcatch.app.restaurant.entity.Category;
 import team.waitingcatch.app.restaurant.repository.CategoryRepository;
@@ -31,6 +33,13 @@ public class CategoryServiceImpl implements CategoryService, InternalCategorySer
 		return categoryRepository.findAllByParentId(null).stream()
 			.map(CategoryResponse::new)
 			.collect(Collectors.toList());
+	}
+
+	@Override
+	public ChildCategoryResponse getChildCategories(GetChildCategoryRequest request) {
+		List<Category> categories = categoryRepository.findAll();
+
+		return new ChildCategoryResponse(categories, request.getParentId());
 	}
 
 	@Override
