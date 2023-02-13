@@ -1,7 +1,6 @@
 package team.waitingcatch.app.exception;
 
-import java.sql.SQLIntegrityConstraintViolationException;
-
+import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -18,7 +17,7 @@ public class ApplicationExceptionController {
 		return new BasicExceptionResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
 	}
 
-	@ExceptionHandler({SQLIntegrityConstraintViolationException.class})
+	@ExceptionHandler({DataAccessException.class})
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public BasicExceptionResponse IntegrityExceptionHandler(DataIntegrityViolationException ex) {
 		return new BasicExceptionResponse(HttpStatus.BAD_REQUEST, "데이터 무결성 오류 발생 : Unique 한 데이터를 넣어주어야합니다.");

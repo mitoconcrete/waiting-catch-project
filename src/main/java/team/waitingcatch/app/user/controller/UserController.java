@@ -2,6 +2,8 @@ package team.waitingcatch.app.user.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -39,12 +41,12 @@ public class UserController {
 
 	@PostMapping("/customer/signup")
 	@ResponseStatus(HttpStatus.CREATED)
-	public void createCustomer(@RequestBody CreateUserControllerRequest controllerRequest) {
+	public void createCustomer(@RequestBody @Valid CreateUserControllerRequest controllerRequest) {
 		_createUserService(UserRoleEnum.USER, controllerRequest);
 	}
 
 	@PostMapping("/customer/find-password")
-	public void findCustomerPassword(@RequestBody FindPasswordRequest findPasswordRequest) {
+	public void findCustomerPassword(@RequestBody @Valid FindPasswordRequest findPasswordRequest) {
 		userService.findUserAndSendEmail(findPasswordRequest);
 	}
 
@@ -83,7 +85,7 @@ public class UserController {
 
 	@PostMapping("/admin/signup")
 	@ResponseStatus(HttpStatus.CREATED)
-	public void createAdmin(@RequestBody CreateUserControllerRequest controllerRequest) {
+	public void createAdmin(@RequestBody @Valid CreateUserControllerRequest controllerRequest) {
 		_createUserService(UserRoleEnum.ADMIN, controllerRequest);
 	}
 
