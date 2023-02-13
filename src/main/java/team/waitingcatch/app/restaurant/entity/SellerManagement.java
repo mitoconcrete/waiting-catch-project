@@ -12,12 +12,15 @@ import javax.persistence.Id;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import team.waitingcatch.app.common.Address;
+import team.waitingcatch.app.common.Position;
+import team.waitingcatch.app.common.entity.TimeStamped;
 import team.waitingcatch.app.restaurant.enums.AcceptedStatusEnum;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class SellerManagement extends Timestamped {
+public class SellerManagement extends TimeStamped {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
