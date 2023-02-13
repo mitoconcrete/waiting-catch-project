@@ -15,6 +15,7 @@ import lombok.NoArgsConstructor;
 import team.waitingcatch.app.common.Address;
 import team.waitingcatch.app.common.Position;
 import team.waitingcatch.app.common.entity.TimeStamped;
+import team.waitingcatch.app.restaurant.dto.DemandSignUpSellerServiceRequest;
 import team.waitingcatch.app.restaurant.enums.AcceptedStatusEnum;
 
 @Getter
@@ -40,8 +41,7 @@ public class SellerManagement extends TimeStamped {
 	private Position position;
 	@Column(nullable = false)
 	private String description;
-	@Column(name = "business_license_no", nullable = false)
-	private String businessLicenseNo;
+
 	@Column(nullable = false)
 	@Enumerated(value = EnumType.STRING)
 	private AcceptedStatusEnum status;
@@ -50,4 +50,16 @@ public class SellerManagement extends TimeStamped {
 	@Column(name = "search_keywords", nullable = false)
 	private String searchKeyWords;
 
+	public SellerManagement(DemandSignUpSellerServiceRequest demandSignupSellerServiceRequest) {
+		this.username = demandSignupSellerServiceRequest.getUsername();
+		this.email = demandSignupSellerServiceRequest.getEmail();
+		this.phoneNumber = demandSignupSellerServiceRequest.getPhoneNumber();
+		this.restaurantName = demandSignupSellerServiceRequest.getRestaurantName();
+		this.address = demandSignupSellerServiceRequest.getAddress();
+		this.position = demandSignupSellerServiceRequest.getPosition();
+		this.description = demandSignupSellerServiceRequest.getDescription();
+		this.status = AcceptedStatusEnum.WAIT;
+		this.categories = demandSignupSellerServiceRequest.getCategories();
+		this.searchKeyWords = demandSignupSellerServiceRequest.getSearchKeyWords();
+	}
 }
