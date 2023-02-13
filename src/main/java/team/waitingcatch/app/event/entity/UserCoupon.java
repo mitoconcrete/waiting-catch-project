@@ -12,6 +12,7 @@ import javax.persistence.ManyToOne;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import team.waitingcatch.app.user.entitiy.User;
 
 @Entity
 @Getter

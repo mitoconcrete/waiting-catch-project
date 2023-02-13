@@ -3,12 +3,14 @@ package team.waitingcatch.app.user.service;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.user.entitiy.User;
 import team.waitingcatch.app.user.entitiy.UserDetailsImpl;
 import team.waitingcatch.app.user.repository.UserRepository;
 
+@Service
 @RequiredArgsConstructor
 public class UserDetailsServiceImpl implements UserDetailsService {
 	private final UserRepository userRepository;

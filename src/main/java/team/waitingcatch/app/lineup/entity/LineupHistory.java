@@ -16,7 +16,10 @@ import javax.persistence.ManyToOne;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import team.waitingcatch.app.common.entity.TimeStamped;
 import team.waitingcatch.app.lineup.enums.ArrivalStatusEnum;
+import team.waitingcatch.app.restaurant.entity.Restaurant;
+import team.waitingcatch.app.user.entitiy.User;
 
 @Entity
 @Getter

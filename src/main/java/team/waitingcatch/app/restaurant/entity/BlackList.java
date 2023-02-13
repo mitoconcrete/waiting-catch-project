@@ -13,11 +13,13 @@ import lombok.AccessLevel;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import team.waitingcatch.app.common.entity.TimeStamped;
+import team.waitingcatch.app.user.entitiy.User;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class BlackList extends Timestamped {
+public class BlackList extends TimeStamped {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
