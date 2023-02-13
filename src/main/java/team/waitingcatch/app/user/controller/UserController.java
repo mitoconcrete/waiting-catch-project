@@ -31,11 +31,15 @@ public class UserController {
 
 	@PostMapping("/admin/signup")
 	@ResponseStatus(HttpStatus.CREATED)
-	public void createAdminUser(@RequestBody UserCreateControllerRequest controllerRequest) {
+	public void createAdmin(@RequestBody UserCreateControllerRequest controllerRequest) {
+		_createUserService(UserRoleEnum.ADMIN, controllerRequest);
+	}
+
+	private void _createUserService(UserRoleEnum role, UserCreateControllerRequest controllerRequest) {
 		// 컨트롤러에서 전달받은 데이터를 기반으로 role을 할당하여 서비스에 전달한다.
 		UserCreateServiceRequest serviceRequest =
 			new UserCreateServiceRequest(
-				UserRoleEnum.ADMIN,
+				role,
 				controllerRequest.getName(),
 				controllerRequest.getEmail(),
 				controllerRequest.getUsername(),
