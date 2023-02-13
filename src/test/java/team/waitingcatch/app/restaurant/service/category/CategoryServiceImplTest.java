@@ -7,6 +7,8 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.DisplayName;
@@ -16,6 +18,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import team.waitingcatch.app.restaurant.dto.CategoryResponse;
 import team.waitingcatch.app.restaurant.dto.CreateCategoryRequest;
 import team.waitingcatch.app.restaurant.dto.DeleteCategoryRequest;
 import team.waitingcatch.app.restaurant.dto.UpdateCategoryServiceRequest;
@@ -55,6 +58,26 @@ class CategoryServiceImplTest {
 
 		// then
 		verify(categoryRepository, times(1)).save(any(Category.class));
+	}
+
+	@Test
+	@DisplayName("최상위 카테고리 조회")
+	void getParentCategory() {
+		// given
+		List<Category> categories = new ArrayList<>();
+		Category category1 = new Category(null, "한식");
+		Category category2 = new Category(null, "양식");
+		categories.add(category1);
+		categories.add(category2);
+
+		when(categoryRepository.findAllByParentId(null)).thenReturn(categories);
+
+		// when
+		List<CategoryResponse> responses = categoryService.getParentCategories();
+
+		// then
+		assertEquals("한식", responses.get(0).getName());
+		assertEquals("양식", responses.get(1).getName());
 	}
 
 	@Test
@@ -98,10 +121,10 @@ class CategoryServiceImplTest {
 		when(categoryRepository.findById(any(Long.class))).thenReturn(Optional.of(category));
 
 		// when
-		categoryService._getCategory(any(Long.class));
+		Category category1 = categoryService._getCategory(any(Long.class));
 
 		// then
-		assertNull(category.getId());
-		assertEquals("한식", category.getName());
+		assertNull(category1.getId());
+		assertEquals("한식", category1.getName());
 	}
 }
