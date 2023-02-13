@@ -4,7 +4,7 @@ import lombok.Getter;
 import team.waitingcatch.app.user.enums.UserRoleEnum;
 
 @Getter
-public class UserCreateServiceRequest {
+public class CreateUserServiceRequest {
 	private final String name;
 	private final String email;
 	private final String username;
@@ -13,7 +13,7 @@ public class UserCreateServiceRequest {
 	private final String phoneNumber;
 	private final UserRoleEnum role;
 
-	public UserCreateServiceRequest(UserRoleEnum role, String name, String email, String username, String password,
+	public CreateUserServiceRequest(UserRoleEnum role, String name, String email, String username, String password,
 		String nickname,
 		String phoneNumber) {
 		this.role = role;

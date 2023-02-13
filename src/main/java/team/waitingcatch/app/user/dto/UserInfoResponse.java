@@ -7,7 +7,7 @@ import team.waitingcatch.app.user.entitiy.User;
 import team.waitingcatch.app.user.enums.UserRoleEnum;
 
 @Getter
-public class CustomerResponse {
+public class UserInfoResponse {
 	private final Long id;
 	private final String username;
 	private final String email;
@@ -19,7 +19,7 @@ public class CustomerResponse {
 	private final LocalDateTime createdDate;
 	private final LocalDateTime modifiedDate;
 
-	public CustomerResponse(User user) {
+	public UserInfoResponse(User user) {
 		this.id = user.getId();
 		this.username = user.getUsername();
 		this.nickname = user.getNickname();

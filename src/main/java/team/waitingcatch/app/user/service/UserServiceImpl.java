@@ -11,12 +11,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
-import team.waitingcatch.app.user.dto.CustomerResponse;
+import team.waitingcatch.app.user.dto.CreateUserServiceRequest;
 import team.waitingcatch.app.user.dto.DeleteUserRequest;
 import team.waitingcatch.app.user.dto.FindPasswordRequest;
 import team.waitingcatch.app.user.dto.GetCustomerByIdAndRoleServiceRequest;
 import team.waitingcatch.app.user.dto.UpdateUserServiceRequest;
-import team.waitingcatch.app.user.dto.UserCreateServiceRequest;
+import team.waitingcatch.app.user.dto.UserInfoResponse;
 import team.waitingcatch.app.user.entitiy.User;
 import team.waitingcatch.app.user.repository.UserRepository;
 
@@ -31,12 +31,12 @@ public class UserServiceImpl implements UserService, InternalUserService {
 	private String smtpSenderEmail;
 
 	@Override
-	public List<CustomerResponse> getCustomers() {
-		return userRepository.findAll().stream().map(CustomerResponse::new).collect(Collectors.toList());
+	public List<UserInfoResponse> getCustomers() {
+		return userRepository.findAll().stream().map(UserInfoResponse::new).collect(Collectors.toList());
 	}
 
 	@Override
-	public CustomerResponse getByUserIdAndRole(GetCustomerByIdAndRoleServiceRequest payload) {
+	public UserInfoResponse getByUserIdAndRole(GetCustomerByIdAndRoleServiceRequest payload) {
 		// 유저의 존재여부를 판단한다.
 		User user = userRepository.findById(payload.getUserId()).orElseThrow(
 			() -> new IllegalArgumentException("유저가 존재하지 않습니다.")
@@ -47,11 +47,11 @@ public class UserServiceImpl implements UserService, InternalUserService {
 			throw new IllegalArgumentException("유저가 존재하지 않습니다.");
 		}
 
-		return new CustomerResponse(user);
+		return new UserInfoResponse(user);
 	}
 
 	@Override
-	public void createUser(UserCreateServiceRequest payload) {
+	public void createUser(CreateUserServiceRequest payload) {
 		// 이미 존재하는 유저인지 검증합니다.
 		Boolean isExistUser = userRepository.existsByUsername(payload.getUsername());
 

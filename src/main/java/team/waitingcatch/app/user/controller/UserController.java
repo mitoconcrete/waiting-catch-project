@@ -14,14 +14,14 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
-import team.waitingcatch.app.user.dto.CustomerResponse;
+import team.waitingcatch.app.user.dto.CreateUserControllerRequest;
+import team.waitingcatch.app.user.dto.CreateUserServiceRequest;
 import team.waitingcatch.app.user.dto.DeleteUserRequest;
 import team.waitingcatch.app.user.dto.FindPasswordRequest;
 import team.waitingcatch.app.user.dto.GetCustomerByIdAndRoleServiceRequest;
 import team.waitingcatch.app.user.dto.UpdateUserControllerRequest;
 import team.waitingcatch.app.user.dto.UpdateUserServiceRequest;
-import team.waitingcatch.app.user.dto.UserCreateControllerRequest;
-import team.waitingcatch.app.user.dto.UserCreateServiceRequest;
+import team.waitingcatch.app.user.dto.UserInfoResponse;
 import team.waitingcatch.app.user.enums.UserRoleEnum;
 import team.waitingcatch.app.user.service.UserService;
 
@@ -33,13 +33,13 @@ public class UserController {
 	// customer
 	@GetMapping("/customer/withdraw")
 	public void withdrawCustomer(@AuthenticationPrincipal UserDetails userDetails) {
-		DeleteUserRequest payload = new DeleteUserRequest(userDetails.getUsername());
-		userService.deleteUser(payload);
+		DeleteUserRequest servicePayload = new DeleteUserRequest(userDetails.getUsername());
+		userService.deleteUser(servicePayload);
 	}
 
 	@PostMapping("/customer/signup")
 	@ResponseStatus(HttpStatus.CREATED)
-	public void createCustomer(@RequestBody UserCreateControllerRequest controllerRequest) {
+	public void createCustomer(@RequestBody CreateUserControllerRequest controllerRequest) {
 		_createUserService(UserRoleEnum.USER, controllerRequest);
 	}
 
@@ -51,46 +51,46 @@ public class UserController {
 	// seller
 	@PostMapping("/seller/withdraw")
 	public void withdrawSeller(@AuthenticationPrincipal UserDetails userDetails) {
-		DeleteUserRequest payload = new DeleteUserRequest(userDetails.getUsername());
-		userService.deleteUser(payload);
+		DeleteUserRequest servicePayload = new DeleteUserRequest(userDetails.getUsername());
+		userService.deleteUser(servicePayload);
 	}
 
 	@PutMapping("/seller/info")
 	public void updateSellerInfo(@AuthenticationPrincipal UserDetails userDetails, @RequestBody
 	UpdateUserControllerRequest controllerRequest) {
-		UpdateUserServiceRequest serviceRequest = new UpdateUserServiceRequest(controllerRequest.getName(),
+		UpdateUserServiceRequest servicePayload = new UpdateUserServiceRequest(controllerRequest.getName(),
 			controllerRequest.getEmail(), userDetails.getUsername(), controllerRequest.getNickName(),
 			controllerRequest.getPhoneNumber());
-		userService.updateUser(serviceRequest);
+		userService.updateUser(servicePayload);
 	}
 
 	// admin
 	@GetMapping("/admin/customers")
-	public List<CustomerResponse> getCustomers() {
+	public List<UserInfoResponse> getCustomers() {
 		return userService.getCustomers();
 	}
 
 	@GetMapping("/admin/customers/{customerId}")
-	public CustomerResponse getCustomer(@PathVariable Long customerId) {
-		GetCustomerByIdAndRoleServiceRequest requestPayload =
+	public UserInfoResponse getCustomer(@PathVariable Long customerId) {
+		GetCustomerByIdAndRoleServiceRequest servicePayload =
 			new GetCustomerByIdAndRoleServiceRequest(
 				customerId,
 				UserRoleEnum.USER
 			);
 
-		return userService.getByUserIdAndRole(requestPayload);
+		return userService.getByUserIdAndRole(servicePayload);
 	}
 
 	@PostMapping("/admin/signup")
 	@ResponseStatus(HttpStatus.CREATED)
-	public void createAdmin(@RequestBody UserCreateControllerRequest controllerRequest) {
+	public void createAdmin(@RequestBody CreateUserControllerRequest controllerRequest) {
 		_createUserService(UserRoleEnum.ADMIN, controllerRequest);
 	}
 
-	private void _createUserService(UserRoleEnum role, UserCreateControllerRequest controllerRequest) {
+	private void _createUserService(UserRoleEnum role, CreateUserControllerRequest controllerRequest) {
 		// 컨트롤러에서 전달받은 데이터를 기반으로 role을 할당하여 서비스에 전달한다.
-		UserCreateServiceRequest serviceRequest =
-			new UserCreateServiceRequest(
+		CreateUserServiceRequest servicePayload =
+			new CreateUserServiceRequest(
 				role,
 				controllerRequest.getName(),
 				controllerRequest.getEmail(),
@@ -100,6 +100,6 @@ public class UserController {
 				controllerRequest.getPhoneNumber()
 			);
 
-		userService.createUser(serviceRequest);
+		userService.createUser(servicePayload);
 	}
 }

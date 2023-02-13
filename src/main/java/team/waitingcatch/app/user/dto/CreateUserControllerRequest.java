@@ -5,7 +5,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class UserCreateControllerRequest {
+public class CreateUserControllerRequest {
 	private String name;
 	private String email;
 	private String username;
