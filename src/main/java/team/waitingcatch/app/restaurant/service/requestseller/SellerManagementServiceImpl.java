@@ -13,8 +13,10 @@ import team.waitingcatch.app.restaurant.dto.ApproveSignUpSellerResponse;
 import team.waitingcatch.app.restaurant.dto.ApproveSignUpSellerServiceRequest;
 import team.waitingcatch.app.restaurant.dto.DemandSignUpSellerServiceRequest;
 import team.waitingcatch.app.restaurant.dto.GetDemandSignUpSellerResponse;
+import team.waitingcatch.app.restaurant.dto.RejectSignUpSellerServiceRequest;
 import team.waitingcatch.app.restaurant.entity.Restaurant;
 import team.waitingcatch.app.restaurant.entity.SellerManagement;
+import team.waitingcatch.app.restaurant.enums.AcceptedStatusEnum;
 import team.waitingcatch.app.restaurant.repository.RestaurantRepository;
 import team.waitingcatch.app.restaurant.repository.SellerManagementRepository;
 import team.waitingcatch.app.user.dto.UserCreateServiceRequest;
@@ -58,9 +60,12 @@ public class SellerManagementServiceImpl implements SellerManagementService, Int
 		SellerManagement sellerManagement = sellerManagementRepository.findById(
 				approveSignUpSellerServiceRequest.getId())
 			.orElseThrow(() -> new IllegalArgumentException("Not found request seller sign-up"));
-		///오류날까?
+		if (sellerManagement.getStatus() == AcceptedStatusEnum.REJECTION) {
+			throw new IllegalArgumentException("This request already rejected please request seller again");
+		}
 		sellerManagement.approveUpdateStatus();
 		sellerManagementRepository.save(sellerManagement);
+
 		//비밀번호
 		String uuidPassword = UUID.randomUUID().toString().substring(1, 8);
 
@@ -79,6 +84,16 @@ public class SellerManagementServiceImpl implements SellerManagementService, Int
 		restaurantRepository.save(restaurant);
 
 		return new ApproveSignUpSellerResponse(sellerManagement.getUsername(), uuidPassword);
+	}
+
+	public void rejectSignUpSeller(RejectSignUpSellerServiceRequest rejectSignUpSellerServiceRequest) {
+		SellerManagement sellerManagement = sellerManagementRepository.findById(
+				rejectSignUpSellerServiceRequest.getId())
+			.orElseThrow(() -> new IllegalArgumentException("Not found request seller sign-up"));
+		///오류날까?
+		sellerManagement.rejectUpdateStatus();
+		sellerManagementRepository.save(sellerManagement);
+
 	}
 
 }

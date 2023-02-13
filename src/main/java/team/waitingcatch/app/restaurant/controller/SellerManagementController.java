@@ -2,6 +2,7 @@ package team.waitingcatch.app.restaurant.controller;
 
 import java.util.List;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,6 +17,7 @@ import team.waitingcatch.app.restaurant.dto.ApproveSignUpSellerServiceRequest;
 import team.waitingcatch.app.restaurant.dto.DemandSignUpSellerControllerRequest;
 import team.waitingcatch.app.restaurant.dto.DemandSignUpSellerServiceRequest;
 import team.waitingcatch.app.restaurant.dto.GetDemandSignUpSellerResponse;
+import team.waitingcatch.app.restaurant.dto.RejectSignUpSellerServiceRequest;
 import team.waitingcatch.app.restaurant.service.requestseller.SellerManagementService;
 
 @RestController
@@ -57,6 +59,13 @@ public class SellerManagementController {
 		ApproveSignUpSellerServiceRequest approveSignUpSellerServiceRequest = new ApproveSignUpSellerServiceRequest(
 			sellerManagementId);
 		return sellerManagementService.approveSignUpSeller(approveSignUpSellerServiceRequest);
+	}
+
+	@DeleteMapping(path = "/admin/seller-managements/{sellerManagementId}")
+	public void rejectSignUpSeller(@PathVariable Long sellerManagementId) {
+		RejectSignUpSellerServiceRequest rejectSignUpSellerServiceRequest = new RejectSignUpSellerServiceRequest(
+			sellerManagementId);
+		sellerManagementService.rejectSignUpSeller(rejectSignUpSellerServiceRequest);
 	}
 
 }

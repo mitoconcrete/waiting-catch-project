@@ -72,4 +72,10 @@ public class SellerManagement extends TimeStamped {
 	public void approveUpdateStatus() {
 		this.status = AcceptedStatusEnum.APPROVAL;
 	}
+
+	public void rejectUpdateStatus() {
+
+		this.status = AcceptedStatusEnum.REJECTION;
+	}
+
 }
