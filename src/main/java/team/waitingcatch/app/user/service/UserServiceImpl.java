@@ -86,15 +86,16 @@ public class UserServiceImpl implements UserService, InternalUserService {
 	@Override
 	public void deleteUser(DeleteUserRequest payload) {
 		User user = _getUserByUsername(payload.getUsername());
-		user.remove();
+		userRepository.delete(user);
 	}
 
 	@Override
 	@Transactional(readOnly = true)
 	public void findUserAndSendEmail(FindPasswordRequest payload) {
-		User user = userRepository.findByUsernameAndEmail(payload.getUsername(), payload.getEmail()).orElseThrow(
-			() -> new IllegalArgumentException("유저가 존재하지 않습니다.")
-		);
+		User user = userRepository.findByUsernameAndEmailAndDeletedFalse(payload.getUsername(), payload.getEmail())
+			.orElseThrow(
+				() -> new IllegalArgumentException("유저가 존재하지 않습니다.")
+			);
 
 		// 유저가 존재하면 임시 비밀번호를 생성하고, 저장한다.
 		String temporaryPassword = UUID.randomUUID().toString().substring(0, 10);
