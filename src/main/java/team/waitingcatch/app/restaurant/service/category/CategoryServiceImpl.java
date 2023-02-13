@@ -1,9 +1,13 @@
 package team.waitingcatch.app.restaurant.service.category;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
+import team.waitingcatch.app.restaurant.dto.CategoryResponse;
 import team.waitingcatch.app.restaurant.dto.CreateCategoryRequest;
 import team.waitingcatch.app.restaurant.dto.DeleteCategoryRequest;
 import team.waitingcatch.app.restaurant.dto.UpdateCategoryServiceRequest;
@@ -20,6 +24,13 @@ public class CategoryServiceImpl implements CategoryService, InternalCategorySer
 	public void createCategory(CreateCategoryRequest request) {
 		Category category = Category.create(request);
 		categoryRepository.save(category);
+	}
+
+	@Override
+	public List<CategoryResponse> getParentCategories() {
+		return categoryRepository.findAllByParentId(null).stream()
+			.map(CategoryResponse::new)
+			.collect(Collectors.toList());
 	}
 
 	@Override

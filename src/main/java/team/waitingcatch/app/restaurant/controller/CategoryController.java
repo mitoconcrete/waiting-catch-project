@@ -1,6 +1,9 @@
 package team.waitingcatch.app.restaurant.controller;
 
+import java.util.List;
+
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -8,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
+import team.waitingcatch.app.restaurant.dto.CategoryResponse;
 import team.waitingcatch.app.restaurant.dto.CreateCategoryRequest;
 import team.waitingcatch.app.restaurant.dto.DeleteCategoryRequest;
 import team.waitingcatch.app.restaurant.dto.UpdateCategoryControllerRequest;
@@ -22,6 +26,11 @@ public class CategoryController {
 	@PostMapping("/admin/categories")
 	public void createCategory(@RequestBody CreateCategoryRequest request) {
 		categoryService.createCategory(request);
+	}
+
+	@GetMapping("/admin/categories")
+	public List<CategoryResponse> getParentCategories() {
+		return categoryService.getParentCategories();
 	}
 
 	@PutMapping("/admin/categories/{categoryId}")
