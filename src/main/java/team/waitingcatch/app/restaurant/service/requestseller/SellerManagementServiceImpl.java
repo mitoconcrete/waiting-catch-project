@@ -21,6 +21,7 @@ import team.waitingcatch.app.restaurant.repository.SellerManagementRepository;
 import team.waitingcatch.app.user.dto.CreateUserServiceRequest;
 import team.waitingcatch.app.user.entitiy.User;
 import team.waitingcatch.app.user.enums.UserRoleEnum;
+import team.waitingcatch.app.user.repository.UserRepository;
 import team.waitingcatch.app.user.service.InternalUserService;
 import team.waitingcatch.app.user.service.UserService;
 
@@ -33,10 +34,16 @@ public class SellerManagementServiceImpl implements SellerManagementService, Int
 	private final RestaurantRepository restaurantRepository;
 	private final UserService userService;
 
+	private final UserRepository userRepository;
+
 	//판매자 요청 등록 하는 메소드
 	public void demandSignUpSeller(DemandSignUpSellerServiceRequest demandSignupSellerServiceRequest) {
-		internalUserService._getUserByUsername(demandSignupSellerServiceRequest.getUsername());
-		internalUserService._getUserByEmail(demandSignupSellerServiceRequest.getEmail());
+		boolean user = userRepository.existsByUsername(demandSignupSellerServiceRequest.getUsername());
+		if (user) {
+			throw new IllegalArgumentException("해당 사용자가 존재합니다.");
+		}
+		//internalUserService._getUserByUsername(demandSignupSellerServiceRequest.getUsername());
+		//internalUserService._getUserByEmail(demandSignupSellerServiceRequest.getEmail());
 
 		SellerManagement sellerManagement = new SellerManagement(demandSignupSellerServiceRequest);
 		sellerManagementRepository.save(sellerManagement);
