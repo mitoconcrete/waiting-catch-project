@@ -39,6 +39,16 @@ public class JwtUtil {
 		key = Keys.hmacShaKeyFor(bytes);
 	}
 
+	public String createAccessToken(String username, UserRoleEnum role) {
+		long ACCESS_TOKEN_TIME = 1000 * 60 * 30L;
+		return createToken(username, role, ACCESS_TOKEN_TIME);
+	}
+
+	public String createRefreshToken(String username, UserRoleEnum role) {
+		long REFRESH_TOKEN_TIME = 1000 * 60 * 60 * 24 * 14L;
+		return createToken(username, role, REFRESH_TOKEN_TIME);
+	}
+
 	// 토큰 생성
 	public String createToken(String username, UserRoleEnum role, long token_time) {
 		Date date = new Date();

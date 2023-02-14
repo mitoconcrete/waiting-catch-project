@@ -49,12 +49,9 @@ public class UserServiceImpl implements UserService, InternalUserService {
 		}
 
 		// access token 과 refresh token을 생성합니다.
-		long ACCESS_TOKEN_TIME = 1000 * 60 * 30L;
-		long REFRESH_TOKEN_TIME = 1000 * 60 * 60 * 24 * 14L;
-		String accessToken = jwtUtil.createToken(user.getUsername(), user.getRole(), ACCESS_TOKEN_TIME);
 
-		//
-		String refreshToken = jwtUtil.createToken(user.getUsername(), user.getRole(), REFRESH_TOKEN_TIME);
+		String accessToken = jwtUtil.createAccessToken(user.getUsername(), user.getRole());
+		String refreshToken = jwtUtil.createRefreshToken(user.getUsername(), user.getRole());
 
 		/*
 		refreshToken을 redis에 저장합니다. 이 때, accessToken:RefreshToken의 형태로 저장하되, 'Bearer ' 을 제외한 토큰을 저장합니다.
