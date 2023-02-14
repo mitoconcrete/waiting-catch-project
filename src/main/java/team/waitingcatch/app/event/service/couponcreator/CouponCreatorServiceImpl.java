@@ -98,7 +98,6 @@ public class CouponCreatorServiceImpl implements CouponCreatorService, InternalC
 			.orElseThrow(
 				() -> new IllegalArgumentException("레스토랑을 찾을수 없습니다.")
 			);
-
 		return restaurant;
 	}
 

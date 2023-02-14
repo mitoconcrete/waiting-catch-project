@@ -41,7 +41,7 @@ public class CouponController {
 
 	/*  어드민  */
 
-	//새로운 어드민 이벤트를 생성한다.
+	//새로운 광역 이벤트를 생성한다.
 	@PostMapping("/admin/events")
 	public ResponseEntity<String> createAdminEvent(
 		@RequestBody CreateEventControllerRequest createEventControllerRequest) {
@@ -49,6 +49,7 @@ public class CouponController {
 			.body(eventService.createAdminEvent(createEventControllerRequest));
 	}
 
+	//광역 이벤트를 수정한다.
 	@PutMapping("/admin/events/{eventId}")
 	public ResponseEntity<String> updateAdminEvent(
 		@RequestBody UpdateEventControllerRequest updateEventControllerRequest, @PathVariable Long eventId) {
@@ -58,6 +59,7 @@ public class CouponController {
 			.body(eventService.updateAdminEvent(updateEventServiceRequest));
 	}
 
+	//광역 이벤트를 삭제한다.
 	@DeleteMapping("/admin/events/{eventId}")
 	public ResponseEntity<String> deleteAdminEvent(@PathVariable Long eventId) {
 		return ResponseEntity.status(HttpStatus.OK)
@@ -76,6 +78,7 @@ public class CouponController {
 			.body(eventService.createSellerEvent(createEventServiceRequest));
 	}
 
+	//레스토랑 이벤트를 수정한다.
 	@PutMapping("/seller/events/{eventId}")
 	public ResponseEntity<String> updateSellerEvent(
 		@RequestBody UpdateEventControllerRequest updateEventControllerRequest, @PathVariable Long eventId,
@@ -86,6 +89,7 @@ public class CouponController {
 			.body(eventService.updateSellerEvent(updateSellerEventServiceRequest));
 	}
 
+	//레스토랑 이벤트를 삭제한다.
 	@DeleteMapping("/seller/events/{eventId}")
 	public ResponseEntity<String> deleteSellerEvent(@PathVariable Long eventId,
 		@AuthenticationPrincipal UserDetailsImpl userDetails) {
@@ -97,12 +101,13 @@ public class CouponController {
 	}
 
 	/*  유저  */
-
+	//광역 이벤트 목록 출력
 	@GetMapping("/events")
 	public List<GetEventsResponse> getEvents() {
 		return eventService.getGlobalEvents();
 	}
 
+	//레스토랑 이벤트 목록 출력
 	@GetMapping("/restaurants/{restaurantId}/events")
 	public List<GetEventsResponse> getRestaurantEvents(@PathVariable Long restaurantId) {
 		return eventService.getRestaurantEvents(restaurantId);
@@ -157,6 +162,5 @@ public class CouponController {
 		return ResponseEntity.status(HttpStatus.OK)
 			.body(couponCreatorService.updateSellerCouponCreator(updateSellerCouponCreatorServiceRequest));
 	}
-	//@GetMapping("/restaurants/{restaurantId}/events/{eventId}")
 
 }
