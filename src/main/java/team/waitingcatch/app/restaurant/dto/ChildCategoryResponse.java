@@ -5,15 +5,13 @@ import java.util.List;
 import java.util.Objects;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import team.waitingcatch.app.restaurant.entity.Category;
 
 @Getter
-@NoArgsConstructor
 public class ChildCategoryResponse {
-	private Long categoryId;
-	private String name;
-	private List<ChildCategoryResponse> childCategories;
+	private final Long categoryId;
+	private final String name;
+	private final List<ChildCategoryResponse> childCategories;
 
 	public ChildCategoryResponse(List<Category> categories, Long categoryId) {
 		this.categoryId = categoryId;
