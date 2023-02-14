@@ -2,6 +2,8 @@ package team.waitingcatch.app.restaurant.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,7 +28,7 @@ public class CategoryController {
 	private final CategoryService categoryService;
 
 	@PostMapping("/admin/categories")
-	public void createCategory(@RequestBody CreateCategoryRequest request) {
+	public void createCategory(@RequestBody @Valid CreateCategoryRequest request) {
 		categoryService.createCategory(request);
 	}
 
@@ -43,7 +45,7 @@ public class CategoryController {
 
 	@PutMapping("/admin/categories/{categoryId}")
 	public void updateCategory(@PathVariable Long categoryId,
-		@RequestBody UpdateCategoryControllerRequest controllerRequest) {
+		@RequestBody @Valid UpdateCategoryControllerRequest controllerRequest) {
 
 		UpdateCategoryServiceRequest serviceRequest =
 			new UpdateCategoryServiceRequest(categoryId, controllerRequest.getName());

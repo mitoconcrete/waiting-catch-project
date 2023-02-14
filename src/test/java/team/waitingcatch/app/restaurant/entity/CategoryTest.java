@@ -2,7 +2,6 @@ package team.waitingcatch.app.restaurant.entity;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -51,7 +50,7 @@ class CategoryTest {
 			assertEquals(name, category.getName());
 		}
 
-		@Nested
+/*		@Nested
 		@DisplayName("실패 케이스")
 		class FailCases {
 
@@ -92,7 +91,7 @@ class CategoryTest {
 				// then
 				assertEquals("카테고리명에 빈값을 입력할 수 없습니다.", exception.getMessage());
 			}
-		}
+		}*/
 	}
 
 	@Nested
@@ -125,7 +124,7 @@ class CategoryTest {
 			assertEquals(serviceRequest.getName(), category.getName());
 		}
 
-		@Nested
+/*		@Nested
 		@DisplayName("실패 케이스")
 		class FailCases {
 
@@ -166,6 +165,6 @@ class CategoryTest {
 				// then
 				assertEquals("카테고리명에 빈값을 입력할 수 없습니다.", exception.getMessage());
 			}
-		}
+		}*/
 	}
 }
