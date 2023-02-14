@@ -62,11 +62,9 @@ public class JwtUtil {
 	}
 
 	// 토큰 검증
-	public boolean validateToken(String token) {
+	public void validateToken(String token) {
 		try {
 			Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
-			// 토큰 검증 시스템
-			return true;
 		} catch (SecurityException | MalformedJwtException e) {
 			throw new IllegalArgumentException("유효하지 않은 JWT 서명입니다.");
 		} catch (ExpiredJwtException e) {

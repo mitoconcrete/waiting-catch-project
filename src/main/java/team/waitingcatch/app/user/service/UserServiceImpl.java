@@ -14,8 +14,8 @@ import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.common.util.JwtUtil;
 import team.waitingcatch.app.redis.dto.CreateRefreshTokenServiceRequest;
 import team.waitingcatch.app.redis.dto.KillTokenRequest;
+import team.waitingcatch.app.redis.service.AliveTokenService;
 import team.waitingcatch.app.redis.service.KilledAccessTokenService;
-import team.waitingcatch.app.redis.service.RefreshTokenService;
 import team.waitingcatch.app.user.dto.CreateUserServiceRequest;
 import team.waitingcatch.app.user.dto.DeleteUserRequest;
 import team.waitingcatch.app.user.dto.FindPasswordRequest;
@@ -35,7 +35,7 @@ public class UserServiceImpl implements UserService, InternalUserService {
 	private final JwtUtil jwtUtil;
 	private final JavaMailSender emailSender;
 	private final UserRepository userRepository;
-	private final RefreshTokenService refreshTokenService;
+	private final AliveTokenService refreshTokenService;
 	private final KilledAccessTokenService accessTokenService;
 	@Value("${spring.mail.username}")
 	private String smtpSenderEmail;

@@ -9,9 +9,8 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RedisHash("refresh-token")
 @RequiredArgsConstructor
-public class RefreshToken {
+public class AliveToken {
 	@Id
 	private final String accessToken;
 	private final String refreshToken;
-
 }
