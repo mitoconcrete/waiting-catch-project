@@ -29,6 +29,7 @@ public class CategoryServiceImpl implements CategoryService, InternalCategorySer
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public List<CategoryResponse> getParentCategories() {
 		return categoryRepository.findAllByParentId(null).stream()
 			.map(CategoryResponse::new)
@@ -36,6 +37,7 @@ public class CategoryServiceImpl implements CategoryService, InternalCategorySer
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public ChildCategoryResponse getChildCategories(GetChildCategoryRequest request) {
 		List<Category> categories = categoryRepository.findAll();
 
@@ -56,6 +58,7 @@ public class CategoryServiceImpl implements CategoryService, InternalCategorySer
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public Category _getCategory(Long categoryId) {
 		return categoryRepository.findById(categoryId).orElseThrow(
 			() -> new IllegalArgumentException("존재하지 않는 카테고리입니다.")
