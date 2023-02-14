@@ -20,15 +20,17 @@ public class ChildCategoryResponse {
 
 		String name = "";
 		for (Category category : categories) {
-			if (Objects.equals(category.getId(), categoryId))
+			if (Objects.equals(category.getId(), categoryId)) {
 				name = category.getName();
+			}
 		}
 		this.name = name;
 
 		List<ChildCategoryResponse> categoryResponses = new ArrayList<>();
 		for (Category category : categories) {
-			if (Objects.equals(category.getParentId(), categoryId))
+			if (Objects.equals(category.getParentId(), categoryId)) {
 				categoryResponses.add(new ChildCategoryResponse(categories, category.getId()));
+			}
 		}
 		this.childCategories = categoryResponses;
 	}
