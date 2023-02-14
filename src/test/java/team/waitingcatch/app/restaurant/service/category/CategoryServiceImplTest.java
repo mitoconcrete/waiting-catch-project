@@ -3,6 +3,7 @@ package team.waitingcatch.app.restaurant.service.category;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -21,8 +22,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import team.waitingcatch.app.restaurant.dto.CategoryResponse;
 import team.waitingcatch.app.restaurant.dto.ChildCategoryResponse;
 import team.waitingcatch.app.restaurant.dto.CreateCategoryRequest;
-import team.waitingcatch.app.restaurant.dto.DeleteCategoryRequest;
-import team.waitingcatch.app.restaurant.dto.GetChildCategoryRequest;
+import team.waitingcatch.app.restaurant.dto.DeleteCategoryServiceRequest;
+import team.waitingcatch.app.restaurant.dto.GetChildCategoryServiceRequest;
 import team.waitingcatch.app.restaurant.dto.UpdateCategoryServiceRequest;
 import team.waitingcatch.app.restaurant.entity.Category;
 import team.waitingcatch.app.restaurant.repository.CategoryRepository;
@@ -40,7 +41,10 @@ class CategoryServiceImplTest {
 	@DisplayName("부모 카테고리 생성")
 	void createParentCategory() {
 		// given
-		CreateCategoryRequest categoryRequest = new CreateCategoryRequest(null, "한식");
+		CreateCategoryRequest categoryRequest = mock(CreateCategoryRequest.class);
+
+		when(categoryRequest.getParentId()).thenReturn(null);
+		when(categoryRequest.getName()).thenReturn("한식");
 
 		// when
 		categoryService.createCategory(categoryRequest);
@@ -53,7 +57,10 @@ class CategoryServiceImplTest {
 	@DisplayName("자식 카테고리 생성")
 	void createChildCategory() {
 		// given
-		CreateCategoryRequest categoryRequest = new CreateCategoryRequest(1L, "떡갈비");
+		CreateCategoryRequest categoryRequest = mock(CreateCategoryRequest.class);
+
+		when(categoryRequest.getParentId()).thenReturn(1L);
+		when(categoryRequest.getName()).thenReturn("떡갈비");
 
 		// when
 		categoryService.createCategory(categoryRequest);
@@ -86,7 +93,9 @@ class CategoryServiceImplTest {
 	@DisplayName("하위 카테고리 조회")
 	void getChildCategories() {
 		// given
-		GetChildCategoryRequest request = new GetChildCategoryRequest(1L);
+		GetChildCategoryServiceRequest request = mock(GetChildCategoryServiceRequest.class);
+
+		when(request.getParentId()).thenReturn(1L);
 
 		List<Category> categories = new ArrayList<>();
 		// Category category1 = new Category(1L, null, "한식");
@@ -115,9 +124,10 @@ class CategoryServiceImplTest {
 	@DisplayName("카테고리 수정")
 	void updateCategory() {
 		// given
-		UpdateCategoryServiceRequest serviceRequest = new UpdateCategoryServiceRequest(1L, "양식");
+		UpdateCategoryServiceRequest serviceRequest = mock(UpdateCategoryServiceRequest.class);
 		Category category = new Category(null, "한식");
 
+		when(serviceRequest.getName()).thenReturn("양식");
 		when(categoryRepository.findById(serviceRequest.getCategoryId())).thenReturn(Optional.of(category));
 
 		// when
@@ -131,7 +141,7 @@ class CategoryServiceImplTest {
 	@DisplayName("카테고리 삭제")
 	void deleteCategory() {
 		// given
-		DeleteCategoryRequest request = new DeleteCategoryRequest(any(Long.class));
+		DeleteCategoryServiceRequest request = mock(DeleteCategoryServiceRequest.class);
 		Category category = new Category(null, "한식");
 
 		when(categoryRepository.findById(request.getCategoryId())).thenReturn(Optional.of(category));

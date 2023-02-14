@@ -5,10 +5,10 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class DeleteCategoryRequest {
+public class DeleteCategoryServiceRequest {
 	private Long categoryId;
 
-	public DeleteCategoryRequest(Long categoryId) {
+	public DeleteCategoryServiceRequest(Long categoryId) {
 		this.categoryId = categoryId;
 	}
 }

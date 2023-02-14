@@ -5,10 +5,10 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class GetChildCategoryRequest {
+public class GetChildCategoryServiceRequest {
 	private Long parentId;
 
-	public GetChildCategoryRequest(Long parentId) {
+	public GetChildCategoryServiceRequest(Long parentId) {
 		this.parentId = parentId;
 	}
 }

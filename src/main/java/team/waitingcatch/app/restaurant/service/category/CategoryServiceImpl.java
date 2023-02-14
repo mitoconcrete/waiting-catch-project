@@ -10,8 +10,8 @@ import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.restaurant.dto.CategoryResponse;
 import team.waitingcatch.app.restaurant.dto.ChildCategoryResponse;
 import team.waitingcatch.app.restaurant.dto.CreateCategoryRequest;
-import team.waitingcatch.app.restaurant.dto.DeleteCategoryRequest;
-import team.waitingcatch.app.restaurant.dto.GetChildCategoryRequest;
+import team.waitingcatch.app.restaurant.dto.DeleteCategoryServiceRequest;
+import team.waitingcatch.app.restaurant.dto.GetChildCategoryServiceRequest;
 import team.waitingcatch.app.restaurant.dto.UpdateCategoryServiceRequest;
 import team.waitingcatch.app.restaurant.entity.Category;
 import team.waitingcatch.app.restaurant.repository.CategoryRepository;
@@ -38,7 +38,7 @@ public class CategoryServiceImpl implements CategoryService, InternalCategorySer
 
 	@Override
 	@Transactional(readOnly = true)
-	public ChildCategoryResponse getChildCategories(GetChildCategoryRequest request) {
+	public ChildCategoryResponse getChildCategories(GetChildCategoryServiceRequest request) {
 		List<Category> categories = categoryRepository.findAll();
 
 		return new ChildCategoryResponse(categories, request.getParentId());
@@ -48,10 +48,11 @@ public class CategoryServiceImpl implements CategoryService, InternalCategorySer
 	public void updateCategory(UpdateCategoryServiceRequest serviceRequest) {
 		Category category = _getCategory(serviceRequest.getCategoryId());
 		category.update(serviceRequest);
+		categoryRepository.save(category);
 	}
 
 	@Override
-	public void deleteCategory(DeleteCategoryRequest request) {
+	public void deleteCategory(DeleteCategoryServiceRequest request) {
 		Category category = _getCategory(request.getCategoryId());
 		categoryRepository.delete(category);
 	}

@@ -14,8 +14,8 @@ import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.restaurant.dto.CategoryResponse;
 import team.waitingcatch.app.restaurant.dto.ChildCategoryResponse;
 import team.waitingcatch.app.restaurant.dto.CreateCategoryRequest;
-import team.waitingcatch.app.restaurant.dto.DeleteCategoryRequest;
-import team.waitingcatch.app.restaurant.dto.GetChildCategoryRequest;
+import team.waitingcatch.app.restaurant.dto.DeleteCategoryServiceRequest;
+import team.waitingcatch.app.restaurant.dto.GetChildCategoryServiceRequest;
 import team.waitingcatch.app.restaurant.dto.UpdateCategoryControllerRequest;
 import team.waitingcatch.app.restaurant.dto.UpdateCategoryServiceRequest;
 import team.waitingcatch.app.restaurant.service.category.CategoryService;
@@ -37,7 +37,7 @@ public class CategoryController {
 
 	@GetMapping("/admin/categories/{categoryId}")
 	public ChildCategoryResponse getChildCategories(@PathVariable Long categoryId) {
-		GetChildCategoryRequest request = new GetChildCategoryRequest(categoryId);
+		GetChildCategoryServiceRequest request = new GetChildCategoryServiceRequest(categoryId);
 		return categoryService.getChildCategories(request);
 	}
 
@@ -53,7 +53,7 @@ public class CategoryController {
 
 	@DeleteMapping("/admin/categories/{categoryId}")
 	public void deleteCategory(@PathVariable Long categoryId) {
-		DeleteCategoryRequest request = new DeleteCategoryRequest(categoryId);
+		DeleteCategoryServiceRequest request = new DeleteCategoryServiceRequest(categoryId);
 		categoryService.deleteCategory(request);
 	}
 

@@ -3,15 +3,20 @@ package team.waitingcatch.app.restaurant.entity;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import team.waitingcatch.app.restaurant.dto.CreateCategoryRequest;
 import team.waitingcatch.app.restaurant.dto.UpdateCategoryServiceRequest;
 
+@ExtendWith(MockitoExtension.class)
 class CategoryTest {
 
 	@Nested
@@ -32,7 +37,10 @@ class CategoryTest {
 		@DisplayName("정상 케이스")
 		void createCategory_Normal() {
 			// given
-			CreateCategoryRequest request = new CreateCategoryRequest(parentId, name);
+			CreateCategoryRequest request = mock(CreateCategoryRequest.class);
+
+			when(request.getParentId()).thenReturn(parentId);
+			when(request.getName()).thenReturn(name);
 
 			// when
 			Category category = Category.create(request);
@@ -52,7 +60,10 @@ class CategoryTest {
 			void fail1() {
 				//given
 				name = null;
-				CreateCategoryRequest request = new CreateCategoryRequest(parentId, name);
+				CreateCategoryRequest request = mock(CreateCategoryRequest.class);
+
+				when(request.getParentId()).thenReturn(parentId);
+				when(request.getName()).thenReturn(name);
 
 				// when
 				Exception exception = assertThrows(IllegalArgumentException.class, () -> {
@@ -68,7 +79,10 @@ class CategoryTest {
 			void fail2() {
 				// given
 				name = "";
-				CreateCategoryRequest request = new CreateCategoryRequest(parentId, name);
+				CreateCategoryRequest request = mock(CreateCategoryRequest.class);
+
+				when(request.getParentId()).thenReturn(parentId);
+				when(request.getName()).thenReturn(name);
 
 				// when
 				Exception exception = assertThrows(IllegalArgumentException.class, () -> {
@@ -99,8 +113,10 @@ class CategoryTest {
 		@DisplayName("정상 케이스")
 		void updateCategory_Normal() {
 			// given
-			UpdateCategoryServiceRequest serviceRequest = new UpdateCategoryServiceRequest(1L, "양식");
+			UpdateCategoryServiceRequest serviceRequest = mock(UpdateCategoryServiceRequest.class);
 			Category category = new Category(parentId, name);
+
+			when(serviceRequest.getName()).thenReturn("양식");
 
 			// when
 			category.update(serviceRequest);
@@ -118,8 +134,10 @@ class CategoryTest {
 			void fail1() {
 				//given
 				name = null;
-				UpdateCategoryServiceRequest serviceRequest = new UpdateCategoryServiceRequest(1L, name);
+				UpdateCategoryServiceRequest serviceRequest = mock(UpdateCategoryServiceRequest.class);
 				Category category = new Category(parentId, "한식");
+
+				when(serviceRequest.getName()).thenReturn(name);
 
 				// when
 				Exception exception = assertThrows(IllegalArgumentException.class, () -> {
@@ -135,8 +153,10 @@ class CategoryTest {
 			void fail2() {
 				//given
 				name = "";
-				UpdateCategoryServiceRequest serviceRequest = new UpdateCategoryServiceRequest(1L, name);
+				UpdateCategoryServiceRequest serviceRequest = mock(UpdateCategoryServiceRequest.class);
 				Category category = new Category(parentId, "한식");
+
+				when(serviceRequest.getName()).thenReturn(name);
 
 				// when
 				Exception exception = assertThrows(IllegalArgumentException.class, () -> {
