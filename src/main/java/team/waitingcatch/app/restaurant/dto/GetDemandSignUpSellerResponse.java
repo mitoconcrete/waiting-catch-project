@@ -1,27 +1,27 @@
 package team.waitingcatch.app.restaurant.dto;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import team.waitingcatch.app.restaurant.entity.SellerManagement;
+import team.waitingcatch.app.restaurant.enums.AcceptedStatusEnum;
 
 @Getter
-@NoArgsConstructor
 public class GetDemandSignUpSellerResponse {
-	private Long id;
-	private String username;
-	private String email;
-	private String phoneNumber;
-	private String restaurantName;
-	private String categories;
-	private float latitude;
-	private float longitude;
-	private String description;
-	private String province;
-	private String city;
-	private String street;
-	private String searchKeyWords;
-	private String businessLicenseNo;
-	private String name;
+	private final Long id;
+	private final String username;
+	private final String email;
+	private final String phoneNumber;
+	private final String restaurantName;
+	private final String categories;
+	private final double latitude;
+	private final double longitude;
+	private final String description;
+	private final String province;
+	private final String city;
+	private final String street;
+	private final String searchKeyWords;
+	private final String businessLicenseNo;
+	private final String name;
+	private final AcceptedStatusEnum status;
 
 	public GetDemandSignUpSellerResponse(SellerManagement sellerManagement) {
 		this.id = sellerManagement.getId();
@@ -39,5 +39,6 @@ public class GetDemandSignUpSellerResponse {
 		this.searchKeyWords = sellerManagement.getSearchKeyWords();
 		this.businessLicenseNo = sellerManagement.getBusinessLicenseNo();
 		this.name = sellerManagement.getName();
+		this.status = sellerManagement.getStatus();
 	}
 }

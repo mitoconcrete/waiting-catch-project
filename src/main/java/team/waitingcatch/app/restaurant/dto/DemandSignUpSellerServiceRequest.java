@@ -1,26 +1,35 @@
 package team.waitingcatch.app.restaurant.dto;
 
+import javax.validation.constraints.NotNull;
+
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import team.waitingcatch.app.common.Address;
 import team.waitingcatch.app.common.Position;
 
 @Getter
-@NoArgsConstructor
 public class DemandSignUpSellerServiceRequest {
-	private String username;
-	private String name;
-	private String email;
-	private String phoneNumber;
-	private String restaurantName;
-	private String categories;
-	private String description;
-
-	private Position position;
-	private Address address;
-
-	private String searchKeyWords;
-	private String businessLicenseNo;
+	@NotNull
+	private final String username;
+	@NotNull
+	private final String name;
+	@NotNull
+	private final String email;
+	@NotNull
+	private final String phoneNumber;
+	@NotNull
+	private final String restaurantName;
+	@NotNull
+	private final String categories;
+	@NotNull
+	private final String description;
+	@NotNull
+	private final Position position;
+	@NotNull
+	private final Address address;
+	@NotNull
+	private final String searchKeyWords;
+	@NotNull
+	private final String businessLicenseNo;
 
 	public DemandSignUpSellerServiceRequest(DemandSignUpSellerControllerRequest demandSignUpSellerControllerRequest,
 		Address address, Position position) {

@@ -5,5 +5,5 @@ import team.waitingcatch.app.user.entitiy.User;
 
 public interface UserService {
 
-	User createSeller(UserCreateServiceRequest payload);
+	User createUser(UserCreateServiceRequest payload);
 }

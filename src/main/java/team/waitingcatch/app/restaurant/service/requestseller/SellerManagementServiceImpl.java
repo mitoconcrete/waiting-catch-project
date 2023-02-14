@@ -1,6 +1,7 @@
 package team.waitingcatch.app.restaurant.service.requestseller;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -16,7 +17,6 @@ import team.waitingcatch.app.restaurant.dto.GetDemandSignUpSellerResponse;
 import team.waitingcatch.app.restaurant.dto.RejectSignUpSellerServiceRequest;
 import team.waitingcatch.app.restaurant.entity.Restaurant;
 import team.waitingcatch.app.restaurant.entity.SellerManagement;
-import team.waitingcatch.app.restaurant.enums.AcceptedStatusEnum;
 import team.waitingcatch.app.restaurant.repository.RestaurantRepository;
 import team.waitingcatch.app.restaurant.repository.SellerManagementRepository;
 import team.waitingcatch.app.user.dto.UserCreateServiceRequest;
@@ -35,12 +35,12 @@ public class SellerManagementServiceImpl implements SellerManagementService, Int
 
 	//판매자 요청 등록 하는 메소드
 	public void demandSignUpSeller(DemandSignUpSellerServiceRequest demandSignupSellerServiceRequest) {
-		User user = internalUserService._findByUsername(demandSignupSellerServiceRequest.getUsername());
-		if (user != null) {
+		Optional<User> user = internalUserService._findByUsername(demandSignupSellerServiceRequest.getUsername());
+		if (user.isPresent()) {
 			throw new IllegalArgumentException("Duplicated user");
 		}
-		User userEmail = internalUserService._findByEmail(demandSignupSellerServiceRequest.getEmail());
-		if (userEmail != null) {
+		Optional<User> userEmail = internalUserService._findByEmail(demandSignupSellerServiceRequest.getEmail());
+		if (userEmail.isPresent()) {
 			throw new IllegalArgumentException("Duplicated email");
 		}
 
@@ -60,29 +60,24 @@ public class SellerManagementServiceImpl implements SellerManagementService, Int
 		SellerManagement sellerManagement = sellerManagementRepository.findById(
 				approveSignUpSellerServiceRequest.getId())
 			.orElseThrow(() -> new IllegalArgumentException("Not found request seller sign-up"));
-		if (sellerManagement.getStatus() == AcceptedStatusEnum.REJECTION) {
-			throw new IllegalArgumentException("This request already rejected please request seller again");
-		}
-		sellerManagement.approveUpdateStatus();
-		sellerManagementRepository.save(sellerManagement);
 
+		sellerManagement.checkReject();
+		sellerManagement.checkApprove();
+
+		sellerManagement.approveUpdateStatus();
 		//비밀번호
 		String uuidPassword = UUID.randomUUID().toString().substring(1, 8);
-
 		//회원가입
 		UserCreateServiceRequest
 			userCreateServiceRequest
 			= new UserCreateServiceRequest(sellerManagement, uuidPassword);
-
-		User seller = userService.createSeller(userCreateServiceRequest);
-
+		User seller = userService.createUser(userCreateServiceRequest);
 		// 레스토랑 만들기
 		ApproveSignUpSellerManagementEntityPassToRestaurantEntityRequest
 			approveSignUpSellerManagementEntityPassToRestaurantEntityRequest
 			= new ApproveSignUpSellerManagementEntityPassToRestaurantEntityRequest(sellerManagement, seller);
 		Restaurant restaurant = new Restaurant(approveSignUpSellerManagementEntityPassToRestaurantEntityRequest);
 		restaurantRepository.save(restaurant);
-
 		return new ApproveSignUpSellerResponse(sellerManagement.getUsername(), uuidPassword);
 	}
 
@@ -90,10 +85,9 @@ public class SellerManagementServiceImpl implements SellerManagementService, Int
 		SellerManagement sellerManagement = sellerManagementRepository.findById(
 				rejectSignUpSellerServiceRequest.getId())
 			.orElseThrow(() -> new IllegalArgumentException("Not found request seller sign-up"));
-		///오류날까?
+		sellerManagement.checkReject();
+		sellerManagement.checkApprove();
 		sellerManagement.rejectUpdateStatus();
-		sellerManagementRepository.save(sellerManagement);
-
 	}
 
 }

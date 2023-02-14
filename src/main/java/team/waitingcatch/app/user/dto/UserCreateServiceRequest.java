@@ -13,7 +13,6 @@ public class UserCreateServiceRequest {
 	private String email;
 	private String phoneNumber;
 	private String name;
-
 	private UserRoleEnum role;
 
 	public UserCreateServiceRequest(SellerManagement sellerManagement, String passwordEncoded) {
@@ -21,7 +20,7 @@ public class UserCreateServiceRequest {
 		this.password = passwordEncoded;
 		this.email = sellerManagement.getEmail();
 		this.phoneNumber = sellerManagement.getPhoneNumber();
-		this.role = UserRoleEnum.USER;
+		this.role = UserRoleEnum.SELLER;
 		this.name = sellerManagement.getName();
 	}
 }

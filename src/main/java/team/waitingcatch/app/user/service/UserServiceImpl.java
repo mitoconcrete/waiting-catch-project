@@ -1,5 +1,7 @@
 package team.waitingcatch.app.user.service;
 
+import java.util.Optional;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,16 +18,16 @@ public class UserServiceImpl implements UserService, InternalUserService {
 	private final UserRepository userRepository;
 
 	@Override
-	public User _findByUsername(String username) {
-		return null;
+	public Optional<User> _findByUsername(String username) {
+		return Optional.empty();
 	}
 
 	@Override
-	public User _findByEmail(String email) {
-		return null;
+	public Optional<User> _findByEmail(String email) {
+		return Optional.empty();
 	}
 
-	public User createSeller(UserCreateServiceRequest payload) {
+	public User createUser(UserCreateServiceRequest payload) {
 		Boolean isExistUser = userRepository.existsByUsername(payload.getUsername());
 		if (isExistUser) {
 			throw new IllegalArgumentException("이미 존재하는 유저입니다.");

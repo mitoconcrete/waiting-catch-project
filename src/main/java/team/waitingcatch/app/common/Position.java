@@ -11,12 +11,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Position {
 	@Column(nullable = false)
-	private float latitude;
+	private double latitude;
 
 	@Column(nullable = false)
-	private float longitude;
+	private double longitude;
 
-	public Position(float latitude, float longitude) {
+	public Position(double latitude, double longitude) {
 		this.latitude = latitude;
 		this.longitude = longitude;
 	}

@@ -74,8 +74,18 @@ public class SellerManagement extends TimeStamped {
 	}
 
 	public void rejectUpdateStatus() {
-
 		this.status = AcceptedStatusEnum.REJECTION;
 	}
 
+	public void checkReject() {
+		if (this.status == AcceptedStatusEnum.REJECTION) {
+			throw new IllegalArgumentException("This request already reject please request seller again");
+		}
+	}
+
+	public void checkApprove() {
+		if (this.status == AcceptedStatusEnum.APPROVAL) {
+			throw new IllegalArgumentException("This request already Approve please request seller again");
+		}
+	}
 }

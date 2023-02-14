@@ -2,10 +2,12 @@ package team.waitingcatch.app.restaurant.controller;
 
 import java.util.List;
 
-import org.springframework.web.bind.annotation.DeleteMapping;
+import javax.validation.Valid;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -29,8 +31,9 @@ public class SellerManagementController {
 	//판매자 권한 부분
 
 	//판매자 셀러 요청
-	@PostMapping(path = "/seller/demand")
-	public void demandSignUpSeller(@RequestBody DemandSignUpSellerControllerRequest demandSignUpControllerRequest) {
+	@PostMapping("/seller/demand")
+	public void demandSignUpSeller(
+		@Valid @RequestBody DemandSignUpSellerControllerRequest demandSignUpControllerRequest) {
 		Address address = new Address(
 			demandSignUpControllerRequest.getProvince(),
 			demandSignUpControllerRequest.getCity(),
@@ -49,19 +52,19 @@ public class SellerManagementController {
 	//관리자 권한 부분
 
 	//판매자 요청 조회
-	@GetMapping(path = "/admin/seller-managements")
+	@GetMapping("/admin/seller-managements")
 	public List<GetDemandSignUpSellerResponse> getDemandSignUpSellers() {
 		return sellerManagementService.getDemandSignUpSellers();
 	}
 
-	@PostMapping(path = "/admin/seller-managements/{sellerManagementId}")
+	@PostMapping("/admin/seller-managements/{sellerManagementId}")
 	public ApproveSignUpSellerResponse approveSignUpSeller(@PathVariable Long sellerManagementId) {
 		ApproveSignUpSellerServiceRequest approveSignUpSellerServiceRequest = new ApproveSignUpSellerServiceRequest(
 			sellerManagementId);
 		return sellerManagementService.approveSignUpSeller(approveSignUpSellerServiceRequest);
 	}
 
-	@DeleteMapping(path = "/admin/seller-managements/{sellerManagementId}")
+	@PutMapping("/admin/seller-managements/{sellerManagementId}")
 	public void rejectSignUpSeller(@PathVariable Long sellerManagementId) {
 		RejectSignUpSellerServiceRequest rejectSignUpSellerServiceRequest = new RejectSignUpSellerServiceRequest(
 			sellerManagementId);
