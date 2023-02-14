@@ -134,7 +134,7 @@ class CategoryServiceImplTest {
 		categoryService.updateCategory(serviceRequest);
 
 		// then
-		verify(categoryRepository, times(1)).save(category);
+		assertEquals("양식", category.getName());
 	}
 
 	@Test

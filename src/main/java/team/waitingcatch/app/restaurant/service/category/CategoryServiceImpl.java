@@ -48,7 +48,6 @@ public class CategoryServiceImpl implements CategoryService, InternalCategorySer
 	public void updateCategory(UpdateCategoryServiceRequest serviceRequest) {
 		Category category = _getCategory(serviceRequest.getCategoryId());
 		category.update(serviceRequest);
-		categoryRepository.save(category);
 	}
 
 	@Override
