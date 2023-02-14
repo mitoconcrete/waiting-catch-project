@@ -19,6 +19,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.common.util.JwtUtil;
+import team.waitingcatch.app.redis.service.RefreshTokenService;
 import team.waitingcatch.app.security.util.SecurityExceptionUtil;
 
 @RequiredArgsConstructor

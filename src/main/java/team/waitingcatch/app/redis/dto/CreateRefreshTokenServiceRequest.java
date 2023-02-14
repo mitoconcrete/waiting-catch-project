@@ -6,6 +6,6 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public class CreateRefreshTokenServiceRequest {
-	private final String username;
+	private final String accessToken;
 	private final String refreshToken;
 }
