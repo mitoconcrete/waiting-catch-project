@@ -19,6 +19,8 @@ import lombok.NoArgsConstructor;
 import team.waitingcatch.app.common.entity.TimeStamped;
 import team.waitingcatch.app.event.dto.couponcreator.CreateAdminCouponCreatorServiceRequest;
 import team.waitingcatch.app.event.dto.couponcreator.CreateSellerCouponCreatorServiceRequest;
+import team.waitingcatch.app.event.dto.couponcreator.UpdateAdminCouponCreatorServiceRequest;
+import team.waitingcatch.app.event.dto.couponcreator.UpdateSellerCouponCreatorServiceRequest;
 import team.waitingcatch.app.event.enums.CouponTypeEnum;
 
 @Entity
@@ -39,7 +41,7 @@ public class CouponCreator extends TimeStamped {
 	private String name;
 
 	@Column(nullable = false)
-	private int discount_price;
+	private int discountPrice;
 
 	@Column(nullable = false)
 	@Enumerated(value = EnumType.STRING)
@@ -54,7 +56,7 @@ public class CouponCreator extends TimeStamped {
 	public CouponCreator(CreateAdminCouponCreatorServiceRequest createAdminCouponCreatorServiceRequest, Event event) {
 		this.event = event;
 		this.name = createAdminCouponCreatorServiceRequest.getName();
-		this.discount_price = createAdminCouponCreatorServiceRequest.getDiscountPrice();
+		this.discountPrice = createAdminCouponCreatorServiceRequest.getDiscountPrice();
 		this.discountType = createAdminCouponCreatorServiceRequest.getDiscountType();
 		this.quantity = createAdminCouponCreatorServiceRequest.getQuantity();
 		this.expireDate = createAdminCouponCreatorServiceRequest.getExpireDate();
@@ -63,9 +65,27 @@ public class CouponCreator extends TimeStamped {
 	public CouponCreator(CreateSellerCouponCreatorServiceRequest createSellerCouponCreatorServiceRequest, Event event) {
 		this.event = event;
 		this.name = createSellerCouponCreatorServiceRequest.getName();
-		this.discount_price = createSellerCouponCreatorServiceRequest.getDiscountPrice();
+		this.discountPrice = createSellerCouponCreatorServiceRequest.getDiscountPrice();
 		this.discountType = createSellerCouponCreatorServiceRequest.getDiscountType();
 		this.quantity = createSellerCouponCreatorServiceRequest.getQuantity();
 		this.expireDate = createSellerCouponCreatorServiceRequest.getExpireDate();
+	}
+
+	public void updateAdminCouponCreator(
+		UpdateAdminCouponCreatorServiceRequest updateAdminCouponCreatorServiceRequest) {
+		this.name = updateAdminCouponCreatorServiceRequest.getName();
+		this.discountPrice = updateAdminCouponCreatorServiceRequest.getDiscountPrice();
+		this.discountType = updateAdminCouponCreatorServiceRequest.getDiscountType();
+		this.quantity = updateAdminCouponCreatorServiceRequest.getQuantity();
+		this.expireDate = updateAdminCouponCreatorServiceRequest.getExpireDate();
+	}
+
+	public void updateSellerCouponCreator(
+		UpdateSellerCouponCreatorServiceRequest updateSellerCouponCreatorServiceRequest) {
+		this.name = updateSellerCouponCreatorServiceRequest.getName();
+		this.discountPrice = updateSellerCouponCreatorServiceRequest.getDiscountPrice();
+		this.discountType = updateSellerCouponCreatorServiceRequest.getDiscountType();
+		this.quantity = updateSellerCouponCreatorServiceRequest.getQuantity();
+		this.expireDate = updateSellerCouponCreatorServiceRequest.getExpireDate();
 	}
 }

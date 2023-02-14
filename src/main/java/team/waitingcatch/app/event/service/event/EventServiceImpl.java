@@ -11,9 +11,7 @@ import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.event.dto.event.CreateEventControllerRequest;
 import team.waitingcatch.app.event.dto.event.CreateEventServiceRequest;
 import team.waitingcatch.app.event.dto.event.DeleteEventServiceRequest;
-import team.waitingcatch.app.event.dto.event.GetEventServiceResponse;
 import team.waitingcatch.app.event.dto.event.GetEventsResponse;
-import team.waitingcatch.app.event.dto.event.GetRestaurantEventControllerRequest;
 import team.waitingcatch.app.event.dto.event.UpdateEventServiceRequest;
 import team.waitingcatch.app.event.dto.event.UpdateSellerEventServiceRequest;
 import team.waitingcatch.app.event.entity.Event;
@@ -120,11 +118,6 @@ public class EventServiceImpl implements EventService, InternalEventService {
 			GetEventsResponse.add(new GetEventsResponse(event));
 		}
 		return GetEventsResponse;
-	}
-
-	@Override
-	public GetEventServiceResponse getEvent(GetRestaurantEventControllerRequest getRestaurantEventControllerRequest) {
-		return null;
 	}
 
 	@Override

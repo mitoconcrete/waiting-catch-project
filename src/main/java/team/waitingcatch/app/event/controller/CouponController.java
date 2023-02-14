@@ -17,6 +17,9 @@ import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.event.dto.couponcreator.CreateAdminCouponCreatorServiceRequest;
 import team.waitingcatch.app.event.dto.couponcreator.CreateCouponCreatorControllerRequest;
 import team.waitingcatch.app.event.dto.couponcreator.CreateSellerCouponCreatorServiceRequest;
+import team.waitingcatch.app.event.dto.couponcreator.UpdateAdminCouponCreatorServiceRequest;
+import team.waitingcatch.app.event.dto.couponcreator.UpdateCouponCreatorControllerRequest;
+import team.waitingcatch.app.event.dto.couponcreator.UpdateSellerCouponCreatorServiceRequest;
 import team.waitingcatch.app.event.dto.event.CreateEventControllerRequest;
 import team.waitingcatch.app.event.dto.event.CreateEventServiceRequest;
 import team.waitingcatch.app.event.dto.event.DeleteEventServiceRequest;
@@ -132,6 +135,28 @@ public class CouponController {
 			.body(couponCreatorService.createSellerCouponCreator(createSellerCouponCreatorServiceRequest));
 	}
 
+	//광역 이벤트 쿠폰 생성자 수정
+	@PutMapping("/admin/events/{eventId}/creator/{creatorId}")
+	public ResponseEntity<String> updateAdminCouponCreator(
+		UpdateCouponCreatorControllerRequest updateCouponCreatorControllerRequest, @PathVariable
+		Long eventId, @PathVariable Long creatorId) {
+		UpdateAdminCouponCreatorServiceRequest updateAdminCouponCreatorServiceRequest = new UpdateAdminCouponCreatorServiceRequest(
+			updateCouponCreatorControllerRequest, eventId, creatorId);
+		return ResponseEntity.status(HttpStatus.OK)
+			.body(couponCreatorService.updateAdminCouponCreator(updateAdminCouponCreatorServiceRequest));
+	}
+
+	//레스토랑 이벤트 쿠폰 생성자 수정
+	@PutMapping("/seller/events/{eventId}/creator/{creatorId}")
+	public ResponseEntity<String> updateSellerCouponCreator(
+		UpdateCouponCreatorControllerRequest updateCouponCreatorControllerRequest,
+		@PathVariable Long eventId, @PathVariable Long creatorId,
+		@AuthenticationPrincipal UserDetailsImpl userDetails) {
+		UpdateSellerCouponCreatorServiceRequest updateSellerCouponCreatorServiceRequest = new UpdateSellerCouponCreatorServiceRequest(
+			updateCouponCreatorControllerRequest, eventId, creatorId, userDetails.getUsername());
+		return ResponseEntity.status(HttpStatus.OK)
+			.body(couponCreatorService.updateSellerCouponCreator(updateSellerCouponCreatorServiceRequest));
+	}
 	//@GetMapping("/restaurants/{restaurantId}/events/{eventId}")
 
 }

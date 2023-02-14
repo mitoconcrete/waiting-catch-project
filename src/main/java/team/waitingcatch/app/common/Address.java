@@ -1,9 +1,9 @@
 package team.waitingcatch.app.common;
 
-import lombok.Getter;
-
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+
+import lombok.Getter;
 
 @Embeddable
 @Getter

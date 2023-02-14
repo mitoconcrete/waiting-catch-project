@@ -7,7 +7,8 @@ import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.event.dto.couponcreator.CreateAdminCouponCreatorServiceRequest;
 import team.waitingcatch.app.event.dto.couponcreator.CreateSellerCouponCreatorServiceRequest;
-import team.waitingcatch.app.event.dto.couponcreator.UpdateCouponCreatorControllerRequest;
+import team.waitingcatch.app.event.dto.couponcreator.UpdateAdminCouponCreatorServiceRequest;
+import team.waitingcatch.app.event.dto.couponcreator.UpdateSellerCouponCreatorServiceRequest;
 import team.waitingcatch.app.event.entity.CouponCreator;
 import team.waitingcatch.app.event.entity.Event;
 import team.waitingcatch.app.event.repository.CouponCreatorRepository;
@@ -52,9 +53,35 @@ public class CouponCreatorServiceImpl implements CouponCreatorService, InternalC
 		return "해당 이벤트에 쿠폰 생성자를 추가하였습니다.";
 	}
 
+	//광역 이벤트 쿠폰생성자를 수정한다.
 	@Override
-	public String updateCouponCreator(UpdateCouponCreatorControllerRequest putCouponCreatorControllerRequest) {
-		return "";
+	public String updateAdminCouponCreator(
+		UpdateAdminCouponCreatorServiceRequest updateAdminCouponCreatorServiceRequest) {
+		Event events = _getEventFindById(updateAdminCouponCreatorServiceRequest.getEventId());
+		CouponCreator couponCreators = _getCouponCreatorFindById(updateAdminCouponCreatorServiceRequest.getCreatorId());
+
+		couponCreators.updateAdminCouponCreator(updateAdminCouponCreatorServiceRequest);
+		return "광역 이벤트 쿠폰생성자를 수정하였습니다.";
+	}
+
+	//레스토랑 이벤트 쿠폰생성자를 수정한다.
+	@Override
+	public String updateSellerCouponCreator(
+		UpdateSellerCouponCreatorServiceRequest updateSellerCouponCreatorServiceRequest) {
+		Restaurant restaurant = _getRestaurantFindByUsername(updateSellerCouponCreatorServiceRequest.getUsername());
+		Event ev = _getEventFindById(updateSellerCouponCreatorServiceRequest.getEventId());
+
+		Event events = eventServiceRepository.findByIdAndRestaurant(
+			updateSellerCouponCreatorServiceRequest.getEventId(),
+			restaurant).orElseThrow(
+			() -> new IllegalArgumentException("매장에 해당 이벤트가 존재하지 않습니다.")
+		);
+
+		CouponCreator couponCreators = _getCouponCreatorFindById(
+			updateSellerCouponCreatorServiceRequest.getCreatorId());
+
+		couponCreators.updateSellerCouponCreator(updateSellerCouponCreatorServiceRequest);
+		return "레스토랑 이벤트 쿠폰생성자를 수정하였습니다.";
 	}
 
 	@Override
@@ -73,5 +100,13 @@ public class CouponCreatorServiceImpl implements CouponCreatorService, InternalC
 			);
 
 		return restaurant;
+	}
+
+	public CouponCreator _getCouponCreatorFindById(Long id) {
+		CouponCreator couponCreator = couponCreatorRepository.findById(id)
+			.orElseThrow(
+				() -> new IllegalArgumentException("쿠폰 생성자를 찾을수 없습니다.")
+			);
+		return couponCreator;
 	}
 }
