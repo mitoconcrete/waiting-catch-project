@@ -94,18 +94,22 @@ class CategoryServiceImplTest {
 	void getChildCategories() {
 		// given
 		GetChildCategoryServiceRequest request = mock(GetChildCategoryServiceRequest.class);
+		Category category1 = mock(Category.class);
+		Category category2 = mock(Category.class);
 
 		when(request.getParentId()).thenReturn(1L);
 
+		when(category1.getId()).thenReturn(1L);
+		when(category1.getParentId()).thenReturn(null);
+		when(category1.getName()).thenReturn("parent");
+
+		when(category2.getId()).thenReturn(2L);
+		when(category2.getParentId()).thenReturn(1L);
+		when(category2.getName()).thenReturn("child");
+
 		List<Category> categories = new ArrayList<>();
-		// Category category1 = new Category(1L, null, "한식");
-		// Category category2 = new Category(2L, 1L, "떡갈비");
-		// Category category3 = new Category(3L, 1L, "한정식");
-		// Category category4 = new Category(4L, 1L, "찌개류");
-		// categories.add(category1);
-		// categories.add(category2);
-		// categories.add(category3);
-		// categories.add(category4);
+		categories.add(category1);
+		categories.add(category2);
 
 		when(categoryRepository.findAll()).thenReturn(categories);
 
@@ -113,11 +117,8 @@ class CategoryServiceImplTest {
 		ChildCategoryResponse categoryResponse = categoryService.getChildCategories(request);
 
 		// then
-		// assertEquals(null, categoryResponse.getName());
-		// assertEquals(null, categoryResponse.getChildCategories().get(0).getName());
-		assertEquals("", categoryResponse.getName());
-		assertEquals(1L, categoryResponse.getCategoryId());
-		assertEquals(categories, categoryResponse.getChildCategories());
+		assertEquals("parent", categoryResponse.getName());
+		assertEquals("child", categoryResponse.getChildCategories().get(0).getName());
 	}
 
 	@Test
