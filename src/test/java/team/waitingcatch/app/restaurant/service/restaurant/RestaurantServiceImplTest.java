@@ -20,6 +20,8 @@ import team.waitingcatch.app.common.Address;
 import team.waitingcatch.app.common.Position;
 import team.waitingcatch.app.restaurant.dto.RestaurantBasicInfoResponse;
 import team.waitingcatch.app.restaurant.dto.RestaurantBasicInfoServiceRequest;
+import team.waitingcatch.app.restaurant.dto.RestaurantDetailedInfoResponse;
+import team.waitingcatch.app.restaurant.dto.RestaurantDetailedInfoServiceRequest;
 import team.waitingcatch.app.restaurant.dto.RestaurantResponse;
 import team.waitingcatch.app.restaurant.entity.Restaurant;
 import team.waitingcatch.app.restaurant.repository.RestaurantRepository;
@@ -65,12 +67,39 @@ class RestaurantServiceImplTest {
 		// given
 		RestaurantBasicInfoServiceRequest request = mock(RestaurantBasicInfoServiceRequest.class);
 		Restaurant restaurant = mock(Restaurant.class);
+		Address address = mock(Address.class);
 
 		when(restaurant.getName()).thenReturn("aaaa");
+		when(restaurant.getAddress()).thenReturn(address);
+		when(restaurant.getAddress().getProvince()).thenReturn("a");
+		when(restaurant.getAddress().getCity()).thenReturn("A");
+
 		when(restaurantRepository.findById(any(Long.class))).thenReturn(Optional.of(restaurant));
 
 		// when
 		RestaurantBasicInfoResponse response = restaurantService.getRestaurantBasicInfo(request);
+
+		// then
+		assertEquals("aaaa", response.getName());
+	}
+
+	@Test
+	@DisplayName("레스토랑 상세정보 조회")
+	void getRestaurantDetailedInfo() {
+		// given
+		RestaurantDetailedInfoServiceRequest request = mock(RestaurantDetailedInfoServiceRequest.class);
+		Restaurant restaurant = mock(Restaurant.class);
+		Address address = mock(Address.class);
+
+		when(restaurant.getName()).thenReturn("aaaa");
+		when(restaurant.getAddress()).thenReturn(address);
+		when(restaurant.getAddress().getProvince()).thenReturn("a");
+		when(restaurant.getAddress().getCity()).thenReturn("A");
+
+		when(restaurantRepository.findById(any(Long.class))).thenReturn(Optional.of(restaurant));
+
+		// when
+		RestaurantDetailedInfoResponse response = restaurantService.getRestaurantDetailedInfo(request);
 
 		// then
 		assertEquals("aaaa", response.getName());
@@ -90,5 +119,47 @@ class RestaurantServiceImplTest {
 
 		// then
 		assertEquals("aaaa", restaurant1.getName());
+	}
+
+	// @Test
+	// @DisplayName("username으로 레스토링 조회")
+	// void _getRestaurantFindByUsername() {
+	// 	// given
+	// 	Restaurant restaurant = mock(Restaurant.class);
+	// 	User user = mock(User.class);
+	//
+	// 	when(restaurant.getUser()).thenReturn(user);
+	// 	when(restaurant.getUser().getUsername()).thenReturn("a");
+	// 	when(restaurant.getName()).thenReturn("aaaa");
+	//
+	// 	when(restaurantRepository.findByName(any(String.class))).thenReturn(Optional.of(restaurant));
+	//
+	// 	// when
+	// 	Restaurant restaurant1 = restaurantService._getRestaurantFindByUsername(any(String.class));
+	//
+	// 	// then
+	// 	assertEquals("aaaa", restaurant1.getName());
+	// 	assertEquals("a", restaurant1.getUser().getUsername());
+	// }
+
+	@Test
+	@DisplayName("userId로 레스토랑 조회")
+	void _getRestaurantByUserId() {
+		// given
+		Restaurant restaurant = mock(Restaurant.class);
+		User user = mock(User.class);
+
+		when(restaurant.getUser()).thenReturn(user);
+		when(restaurant.getUser().getId()).thenReturn(1L);
+		when(restaurant.getName()).thenReturn("aaaa");
+
+		when(restaurantRepository.findByUserId(any(Long.class))).thenReturn(Optional.of(restaurant));
+
+		// when
+		Restaurant restaurant1 = restaurantService._getRestaurantByUserId(any(Long.class));
+
+		// then
+		assertEquals("aaaa", restaurant1.getName());
+		assertEquals(1L, restaurant1.getUser().getId());
 	}
 }
