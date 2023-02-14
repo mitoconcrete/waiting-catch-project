@@ -4,4 +4,6 @@ import team.waitingcatch.app.user.entitiy.User;
 
 public interface InternalUserService {
 	User _getUserByUsername(String username);
+
+	User _getUserByEmail(String email);
 }
