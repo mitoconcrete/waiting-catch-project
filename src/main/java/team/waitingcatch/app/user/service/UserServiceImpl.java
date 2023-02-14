@@ -92,7 +92,7 @@ public class UserServiceImpl implements UserService, InternalUserService {
 	@Override
 	@Transactional(readOnly = true)
 	public void findUserAndSendEmail(FindPasswordRequest payload) {
-		User user = userRepository.findByUsernameAndEmailAndDeletedFalse(payload.getUsername(), payload.getEmail())
+		User user = userRepository.findByUsernameAndEmailAndIsDeletedFalse(payload.getUsername(), payload.getEmail())
 			.orElseThrow(
 				() -> new IllegalArgumentException("유저가 존재하지 않습니다.")
 			);
@@ -114,7 +114,7 @@ public class UserServiceImpl implements UserService, InternalUserService {
 	@Override
 	@Transactional(readOnly = true)
 	public User _getUserByUsername(String username) {
-		return userRepository.findByUsernameAndDeletedFalse(username).orElseThrow(
+		return userRepository.findByUsernameAndIsDeletedFalse(username).orElseThrow(
 			() -> new IllegalArgumentException("유저가 존재하지 않습니다.")
 		);
 	}
@@ -122,7 +122,7 @@ public class UserServiceImpl implements UserService, InternalUserService {
 	@Override
 	@Transactional(readOnly = true)
 	public User _getUserByEmail(String email) {
-		return userRepository.findByEmailAndDeletedFalse(email).orElseThrow(
+		return userRepository.findByEmailAndIsDeletedFalse(email).orElseThrow(
 			() -> new IllegalArgumentException("유저가 존재하지 않습니다.")
 		);
 	}
