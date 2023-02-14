@@ -1,9 +1,8 @@
 package team.waitingcatch.app.user.dto;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,8 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CreateUserControllerRequest {
 	@NotNull
-	@Min(value = 2, message = "이름은 최소 2글자 이상이어야합니다.")
-	@Max(value = 5, message = "이름은 최대 5글자 이어야합니다.")
+	@Size(min = 2, max = 5, message = "이름은 최소 2글자에서 5글자 사이어야합니다.")
 	private String name;
 
 	@NotNull
@@ -37,7 +35,7 @@ public class CreateUserControllerRequest {
 	private String nickname;
 
 	@NotNull
-	@Pattern(regexp = "^01(?:0|1|[6-9])-(?:\\\\d{3}|\\\\d{4})-\\\\d{4}$",
+	@Pattern(regexp = "^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$",
 		message = "올바른 전화번호 형식을 입력하세요.")
 	private String phoneNumber;
 }

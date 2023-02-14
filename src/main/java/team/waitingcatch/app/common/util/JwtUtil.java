@@ -27,7 +27,6 @@ public class JwtUtil {
 	public static final String AUTHORIZATION_HEADER = "Authorization";
 	public static final String AUTHORIZATION_KEY = "auth";
 	public static final String BEARER_PREFIX = "Bearer ";
-	private static final long TOKEN_TIME = 60 * 60 * 1000L;
 
 	@Value("${jwt.secret.key}")
 	private String secretKey;
@@ -41,13 +40,13 @@ public class JwtUtil {
 	}
 
 	// 토큰 생성
-	public String createToken(String username, UserRoleEnum role) {
+	public String createToken(String username, UserRoleEnum role, long token_time) {
 		Date date = new Date();
 		return BEARER_PREFIX +
 			Jwts.builder()
 				.setSubject(username) // 토큰 정보 안에 username을 넣어줌
 				.claim(AUTHORIZATION_KEY, role) // 권한 가져오기
-				.setExpiration(new Date(date.getTime() + TOKEN_TIME))  // 토큰 만료 기한 설정
+				.setExpiration(new Date(date.getTime() + token_time))  // 들어오는 만료 시간에 따라 리프레시, 엑세스 토큰 구분 지으려고 함.
 				.setIssuedAt(date) // 토큰 생성 시점
 				.signWith(key, signatureAlgorithm) // secret key를 이용해 만든 key를 어떤 알고리즘으로 암호화 할 것인지
 				.compact();

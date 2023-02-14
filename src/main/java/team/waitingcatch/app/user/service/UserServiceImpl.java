@@ -11,10 +11,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
+import team.waitingcatch.app.common.util.JwtUtil;
+import team.waitingcatch.app.redis.dto.CreateRefreshTokenServiceRequest;
+import team.waitingcatch.app.redis.service.RedisService;
 import team.waitingcatch.app.user.dto.CreateUserServiceRequest;
 import team.waitingcatch.app.user.dto.DeleteUserRequest;
 import team.waitingcatch.app.user.dto.FindPasswordRequest;
 import team.waitingcatch.app.user.dto.GetCustomerByIdAndRoleServiceRequest;
+import team.waitingcatch.app.user.dto.LoginRequest;
+import team.waitingcatch.app.user.dto.LoginServiceResponse;
 import team.waitingcatch.app.user.dto.UpdateUserServiceRequest;
 import team.waitingcatch.app.user.dto.UserInfoResponse;
 import team.waitingcatch.app.user.entitiy.User;
@@ -24,11 +29,34 @@ import team.waitingcatch.app.user.repository.UserRepository;
 @Transactional
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService, InternalUserService {
+	private final JwtUtil jwtUtil;
 	private final JavaMailSender emailSender;
 	private final UserRepository userRepository;
 
+	private final RedisService redisService;
+
 	@Value("${spring.mail.username}")
 	private String smtpSenderEmail;
+
+	@Override
+	public LoginServiceResponse login(LoginRequest payload) {
+		User user = _getUserByUsername(payload.getUsername());
+
+		if (!user.isPasswordMatch(payload.getPassword())) {
+			throw new IllegalArgumentException("패스워드가 일치하지 않습니다.");
+		}
+
+		long ACCESS_TOKEN_TIME = 1000 * 60 * 30L;
+		long REFRESH_TOKEN_TIME = 1000 * 60 * 60 * 24 * 14L;
+		String accessToken = jwtUtil.createToken(user.getUsername(), user.getRole(), ACCESS_TOKEN_TIME);
+		String refreshToken = jwtUtil.createToken(user.getUsername(), user.getRole(), REFRESH_TOKEN_TIME);
+
+		CreateRefreshTokenServiceRequest redisPayload = new CreateRefreshTokenServiceRequest(user.getUsername(),
+			refreshToken);
+		redisService.createRefreshToken(redisPayload);
+
+		return new LoginServiceResponse(accessToken);
+	}
 
 	@Override
 	@Transactional(readOnly = true)
@@ -78,7 +106,7 @@ public class UserServiceImpl implements UserService, InternalUserService {
 
 	@Override
 	public void updateUser(UpdateUserServiceRequest payload) {
-		// 중복되면 안되는 값(이메일, 전화번호, 닉네임)들을 체크해준다.
+		// 중복되면 안되는 값(이메일, boolean, 닉네임)들을 체크해준다.
 		User user = _getUserByUsername(payload.getUsername());
 		user.updateBasicInfo(payload.getNickName(), payload.getName(), payload.getPhoneNumber(), payload.getEmail());
 	}
@@ -92,7 +120,7 @@ public class UserServiceImpl implements UserService, InternalUserService {
 	@Override
 	@Transactional(readOnly = true)
 	public void findUserAndSendEmail(FindPasswordRequest payload) {
-		User user = userRepository.findByUsernameAndEmailAndDeletedFalse(payload.getUsername(), payload.getEmail())
+		User user = userRepository.findByUsernameAndEmailAndIsDeletedFalse(payload.getUsername(), payload.getEmail())
 			.orElseThrow(
 				() -> new IllegalArgumentException("유저가 존재하지 않습니다.")
 			);
@@ -114,14 +142,14 @@ public class UserServiceImpl implements UserService, InternalUserService {
 	@Override
 	@Transactional(readOnly = true)
 	public User _getUserByUsername(String username) {
-		return userRepository.findByUsernameAndDeletedFalse(username).orElseThrow(
+		return userRepository.findByUsernameAndIsDeletedFalse(username).orElseThrow(
 			() -> new IllegalArgumentException("유저가 존재하지 않습니다.")
 		);
 	}
 
 	@Override
 	public User _getUserByEmail(String email) {
-		return userRepository.findByEmailAndDeletedFalse(email).orElseThrow(
+		return userRepository.findByEmailAndIsDeletedFalse(email).orElseThrow(
 			() -> new IllegalArgumentException("유저가 존재하지 않습니다.")
 		);
 	}

@@ -107,4 +107,9 @@ public class User extends TimeStamped {
 		PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 		this.password = passwordEncoder.encode(password);
 	}
+
+	public boolean isPasswordMatch(String password) {
+		PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+		return passwordEncoder.matches(password, this.password);
+	}
 }

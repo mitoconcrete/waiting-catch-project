@@ -6,10 +6,14 @@ import team.waitingcatch.app.user.dto.CreateUserServiceRequest;
 import team.waitingcatch.app.user.dto.DeleteUserRequest;
 import team.waitingcatch.app.user.dto.FindPasswordRequest;
 import team.waitingcatch.app.user.dto.GetCustomerByIdAndRoleServiceRequest;
+import team.waitingcatch.app.user.dto.LoginRequest;
+import team.waitingcatch.app.user.dto.LoginServiceResponse;
 import team.waitingcatch.app.user.dto.UpdateUserServiceRequest;
 import team.waitingcatch.app.user.dto.UserInfoResponse;
 
 public interface UserService {
+	LoginServiceResponse login(LoginRequest payload);
+
 	List<UserInfoResponse> getCustomers();
 
 	UserInfoResponse getByUserIdAndRole(GetCustomerByIdAndRoleServiceRequest payload);
