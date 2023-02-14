@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
+import team.waitingcatch.app.restaurant.dto.RestaurantBasicInfoResponse;
+import team.waitingcatch.app.restaurant.dto.RestaurantBasicInfoServiceRequest;
 import team.waitingcatch.app.restaurant.dto.RestaurantResponse;
 import team.waitingcatch.app.restaurant.service.restaurant.RestaurantService;
 
@@ -17,8 +19,9 @@ public class RestaurantController {
 
 	// Customer
 	@GetMapping("/restaurants/{restaurantId}")
-	public void getRestaurantBasicInfo(@PathVariable Long restaurantId) {
-		restaurantService.getRestaurantBasicInfo(restaurantId);
+	public RestaurantBasicInfoResponse getRestaurantBasicInfo(@PathVariable Long restaurantId) {
+		RestaurantBasicInfoServiceRequest request = new RestaurantBasicInfoServiceRequest(restaurantId);
+		return restaurantService.getRestaurantBasicInfo(request);
 	}
 
 	// Seller

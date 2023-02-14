@@ -9,13 +9,11 @@ public class RestaurantBasicInfoResponse {
 	private final String name;
 	private final String images;
 	private final Address address;
-	private final int rate;
+	// private final int rate;
 
-	public RestaurantBasicInfoResponse(Restaurant restaurant, int rate) {
+	public RestaurantBasicInfoResponse(Restaurant restaurant) {
 		this.name = restaurant.getName();
 		this.images = restaurant.getImages();
 		this.address = restaurant.getAddress();
-		this.rate = rate;
-
 	}
 }

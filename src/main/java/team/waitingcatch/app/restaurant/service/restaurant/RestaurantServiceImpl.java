@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.restaurant.dto.RestaurantBasicInfoResponse;
+import team.waitingcatch.app.restaurant.dto.RestaurantBasicInfoServiceRequest;
 import team.waitingcatch.app.restaurant.dto.RestaurantResponse;
 import team.waitingcatch.app.restaurant.entity.Restaurant;
 import team.waitingcatch.app.restaurant.repository.RestaurantRepository;
@@ -20,18 +21,17 @@ public class RestaurantServiceImpl implements RestaurantService, InternalRestaur
 
 	@Override
 	@Transactional(readOnly = true)
-	public List<RestaurantResponse> getRestaurants() {
-		return restaurantRepository.findAll().stream()
-			.map(RestaurantResponse::new)
-			.collect(Collectors.toList());
+	public RestaurantBasicInfoResponse getRestaurantBasicInfo(RestaurantBasicInfoServiceRequest request) {
+		Restaurant restaurant = _getRestaurant(request.getRestaurantId());
+		return new RestaurantBasicInfoResponse(restaurant);
 	}
 
 	@Override
 	@Transactional(readOnly = true)
-	public RestaurantBasicInfoResponse getRestaurantBasicInfo(Long restaurantId) {
-		Restaurant restaurant = _getRestaurant(restaurantId);
-		int rate = 0;
-		return new RestaurantBasicInfoResponse(restaurant, rate);
+	public List<RestaurantResponse> getRestaurants() {
+		return restaurantRepository.findAll().stream()
+			.map(RestaurantResponse::new)
+			.collect(Collectors.toList());
 	}
 
 	@Override
