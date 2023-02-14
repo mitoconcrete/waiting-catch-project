@@ -18,8 +18,9 @@ import team.waitingcatch.app.restaurant.entity.Restaurant;
 import team.waitingcatch.app.restaurant.entity.SellerManagement;
 import team.waitingcatch.app.restaurant.repository.RestaurantRepository;
 import team.waitingcatch.app.restaurant.repository.SellerManagementRepository;
-import team.waitingcatch.app.user.dto.UserCreateServiceRequest;
+import team.waitingcatch.app.user.dto.CreateUserServiceRequest;
 import team.waitingcatch.app.user.entitiy.User;
+import team.waitingcatch.app.user.enums.UserRoleEnum;
 import team.waitingcatch.app.user.service.InternalUserService;
 import team.waitingcatch.app.user.service.UserService;
 
@@ -61,10 +62,12 @@ public class SellerManagementServiceImpl implements SellerManagementService, Int
 		//비밀번호
 		String uuidPassword = UUID.randomUUID().toString().substring(1, 8);
 		//회원가입
-		UserCreateServiceRequest
+		CreateUserServiceRequest
 			userCreateServiceRequest
-			= new UserCreateServiceRequest(sellerManagement, uuidPassword);
-		User seller = userService.createUser(userCreateServiceRequest);
+			= new CreateUserServiceRequest(UserRoleEnum.SELLER, sellerManagement.getName(), sellerManagement.getEmail(),
+			sellerManagement.getUsername(), uuidPassword, null, sellerManagement.getPhoneNumber());
+		userService.createUser(userCreateServiceRequest);
+		User seller = internalUserService._getUserByUsername(sellerManagement.getUsername());
 		// 레스토랑 만들기
 		ApproveSignUpSellerManagementEntityPassToRestaurantEntityRequest
 			approveSignUpSellerManagementEntityPassToRestaurantEntityRequest

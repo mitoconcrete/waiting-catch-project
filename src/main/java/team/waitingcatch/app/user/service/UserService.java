@@ -1,9 +1,24 @@
 package team.waitingcatch.app.user.service;
 
-import team.waitingcatch.app.user.dto.UserCreateServiceRequest;
-import team.waitingcatch.app.user.entitiy.User;
+import java.util.List;
+
+import team.waitingcatch.app.user.dto.CreateUserServiceRequest;
+import team.waitingcatch.app.user.dto.DeleteUserRequest;
+import team.waitingcatch.app.user.dto.FindPasswordRequest;
+import team.waitingcatch.app.user.dto.GetCustomerByIdAndRoleServiceRequest;
+import team.waitingcatch.app.user.dto.UpdateUserServiceRequest;
+import team.waitingcatch.app.user.dto.UserInfoResponse;
 
 public interface UserService {
+	List<UserInfoResponse> getCustomers();
 
-	User createUser(UserCreateServiceRequest payload);
+	UserInfoResponse getByUserIdAndRole(GetCustomerByIdAndRoleServiceRequest payload);
+
+	void createUser(CreateUserServiceRequest payload);
+
+	void updateUser(UpdateUserServiceRequest payload);
+
+	void deleteUser(DeleteUserRequest payload);
+
+	void findUserAndSendEmail(FindPasswordRequest payload);
 }

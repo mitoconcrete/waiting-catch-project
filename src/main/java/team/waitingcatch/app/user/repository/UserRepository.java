@@ -7,7 +7,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import team.waitingcatch.app.user.entitiy.User;
 
 public interface UserRepository extends JpaRepository<User, Long> {
-	Optional<User> findByUsername(String username);
+	Optional<User> findByEmailAndDeletedFalse(String email);
 
-	Boolean existsByUsername(String username);
+	Optional<User> findByUsernameAndDeletedFalse(String username);
+
+	Optional<User> findByUsernameAndEmailAndDeletedFalse(String username, String email);
+
+	boolean existsByUsername(String username);
 }
