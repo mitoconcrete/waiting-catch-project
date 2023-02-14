@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -33,7 +34,7 @@ public class UserController {
 	private final UserService userService;
 
 	// customer
-	@GetMapping("/customer/withdraw")
+	@DeleteMapping("/customer/withdraw")
 	public void withdrawCustomer(@AuthenticationPrincipal UserDetails userDetails) {
 		DeleteUserRequest servicePayload = new DeleteUserRequest(userDetails.getUsername());
 		userService.deleteUser(servicePayload);
@@ -51,7 +52,7 @@ public class UserController {
 	}
 
 	// seller
-	@PostMapping("/seller/withdraw")
+	@DeleteMapping("/seller/withdraw")
 	public void withdrawSeller(@AuthenticationPrincipal UserDetails userDetails) {
 		DeleteUserRequest servicePayload = new DeleteUserRequest(userDetails.getUsername());
 		userService.deleteUser(servicePayload);

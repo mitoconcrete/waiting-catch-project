@@ -82,7 +82,7 @@ public class User extends TimeStamped {
 	}
 
 	public boolean hasSameRole(UserRoleEnum role) {
-		return this.role.equals(role);
+		return this.role == role;
 	}
 
 	public void updateBasicInfo(String nickname, String name, String phoneNumber, String email) {
