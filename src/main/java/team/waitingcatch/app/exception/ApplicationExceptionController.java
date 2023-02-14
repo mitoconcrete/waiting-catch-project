@@ -1,7 +1,6 @@
 package team.waitingcatch.app.exception;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -14,12 +13,5 @@ public class ApplicationExceptionController {
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public BasicExceptionResponse IllegalArgumentExceptionHandler(IllegalArgumentException ex) {
 		return new BasicExceptionResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
-	}
-
-	@ExceptionHandler(MethodArgumentNotValidException.class)
-	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	public BasicExceptionResponse MethodArgumentNotValidExceptionHandler(MethodArgumentNotValidException ex) {
-		return new BasicExceptionResponse(HttpStatus.BAD_REQUEST,
-			ex.getBindingResult().getAllErrors().get(0).getDefaultMessage());
 	}
 }
