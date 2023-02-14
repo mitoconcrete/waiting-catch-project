@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
+import team.waitingcatch.app.restaurant.dto.blacklist.ApproveBlackListServiceRequest;
 import team.waitingcatch.app.restaurant.dto.blacklist.CancelRequestUserBlackListByRestaurantServiceRequest;
 import team.waitingcatch.app.restaurant.dto.blacklist.GetRequestBlackListResponse;
 import team.waitingcatch.app.restaurant.dto.blacklist.RequestUserBlackListByRestaurantControllerRequest;
@@ -52,6 +53,14 @@ public class RequestBlackListController {
 	@GetMapping("/admin/restaurants/blacklist-request")
 	public List<GetRequestBlackListResponse> getRequestBlackLists() {
 		return blackListRequestService.getRequestBlackLists();
+	}
+
+	//블랙리스트요청 수락
+	@PostMapping("/admin/restaurants/blacklist-request/{blacklistrequestId}")
+	public void approveBlackListRequest(@PathVariable Long blacklistrequestId) {
+		ApproveBlackListServiceRequest approveBlackListServiceRequest = new ApproveBlackListServiceRequest(
+			blacklistrequestId);
+		blackListRequestService.approveBlackListRequest(approveBlackListServiceRequest);
 	}
 
 }

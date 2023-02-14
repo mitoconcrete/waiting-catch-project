@@ -10,7 +10,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import lombok.AccessLevel;
-
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import team.waitingcatch.app.common.entity.TimeStamped;
@@ -34,4 +33,8 @@ public class BlackList extends TimeStamped {
 	@JoinColumn(name = "user_id", nullable = false)
 	private User user;
 
+	public BlackList(Restaurant restaurant, User user) {
+		this.restaurant = restaurant;
+		this.user = user;
+	}
 }

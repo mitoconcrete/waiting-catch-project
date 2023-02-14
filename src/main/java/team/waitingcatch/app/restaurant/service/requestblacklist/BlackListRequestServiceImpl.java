@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
+import team.waitingcatch.app.restaurant.dto.blacklist.ApproveBlackListServiceRequest;
 import team.waitingcatch.app.restaurant.dto.blacklist.CancelRequestUserBlackListByRestaurantServiceRequest;
 import team.waitingcatch.app.restaurant.dto.blacklist.GetRequestBlackListResponse;
 import team.waitingcatch.app.restaurant.dto.blacklist.RequestUserBlackListByRestaurantServiceRequest;
@@ -14,6 +15,7 @@ import team.waitingcatch.app.restaurant.entity.BlackListRequest;
 import team.waitingcatch.app.restaurant.entity.Restaurant;
 import team.waitingcatch.app.restaurant.repository.BlackListRequestRepository;
 import team.waitingcatch.app.restaurant.repository.RestaurantRepository;
+import team.waitingcatch.app.restaurant.service.blacklist.InternalBlackListService;
 import team.waitingcatch.app.user.entitiy.User;
 import team.waitingcatch.app.user.enums.UserRoleEnum;
 import team.waitingcatch.app.user.repository.UserRepository;
@@ -25,6 +27,7 @@ public class BlackListRequestServiceImpl implements BlackListRequestService, Int
 	private final BlackListRequestRepository blackListRequestRepository;
 	private final UserRepository userRepository;
 	private final RestaurantRepository restaurantRepository;
+	private final InternalBlackListService internalBlackListService;
 
 	//판매자가 한명의 고객을 블랙리스트 요청을 한다.
 	public void requestUserBlackList(
@@ -67,6 +70,15 @@ public class BlackListRequestServiceImpl implements BlackListRequestService, Int
 	public List<GetRequestBlackListResponse> getRequestBlackLists() {
 		List<BlackListRequest> blackListRequests = blackListRequestRepository.findAll();
 		return blackListRequests.stream().map(GetRequestBlackListResponse::new).collect(Collectors.toList());
+	}
+
+	public void approveBlackListRequest(ApproveBlackListServiceRequest approveBlackListServiceRequest) {
+		BlackListRequest blackListRequest = blackListRequestRepository.findById(
+			approveBlackListServiceRequest.getBlackListRequestId()).orElseThrow(
+			() -> new IllegalArgumentException("Not found black list request"));
+		blackListRequest.checkStatus();
+		blackListRequest.updateApprovalStatus();
+		internalBlackListService._createBlackList(blackListRequest.getRestaurant(), blackListRequest.getUser());
 	}
 
 }

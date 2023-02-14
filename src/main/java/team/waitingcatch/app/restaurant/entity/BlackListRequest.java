@@ -63,4 +63,8 @@ public class BlackListRequest extends TimeStamped {
 		}
 	}
 
+	public void updateApprovalStatus() {
+		this.status = AcceptedStatusEnum.APPROVAL;
+	}
+
 }
