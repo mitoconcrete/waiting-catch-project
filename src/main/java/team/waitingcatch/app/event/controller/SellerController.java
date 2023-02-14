@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
@@ -22,13 +21,12 @@ import team.waitingcatch.app.user.entitiy.UserDetailsImpl;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/seller")
 public class SellerController {
 
 	private final EventService eventService;
 
 	//새로운 레스토랑 이벤트를 생성한다.
-	@PostMapping("/restaurants/{restaurant_id}/events")
+	@PostMapping("/seller/restaurants/{restaurant_id}/events")
 	public ResponseEntity<String> createSellerEvent(
 		@RequestBody CreateEventControllerRequest createEventControllerRequest, @PathVariable Long restaurant_id) {
 		CreateEventServiceRequest createEventServiceRequest = new CreateEventServiceRequest(
@@ -37,7 +35,7 @@ public class SellerController {
 			.body(eventService.createSellerEvent(createEventServiceRequest));
 	}
 
-	@PutMapping("/events/{eventId}")
+	@PutMapping("/seller/events/{eventId}")
 	public ResponseEntity<String> updateSellerEvent(
 		@RequestBody UpdateEventControllerRequest updateEventControllerRequest, @PathVariable Long eventId,
 		@AuthenticationPrincipal UserDetailsImpl userDetails) {
@@ -47,7 +45,7 @@ public class SellerController {
 			.body(eventService.updateSellerEvent(updateSellerEventServiceRequest));
 	}
 
-	@DeleteMapping("/events/{eventId}")
+	@DeleteMapping("/seller/events/{eventId}")
 	public ResponseEntity<String> deleteSellerEvent(@PathVariable Long eventId,
 		@AuthenticationPrincipal UserDetailsImpl userDetails) {
 
