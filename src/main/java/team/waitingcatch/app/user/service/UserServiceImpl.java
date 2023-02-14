@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.common.util.JwtUtil;
 import team.waitingcatch.app.redis.dto.CreateRefreshTokenServiceRequest;
-import team.waitingcatch.app.redis.service.RedisService;
+import team.waitingcatch.app.redis.service.RefreshTokenService;
 import team.waitingcatch.app.user.dto.CreateUserServiceRequest;
 import team.waitingcatch.app.user.dto.DeleteUserRequest;
 import team.waitingcatch.app.user.dto.FindPasswordRequest;
@@ -33,7 +33,7 @@ public class UserServiceImpl implements UserService, InternalUserService {
 	private final JavaMailSender emailSender;
 	private final UserRepository userRepository;
 
-	private final RedisService redisService;
+	private final RefreshTokenService refreshTokenService;
 
 	@Value("${spring.mail.username}")
 	private String smtpSenderEmail;
@@ -46,14 +46,16 @@ public class UserServiceImpl implements UserService, InternalUserService {
 			throw new IllegalArgumentException("패스워드가 일치하지 않습니다.");
 		}
 
+		// access token 과 refresh token을 생성합니다.
 		long ACCESS_TOKEN_TIME = 1000 * 60 * 30L;
 		long REFRESH_TOKEN_TIME = 1000 * 60 * 60 * 24 * 14L;
 		String accessToken = jwtUtil.createToken(user.getUsername(), user.getRole(), ACCESS_TOKEN_TIME);
 		String refreshToken = jwtUtil.createToken(user.getUsername(), user.getRole(), REFRESH_TOKEN_TIME);
 
+		// redis에 저장합니다.
 		CreateRefreshTokenServiceRequest redisPayload = new CreateRefreshTokenServiceRequest(user.getUsername(),
 			refreshToken);
-		redisService.createRefreshToken(redisPayload);
+		refreshTokenService.createToken(redisPayload);
 
 		return new LoginServiceResponse(accessToken);
 	}

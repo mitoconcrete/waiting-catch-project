@@ -1,4 +1,4 @@
 package team.waitingcatch.app.redis.service;
 
-public interface InternalRedisService {
+public interface InternalRefreshTokenService {
 }
