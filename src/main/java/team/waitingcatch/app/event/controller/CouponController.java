@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
+import team.waitingcatch.app.event.dto.couponcreator.CreateAdminCouponCreatorServiceRequest;
+import team.waitingcatch.app.event.dto.couponcreator.CreateCouponCreatorControllerRequest;
+import team.waitingcatch.app.event.dto.couponcreator.CreateSellerCouponCreatorServiceRequest;
 import team.waitingcatch.app.event.dto.event.CreateEventControllerRequest;
 import team.waitingcatch.app.event.dto.event.CreateEventServiceRequest;
 import team.waitingcatch.app.event.dto.event.DeleteEventServiceRequest;
@@ -21,6 +24,7 @@ import team.waitingcatch.app.event.dto.event.GetEventsResponse;
 import team.waitingcatch.app.event.dto.event.UpdateEventControllerRequest;
 import team.waitingcatch.app.event.dto.event.UpdateEventServiceRequest;
 import team.waitingcatch.app.event.dto.event.UpdateSellerEventServiceRequest;
+import team.waitingcatch.app.event.service.couponcreator.CouponCreatorService;
 import team.waitingcatch.app.event.service.event.EventService;
 import team.waitingcatch.app.user.entitiy.UserDetailsImpl;
 
@@ -29,6 +33,7 @@ import team.waitingcatch.app.user.entitiy.UserDetailsImpl;
 public class CouponController {
 
 	private final EventService eventService;
+	private final CouponCreatorService couponCreatorService;
 
 
 	/*  어드민  */
@@ -96,8 +101,35 @@ public class CouponController {
 	}
 
 	@GetMapping("/restaurants/{restaurantId}/events")
-	public List<GetEventsResponse> getrestaurantEvents(Long restaurantId) {
+	public List<GetEventsResponse> getRestaurantEvents(@PathVariable Long restaurantId) {
 		return eventService.getRestaurantEvents(restaurantId);
+	}
+
+
+	/*  쿠폰 생성자  */
+
+	//광역 이벤트 쿠폰 생성자 생성
+	@PostMapping("/admin/events/{eventId}/creator")
+	public ResponseEntity<String> createAdminCouponCreator(
+		CreateCouponCreatorControllerRequest createCouponCreatorControllerRequest, @PathVariable Long eventId) {
+		CreateAdminCouponCreatorServiceRequest createAdminCouponCreatorServiceRequest = new CreateAdminCouponCreatorServiceRequest(
+			createCouponCreatorControllerRequest, eventId);
+
+		return ResponseEntity.status(HttpStatus.OK)
+			.body(couponCreatorService.createAdminCouponCreator(createAdminCouponCreatorServiceRequest));
+
+	}
+
+	//레스토랑 이벤트 쿠폰 생성자 생성
+	@PostMapping("/seller/events/{eventId}/creator")
+	public ResponseEntity<String> createSellerCouponCreator(
+		CreateCouponCreatorControllerRequest createCouponCreatorControllerRequest, @PathVariable Long eventId,
+		@AuthenticationPrincipal UserDetailsImpl userDetails) {
+		CreateSellerCouponCreatorServiceRequest createSellerCouponCreatorServiceRequest = new CreateSellerCouponCreatorServiceRequest(
+			createCouponCreatorControllerRequest, eventId, userDetails.getUsername());
+
+		return ResponseEntity.status(HttpStatus.OK)
+			.body(couponCreatorService.createSellerCouponCreator(createSellerCouponCreatorServiceRequest));
 	}
 
 	//@GetMapping("/restaurants/{restaurantId}/events/{eventId}")

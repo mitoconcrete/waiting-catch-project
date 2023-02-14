@@ -17,6 +17,8 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import team.waitingcatch.app.common.entity.TimeStamped;
+import team.waitingcatch.app.event.dto.couponcreator.CreateAdminCouponCreatorServiceRequest;
+import team.waitingcatch.app.event.dto.couponcreator.CreateSellerCouponCreatorServiceRequest;
 import team.waitingcatch.app.event.enums.CouponTypeEnum;
 
 @Entity
@@ -48,4 +50,22 @@ public class CouponCreator extends TimeStamped {
 
 	@Column(nullable = false)
 	private LocalDateTime expireDate;
+
+	public CouponCreator(CreateAdminCouponCreatorServiceRequest createAdminCouponCreatorServiceRequest, Event event) {
+		this.event = event;
+		this.name = createAdminCouponCreatorServiceRequest.getName();
+		this.discount_price = createAdminCouponCreatorServiceRequest.getDiscountPrice();
+		this.discountType = createAdminCouponCreatorServiceRequest.getDiscountType();
+		this.quantity = createAdminCouponCreatorServiceRequest.getQuantity();
+		this.expireDate = createAdminCouponCreatorServiceRequest.getExpireDate();
+	}
+
+	public CouponCreator(CreateSellerCouponCreatorServiceRequest createSellerCouponCreatorServiceRequest, Event event) {
+		this.event = event;
+		this.name = createSellerCouponCreatorServiceRequest.getName();
+		this.discount_price = createSellerCouponCreatorServiceRequest.getDiscountPrice();
+		this.discountType = createSellerCouponCreatorServiceRequest.getDiscountType();
+		this.quantity = createSellerCouponCreatorServiceRequest.getQuantity();
+		this.expireDate = createSellerCouponCreatorServiceRequest.getExpireDate();
+	}
 }
