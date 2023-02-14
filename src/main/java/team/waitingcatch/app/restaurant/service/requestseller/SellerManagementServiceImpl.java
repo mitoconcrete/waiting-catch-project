@@ -1,7 +1,6 @@
 package team.waitingcatch.app.restaurant.service.requestseller;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -35,14 +34,8 @@ public class SellerManagementServiceImpl implements SellerManagementService, Int
 
 	//판매자 요청 등록 하는 메소드
 	public void demandSignUpSeller(DemandSignUpSellerServiceRequest demandSignupSellerServiceRequest) {
-		Optional<User> user = internalUserService._findByUsername(demandSignupSellerServiceRequest.getUsername());
-		if (user.isPresent()) {
-			throw new IllegalArgumentException("Duplicated user");
-		}
-		Optional<User> userEmail = internalUserService._findByEmail(demandSignupSellerServiceRequest.getEmail());
-		if (userEmail.isPresent()) {
-			throw new IllegalArgumentException("Duplicated email");
-		}
+		internalUserService._getUserByUsername(demandSignupSellerServiceRequest.getUsername());
+		internalUserService._getUserByEmail(demandSignupSellerServiceRequest.getEmail());
 
 		SellerManagement sellerManagement = new SellerManagement(demandSignupSellerServiceRequest);
 		sellerManagementRepository.save(sellerManagement);
