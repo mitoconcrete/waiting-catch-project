@@ -4,10 +4,12 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
+import team.waitingcatch.app.restaurant.dto.blacklist.CancelRequestUserBlackListByRestaurantServiceRequest;
 import team.waitingcatch.app.restaurant.dto.blacklist.RequestUserBlackListByRestaurantControllerRequest;
 import team.waitingcatch.app.restaurant.dto.blacklist.RequestUserBlackListByRestaurantServiceRequest;
 import team.waitingcatch.app.restaurant.service.requestblacklist.BlackListRequestService;
@@ -31,6 +33,14 @@ public class RequestBlackListController {
 			= new RequestUserBlackListByRestaurantServiceRequest(
 			demandSignUpControllerRequest.getDescription(), userId, userDetails.getUsername());
 		blackListRequestService.requestUserBlackList(requestUserBlackListByRestaurantServiceRequest);
+	}
+
+	@PutMapping("/seller/blacklist/{userId}")
+	public void cancelRequestUserBlackListByRestaurant(@PathVariable Long userId,
+		@AuthenticationPrincipal UserDetails userDetails) {
+		CancelRequestUserBlackListByRestaurantServiceRequest cancelRequestUserBlackListByRestaurantServiceRequest
+			= new CancelRequestUserBlackListByRestaurantServiceRequest(userId, userDetails.getUsername());
+		blackListRequestService.cancelRequestUserBlackList(cancelRequestUserBlackListByRestaurantServiceRequest);
 	}
 
 }
