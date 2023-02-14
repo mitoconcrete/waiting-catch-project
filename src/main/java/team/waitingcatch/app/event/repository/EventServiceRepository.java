@@ -1,5 +1,6 @@
 package team.waitingcatch.app.event.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,5 +12,9 @@ public interface EventServiceRepository extends JpaRepository<Event, Long> {
 	Optional<Event> findByName(String name);
 
 	Optional<Event> findByIdAndRestaurant(Long id, Restaurant restaurant);
+
+	List<Event> findByRestaurantIsNull();
+
+	List<Event> findByRestaurant(Restaurant restaurant);
 
 }

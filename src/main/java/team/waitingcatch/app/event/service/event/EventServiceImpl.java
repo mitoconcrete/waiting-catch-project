@@ -1,6 +1,7 @@
 package team.waitingcatch.app.event.service.event;
 
-import java.util.Optional;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.transaction.Transactional;
 
@@ -11,9 +12,8 @@ import team.waitingcatch.app.event.dto.event.CreateEventControllerRequest;
 import team.waitingcatch.app.event.dto.event.CreateEventServiceRequest;
 import team.waitingcatch.app.event.dto.event.DeleteEventServiceRequest;
 import team.waitingcatch.app.event.dto.event.GetEventServiceResponse;
-import team.waitingcatch.app.event.dto.event.GetGlobalEventsServiceResponse;
+import team.waitingcatch.app.event.dto.event.GetEventsResponse;
 import team.waitingcatch.app.event.dto.event.GetRestaurantEventControllerRequest;
-import team.waitingcatch.app.event.dto.event.GetRestaurantEventsServiceResponse;
 import team.waitingcatch.app.event.dto.event.UpdateEventServiceRequest;
 import team.waitingcatch.app.event.dto.event.UpdateSellerEventServiceRequest;
 import team.waitingcatch.app.event.entity.Event;
@@ -29,6 +29,7 @@ public class EventServiceImpl implements EventService, InternalEventService {
 	private final EventServiceRepository eventServiceRepository;
 	private final RestaurantRepository restaurantRepository;
 
+	//광역 이벤트를 생성한다.
 	@Override
 	public String createAdminEvent(CreateEventControllerRequest createEventControllerRequest) {
 		Event event = new Event(createEventControllerRequest);
@@ -36,6 +37,7 @@ public class EventServiceImpl implements EventService, InternalEventService {
 		return "어드민 이벤트 생성 완료";
 	}
 
+	//레스토랑 이벤트를 생성한다.
 	@Override
 	public String createSellerEvent(CreateEventServiceRequest createEventServiceRequest) {
 
@@ -48,6 +50,7 @@ public class EventServiceImpl implements EventService, InternalEventService {
 		return "레스토랑 이벤트 생성 완료";
 	}
 
+	//광역 이벤트를 수정한다.
 	@Override
 	public String updateAdminEvent(UpdateEventServiceRequest updateEventServiceRequest) {
 		Event events = _getEventFindById(updateEventServiceRequest.getEventId());
@@ -55,6 +58,7 @@ public class EventServiceImpl implements EventService, InternalEventService {
 		return "관리자 이벤트 수정 완료";
 	}
 
+	//레스토랑 이벤트를 수정한다.
 	@Override
 	public String updateSellerEvent(UpdateSellerEventServiceRequest updateSellerEventServiceRequest) {
 		Restaurant restaurant = _getRestaurantFindByUsername(updateSellerEventServiceRequest.getUsername());
@@ -69,6 +73,7 @@ public class EventServiceImpl implements EventService, InternalEventService {
 		return "레스토랑 이벤트 수정 완료";
 	}
 
+	//광역 이벤트를 삭제한다.
 	@Override
 	public String deleteAdminEvent(Long eventId) {
 		Event events = _getEventFindById(eventId);
@@ -76,11 +81,12 @@ public class EventServiceImpl implements EventService, InternalEventService {
 		return "광역 이벤트가 삭제완료";
 	}
 
+	//레스토랑 이벤트를 삭제한다.
 	@Override
 	public String deleteSellerEvent(DeleteEventServiceRequest deleteEventServiceRequest) {
 		Restaurant restaurant = _getRestaurantFindByUsername(deleteEventServiceRequest.getUsername());
 		Event ev = _getEventFindById(deleteEventServiceRequest.getEventId());
-		
+
 		Event events = eventServiceRepository.findByIdAndRestaurant(deleteEventServiceRequest.getEventId(),
 			restaurant).orElseThrow(
 			() -> new IllegalArgumentException("매장에 해당 이벤트가 존재하지 않습니다.")
@@ -89,28 +95,36 @@ public class EventServiceImpl implements EventService, InternalEventService {
 		return "레스토랑 이벤트가 삭제완료";
 	}
 
+	//광역 이벤트를 조회한다.
 	@Override
-	public GetGlobalEventsServiceResponse getGlobalEvents() {
-		return null;
+	public List<GetEventsResponse> getGlobalEvents() {
+		//이벤트중 restaurant이 null인것만 조회
+		List<Event> events = eventServiceRepository.findByRestaurantIsNull();
+		List<GetEventsResponse> GetEventsResponse = new ArrayList<>();
+		for (Event event : events) {
+			GetEventsResponse.add(new GetEventsResponse(event));
+		}
+		return GetEventsResponse;
+
 	}
 
+	//레스토랑 이벤트를 조회한다.
 	@Override
-	public GetRestaurantEventsServiceResponse getRestaurantEvents(Long id) {
-		return null;
+	public List<GetEventsResponse> getRestaurantEvents(Long restaurantId) {
+		//레스토랑 아이디로 레스토랑 객체를 찾아야함
+		Restaurant restaurant = _getRestaurantFindById(restaurantId);
+		//찾은 객체로 이벤트 검색
+		List<Event> events = eventServiceRepository.findByRestaurant(restaurant);
+		List<GetEventsResponse> GetEventsResponse = new ArrayList<>();
+		for (Event event : events) {
+			GetEventsResponse.add(new GetEventsResponse(event));
+		}
+		return GetEventsResponse;
 	}
 
 	@Override
 	public GetEventServiceResponse getEvent(GetRestaurantEventControllerRequest getRestaurantEventControllerRequest) {
 		return null;
-	}
-
-	@Override
-	public Optional<Event> _getEventFindByName(String name) {
-		Optional<Event> events = eventServiceRepository.findByName(name);
-		if (events.isPresent()) {
-			throw new IllegalArgumentException("이미 존재하는 이벤트입니다.");
-		}
-		return events;
 	}
 
 	@Override
@@ -125,7 +139,17 @@ public class EventServiceImpl implements EventService, InternalEventService {
 	public Restaurant _getRestaurantFindByUsername(String name) {
 		Restaurant restaurant = restaurantRepository.findByUsername(name)
 			.orElseThrow(
-				() -> new IllegalArgumentException("레스토랑을 보유한 유저가 아닙니다.")
+				() -> new IllegalArgumentException("레스토랑을 찾을수 없습니다.")
+			);
+
+		return restaurant;
+	}
+
+	@Override
+	public Restaurant _getRestaurantFindById(Long id) {
+		Restaurant restaurant = restaurantRepository.findById(id)
+			.orElseThrow(
+				() -> new IllegalArgumentException("레스토랑을 찾을수 없습니다.")
 			);
 
 		return restaurant;
