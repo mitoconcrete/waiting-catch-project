@@ -9,9 +9,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RedisHash("old-access-token")
 @RequiredArgsConstructor
-public class DeadAccessToken {
+public class KilledAccessToken {
 	@Id
-	private final String username;
 	private final String token;
-
 }

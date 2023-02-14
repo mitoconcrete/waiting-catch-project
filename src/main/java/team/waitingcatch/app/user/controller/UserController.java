@@ -2,6 +2,7 @@ package team.waitingcatch.app.user.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
@@ -26,6 +27,7 @@ import team.waitingcatch.app.user.dto.FindPasswordRequest;
 import team.waitingcatch.app.user.dto.GetCustomerByIdAndRoleServiceRequest;
 import team.waitingcatch.app.user.dto.LoginRequest;
 import team.waitingcatch.app.user.dto.LoginServiceResponse;
+import team.waitingcatch.app.user.dto.LogoutRequest;
 import team.waitingcatch.app.user.dto.UpdateUserControllerRequest;
 import team.waitingcatch.app.user.dto.UpdateUserServiceRequest;
 import team.waitingcatch.app.user.dto.UserInfoResponse;
@@ -35,6 +37,8 @@ import team.waitingcatch.app.user.service.UserService;
 @RestController
 @RequiredArgsConstructor
 public class UserController {
+
+	private final JwtUtil jwtUtil;
 	private final UserService userService;
 
 	// global
@@ -43,6 +47,12 @@ public class UserController {
 		LoginServiceResponse loginServiceResponse = userService.login(loginRequest);
 		// 엑세스 토큰을 서비스로 부터 반환 받아 헤더에 넣어준다.
 		response.setHeader(JwtUtil.AUTHORIZATION_HEADER, loginServiceResponse.getAccessToken());
+	}
+
+	@PostMapping({"/customer/logout", "/seller/logout", "/admin/logout"})
+	public void logout(HttpServletRequest request) {
+		String token = jwtUtil.resolveToken(request);
+		LogoutRequest servicePayload = new LogoutRequest(token);
 	}
 
 	// customer

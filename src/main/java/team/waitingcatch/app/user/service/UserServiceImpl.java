@@ -13,6 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.common.util.JwtUtil;
 import team.waitingcatch.app.redis.dto.CreateRefreshTokenServiceRequest;
+import team.waitingcatch.app.redis.dto.KillTokenRequest;
+import team.waitingcatch.app.redis.service.KilledAccessTokenService;
 import team.waitingcatch.app.redis.service.RefreshTokenService;
 import team.waitingcatch.app.user.dto.CreateUserServiceRequest;
 import team.waitingcatch.app.user.dto.DeleteUserRequest;
@@ -20,6 +22,7 @@ import team.waitingcatch.app.user.dto.FindPasswordRequest;
 import team.waitingcatch.app.user.dto.GetCustomerByIdAndRoleServiceRequest;
 import team.waitingcatch.app.user.dto.LoginRequest;
 import team.waitingcatch.app.user.dto.LoginServiceResponse;
+import team.waitingcatch.app.user.dto.LogoutRequest;
 import team.waitingcatch.app.user.dto.UpdateUserServiceRequest;
 import team.waitingcatch.app.user.dto.UserInfoResponse;
 import team.waitingcatch.app.user.entitiy.User;
@@ -32,9 +35,8 @@ public class UserServiceImpl implements UserService, InternalUserService {
 	private final JwtUtil jwtUtil;
 	private final JavaMailSender emailSender;
 	private final UserRepository userRepository;
-
 	private final RefreshTokenService refreshTokenService;
-
+	private final KilledAccessTokenService accessTokenService;
 	@Value("${spring.mail.username}")
 	private String smtpSenderEmail;
 
@@ -58,6 +60,12 @@ public class UserServiceImpl implements UserService, InternalUserService {
 		refreshTokenService.createToken(redisPayload);
 
 		return new LoginServiceResponse(accessToken);
+	}
+
+	@Override
+	public void logout(LogoutRequest payload) {
+		KillTokenRequest servicePayload = new KillTokenRequest(payload.getAccessToken());
+		accessTokenService.killToken(servicePayload);
 	}
 
 	@Override

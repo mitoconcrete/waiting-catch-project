@@ -8,11 +8,14 @@ import team.waitingcatch.app.user.dto.FindPasswordRequest;
 import team.waitingcatch.app.user.dto.GetCustomerByIdAndRoleServiceRequest;
 import team.waitingcatch.app.user.dto.LoginRequest;
 import team.waitingcatch.app.user.dto.LoginServiceResponse;
+import team.waitingcatch.app.user.dto.LogoutRequest;
 import team.waitingcatch.app.user.dto.UpdateUserServiceRequest;
 import team.waitingcatch.app.user.dto.UserInfoResponse;
 
 public interface UserService {
 	LoginServiceResponse login(LoginRequest payload);
+
+	void logout(LogoutRequest payload);
 
 	List<UserInfoResponse> getCustomers();
 
