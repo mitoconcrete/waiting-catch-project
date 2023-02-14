@@ -46,13 +46,13 @@ public class CategoryServiceImpl implements CategoryService, InternalCategorySer
 
 	@Override
 	public void updateCategory(UpdateCategoryServiceRequest serviceRequest) {
-		Category category = this._getCategory(serviceRequest.getCategoryId());
+		Category category = _getCategory(serviceRequest.getCategoryId());
 		category.update(serviceRequest);
 	}
 
 	@Override
 	public void deleteCategory(DeleteCategoryRequest request) {
-		Category category = this._getCategory(request.getCategoryId());
+		Category category = _getCategory(request.getCategoryId());
 		categoryRepository.delete(category);
 	}
 
