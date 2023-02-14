@@ -52,6 +52,7 @@ dependencies {
         exclude group: "org.slf4j", module: "slf4j-simple"
     }
 
+    //테스트에서 lombok 사용
     testCompileOnly 'org.projectlombok:lombok'
     testAnnotationProcessor 'org.projectlombok:lombok'
 }
@@ -70,3 +71,4 @@ jar {
 	enabled = false
 }
  */
+
