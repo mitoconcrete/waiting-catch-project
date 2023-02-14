@@ -6,6 +6,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -14,6 +16,7 @@ import team.waitingcatch.app.common.Address;
 import team.waitingcatch.app.common.Position;
 import team.waitingcatch.app.common.entity.TimeStamped;
 import team.waitingcatch.app.restaurant.dto.ApproveSignUpSellerManagementEntityPassToRestaurantEntityRequest;
+import team.waitingcatch.app.user.entitiy.User;
 
 @Entity
 @Getter
@@ -52,6 +55,10 @@ public class Restaurant extends TimeStamped {
 	@Column(nullable = false)
 	private String businessLicenseNo;
 
+	@OneToOne
+	@JoinColumn(name = "user_id", nullable = false)
+	private User user;
+
 	public Restaurant(ApproveSignUpSellerManagementEntityPassToRestaurantEntityRequest
 		approveSignUpSellerManagementEntityPassToRestaurantEntityRequest) {
 		this.name = approveSignUpSellerManagementEntityPassToRestaurantEntityRequest.getRestaurantName();
@@ -63,5 +70,6 @@ public class Restaurant extends TimeStamped {
 		this.description = approveSignUpSellerManagementEntityPassToRestaurantEntityRequest.getDescription();
 		this.businessLicenseNo = approveSignUpSellerManagementEntityPassToRestaurantEntityRequest.getBusinessLicenseNo();
 		this.capacity = 0;
+		this.user = approveSignUpSellerManagementEntityPassToRestaurantEntityRequest.getUser();
 	}
 }
