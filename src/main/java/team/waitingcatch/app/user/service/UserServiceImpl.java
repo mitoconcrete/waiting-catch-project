@@ -118,5 +118,12 @@ public class UserServiceImpl implements UserService, InternalUserService {
 			() -> new IllegalArgumentException("유저가 존재하지 않습니다.")
 		);
 	}
+
+	@Override
+	public User _getUserByEmail(String email) {
+		return userRepository.findByEmailAndDeletedFalse(email).orElseThrow(
+			() -> new IllegalArgumentException("유저가 존재하지 않습니다.")
+		);
+	}
 }
 
