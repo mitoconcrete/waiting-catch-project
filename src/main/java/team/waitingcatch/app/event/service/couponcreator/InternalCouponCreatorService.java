@@ -1,11 +1,8 @@
 package team.waitingcatch.app.event.service.couponcreator;
 
-import team.waitingcatch.app.event.entity.Event;
-import team.waitingcatch.app.restaurant.entity.Restaurant;
+import team.waitingcatch.app.event.entity.CouponCreator;
 
 public interface InternalCouponCreatorService {
 
-	public Event _getEventFindById(Long id);
-
-	public Restaurant _getRestaurantFindByUsername(String name);
+	public CouponCreator _getCouponCreatorFindById(Long id);
 }

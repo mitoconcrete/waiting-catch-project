@@ -27,8 +27,10 @@ import team.waitingcatch.app.event.dto.event.GetEventsResponse;
 import team.waitingcatch.app.event.dto.event.UpdateEventControllerRequest;
 import team.waitingcatch.app.event.dto.event.UpdateEventServiceRequest;
 import team.waitingcatch.app.event.dto.event.UpdateSellerEventServiceRequest;
+import team.waitingcatch.app.event.dto.usercoupon.CreateUserCouponServiceRequest;
 import team.waitingcatch.app.event.service.couponcreator.CouponCreatorService;
 import team.waitingcatch.app.event.service.event.EventService;
+import team.waitingcatch.app.event.service.usercoupon.UserCouponService;
 import team.waitingcatch.app.user.entitiy.UserDetailsImpl;
 
 @RequiredArgsConstructor
@@ -37,6 +39,7 @@ public class CouponController {
 
 	private final EventService eventService;
 	private final CouponCreatorService couponCreatorService;
+	private final UserCouponService userCouponService;
 
 
 	/*  어드민  */
@@ -163,4 +166,17 @@ public class CouponController {
 			.body(couponCreatorService.updateSellerCouponCreator(updateSellerCouponCreatorServiceRequest));
 	}
 
+
+	/*  유저 쿠폰  */
+
+	//유저 쿠폰 생성
+	@PostMapping("/restaurants/{restaurantId}/events/{eventId}/creators/{creatorId}")
+	public ResponseEntity<String> createUserCoupon(@PathVariable Long creatorId,
+		@AuthenticationPrincipal UserDetailsImpl userDetails) {
+		CreateUserCouponServiceRequest createUserCouponserviceRequest = new CreateUserCouponServiceRequest(creatorId,
+			userDetails.getUsername());
+
+		return ResponseEntity.status(HttpStatus.OK)
+			.body(userCouponService.createUserCoupon(createUserCouponserviceRequest));
+	}
 }
