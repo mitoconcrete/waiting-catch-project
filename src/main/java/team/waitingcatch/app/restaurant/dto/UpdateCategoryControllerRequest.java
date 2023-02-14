@@ -6,6 +6,6 @@ import lombok.Getter;
 
 @Getter
 public class UpdateCategoryControllerRequest {
-	@NotBlank
+	@NotBlank(message = "올바른 카테고리명이 아닙니다.")
 	private String name;
 }
