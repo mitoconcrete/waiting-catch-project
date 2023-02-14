@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.event.dto.event.CreateEventControllerRequest;
 import team.waitingcatch.app.event.dto.event.CreateEventServiceRequest;
+import team.waitingcatch.app.event.dto.event.DeleteEventServiceRequest;
 import team.waitingcatch.app.event.dto.event.GetEventServiceResponse;
 import team.waitingcatch.app.event.dto.event.GetGlobalEventsServiceResponse;
 import team.waitingcatch.app.event.dto.event.GetRestaurantEventControllerRequest;
@@ -56,11 +57,7 @@ public class EventServiceImpl implements EventService, InternalEventService {
 
 	@Override
 	public String updateSellerEvent(UpdateSellerEventServiceRequest updateSellerEventServiceRequest) {
-		//셀러는 자신의 이벤트만 수정할수있다.(레스토랑 검색 필요)
-		Restaurant restaurant = restaurantRepository.findByUsername(updateSellerEventServiceRequest.getUsername())
-			.orElseThrow(
-				() -> new IllegalArgumentException("레스토랑을 보유한 유저가 아닙니다.")
-			);
+		Restaurant restaurant = _getRestaurantFindByUsername(updateSellerEventServiceRequest.getUsername());
 		Event ev = _getEventFindById(updateSellerEventServiceRequest.getEventId());
 
 		Event events = eventServiceRepository.findByIdAndRestaurant(updateSellerEventServiceRequest.getEventId(),
@@ -75,8 +72,21 @@ public class EventServiceImpl implements EventService, InternalEventService {
 	@Override
 	public String deleteAdminEvent(Long eventId) {
 		Event events = _getEventFindById(eventId);
-		eventServiceRepository.deleteById(eventId);
-		return "이벤트가 삭제되었습니다.";
+		events.isDeleted();
+		return "광역 이벤트가 삭제완료";
+	}
+
+	@Override
+	public String deleteSellerEvent(DeleteEventServiceRequest deleteEventServiceRequest) {
+		Restaurant restaurant = _getRestaurantFindByUsername(deleteEventServiceRequest.getUsername());
+		Event ev = _getEventFindById(deleteEventServiceRequest.getEventId());
+		
+		Event events = eventServiceRepository.findByIdAndRestaurant(deleteEventServiceRequest.getEventId(),
+			restaurant).orElseThrow(
+			() -> new IllegalArgumentException("매장에 해당 이벤트가 존재하지 않습니다.")
+		);
+		events.isDeleted();
+		return "레스토랑 이벤트가 삭제완료";
 	}
 
 	@Override
@@ -109,5 +119,15 @@ public class EventServiceImpl implements EventService, InternalEventService {
 			() -> new IllegalArgumentException("존재하지 않는 이벤트 입니다.")
 		);
 		return events;
+	}
+
+	@Override
+	public Restaurant _getRestaurantFindByUsername(String name) {
+		Restaurant restaurant = restaurantRepository.findByUsername(name)
+			.orElseThrow(
+				() -> new IllegalArgumentException("레스토랑을 보유한 유저가 아닙니다.")
+			);
+
+		return restaurant;
 	}
 }

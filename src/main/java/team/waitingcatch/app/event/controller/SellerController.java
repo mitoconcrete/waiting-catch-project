@@ -3,6 +3,7 @@ package team.waitingcatch.app.event.controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.event.dto.event.CreateEventControllerRequest;
 import team.waitingcatch.app.event.dto.event.CreateEventServiceRequest;
+import team.waitingcatch.app.event.dto.event.DeleteEventServiceRequest;
 import team.waitingcatch.app.event.dto.event.UpdateEventControllerRequest;
 import team.waitingcatch.app.event.dto.event.UpdateSellerEventServiceRequest;
 import team.waitingcatch.app.event.service.event.EventService;
@@ -43,6 +45,16 @@ public class SellerController {
 			updateEventControllerRequest, eventId, userDetails.getUsername());
 		return ResponseEntity.status(HttpStatus.OK)
 			.body(eventService.updateSellerEvent(updateSellerEventServiceRequest));
+	}
+
+	@DeleteMapping("/events/{eventId}")
+	public ResponseEntity<String> deleteSellerEvent(@PathVariable Long eventId,
+		@AuthenticationPrincipal UserDetailsImpl userDetails) {
+
+		DeleteEventServiceRequest deleteEventServiceRequest = new DeleteEventServiceRequest(eventId,
+			userDetails.getUsername());
+		return ResponseEntity.status(HttpStatus.OK)
+			.body(eventService.deleteSellerEvent(deleteEventServiceRequest));
 	}
 
 }

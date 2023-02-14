@@ -42,6 +42,9 @@ public class Event extends TimeStamped {
 	@Column(nullable = false)
 	private String eventEndDate;
 
+	@Column(nullable = false)
+	private boolean isDeleted;
+
 	public Event(CreateEventControllerRequest createEventControllerRequest) {
 		this.name = createEventControllerRequest.getName();
 		this.eventStartDate = createEventControllerRequest.getEventStartDate();
@@ -65,5 +68,9 @@ public class Event extends TimeStamped {
 		this.name = updateSellerEventServiceRequest.getName();
 		this.eventStartDate = updateSellerEventServiceRequest.getEventStartDate();
 		this.eventEndDate = updateSellerEventServiceRequest.getEventEndDate();
+	}
+
+	public void isDeleted() {
+		this.isDeleted = true;
 	}
 }
