@@ -1,7 +1,10 @@
 package team.waitingcatch.app.restaurant.controller;
 
+import java.util.List;
+
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -10,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.restaurant.dto.blacklist.CancelRequestUserBlackListByRestaurantServiceRequest;
+import team.waitingcatch.app.restaurant.dto.blacklist.GetRequestBlackListResponse;
 import team.waitingcatch.app.restaurant.dto.blacklist.RequestUserBlackListByRestaurantControllerRequest;
 import team.waitingcatch.app.restaurant.dto.blacklist.RequestUserBlackListByRestaurantServiceRequest;
 import team.waitingcatch.app.restaurant.service.requestblacklist.BlackListRequestService;
@@ -41,6 +45,13 @@ public class RequestBlackListController {
 		CancelRequestUserBlackListByRestaurantServiceRequest cancelRequestUserBlackListByRestaurantServiceRequest
 			= new CancelRequestUserBlackListByRestaurantServiceRequest(userId, userDetails.getUsername());
 		blackListRequestService.cancelRequestUserBlackList(cancelRequestUserBlackListByRestaurantServiceRequest);
+	}
+
+	//관리자 부분
+	//블랙리스트요청 전체조회
+	@GetMapping("/admin/restaurants/blacklist-request")
+	public List<GetRequestBlackListResponse> getRequestBlackLists() {
+		return blackListRequestService.getRequestBlackLists();
 	}
 
 }

@@ -1,10 +1,14 @@
 package team.waitingcatch.app.restaurant.service.requestblacklist;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.restaurant.dto.blacklist.CancelRequestUserBlackListByRestaurantServiceRequest;
+import team.waitingcatch.app.restaurant.dto.blacklist.GetRequestBlackListResponse;
 import team.waitingcatch.app.restaurant.dto.blacklist.RequestUserBlackListByRestaurantServiceRequest;
 import team.waitingcatch.app.restaurant.entity.BlackListRequest;
 import team.waitingcatch.app.restaurant.entity.Restaurant;
@@ -54,6 +58,15 @@ public class BlackListRequestServiceImpl implements BlackListRequestService, Int
 		blackListRequest.checkStatus();
 		blackListRequest.cancelStatus();
 		blackListRequestRepository.save(blackListRequest);
+	}
+
+	//관리자 부분
+
+	//블랙리스트 요청 전체조회
+	@Transactional(readOnly = true)
+	public List<GetRequestBlackListResponse> getRequestBlackLists() {
+		List<BlackListRequest> blackListRequests = blackListRequestRepository.findAll();
+		return blackListRequests.stream().map(GetRequestBlackListResponse::new).collect(Collectors.toList());
 	}
 
 }
