@@ -4,19 +4,23 @@ import lombok.Getter;
 import team.waitingcatch.app.restaurant.entity.Restaurant;
 
 @Getter
-public class RestaurantBasicInfoResponse {
+public class RestaurantDetailedInfoResponse {
 	private final String name;
-	private final String images;
 	private final String province;
 	private final String city;
 	private final String street;
-	// private final int rate;
+	private final String phoneNumber;
+	private final String description;
+	// private final String openTime;
+	// private final String closeTime;
 
-	public RestaurantBasicInfoResponse(Restaurant restaurant) {
+	public RestaurantDetailedInfoResponse(Restaurant restaurant) {
 		this.name = restaurant.getName();
-		this.images = restaurant.getImages();
 		this.province = restaurant.getAddress().getProvince();
 		this.city = restaurant.getAddress().getCity();
-		this.street = restaurant.getAddress().getStreet();
+		this.street = restaurant.getAddress().getCity();
+		this.phoneNumber = restaurant.getPhoneNumber();
+		this.description = restaurant.getDescription();
+
 	}
 }
