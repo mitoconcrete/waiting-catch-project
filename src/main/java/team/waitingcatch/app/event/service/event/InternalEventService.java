@@ -5,10 +5,10 @@ import team.waitingcatch.app.restaurant.entity.Restaurant;
 
 public interface InternalEventService {
 
-	public Event _getEventFindById(Long id);
+	public Event _getEventById(Long id);
 
-	public Restaurant _getRestaurantFindByUsername(String name);
+	public Restaurant _getRestaurantByUsername(String name);
 
-	public Restaurant _getRestaurantFindById(Long id);
+	public Restaurant _getRestaurantById(Long id);
 
 }

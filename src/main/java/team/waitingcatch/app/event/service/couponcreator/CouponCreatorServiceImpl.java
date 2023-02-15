@@ -30,7 +30,7 @@ public class CouponCreatorServiceImpl implements CouponCreatorService, InternalC
 	@Override
 	public String createAdminCouponCreator(
 		CreateAdminCouponCreatorServiceRequest createAdminCouponCreatorServiceRequest) {
-		Event events = internalEventService._getEventFindById(createAdminCouponCreatorServiceRequest.getEventId());
+		Event events = internalEventService._getEventById(createAdminCouponCreatorServiceRequest.getEventId());
 		CouponCreator couponCreator = new CouponCreator(createAdminCouponCreatorServiceRequest, events);
 		couponCreatorRepository.save(couponCreator);
 		return "해당 이벤트에 쿠폰 생성자를 추가하였습니다.";
@@ -40,9 +40,9 @@ public class CouponCreatorServiceImpl implements CouponCreatorService, InternalC
 	@Override
 	public String createSellerCouponCreator(
 		CreateSellerCouponCreatorServiceRequest createSellerCouponCreatorServiceRequest) {
-		Restaurant restaurant = internalEventService._getRestaurantFindByUsername(
+		Restaurant restaurant = internalEventService._getRestaurantByUsername(
 			createSellerCouponCreatorServiceRequest.getUsername());
-		Event ev = internalEventService._getEventFindById(createSellerCouponCreatorServiceRequest.getEventId());
+		Event ev = internalEventService._getEventById(createSellerCouponCreatorServiceRequest.getEventId());
 
 		Event events = eventServiceRepository.findByIdAndRestaurant(
 			createSellerCouponCreatorServiceRequest.getEventId(),
@@ -59,7 +59,7 @@ public class CouponCreatorServiceImpl implements CouponCreatorService, InternalC
 	@Override
 	public String updateAdminCouponCreator(
 		UpdateAdminCouponCreatorServiceRequest updateAdminCouponCreatorServiceRequest) {
-		Event events = internalEventService._getEventFindById(updateAdminCouponCreatorServiceRequest.getEventId());
+		Event events = internalEventService._getEventById(updateAdminCouponCreatorServiceRequest.getEventId());
 		CouponCreator couponCreators = _getCouponCreatorFindById(updateAdminCouponCreatorServiceRequest.getCreatorId());
 
 		couponCreators.updateAdminCouponCreator(updateAdminCouponCreatorServiceRequest);
@@ -70,9 +70,9 @@ public class CouponCreatorServiceImpl implements CouponCreatorService, InternalC
 	@Override
 	public String updateSellerCouponCreator(
 		UpdateSellerCouponCreatorServiceRequest updateSellerCouponCreatorServiceRequest) {
-		Restaurant restaurant = internalEventService._getRestaurantFindByUsername(
+		Restaurant restaurant = internalEventService._getRestaurantByUsername(
 			updateSellerCouponCreatorServiceRequest.getUsername());
-		Event ev = internalEventService._getEventFindById(updateSellerCouponCreatorServiceRequest.getEventId());
+		Event ev = internalEventService._getEventById(updateSellerCouponCreatorServiceRequest.getEventId());
 
 		Event events = eventServiceRepository.findByIdAndRestaurant(
 			updateSellerCouponCreatorServiceRequest.getEventId(),
