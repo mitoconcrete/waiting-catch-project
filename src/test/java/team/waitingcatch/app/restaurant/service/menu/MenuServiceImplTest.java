@@ -10,6 +10,7 @@ import static org.mockito.Mockito.when;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -23,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 import team.waitingcatch.app.common.util.S3Uploader;
 import team.waitingcatch.app.restaurant.dto.menu.CreateMenuServiceRequest;
 import team.waitingcatch.app.restaurant.dto.menu.MenuResponse;
+import team.waitingcatch.app.restaurant.dto.menu.UpdateMenuServiceRequest;
 import team.waitingcatch.app.restaurant.entity.Menu;
 import team.waitingcatch.app.restaurant.entity.Restaurant;
 import team.waitingcatch.app.restaurant.repository.MenuRepository;
@@ -120,5 +122,52 @@ class MenuServiceImplTest {
 
 		// then
 		assertEquals("aaa", menus1.get(0).getName());
+	}
+
+	@Nested
+	@DisplayName("메뉴 수정")
+	class updateMenu {
+
+		@Test
+		@DisplayName("수정할 이미지가 없는 경우")
+		void updateMenuWithoutImage() {
+			// given
+			UpdateMenuServiceRequest serviceRequest = mock(UpdateMenuServiceRequest.class);
+			Restaurant restaurant = mock(Restaurant.class);
+			Menu menu = new Menu(restaurant, "aaa", 100, "image");
+			MultipartFile multipartFile = mock(MultipartFile.class);
+
+			when(serviceRequest.getName()).thenReturn("bbb");
+			when(serviceRequest.getMultipartFile()).thenReturn(multipartFile);
+			when(serviceRequest.getMultipartFile().isEmpty()).thenReturn(true);
+			when(menuRepository.findById(any(Long.class))).thenReturn(Optional.of(menu));
+
+			// when
+			menuService.updateMenu(serviceRequest);
+
+			// then
+			assertEquals("bbb", menu.getName());
+		}
+
+		@Test
+		@DisplayName("수정할 이미지가 있는 경우")
+		void updateMenuWithImage() {
+			// given
+			UpdateMenuServiceRequest serviceRequest = mock(UpdateMenuServiceRequest.class);
+			Restaurant restaurant = mock(Restaurant.class);
+			Menu menu = new Menu(restaurant, "aaa", 100, "image");
+			MultipartFile multipartFile = mock(MultipartFile.class);
+
+			when(serviceRequest.getName()).thenReturn("bbb");
+			when(serviceRequest.getMultipartFile()).thenReturn(multipartFile);
+			when(serviceRequest.getMultipartFile().isEmpty()).thenReturn(false);
+			when(menuRepository.findById(any(Long.class))).thenReturn(Optional.of(menu));
+
+			// when
+			menuService.updateMenu(serviceRequest);
+
+			// then
+			assertEquals("bbb", menu.getName());
+		}
 	}
 }
