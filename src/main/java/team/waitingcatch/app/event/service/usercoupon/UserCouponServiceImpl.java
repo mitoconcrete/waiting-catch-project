@@ -8,6 +8,7 @@ import team.waitingcatch.app.event.dto.usercoupon.CreateUserCouponServiceRequest
 import team.waitingcatch.app.event.entity.CouponCreator;
 import team.waitingcatch.app.event.entity.UserCoupon;
 import team.waitingcatch.app.event.repository.UserCouponRepository;
+import team.waitingcatch.app.event.service.couponcreator.InternalCouponCreatorService;
 import team.waitingcatch.app.user.entitiy.User;
 import team.waitingcatch.app.user.repository.UserRepository;
 import team.waitingcatch.app.user.service.InternalUserService;
@@ -18,17 +19,16 @@ import team.waitingcatch.app.user.service.InternalUserService;
 public class UserCouponServiceImpl implements UserCouponService, InternalUserCouponService {
 
 	private final InternalUserService internalUserService;
+	private final InternalCouponCreatorService internalCouponCreatorService;
 	private final UserRepository userRepository;
 	private final UserCouponRepository userCouponRepository;
 
 	//유저 쿠폰을 생성한다
 	@Override
 	public void createUserCoupon(CreateUserCouponServiceRequest createUserCouponserviceRequest) {
-		CouponCreator couponCreator = internalUserService._getUserByUsername(
+		CouponCreator couponCreator = internalCouponCreatorService._getCouponCreatorById(
 			createUserCouponserviceRequest.getCreatorId());
-		User user = userRepository.findByUsername(createUserCouponserviceRequest.getUsername()).orElseThrow(
-			() -> new IllegalArgumentException("존재하지 않는 유저입니다.")    //도달불가.옵티널이므로 명시적 기재
-		);
+		User user = internalUserService._getUserByUsername(createUserCouponserviceRequest.getUsername());
 		UserCoupon userCoupon = new UserCoupon(user, couponCreator);
 		userCouponRepository.save(userCoupon);
 	}
