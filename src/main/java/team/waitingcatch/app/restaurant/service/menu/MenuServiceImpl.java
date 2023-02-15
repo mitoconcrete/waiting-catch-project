@@ -55,9 +55,7 @@ public class MenuServiceImpl implements MenuService, InternalMenuService {
 
 	@Override
 	public List<Menu> _getMenusByRestaurantId(Long restaurantId) {
-		return menuRepository.findAllByRestaurantId(restaurantId).orElseThrow(
-			() -> new IllegalArgumentException("해당 레스토랑에 메뉴가 없습니다.")
-		);
+		return menuRepository.findAllByRestaurantId(restaurantId);
 	}
 
 }
