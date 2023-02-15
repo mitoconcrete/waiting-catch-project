@@ -53,6 +53,9 @@ public class CouponCreator extends TimeStamped {
 	@Column(nullable = false)
 	private LocalDateTime expireDate;
 
+	@Column(nullable = false)
+	private boolean isDeleted;
+
 	public CouponCreator(CreateAdminCouponCreatorRequest createAdminCouponCreatorRequest) {
 		this.event = createAdminCouponCreatorRequest.getEvent();
 		this.name = createAdminCouponCreatorRequest.getCreateAdminCouponCreatorServiceRequest().getName();
@@ -91,5 +94,9 @@ public class CouponCreator extends TimeStamped {
 		this.discountType = updateSellerCouponCreatorServiceRequest.getDiscountType();
 		this.quantity = updateSellerCouponCreatorServiceRequest.getQuantity();
 		this.expireDate = updateSellerCouponCreatorServiceRequest.getExpireDate();
+	}
+
+	public void deleteCouponCreator() {
+		this.isDeleted = true;
 	}
 }
