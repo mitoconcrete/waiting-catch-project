@@ -13,6 +13,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import team.waitingcatch.app.common.entity.TimeStamped;
 import team.waitingcatch.app.restaurant.dto.menu.CreateMenuEntityRequest;
+import team.waitingcatch.app.restaurant.dto.menu.UpdateMenuEntityRequest;
 
 @Entity
 @Getter
@@ -44,5 +45,11 @@ public class Menu extends TimeStamped {
 
 	public static Menu create(CreateMenuEntityRequest request) {
 		return new Menu(request.getRestaurant(), request.getName(), request.getPrice(), request.getImage());
+	}
+
+	public void update(UpdateMenuEntityRequest request) {
+		this.name = request.getName();
+		this.price = request.getPrice();
+		this.images = request.getImageUrl();
 	}
 }

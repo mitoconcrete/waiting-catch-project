@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,6 +18,8 @@ import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.restaurant.dto.menu.CreateMenuControllerRequest;
 import team.waitingcatch.app.restaurant.dto.menu.CreateMenuServiceRequest;
 import team.waitingcatch.app.restaurant.dto.menu.MenuResponse;
+import team.waitingcatch.app.restaurant.dto.menu.UpdateMenuControllerRequest;
+import team.waitingcatch.app.restaurant.dto.menu.UpdateMenuServiceRequest;
 import team.waitingcatch.app.restaurant.service.menu.MenuService;
 
 @RestController
@@ -40,5 +43,14 @@ public class MenuController {
 	@GetMapping("/seller/restaurants/{restaurantId}/menus")
 	public List<MenuResponse> getMyRestaurantMenus(@PathVariable Long restaurantId) {
 		return menuService.getMyRestaurantMenus(restaurantId);
+	}
+
+	@PutMapping("/seller/restaurants/{restaurantId}/menus/{menuId}")
+	public void updateMenu(@PathVariable Long menuId,
+		@RequestPart("images") MultipartFile multipartFile,
+		@RequestPart("requestDto") @Valid UpdateMenuControllerRequest request) {
+
+		UpdateMenuServiceRequest serviceRequest = new UpdateMenuServiceRequest(menuId, request, multipartFile);
+		menuService.updateMenu(serviceRequest);
 	}
 }

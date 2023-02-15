@@ -12,6 +12,8 @@ import team.waitingcatch.app.common.util.S3Uploader;
 import team.waitingcatch.app.restaurant.dto.menu.CreateMenuEntityRequest;
 import team.waitingcatch.app.restaurant.dto.menu.CreateMenuServiceRequest;
 import team.waitingcatch.app.restaurant.dto.menu.MenuResponse;
+import team.waitingcatch.app.restaurant.dto.menu.UpdateMenuEntityRequest;
+import team.waitingcatch.app.restaurant.dto.menu.UpdateMenuServiceRequest;
 import team.waitingcatch.app.restaurant.entity.Menu;
 import team.waitingcatch.app.restaurant.entity.Restaurant;
 import team.waitingcatch.app.restaurant.repository.MenuRepository;
@@ -47,6 +49,7 @@ public class MenuServiceImpl implements MenuService, InternalMenuService {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public List<MenuResponse> getMyRestaurantMenus(Long restaurantId) {
 		return _getMenusByRestaurantId(restaurantId).stream()
 			.map(MenuResponse::new)
@@ -54,8 +57,34 @@ public class MenuServiceImpl implements MenuService, InternalMenuService {
 	}
 
 	@Override
+	public void updateMenu(UpdateMenuServiceRequest serviceRequest) {
+		Menu menu = _getMenuById(serviceRequest.getMenuId());
+		String name = serviceRequest.getName();
+		int price = serviceRequest.getPrice();
+		String imageUrl = "기본 메뉴 이미지 URL";
+
+		if (!serviceRequest.getMultipartFile().isEmpty()) {
+			try {
+				imageUrl = s3Uploader.upload(serviceRequest.getMultipartFile(), "menu");
+			} catch (IOException e) {
+				throw new RuntimeException(e);
+			}
+		}
+
+		UpdateMenuEntityRequest entityRequest = new UpdateMenuEntityRequest(name, price, imageUrl);
+		menu.update(entityRequest);
+	}
+
+	@Override
 	public List<Menu> _getMenusByRestaurantId(Long restaurantId) {
 		return menuRepository.findAllByRestaurantId(restaurantId);
+	}
+
+	@Override
+	public Menu _getMenuById(Long menuId) {
+		return menuRepository.findById(menuId).orElseThrow(
+			() -> new IllegalArgumentException("해당 메뉴가 없습니다.")
+		);
 	}
 
 }
