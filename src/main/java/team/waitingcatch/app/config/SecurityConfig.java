@@ -25,8 +25,8 @@ import team.waitingcatch.app.user.service.UserDetailsServiceImpl;
 public class SecurityConfig {
 	private final JwtUtil jwtUtil;
 	private final UserDetailsServiceImpl userDetailsService;
-	private AccessDeniedHandlerImpl accessDeniedHandler;
-	private AuthenticationEntryPointImpl authenticationEntryPoint;
+	private final AccessDeniedHandlerImpl accessDeniedHandler;
+	private final AuthenticationEntryPointImpl authenticationEntryPoint;
 
 	@Bean
 	public WebSecurityCustomizer webSecurityCustomizer() {
