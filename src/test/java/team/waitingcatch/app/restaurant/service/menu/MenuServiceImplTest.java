@@ -170,4 +170,20 @@ class MenuServiceImplTest {
 			assertEquals("bbb", menu.getName());
 		}
 	}
+
+	@Test
+	@DisplayName("_getMenuById 메소드")
+	void _getMenuById() {
+		// given
+		Menu menu = mock(Menu.class);
+
+		when(menu.getName()).thenReturn("aaa");
+		when(menuRepository.findById(any(Long.class))).thenReturn(Optional.of(menu));
+
+		// when
+		Menu menu1 = menuService._getMenuById(any(Long.class));
+
+		// then
+		assertEquals("aaa", menu1.getName());
+	}
 }
