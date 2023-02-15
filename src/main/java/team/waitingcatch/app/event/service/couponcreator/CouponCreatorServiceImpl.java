@@ -28,17 +28,16 @@ public class CouponCreatorServiceImpl implements CouponCreatorService, InternalC
 
 	//광역 이벤트 쿠폰생성자를 생성한다.
 	@Override
-	public String createAdminCouponCreator(
+	public void createAdminCouponCreator(
 		CreateAdminCouponCreatorServiceRequest createAdminCouponCreatorServiceRequest) {
 		Event events = internalEventService._getEventById(createAdminCouponCreatorServiceRequest.getEventId());
 		CouponCreator couponCreator = new CouponCreator(createAdminCouponCreatorServiceRequest, events);
 		couponCreatorRepository.save(couponCreator);
-		return "해당 이벤트에 쿠폰 생성자를 추가하였습니다.";
 	}
 
 	//레스토랑 이벤트 쿠폰생성자를 생성한다
 	@Override
-	public String createSellerCouponCreator(
+	public void createSellerCouponCreator(
 		CreateSellerCouponCreatorServiceRequest createSellerCouponCreatorServiceRequest) {
 		Restaurant restaurant = internalEventService._getRestaurantByUsername(
 			createSellerCouponCreatorServiceRequest.getUsername());
@@ -52,23 +51,21 @@ public class CouponCreatorServiceImpl implements CouponCreatorService, InternalC
 
 		CouponCreator couponCreator = new CouponCreator(createSellerCouponCreatorServiceRequest, events);
 		couponCreatorRepository.save(couponCreator);
-		return "해당 이벤트에 쿠폰 생성자를 추가하였습니다.";
 	}
 
 	//광역 이벤트 쿠폰생성자를 수정한다.
 	@Override
-	public String updateAdminCouponCreator(
+	public void updateAdminCouponCreator(
 		UpdateAdminCouponCreatorServiceRequest updateAdminCouponCreatorServiceRequest) {
 		Event events = internalEventService._getEventById(updateAdminCouponCreatorServiceRequest.getEventId());
 		CouponCreator couponCreators = _getCouponCreatorFindById(updateAdminCouponCreatorServiceRequest.getCreatorId());
 
 		couponCreators.updateAdminCouponCreator(updateAdminCouponCreatorServiceRequest);
-		return "광역 이벤트 쿠폰생성자를 수정하였습니다.";
 	}
 
 	//레스토랑 이벤트 쿠폰생성자를 수정한다.
 	@Override
-	public String updateSellerCouponCreator(
+	public void updateSellerCouponCreator(
 		UpdateSellerCouponCreatorServiceRequest updateSellerCouponCreatorServiceRequest) {
 		Restaurant restaurant = internalEventService._getRestaurantByUsername(
 			updateSellerCouponCreatorServiceRequest.getUsername());
@@ -84,7 +81,6 @@ public class CouponCreatorServiceImpl implements CouponCreatorService, InternalC
 			updateSellerCouponCreatorServiceRequest.getCreatorId());
 
 		couponCreators.updateSellerCouponCreator(updateSellerCouponCreatorServiceRequest);
-		return "레스토랑 이벤트 쿠폰생성자를 수정하였습니다.";
 	}
 
 	@Override

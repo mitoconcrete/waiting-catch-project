@@ -12,22 +12,22 @@ import team.waitingcatch.app.event.dto.event.UpdateSellerEventServiceRequest;
 public interface EventService {
 
 	//새로운 광역 이벤트를 생성한다.
-	public String createAdminEvent(CreateEventControllerRequest createEventControllerRequest);
+	public void createAdminEvent(CreateEventControllerRequest createEventControllerRequest);
 
 	//새로운 레스토랑 이벤트를 생성한다.
-	public String createSellerEvent(CreateEventServiceRequest createEventServiceRequest);
+	public void createSellerEvent(CreateEventServiceRequest createEventServiceRequest);
 
 	//광역 이벤트를 수정한다
-	public String updateAdminEvent(UpdateEventServiceRequest updateEventServiceRequest);
+	public void updateAdminEvent(UpdateEventServiceRequest updateEventServiceRequest);
 
 	//레스토랑 이벤트를 수정한다
-	public String updateSellerEvent(UpdateSellerEventServiceRequest updateSellerEventServiceRequest);
+	public void updateSellerEvent(UpdateSellerEventServiceRequest updateSellerEventServiceRequest);
 
 	//광역 이벤트를 삭제한다.
-	public String deleteAdminEvent(Long eventId);
+	public void deleteAdminEvent(Long eventId);
 
 	//레스토랑 이벤트를 삭제한다.
-	public String deleteSellerEvent(DeleteEventServiceRequest deleteEventServiceRequest);
+	public void deleteSellerEvent(DeleteEventServiceRequest deleteEventServiceRequest);
 
 	//모든 광역 이벤트 목록을 가져온다.
 	public List<GetEventsResponse> getGlobalEvents();

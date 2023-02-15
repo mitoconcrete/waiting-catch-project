@@ -23,7 +23,7 @@ public class UserCouponServiceImpl implements UserCouponService, InternalUserCou
 
 	//유저 쿠폰을 생성한다
 	@Override
-	public String createUserCoupon(CreateUserCouponServiceRequest createUserCouponserviceRequest) {
+	public void createUserCoupon(CreateUserCouponServiceRequest createUserCouponserviceRequest) {
 		CouponCreator couponCreator = internalCouponCreatorService._getCouponCreatorFindById(
 			createUserCouponserviceRequest.getCreatorId());
 		User user = userRepository.findByUsername(createUserCouponserviceRequest.getUsername()).orElseThrow(
@@ -31,6 +31,5 @@ public class UserCouponServiceImpl implements UserCouponService, InternalUserCou
 		);
 		UserCoupon userCoupon = new UserCoupon(user, couponCreator);
 		userCouponRepository.save(userCoupon);
-		return "쿠폰이 발급되었습니다.";
 	}
 }

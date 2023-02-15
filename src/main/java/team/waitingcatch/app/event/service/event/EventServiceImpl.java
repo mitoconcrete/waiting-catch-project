@@ -28,15 +28,14 @@ public class EventServiceImpl implements EventService, InternalEventService {
 
 	//광역 이벤트를 생성한다.
 	@Override
-	public String createAdminEvent(CreateEventControllerRequest createEventControllerRequest) {
+	public void createAdminEvent(CreateEventControllerRequest createEventControllerRequest) {
 		Event event = new Event(createEventControllerRequest);
 		eventServiceRepository.save(event);
-		return "어드민 이벤트 생성 완료";
 	}
 
 	//레스토랑 이벤트를 생성한다.
 	@Override
-	public String createSellerEvent(CreateEventServiceRequest createEventServiceRequest) {
+	public void createSellerEvent(CreateEventServiceRequest createEventServiceRequest) {
 
 		Restaurant restaurants = restaurantRepository.findById(createEventServiceRequest.getRestaurantId()).orElseThrow(
 			() -> new IllegalArgumentException("잘못된 레스토랑 Id 입니다.")
@@ -44,20 +43,18 @@ public class EventServiceImpl implements EventService, InternalEventService {
 
 		Event event = new Event(createEventServiceRequest, restaurants);
 		eventServiceRepository.save(event);
-		return "레스토랑 이벤트 생성 완료";
 	}
 
 	//광역 이벤트를 수정한다.
 	@Override
-	public String updateAdminEvent(UpdateEventServiceRequest updateEventServiceRequest) {
+	public void updateAdminEvent(UpdateEventServiceRequest updateEventServiceRequest) {
 		Event events = _getEventById(updateEventServiceRequest.getEventId());
 		events.updateAdminEvent(updateEventServiceRequest);
-		return "관리자 이벤트 수정 완료";
 	}
 
 	//레스토랑 이벤트를 수정한다.
 	@Override
-	public String updateSellerEvent(UpdateSellerEventServiceRequest updateSellerEventServiceRequest) {
+	public void updateSellerEvent(UpdateSellerEventServiceRequest updateSellerEventServiceRequest) {
 		Restaurant restaurant = _getRestaurantByUsername(updateSellerEventServiceRequest.getUsername());
 		Event ev = _getEventById(updateSellerEventServiceRequest.getEventId());
 
@@ -67,20 +64,18 @@ public class EventServiceImpl implements EventService, InternalEventService {
 		);
 
 		events.updateSellerEvent(updateSellerEventServiceRequest);
-		return "레스토랑 이벤트 수정 완료";
 	}
 
 	//광역 이벤트를 삭제한다.
 	@Override
-	public String deleteAdminEvent(Long eventId) {
+	public void deleteAdminEvent(Long eventId) {
 		Event events = _getEventById(eventId);
 		events.isDeleted();
-		return "광역 이벤트가 삭제완료";
 	}
 
 	//레스토랑 이벤트를 삭제한다.
 	@Override
-	public String deleteSellerEvent(DeleteEventServiceRequest deleteEventServiceRequest) {
+	public void deleteSellerEvent(DeleteEventServiceRequest deleteEventServiceRequest) {
 		Restaurant restaurant = _getRestaurantByUsername(deleteEventServiceRequest.getUsername());
 		Event ev = _getEventById(deleteEventServiceRequest.getEventId());
 
@@ -89,7 +84,6 @@ public class EventServiceImpl implements EventService, InternalEventService {
 			() -> new IllegalArgumentException("매장에 해당 이벤트가 존재하지 않습니다.")
 		);
 		events.isDeleted();
-		return "레스토랑 이벤트가 삭제완료";
 	}
 
 	//광역 이벤트를 조회한다.

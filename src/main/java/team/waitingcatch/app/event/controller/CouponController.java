@@ -2,8 +2,6 @@ package team.waitingcatch.app.event.controller;
 
 import java.util.List;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -46,61 +44,52 @@ public class CouponController {
 
 	//새로운 광역 이벤트를 생성한다.
 	@PostMapping("/admin/events")
-	public ResponseEntity<String> createAdminEvent(
-		@RequestBody CreateEventControllerRequest createEventControllerRequest) {
-		return ResponseEntity.status(HttpStatus.CREATED)
-			.body(eventService.createAdminEvent(createEventControllerRequest));
+	public void createAdminEvent(@RequestBody CreateEventControllerRequest createEventControllerRequest) {
+		eventService.createAdminEvent(createEventControllerRequest);
 	}
 
 	//광역 이벤트를 수정한다.
 	@PutMapping("/admin/events/{eventId}")
-	public ResponseEntity<String> updateAdminEvent(
-		@RequestBody UpdateEventControllerRequest updateEventControllerRequest, @PathVariable Long eventId) {
+	public void updateAdminEvent(@RequestBody UpdateEventControllerRequest updateEventControllerRequest,
+		@PathVariable Long eventId) {
 		UpdateEventServiceRequest updateEventServiceRequest = new UpdateEventServiceRequest(
 			updateEventControllerRequest, eventId);
-		return ResponseEntity.status(HttpStatus.CREATED)
-			.body(eventService.updateAdminEvent(updateEventServiceRequest));
+		eventService.updateAdminEvent(updateEventServiceRequest);
 	}
 
 	//광역 이벤트를 삭제한다.
 	@DeleteMapping("/admin/events/{eventId}")
-	public ResponseEntity<String> deleteAdminEvent(@PathVariable Long eventId) {
-		return ResponseEntity.status(HttpStatus.OK)
-			.body(eventService.deleteAdminEvent(eventId));
+	public void deleteAdminEvent(@PathVariable Long eventId) {
+		eventService.deleteAdminEvent(eventId);
 	}
 
 	/*  레스토랑  */
 
 	//새로운 레스토랑 이벤트를 생성한다.
 	@PostMapping("/seller/restaurants/{restaurant_id}/events")
-	public ResponseEntity<String> createSellerEvent(
-		@RequestBody CreateEventControllerRequest createEventControllerRequest, @PathVariable Long restaurant_id) {
+	public void createSellerEvent(@RequestBody CreateEventControllerRequest createEventControllerRequest,
+		@PathVariable Long restaurant_id) {
 		CreateEventServiceRequest createEventServiceRequest = new CreateEventServiceRequest(
 			createEventControllerRequest, restaurant_id);
-		return ResponseEntity.status(HttpStatus.CREATED)
-			.body(eventService.createSellerEvent(createEventServiceRequest));
+		eventService.createSellerEvent(createEventServiceRequest);
 	}
 
 	//레스토랑 이벤트를 수정한다.
 	@PutMapping("/seller/events/{eventId}")
-	public ResponseEntity<String> updateSellerEvent(
-		@RequestBody UpdateEventControllerRequest updateEventControllerRequest, @PathVariable Long eventId,
-		@AuthenticationPrincipal UserDetailsImpl userDetails) {
+	public void updateSellerEvent(@RequestBody UpdateEventControllerRequest updateEventControllerRequest,
+		@PathVariable Long eventId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
 		UpdateSellerEventServiceRequest updateSellerEventServiceRequest = new UpdateSellerEventServiceRequest(
 			updateEventControllerRequest, eventId, userDetails.getUsername());
-		return ResponseEntity.status(HttpStatus.OK)
-			.body(eventService.updateSellerEvent(updateSellerEventServiceRequest));
+		eventService.updateSellerEvent(updateSellerEventServiceRequest);
 	}
 
 	//레스토랑 이벤트를 삭제한다.
 	@DeleteMapping("/seller/events/{eventId}")
-	public ResponseEntity<String> deleteSellerEvent(@PathVariable Long eventId,
-		@AuthenticationPrincipal UserDetailsImpl userDetails) {
+	public void deleteSellerEvent(@PathVariable Long eventId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
 		DeleteEventServiceRequest deleteEventServiceRequest = new DeleteEventServiceRequest(eventId,
 			userDetails.getUsername());
-		return ResponseEntity.status(HttpStatus.OK)
-			.body(eventService.deleteSellerEvent(deleteEventServiceRequest));
+		eventService.deleteSellerEvent(deleteEventServiceRequest);
 	}
 
 	/*  유저  */
@@ -121,49 +110,42 @@ public class CouponController {
 
 	//광역 이벤트 쿠폰 생성자 생성
 	@PostMapping("/admin/events/{eventId}/creator")
-	public ResponseEntity<String> createAdminCouponCreator(
-		CreateCouponCreatorControllerRequest createCouponCreatorControllerRequest, @PathVariable Long eventId) {
+	public void createAdminCouponCreator(CreateCouponCreatorControllerRequest createCouponCreatorControllerRequest,
+		@PathVariable Long eventId) {
 		CreateAdminCouponCreatorServiceRequest createAdminCouponCreatorServiceRequest = new CreateAdminCouponCreatorServiceRequest(
 			createCouponCreatorControllerRequest, eventId);
 
-		return ResponseEntity.status(HttpStatus.CREATED)
-			.body(couponCreatorService.createAdminCouponCreator(createAdminCouponCreatorServiceRequest));
+		couponCreatorService.createAdminCouponCreator(createAdminCouponCreatorServiceRequest);
 
 	}
 
 	//레스토랑 이벤트 쿠폰 생성자 생성
 	@PostMapping("/seller/events/{eventId}/creator")
-	public ResponseEntity<String> createSellerCouponCreator(
-		CreateCouponCreatorControllerRequest createCouponCreatorControllerRequest, @PathVariable Long eventId,
-		@AuthenticationPrincipal UserDetailsImpl userDetails) {
+	public void createSellerCouponCreator(CreateCouponCreatorControllerRequest createCouponCreatorControllerRequest,
+		@PathVariable Long eventId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
 		CreateSellerCouponCreatorServiceRequest createSellerCouponCreatorServiceRequest = new CreateSellerCouponCreatorServiceRequest(
 			createCouponCreatorControllerRequest, eventId, userDetails.getUsername());
 
-		return ResponseEntity.status(HttpStatus.CREATED)
-			.body(couponCreatorService.createSellerCouponCreator(createSellerCouponCreatorServiceRequest));
+		couponCreatorService.createSellerCouponCreator(createSellerCouponCreatorServiceRequest);
 	}
 
 	//광역 이벤트 쿠폰 생성자 수정
 	@PutMapping("/admin/events/{eventId}/creator/{creatorId}")
-	public ResponseEntity<String> updateAdminCouponCreator(
-		UpdateCouponCreatorControllerRequest updateCouponCreatorControllerRequest, @PathVariable
-		Long eventId, @PathVariable Long creatorId) {
+	public void updateAdminCouponCreator(UpdateCouponCreatorControllerRequest updateCouponCreatorControllerRequest,
+		@PathVariable Long eventId, @PathVariable Long creatorId) {
 		UpdateAdminCouponCreatorServiceRequest updateAdminCouponCreatorServiceRequest = new UpdateAdminCouponCreatorServiceRequest(
 			updateCouponCreatorControllerRequest, eventId, creatorId);
-		return ResponseEntity.status(HttpStatus.OK)
-			.body(couponCreatorService.updateAdminCouponCreator(updateAdminCouponCreatorServiceRequest));
+		couponCreatorService.updateAdminCouponCreator(updateAdminCouponCreatorServiceRequest);
 	}
 
 	//레스토랑 이벤트 쿠폰 생성자 수정
 	@PutMapping("/seller/events/{eventId}/creator/{creatorId}")
-	public ResponseEntity<String> updateSellerCouponCreator(
-		UpdateCouponCreatorControllerRequest updateCouponCreatorControllerRequest,
+	public void updateSellerCouponCreator(UpdateCouponCreatorControllerRequest updateCouponCreatorControllerRequest,
 		@PathVariable Long eventId, @PathVariable Long creatorId,
 		@AuthenticationPrincipal UserDetailsImpl userDetails) {
 		UpdateSellerCouponCreatorServiceRequest updateSellerCouponCreatorServiceRequest = new UpdateSellerCouponCreatorServiceRequest(
 			updateCouponCreatorControllerRequest, eventId, creatorId, userDetails.getUsername());
-		return ResponseEntity.status(HttpStatus.OK)
-			.body(couponCreatorService.updateSellerCouponCreator(updateSellerCouponCreatorServiceRequest));
+		couponCreatorService.updateSellerCouponCreator(updateSellerCouponCreatorServiceRequest);
 	}
 
 
@@ -171,12 +153,10 @@ public class CouponController {
 
 	//유저 쿠폰 생성
 	@PostMapping("/restaurants/{restaurantId}/events/{eventId}/creators/{creatorId}")
-	public ResponseEntity<String> createUserCoupon(@PathVariable Long creatorId,
-		@AuthenticationPrincipal UserDetailsImpl userDetails) {
+	public void createUserCoupon(@PathVariable Long creatorId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
 		CreateUserCouponServiceRequest createUserCouponserviceRequest = new CreateUserCouponServiceRequest(creatorId,
 			userDetails.getUsername());
 
-		return ResponseEntity.status(HttpStatus.CREATED)
-			.body(userCouponService.createUserCoupon(createUserCouponserviceRequest));
+		userCouponService.createUserCoupon(createUserCouponserviceRequest);
 	}
 }
