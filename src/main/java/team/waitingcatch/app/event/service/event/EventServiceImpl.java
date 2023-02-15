@@ -97,7 +97,7 @@ public class EventServiceImpl implements EventService, InternalEventService {
 	@Transactional(readOnly = true)
 	public List<GetEventsResponse> getGlobalEvents() {
 		//이벤트중 restaurant이 null인것만 조회
-		List<Event> events = eventServiceRepository.findByRestaurantIsNull();
+		List<Event> events = eventServiceRepository.findByRestaurantIsNullAndIsDeletedFalse();
 		List<GetEventsResponse> GetEventsResponse = new ArrayList<>();
 		for (Event event : events) {
 			GetEventsResponse.add(new GetEventsResponse(event));
@@ -113,7 +113,7 @@ public class EventServiceImpl implements EventService, InternalEventService {
 		//레스토랑 아이디로 레스토랑 객체를 찾아야함
 		Restaurant restaurant = _getRestaurantById(restaurantId);
 		//찾은 객체로 이벤트 검색
-		List<Event> events = eventServiceRepository.findByRestaurant(restaurant);
+		List<Event> events = eventServiceRepository.findByRestaurantAndIsDeletedFalse(restaurant);
 		List<GetEventsResponse> GetEventsResponse = new ArrayList<>();
 		for (Event event : events) {
 			GetEventsResponse.add(new GetEventsResponse(event));
@@ -124,7 +124,7 @@ public class EventServiceImpl implements EventService, InternalEventService {
 	@Override
 	@Transactional(readOnly = true)
 	public Event _getEventById(Long id) {
-		Event events = eventServiceRepository.findById(id).orElseThrow(
+		Event events = eventServiceRepository.findByIdAndIsDeletedFalse(id).orElseThrow(
 			() -> new IllegalArgumentException("존재하지 않는 이벤트 입니다.")
 		);
 		return events;
@@ -133,7 +133,7 @@ public class EventServiceImpl implements EventService, InternalEventService {
 	@Override
 	@Transactional(readOnly = true)
 	public Restaurant _getRestaurantByUsername(String name) {
-		Restaurant restaurant = restaurantRepository.findByUsername(name)
+		Restaurant restaurant = restaurantRepository.findByUsernameAndIsDeletedFalse(name)
 			.orElseThrow(
 				() -> new IllegalArgumentException("레스토랑을 찾을수 없습니다.")
 			);
@@ -143,7 +143,7 @@ public class EventServiceImpl implements EventService, InternalEventService {
 	@Override
 	@Transactional(readOnly = true)
 	public Restaurant _getRestaurantById(Long id) {
-		Restaurant restaurant = restaurantRepository.findById(id)
+		Restaurant restaurant = restaurantRepository.findByIdAndIsDeletedFalse(id)
 			.orElseThrow(
 				() -> new IllegalArgumentException("레스토랑을 찾을수 없습니다.")
 			);

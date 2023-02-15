@@ -12,8 +12,10 @@ public interface EventServiceRepository extends JpaRepository<Event, Long> {
 
 	Optional<Event> findByIdAndRestaurant(Long id, Restaurant restaurant);
 
-	List<Event> findByRestaurantIsNull();
+	List<Event> findByRestaurantIsNullAndIsDeletedFalse();
 
-	List<Event> findByRestaurant(Restaurant restaurant);
+	List<Event> findByRestaurantAndIsDeletedFalse(Restaurant restaurant);
+
+	Optional<Event> findByIdAndIsDeletedFalse(Long id);
 
 }
