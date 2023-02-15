@@ -3,10 +3,8 @@ package team.waitingcatch.app.event.dto.event;
 import java.time.LocalDateTime;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor
 public class CreateEventServiceRequest {
 	private String name;
 	private LocalDateTime eventStartDate;

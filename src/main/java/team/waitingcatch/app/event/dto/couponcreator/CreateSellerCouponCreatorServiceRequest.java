@@ -3,19 +3,19 @@ package team.waitingcatch.app.event.dto.couponcreator;
 import java.time.LocalDateTime;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.event.enums.CouponTypeEnum;
 
 @Getter
-@NoArgsConstructor
+@RequiredArgsConstructor
 public class CreateSellerCouponCreatorServiceRequest {
-	private String name;
-	private int discountPrice;
-	private CouponTypeEnum discountType;
-	private int quantity;
-	private LocalDateTime expireDate;
-	private Long eventId;
-	private String username;
+	private final String name;
+	private final int discountPrice;
+	private final CouponTypeEnum discountType;
+	private final int quantity;
+	private final LocalDateTime expireDate;
+	private final Long eventId;
+	private final String username;
 
 	public CreateSellerCouponCreatorServiceRequest(
 		CreateCouponCreatorControllerRequest createCouponCreatorControllerRequest,
