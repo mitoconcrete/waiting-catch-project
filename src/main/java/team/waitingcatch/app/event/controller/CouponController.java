@@ -112,7 +112,8 @@ public class CouponController {
 
 	//광역 이벤트 쿠폰 생성자 생성
 	@PostMapping("/admin/events/{eventId}/creator")
-	public void createAdminCouponCreator(CreateCouponCreatorControllerRequest createCouponCreatorControllerRequest,
+	public void createAdminCouponCreator(
+		@RequestBody CreateCouponCreatorControllerRequest createCouponCreatorControllerRequest,
 		@PathVariable Long eventId) {
 		CreateAdminCouponCreatorServiceRequest createAdminCouponCreatorServiceRequest = new CreateAdminCouponCreatorServiceRequest(
 			createCouponCreatorControllerRequest, eventId);
@@ -123,7 +124,8 @@ public class CouponController {
 
 	//레스토랑 이벤트 쿠폰 생성자 생성
 	@PostMapping("/seller/events/{eventId}/creator")
-	public void createSellerCouponCreator(CreateCouponCreatorControllerRequest createCouponCreatorControllerRequest,
+	public void createSellerCouponCreator(
+		@RequestBody CreateCouponCreatorControllerRequest createCouponCreatorControllerRequest,
 		@PathVariable Long eventId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
 		CreateSellerCouponCreatorServiceRequest createSellerCouponCreatorServiceRequest = new CreateSellerCouponCreatorServiceRequest(
 			createCouponCreatorControllerRequest, eventId, userDetails.getUsername());
@@ -133,7 +135,8 @@ public class CouponController {
 
 	//광역 이벤트 쿠폰 생성자 수정
 	@PutMapping("/admin/events/{eventId}/creator/{creatorId}")
-	public void updateAdminCouponCreator(UpdateCouponCreatorControllerRequest updateCouponCreatorControllerRequest,
+	public void updateAdminCouponCreator(
+		@RequestBody UpdateCouponCreatorControllerRequest updateCouponCreatorControllerRequest,
 		@PathVariable Long eventId, @PathVariable Long creatorId) {
 		UpdateAdminCouponCreatorServiceRequest updateAdminCouponCreatorServiceRequest = new UpdateAdminCouponCreatorServiceRequest(
 			updateCouponCreatorControllerRequest, eventId, creatorId);
@@ -142,7 +145,8 @@ public class CouponController {
 
 	//레스토랑 이벤트 쿠폰 생성자 수정
 	@PutMapping("/seller/events/{eventId}/creator/{creatorId}")
-	public void updateSellerCouponCreator(UpdateCouponCreatorControllerRequest updateCouponCreatorControllerRequest,
+	public void updateSellerCouponCreator(
+		@RequestBody UpdateCouponCreatorControllerRequest updateCouponCreatorControllerRequest,
 		@PathVariable Long eventId, @PathVariable Long creatorId,
 		@AuthenticationPrincipal UserDetailsImpl userDetails) {
 		UpdateSellerCouponCreatorServiceRequest updateSellerCouponCreatorServiceRequest = new UpdateSellerCouponCreatorServiceRequest(
