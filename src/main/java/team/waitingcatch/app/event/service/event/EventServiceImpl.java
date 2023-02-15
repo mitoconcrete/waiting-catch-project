@@ -132,4 +132,5 @@ public class EventServiceImpl implements EventService, InternalEventService {
 			.orElseThrow(() -> new IllegalArgumentException("레스토랑을 찾을수 없습니다."));
 		return restaurant;
 	}
+
 }

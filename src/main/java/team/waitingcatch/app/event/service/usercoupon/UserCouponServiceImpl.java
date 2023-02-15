@@ -9,17 +9,17 @@ import team.waitingcatch.app.event.entity.CouponCreator;
 import team.waitingcatch.app.event.entity.UserCoupon;
 import team.waitingcatch.app.event.repository.UserCouponRepository;
 import team.waitingcatch.app.event.service.couponcreator.InternalCouponCreatorService;
+import team.waitingcatch.app.event.service.event.InternalEventService;
 import team.waitingcatch.app.user.entitiy.User;
 import team.waitingcatch.app.user.repository.UserRepository;
-import team.waitingcatch.app.user.service.InternalUserService;
 
 @Service
 @RequiredArgsConstructor
 @Transactional
 public class UserCouponServiceImpl implements UserCouponService, InternalUserCouponService {
 
-	private final InternalUserService internalUserService;
 	private final InternalCouponCreatorService internalCouponCreatorService;
+	private final InternalEventService internalEventService;
 	private final UserRepository userRepository;
 	private final UserCouponRepository userCouponRepository;
 
