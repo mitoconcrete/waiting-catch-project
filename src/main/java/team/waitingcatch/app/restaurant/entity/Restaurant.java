@@ -93,4 +93,12 @@ public class Restaurant extends TimeStamped {
 	public double getLongitude() {
 		return this.getPosition().getLongitude();
 	}
+
+	public void deleteRestaurant() {
+		if (this.isDeleted) {
+			throw new IllegalArgumentException("해당 유저는 이미 삭제되었습니다.");
+		} else {
+			this.isDeleted = true;
+		}
+	}
 }

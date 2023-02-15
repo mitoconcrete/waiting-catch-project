@@ -2,6 +2,7 @@ package team.waitingcatch.app.restaurant.service.restaurant;
 
 import java.util.List;
 
+import team.waitingcatch.app.restaurant.dto.restaurant.DeleteRestaurantByAdminServiceRequest;
 import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantBasicInfoResponse;
 import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantBasicInfoServiceRequest;
 import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantDetailedInfoResponse;
@@ -14,4 +15,6 @@ public interface RestaurantService {
 	RestaurantDetailedInfoResponse getRestaurantDetailedInfo(RestaurantDetailedInfoServiceRequest request);
 
 	List<RestaurantResponse> getRestaurants();
+
+	void deleteRestaurantByAdmin(DeleteRestaurantByAdminServiceRequest deleteRestaurantByAdminServiceRequest);
 }
