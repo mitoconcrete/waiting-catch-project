@@ -5,6 +5,7 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -52,5 +53,10 @@ public class MenuController {
 
 		UpdateMenuServiceRequest serviceRequest = new UpdateMenuServiceRequest(menuId, request, multipartFile);
 		menuService.updateMenu(serviceRequest);
+	}
+
+	@DeleteMapping("/seller/restaurants/{restaurantId}/menus/{menuId}")
+	public void deleteMenu(@PathVariable Long menuId) {
+		menuService.deleteMenu(menuId);
 	}
 }

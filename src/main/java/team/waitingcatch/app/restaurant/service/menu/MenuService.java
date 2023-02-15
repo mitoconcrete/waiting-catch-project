@@ -12,4 +12,6 @@ public interface MenuService {
 	List<MenuResponse> getMyRestaurantMenus(Long restaurantId);
 
 	void updateMenu(UpdateMenuServiceRequest serviceRequest);
+
+	void deleteMenu(Long menuId);
 }

@@ -76,6 +76,12 @@ public class MenuServiceImpl implements MenuService, InternalMenuService {
 	}
 
 	@Override
+	public void deleteMenu(Long menuId) {
+		Menu menu = _getMenuById(menuId);
+		menuRepository.delete(menu);
+	}
+
+	@Override
 	public List<Menu> _getMenusByRestaurantId(Long restaurantId) {
 		return menuRepository.findAllByRestaurantId(restaurantId);
 	}

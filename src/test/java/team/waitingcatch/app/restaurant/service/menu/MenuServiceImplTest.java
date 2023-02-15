@@ -106,24 +106,6 @@ class MenuServiceImplTest {
 		assertEquals("aaa", responses.get(0).getName());
 	}
 
-	@Test
-	@DisplayName("_getMenuByRestaurantId 메소드")
-	void _getMenuByRestaurantId() {
-		// given
-		List<Menu> menus = new ArrayList<>();
-		Menu menu = mock(Menu.class);
-		menus.add(menu);
-
-		when(menu.getName()).thenReturn("aaa");
-		when(menuRepository.findAllByRestaurantId(any(Long.class))).thenReturn(menus);
-
-		// when
-		List<Menu> menus1 = menuService._getMenusByRestaurantId(any(Long.class));
-
-		// then
-		assertEquals("aaa", menus1.get(0).getName());
-	}
-
 	@Nested
 	@DisplayName("메뉴 수정")
 	class updateMenu {
@@ -169,6 +151,39 @@ class MenuServiceImplTest {
 			// then
 			assertEquals("bbb", menu.getName());
 		}
+	}
+
+	@Test
+	@DisplayName("메뉴 삭제")
+	void deleteMenu() {
+		// given
+		Menu menu = mock(Menu.class);
+
+		when(menuRepository.findById(any(Long.class))).thenReturn(Optional.of(menu));
+
+		// when
+		menuService.deleteMenu(any(Long.class));
+
+		// then
+		verify(menuRepository, times(1)).delete(menu);
+	}
+
+	@Test
+	@DisplayName("_getMenuByRestaurantId 메소드")
+	void _getMenuByRestaurantId() {
+		// given
+		List<Menu> menus = new ArrayList<>();
+		Menu menu = mock(Menu.class);
+		menus.add(menu);
+
+		when(menu.getName()).thenReturn("aaa");
+		when(menuRepository.findAllByRestaurantId(any(Long.class))).thenReturn(menus);
+
+		// when
+		List<Menu> menus1 = menuService._getMenusByRestaurantId(any(Long.class));
+
+		// then
+		assertEquals("aaa", menus1.get(0).getName());
 	}
 
 	@Test
