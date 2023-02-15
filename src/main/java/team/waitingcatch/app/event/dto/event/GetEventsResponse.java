@@ -1,13 +1,15 @@
 package team.waitingcatch.app.event.dto.event;
 
+import java.time.LocalDateTime;
+
 import lombok.Getter;
 import team.waitingcatch.app.event.entity.Event;
 
 @Getter
 public class GetEventsResponse {
 	private String name;
-	private String eventStartDate;
-	private String eventEndDate;
+	private LocalDateTime eventStartDate;
+	private LocalDateTime eventEndDate;
 
 	public GetEventsResponse(Event event) {
 		this.name = event.getName();

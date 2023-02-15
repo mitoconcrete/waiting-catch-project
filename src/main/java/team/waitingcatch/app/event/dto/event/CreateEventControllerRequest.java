@@ -1,5 +1,7 @@
 package team.waitingcatch.app.event.dto.event;
 
+import java.time.LocalDateTime;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -8,6 +10,6 @@ import lombok.NoArgsConstructor;
 public class CreateEventControllerRequest {
 
 	private String name;
-	private String eventStartDate;
-	private String eventEndDate;
+	private LocalDateTime eventStartDate;
+	private LocalDateTime eventEndDate;
 }

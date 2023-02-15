@@ -1,12 +1,14 @@
 package team.waitingcatch.app.event.dto.event;
 
+import java.time.LocalDateTime;
+
 import lombok.Getter;
 
 @Getter
 public class UpdateSellerEventServiceRequest {
 	private String name;
-	private String eventStartDate;
-	private String eventEndDate;
+	private LocalDateTime eventStartDate;
+	private LocalDateTime eventEndDate;
 	private Long eventId;
 	private String username;
 

@@ -1,5 +1,7 @@
 package team.waitingcatch.app.event.entity;
 
+import java.time.LocalDateTime;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -37,10 +39,10 @@ public class Event extends TimeStamped {
 	private String name;
 
 	@Column(nullable = false)
-	private String eventStartDate;
+	private LocalDateTime eventStartDate;
 
 	@Column(nullable = false)
-	private String eventEndDate;
+	private LocalDateTime eventEndDate;
 
 	@Column(nullable = false)
 	private boolean isDeleted;
