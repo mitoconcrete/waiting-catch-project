@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.event.dto.event.CreateEventControllerRequest;
+import team.waitingcatch.app.event.dto.event.CreateEventRequest;
 import team.waitingcatch.app.event.dto.event.CreateEventServiceRequest;
 import team.waitingcatch.app.event.dto.event.DeleteEventControllerRequest;
 import team.waitingcatch.app.event.dto.event.DeleteEventServiceRequest;
@@ -41,8 +42,8 @@ public class EventServiceImpl implements EventService, InternalEventService {
 		Restaurant restaurant = restaurantRepository.findById(createEventServiceRequest.getRestaurantId()).orElseThrow(
 			() -> new IllegalArgumentException("잘못된 레스토랑 Id 입니다.")
 		);
-
-		Event event = new Event(createEventServiceRequest, restaurant);
+		CreateEventRequest createEventRequest = new CreateEventRequest(createEventServiceRequest, restaurant);
+		Event event = new Event(createEventRequest);
 		eventServiceRepository.save(event);
 	}
 
