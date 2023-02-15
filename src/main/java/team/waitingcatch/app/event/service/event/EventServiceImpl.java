@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.event.dto.event.CreateEventControllerRequest;
 import team.waitingcatch.app.event.dto.event.CreateEventServiceRequest;
+import team.waitingcatch.app.event.dto.event.DeleteEventControllerRequest;
 import team.waitingcatch.app.event.dto.event.DeleteEventServiceRequest;
 import team.waitingcatch.app.event.dto.event.GetEventsResponse;
 import team.waitingcatch.app.event.dto.event.UpdateEventServiceRequest;
@@ -68,8 +69,8 @@ public class EventServiceImpl implements EventService, InternalEventService {
 
 	//광역 이벤트를 삭제한다.
 	@Override
-	public void deleteAdminEvent(Long eventId) {
-		Event event = _getEventById(eventId);
+	public void deleteAdminEvent(DeleteEventControllerRequest deleteEventControllerRequest) {
+		Event event = _getEventById(deleteEventControllerRequest.getEventId());
 		event.isDeleted();
 	}
 

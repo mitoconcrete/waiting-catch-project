@@ -4,6 +4,7 @@ import java.util.List;
 
 import team.waitingcatch.app.event.dto.event.CreateEventControllerRequest;
 import team.waitingcatch.app.event.dto.event.CreateEventServiceRequest;
+import team.waitingcatch.app.event.dto.event.DeleteEventControllerRequest;
 import team.waitingcatch.app.event.dto.event.DeleteEventServiceRequest;
 import team.waitingcatch.app.event.dto.event.GetEventsResponse;
 import team.waitingcatch.app.event.dto.event.UpdateEventServiceRequest;
@@ -24,7 +25,7 @@ public interface EventService {
 	void updateSellerEvent(UpdateSellerEventServiceRequest updateSellerEventServiceRequest);
 
 	//광역 이벤트를 삭제한다.
-	void deleteAdminEvent(Long eventId);
+	void deleteAdminEvent(DeleteEventControllerRequest deleteEventControllerRequest);
 
 	//레스토랑 이벤트를 삭제한다.
 	void deleteSellerEvent(DeleteEventServiceRequest deleteEventServiceRequest);

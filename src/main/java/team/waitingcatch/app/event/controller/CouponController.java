@@ -20,6 +20,7 @@ import team.waitingcatch.app.event.dto.couponcreator.UpdateCouponCreatorControll
 import team.waitingcatch.app.event.dto.couponcreator.UpdateSellerCouponCreatorServiceRequest;
 import team.waitingcatch.app.event.dto.event.CreateEventControllerRequest;
 import team.waitingcatch.app.event.dto.event.CreateEventServiceRequest;
+import team.waitingcatch.app.event.dto.event.DeleteEventControllerRequest;
 import team.waitingcatch.app.event.dto.event.DeleteEventServiceRequest;
 import team.waitingcatch.app.event.dto.event.GetEventsResponse;
 import team.waitingcatch.app.event.dto.event.UpdateEventControllerRequest;
@@ -60,7 +61,8 @@ public class CouponController {
 	//광역 이벤트를 삭제한다.
 	@DeleteMapping("/admin/events/{eventId}")
 	public void deleteAdminEvent(@PathVariable Long eventId) {
-		eventService.deleteAdminEvent(eventId);
+		DeleteEventControllerRequest deleteEventControllerRequest = new DeleteEventControllerRequest(eventId);
+		eventService.deleteAdminEvent(deleteEventControllerRequest);
 	}
 
 	/*  레스토랑  */
