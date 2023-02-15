@@ -1,13 +1,18 @@
 package team.waitingcatch.app.restaurant.controller;
 
+import java.util.List;
+
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.restaurant.dto.blacklist.DeleteUserBlackListByRestaurantServiceRequest;
+import team.waitingcatch.app.restaurant.dto.blacklist.GetBlackListByRestaurantIdServiceRequest;
+import team.waitingcatch.app.restaurant.dto.blacklist.GetBlackListResponse;
 import team.waitingcatch.app.restaurant.service.blacklist.BlackListService;
 
 @RestController
@@ -26,5 +31,12 @@ public class BlackListController {
 		blackListService.deleteUserBlackListByRestaurant(deleteUserBlackListByRestaurantServiceRequest);
 	}
 
+	//레스토랑 별 블랙리스트 조회
+	@GetMapping("/admin/restaurants/{restaurantId}/blacklist")
+	public List<GetBlackListResponse> getBlackListByRestaurantId(@PathVariable Long restaurantId) {
+		GetBlackListByRestaurantIdServiceRequest getBlackListByRestaurantIdServiceRequest
+			= new GetBlackListByRestaurantIdServiceRequest(restaurantId);
+		return blackListService.getBlackListByRestaurantIdRequest(getBlackListByRestaurantIdServiceRequest);
+	}
 }
 
