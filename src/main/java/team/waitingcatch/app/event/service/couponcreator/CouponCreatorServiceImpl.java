@@ -13,7 +13,7 @@ import team.waitingcatch.app.event.dto.couponcreator.UpdateSellerCouponCreatorSe
 import team.waitingcatch.app.event.entity.CouponCreator;
 import team.waitingcatch.app.event.entity.Event;
 import team.waitingcatch.app.event.repository.CouponCreatorRepository;
-import team.waitingcatch.app.event.repository.EventServiceRepository;
+import team.waitingcatch.app.event.repository.EventRepository;
 import team.waitingcatch.app.event.service.event.InternalEventService;
 import team.waitingcatch.app.restaurant.entity.Restaurant;
 import team.waitingcatch.app.restaurant.repository.RestaurantRepository;
@@ -23,7 +23,7 @@ import team.waitingcatch.app.restaurant.repository.RestaurantRepository;
 @Transactional
 public class CouponCreatorServiceImpl implements CouponCreatorService, InternalCouponCreatorService {
 
-	private final EventServiceRepository eventServiceRepository;
+	private final EventRepository eventRepository;
 	private final CouponCreatorRepository couponCreatorRepository;
 	private final RestaurantRepository restaurantRepository;
 	private final InternalEventService internalEventService;
@@ -47,7 +47,7 @@ public class CouponCreatorServiceImpl implements CouponCreatorService, InternalC
 			createSellerCouponCreatorServiceRequest.getUsername());
 		Event ev = internalEventService._getEventById(createSellerCouponCreatorServiceRequest.getEventId());
 
-		Event event = eventServiceRepository.findByIdAndRestaurant(
+		Event event = eventRepository.findByIdAndRestaurant(
 				createSellerCouponCreatorServiceRequest.getEventId(), restaurant)
 			.orElseThrow(() -> new IllegalArgumentException("매장에 해당 이벤트가 존재하지 않습니다."));
 
@@ -75,7 +75,7 @@ public class CouponCreatorServiceImpl implements CouponCreatorService, InternalC
 			updateSellerCouponCreatorServiceRequest.getUsername());
 		Event ev = internalEventService._getEventById(updateSellerCouponCreatorServiceRequest.getEventId());
 
-		Event event = eventServiceRepository.findByIdAndRestaurant(
+		Event event = eventRepository.findByIdAndRestaurant(
 				updateSellerCouponCreatorServiceRequest.getEventId(), restaurant)
 			.orElseThrow(() -> new IllegalArgumentException("매장에 해당 이벤트가 존재하지 않습니다."));
 
