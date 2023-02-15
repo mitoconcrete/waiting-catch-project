@@ -3,12 +3,12 @@ package team.waitingcatch.app.event.dto.event;
 import java.time.LocalDateTime;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 @Getter
-@NoArgsConstructor
+@RequiredArgsConstructor
 public class UpdateEventControllerRequest {
-	private String name;
-	private LocalDateTime eventStartDate;
-	private LocalDateTime eventEndDate;
+	private final String name;
+	private final LocalDateTime eventStartDate;
+	private final LocalDateTime eventEndDate;
 }

@@ -1,14 +1,12 @@
 package team.waitingcatch.app.event.dto.usercoupon;
 
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 @Getter
+@RequiredArgsConstructor
 public class CreateUserCouponServiceRequest {
-	private Long creatorId;
-	private String username;
+	private final Long creatorId;
+	private final String username;
 
-	public CreateUserCouponServiceRequest(Long creatorId, String username) {
-		this.creatorId = creatorId;
-		this.username = username;
-	}
 }
