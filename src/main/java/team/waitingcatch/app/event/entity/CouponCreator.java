@@ -17,8 +17,8 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import team.waitingcatch.app.common.entity.TimeStamped;
-import team.waitingcatch.app.event.dto.couponcreator.CreateAdminCouponCreatorServiceRequest;
-import team.waitingcatch.app.event.dto.couponcreator.CreateSellerCouponCreatorServiceRequest;
+import team.waitingcatch.app.event.dto.couponcreator.CreateAdminCouponCreatorRequest;
+import team.waitingcatch.app.event.dto.couponcreator.CreateSellerCouponCreatorRequest;
 import team.waitingcatch.app.event.dto.couponcreator.UpdateAdminCouponCreatorServiceRequest;
 import team.waitingcatch.app.event.dto.couponcreator.UpdateSellerCouponCreatorServiceRequest;
 import team.waitingcatch.app.event.enums.CouponTypeEnum;
@@ -53,22 +53,26 @@ public class CouponCreator extends TimeStamped {
 	@Column(nullable = false)
 	private LocalDateTime expireDate;
 
-	public CouponCreator(CreateAdminCouponCreatorServiceRequest createAdminCouponCreatorServiceRequest, Event event) {
-		this.event = event;
-		this.name = createAdminCouponCreatorServiceRequest.getName();
-		this.discountPrice = createAdminCouponCreatorServiceRequest.getDiscountPrice();
-		this.discountType = createAdminCouponCreatorServiceRequest.getDiscountType();
-		this.quantity = createAdminCouponCreatorServiceRequest.getQuantity();
-		this.expireDate = createAdminCouponCreatorServiceRequest.getExpireDate();
+	public CouponCreator(CreateAdminCouponCreatorRequest createAdminCouponCreatorRequest) {
+		this.event = createAdminCouponCreatorRequest.getEvent();
+		this.name = createAdminCouponCreatorRequest.getCreateAdminCouponCreatorServiceRequest().getName();
+		this.discountPrice = createAdminCouponCreatorRequest.getCreateAdminCouponCreatorServiceRequest()
+			.getDiscountPrice();
+		this.discountType = createAdminCouponCreatorRequest.getCreateAdminCouponCreatorServiceRequest()
+			.getDiscountType();
+		this.quantity = createAdminCouponCreatorRequest.getCreateAdminCouponCreatorServiceRequest().getQuantity();
+		this.expireDate = createAdminCouponCreatorRequest.getCreateAdminCouponCreatorServiceRequest().getExpireDate();
 	}
 
-	public CouponCreator(CreateSellerCouponCreatorServiceRequest createSellerCouponCreatorServiceRequest, Event event) {
-		this.event = event;
-		this.name = createSellerCouponCreatorServiceRequest.getName();
-		this.discountPrice = createSellerCouponCreatorServiceRequest.getDiscountPrice();
-		this.discountType = createSellerCouponCreatorServiceRequest.getDiscountType();
-		this.quantity = createSellerCouponCreatorServiceRequest.getQuantity();
-		this.expireDate = createSellerCouponCreatorServiceRequest.getExpireDate();
+	public CouponCreator(CreateSellerCouponCreatorRequest createAdminCouponCreatorRequest) {
+		this.event = createAdminCouponCreatorRequest.getEvent();
+		this.name = createAdminCouponCreatorRequest.getCreateSellerCouponCreatorServiceRequest().getName();
+		this.discountPrice = createAdminCouponCreatorRequest.getCreateSellerCouponCreatorServiceRequest()
+			.getDiscountPrice();
+		this.discountType = createAdminCouponCreatorRequest.getCreateSellerCouponCreatorServiceRequest()
+			.getDiscountType();
+		this.quantity = createAdminCouponCreatorRequest.getCreateSellerCouponCreatorServiceRequest().getQuantity();
+		this.expireDate = createAdminCouponCreatorRequest.getCreateSellerCouponCreatorServiceRequest().getExpireDate();
 	}
 
 	public void updateAdminCouponCreator(

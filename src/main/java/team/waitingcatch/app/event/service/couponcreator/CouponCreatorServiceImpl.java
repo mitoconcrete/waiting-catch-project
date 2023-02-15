@@ -4,7 +4,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
+import team.waitingcatch.app.event.dto.couponcreator.CreateAdminCouponCreatorRequest;
 import team.waitingcatch.app.event.dto.couponcreator.CreateAdminCouponCreatorServiceRequest;
+import team.waitingcatch.app.event.dto.couponcreator.CreateSellerCouponCreatorRequest;
 import team.waitingcatch.app.event.dto.couponcreator.CreateSellerCouponCreatorServiceRequest;
 import team.waitingcatch.app.event.dto.couponcreator.UpdateAdminCouponCreatorServiceRequest;
 import team.waitingcatch.app.event.dto.couponcreator.UpdateSellerCouponCreatorServiceRequest;
@@ -31,7 +33,9 @@ public class CouponCreatorServiceImpl implements CouponCreatorService, InternalC
 	public void createAdminCouponCreator(
 		CreateAdminCouponCreatorServiceRequest createAdminCouponCreatorServiceRequest) {
 		Event events = internalEventService._getEventById(createAdminCouponCreatorServiceRequest.getEventId());
-		CouponCreator couponCreator = new CouponCreator(createAdminCouponCreatorServiceRequest, events);
+		CreateAdminCouponCreatorRequest createAdminCouponCreatorRequest = new CreateAdminCouponCreatorRequest(
+			createAdminCouponCreatorServiceRequest, events);
+		CouponCreator couponCreator = new CouponCreator(createAdminCouponCreatorRequest);
 		couponCreatorRepository.save(couponCreator);
 	}
 
@@ -43,11 +47,13 @@ public class CouponCreatorServiceImpl implements CouponCreatorService, InternalC
 			createSellerCouponCreatorServiceRequest.getUsername());
 		Event ev = internalEventService._getEventById(createSellerCouponCreatorServiceRequest.getEventId());
 
-		Event events = eventServiceRepository.findByIdAndRestaurant(
+		Event event = eventServiceRepository.findByIdAndRestaurant(
 				createSellerCouponCreatorServiceRequest.getEventId(), restaurant)
 			.orElseThrow(() -> new IllegalArgumentException("매장에 해당 이벤트가 존재하지 않습니다."));
 
-		CouponCreator couponCreator = new CouponCreator(createSellerCouponCreatorServiceRequest, events);
+		CreateSellerCouponCreatorRequest createAdminCouponCreatorRequest = new CreateSellerCouponCreatorRequest(
+			createSellerCouponCreatorServiceRequest, event);
+		CouponCreator couponCreator = new CouponCreator(createAdminCouponCreatorRequest);
 		couponCreatorRepository.save(couponCreator);
 	}
 
@@ -69,7 +75,7 @@ public class CouponCreatorServiceImpl implements CouponCreatorService, InternalC
 			updateSellerCouponCreatorServiceRequest.getUsername());
 		Event ev = internalEventService._getEventById(updateSellerCouponCreatorServiceRequest.getEventId());
 
-		Event events = eventServiceRepository.findByIdAndRestaurant(
+		Event event = eventServiceRepository.findByIdAndRestaurant(
 				updateSellerCouponCreatorServiceRequest.getEventId(), restaurant)
 			.orElseThrow(() -> new IllegalArgumentException("매장에 해당 이벤트가 존재하지 않습니다."));
 
