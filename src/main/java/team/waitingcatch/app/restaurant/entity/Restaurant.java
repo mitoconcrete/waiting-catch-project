@@ -6,6 +6,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -13,6 +15,8 @@ import lombok.NoArgsConstructor;
 import team.waitingcatch.app.common.Address;
 import team.waitingcatch.app.common.Position;
 import team.waitingcatch.app.common.entity.TimeStamped;
+import team.waitingcatch.app.restaurant.dto.ApproveSignUpSellerManagementEntityPassToRestaurantEntityRequest;
+import team.waitingcatch.app.user.entitiy.User;
 
 @Entity
 @Getter
@@ -47,5 +51,46 @@ public class Restaurant extends TimeStamped {
 	private String description;
 
 	@Column(nullable = false)
-	private String capacity;
+	private int capacity;
+
+	@Column(nullable = false)
+	private String businessLicenseNo;
+
+	@OneToOne
+	@JoinColumn(name = "user_id", nullable = false)
+	private User user;
+
+	public Restaurant(ApproveSignUpSellerManagementEntityPassToRestaurantEntityRequest
+		approveSignUpSellerManagementEntityPassToRestaurantEntityRequest) {
+		this.name = approveSignUpSellerManagementEntityPassToRestaurantEntityRequest.getRestaurantName();
+		this.position = approveSignUpSellerManagementEntityPassToRestaurantEntityRequest.getPosition();
+		this.address = approveSignUpSellerManagementEntityPassToRestaurantEntityRequest.getAddress();
+		this.phoneNumber = approveSignUpSellerManagementEntityPassToRestaurantEntityRequest.getPhoneNumber();
+		this.isDeleted = false;
+		this.searchKeywords = approveSignUpSellerManagementEntityPassToRestaurantEntityRequest.getSearchKeyWords();
+		this.description = approveSignUpSellerManagementEntityPassToRestaurantEntityRequest.getDescription();
+		this.businessLicenseNo = approveSignUpSellerManagementEntityPassToRestaurantEntityRequest.getBusinessLicenseNo();
+		this.capacity = 0;
+		this.user = approveSignUpSellerManagementEntityPassToRestaurantEntityRequest.getUser();
+	}
+
+	public String getProvince() {
+		return this.getAddress().getProvince();
+	}
+
+	public String getCity() {
+		return this.getAddress().getCity();
+	}
+
+	public String getStreet() {
+		return this.getAddress().getStreet();
+	}
+
+	public double getLatitude() {
+		return this.getPosition().getLatitude();
+	}
+
+	public double getLongitude() {
+		return this.getPosition().getLongitude();
+	}
 }
