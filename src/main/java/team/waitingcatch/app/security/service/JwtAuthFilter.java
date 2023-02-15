@@ -17,10 +17,10 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
 import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.common.util.JwtUtil;
 import team.waitingcatch.app.dto.service.UpdateTokenRequest;
+import team.waitingcatch.app.exception.TokenExpiredException;
 import team.waitingcatch.app.redis.dto.GetRefreshTokenRequest;
 import team.waitingcatch.app.redis.dto.ValidateTokenRequest;
 import team.waitingcatch.app.redis.service.AliveTokenService;
@@ -55,7 +55,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
 				Claims info = jwtUtils.getUserInfoFromToken(token);
 				setAuthentication(info.getSubject());
-			} catch (ExpiredJwtException accessTokenExpiredException) {
+			} catch (TokenExpiredException accessTokenExpiredException) {
 				// 2. 토큰이 만료되었을 경우
 				try {
 					// 해당 토큰이 만료되었다면 redis 내의 리프레시 토큰을 이용하여, 새로운 access 토큰을 발급해줍니다. -> 로그인 유지
@@ -68,8 +68,8 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 					// 2. 리프레시 토큰으로부터 정보들을 얻어 새로운 accessToken 생성
 					Claims userInfoFromRefreshToken = jwtUtils.getUserInfoFromToken(refreshToken);
 					String username = userInfoFromRefreshToken.getSubject();
-					UserRoleEnum role = userInfoFromRefreshToken.get(JwtUtil.AUTHORIZATION_KEY, UserRoleEnum.class);
-					String updateAccessToken = jwtUtils.createAccessToken(username, role);
+					String role = userInfoFromRefreshToken.get(JwtUtil.AUTHORIZATION_KEY, String.class);
+					String updateAccessToken = jwtUtils.createAccessToken(username, UserRoleEnum.valueOf(role));
 
 					// 3. redis 의 정보 업데이트
 					UpdateTokenRequest updateServicePayload = new UpdateTokenRequest(token,
@@ -80,10 +80,12 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 					// 4. 새로운 access Token 헤더에 넣어서 반환.
 					response.setStatus(HttpStatus.CREATED.value());
 					response.setHeader(JwtUtil.AUTHORIZATION_HEADER, updateAccessToken);
-				} catch (ExpiredJwtException refreshTokenExpiredException) {
+				} catch (TokenExpiredException refreshTokenExpiredException) {
 					// 해당 토큰이 만료되었고, redis 내에 리프레시 토큰또한 만료되었다면, 리프레시토큰을 DB에서 제거한다. -> 로그아웃
 					RemoveTokenRequest removeServicePayload = new RemoveTokenRequest(token);
 					aliveTokenService.removeToken(removeServicePayload);
+					SecurityExceptionUtil exceptionUtil = new SecurityExceptionUtil();
+					exceptionUtil.active(response, HttpStatus.UNAUTHORIZED, refreshTokenExpiredException.getMessage());
 				} catch (RuntimeException runtimeException) {
 					SecurityExceptionUtil exceptionUtil = new SecurityExceptionUtil();
 					exceptionUtil.active(response, HttpStatus.UNAUTHORIZED, runtimeException.getMessage());
