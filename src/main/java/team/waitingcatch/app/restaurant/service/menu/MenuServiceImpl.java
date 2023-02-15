@@ -1,9 +1,12 @@
 package team.waitingcatch.app.restaurant.service.menu;
 
+import java.io.IOException;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
+import team.waitingcatch.app.common.util.S3Uploader;
 import team.waitingcatch.app.restaurant.dto.menu.CreateMenuEntityRequest;
 import team.waitingcatch.app.restaurant.dto.menu.CreateMenuServiceRequest;
 import team.waitingcatch.app.restaurant.entity.Menu;
@@ -27,7 +30,11 @@ public class MenuServiceImpl implements MenuService, InternalMenuService {
 		String imageUrl = "기본 메뉴 이미지 URL";
 
 		if (!serviceRequest.getMultipartFile().isEmpty()) {
-			imageUrl = s3Uploader.upload(serviceRequest.getMultipartFile(), "menu");
+			try {
+				imageUrl = s3Uploader.upload(serviceRequest.getMultipartFile(), "menu");
+			} catch (IOException e) {
+				throw new RuntimeException(e);
+			}
 		}
 
 		CreateMenuEntityRequest entityRequest = new CreateMenuEntityRequest(restaurant, name, price, imageUrl);
