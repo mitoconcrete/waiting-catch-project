@@ -16,6 +16,7 @@ import team.waitingcatch.app.redis.dto.CreateRefreshTokenServiceRequest;
 import team.waitingcatch.app.redis.dto.KillTokenRequest;
 import team.waitingcatch.app.redis.service.AliveTokenService;
 import team.waitingcatch.app.redis.service.KilledAccessTokenService;
+import team.waitingcatch.app.redis.service.RemoveTokenRequest;
 import team.waitingcatch.app.user.dto.CreateUserServiceRequest;
 import team.waitingcatch.app.user.dto.DeleteUserRequest;
 import team.waitingcatch.app.user.dto.FindPasswordRequest;
@@ -49,7 +50,6 @@ public class UserServiceImpl implements UserService, InternalUserService {
 		}
 
 		// access token 과 refresh token을 생성합니다.
-
 		String accessToken = jwtUtil.createAccessToken(user.getUsername(), user.getRole());
 		String refreshToken = jwtUtil.createRefreshToken(user.getUsername(), user.getRole());
 
@@ -69,6 +69,11 @@ public class UserServiceImpl implements UserService, InternalUserService {
 	@Override
 	public void logout(LogoutRequest payload) {
 		KillTokenRequest servicePayload = new KillTokenRequest(payload.getAccessToken());
+
+		// refresh Token 제거
+		refreshTokenService.removeToken(new RemoveTokenRequest(servicePayload.getAccessToken()));
+
+		// kill token 리스트에 추가.
 		accessTokenService.killToken(servicePayload);
 	}
 

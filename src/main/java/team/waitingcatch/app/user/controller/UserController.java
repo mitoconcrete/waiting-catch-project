@@ -53,6 +53,7 @@ public class UserController {
 	public void logout(HttpServletRequest request) {
 		String token = jwtUtil.resolveToken(request);
 		LogoutRequest servicePayload = new LogoutRequest(token);
+		userService.logout(servicePayload);
 	}
 
 	// customer
