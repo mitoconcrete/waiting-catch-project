@@ -71,7 +71,7 @@ public class EventServiceImpl implements EventService, InternalEventService {
 	@Override
 	public void deleteAdminEvent(DeleteEventControllerRequest deleteEventControllerRequest) {
 		Event event = _getEventById(deleteEventControllerRequest.getEventId());
-		event.isDeleted();
+		event.deleteEvent();
 	}
 
 	//레스토랑 이벤트를 삭제한다.
@@ -84,7 +84,7 @@ public class EventServiceImpl implements EventService, InternalEventService {
 			restaurant).orElseThrow(
 			() -> new IllegalArgumentException("매장에 해당 이벤트가 존재하지 않습니다.")
 		);
-		event.isDeleted();
+		event.deleteEvent();
 	}
 
 	//광역 이벤트를 조회한다.

@@ -72,7 +72,7 @@ public class Event extends TimeStamped {
 		this.eventEndDate = updateSellerEventServiceRequest.getEventEndDate();
 	}
 
-	public void isDeleted() {
+	public void deleteEvent() {
 		this.isDeleted = true;
 	}
 }
