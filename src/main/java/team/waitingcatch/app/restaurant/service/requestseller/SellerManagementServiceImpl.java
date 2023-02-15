@@ -8,12 +8,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
-import team.waitingcatch.app.restaurant.dto.ApproveSignUpSellerManagementEntityPassToRestaurantEntityRequest;
-import team.waitingcatch.app.restaurant.dto.ApproveSignUpSellerResponse;
-import team.waitingcatch.app.restaurant.dto.ApproveSignUpSellerServiceRequest;
-import team.waitingcatch.app.restaurant.dto.DemandSignUpSellerServiceRequest;
-import team.waitingcatch.app.restaurant.dto.GetDemandSignUpSellerResponse;
-import team.waitingcatch.app.restaurant.dto.RejectSignUpSellerServiceRequest;
+import team.waitingcatch.app.restaurant.dto.requestseller.ApproveSignUpSellerManagementEntityPassToRestaurantEntityRequest;
+import team.waitingcatch.app.restaurant.dto.requestseller.ApproveSignUpSellerResponse;
+import team.waitingcatch.app.restaurant.dto.requestseller.ApproveSignUpSellerServiceRequest;
+import team.waitingcatch.app.restaurant.dto.requestseller.DemandSignUpSellerServiceRequest;
+import team.waitingcatch.app.restaurant.dto.requestseller.GetDemandSignUpSellerResponse;
+import team.waitingcatch.app.restaurant.dto.requestseller.RejectSignUpSellerServiceRequest;
 import team.waitingcatch.app.restaurant.entity.Restaurant;
 import team.waitingcatch.app.restaurant.entity.SellerManagement;
 import team.waitingcatch.app.restaurant.repository.RestaurantRepository;
@@ -74,6 +74,7 @@ public class SellerManagementServiceImpl implements SellerManagementService, Int
 			= new CreateUserServiceRequest(UserRoleEnum.SELLER, sellerManagement.getName(), sellerManagement.getEmail(),
 			sellerManagement.getUsername(), uuidPassword, null, sellerManagement.getPhoneNumber());
 		userService.createUser(userCreateServiceRequest);
+
 		User seller = internalUserService._getUserByUsername(sellerManagement.getUsername());
 		// 레스토랑 만들기
 		ApproveSignUpSellerManagementEntityPassToRestaurantEntityRequest

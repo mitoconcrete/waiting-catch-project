@@ -9,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.restaurant.dto.blacklist.ApproveBlackListServiceRequest;
 import team.waitingcatch.app.restaurant.dto.blacklist.CancelRequestUserBlackListByRestaurantServiceRequest;
-import team.waitingcatch.app.restaurant.dto.blacklist.CreateRequestBlackListEntityPassToBlackListEntityInTheRequestBlackListService;
 import team.waitingcatch.app.restaurant.dto.blacklist.GetRequestBlackListResponse;
 import team.waitingcatch.app.restaurant.dto.blacklist.RequestUserBlackListByRestaurantServiceRequest;
 import team.waitingcatch.app.restaurant.entity.BlackListRequest;
@@ -78,11 +77,8 @@ public class BlackListRequestServiceImpl implements BlackListRequestService, Int
 			() -> new IllegalArgumentException("Not found black list request"));
 		blackListRequest.checkWaitingStatus();
 		blackListRequest.updateApprovalStatus();
-		CreateRequestBlackListEntityPassToBlackListEntityInTheRequestBlackListService createRequestBlackListEntityPassToBlackListEntityInTheRequestBlackListService = new CreateRequestBlackListEntityPassToBlackListEntityInTheRequestBlackListService(
-			blackListRequest.getRestaurant(),
-			blackListRequest.getUser());
 		internalBlackListService._createBlackList(
-			createRequestBlackListEntityPassToBlackListEntityInTheRequestBlackListService);
+			blackListRequest.getRestaurant(), blackListRequest.getUser());
 	}
 
 }

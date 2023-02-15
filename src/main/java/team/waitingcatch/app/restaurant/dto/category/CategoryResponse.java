@@ -1,4 +1,4 @@
-package team.waitingcatch.app.restaurant.dto;
+package team.waitingcatch.app.restaurant.dto.category;
 
 import lombok.Getter;
 import team.waitingcatch.app.restaurant.entity.Category;

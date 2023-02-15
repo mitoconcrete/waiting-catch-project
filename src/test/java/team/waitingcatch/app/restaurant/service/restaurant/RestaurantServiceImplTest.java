@@ -1,9 +1,8 @@
 package team.waitingcatch.app.restaurant.service.restaurant;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,11 +17,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import team.waitingcatch.app.common.Address;
 import team.waitingcatch.app.common.Position;
-import team.waitingcatch.app.restaurant.dto.RestaurantBasicInfoResponse;
-import team.waitingcatch.app.restaurant.dto.RestaurantBasicInfoServiceRequest;
-import team.waitingcatch.app.restaurant.dto.RestaurantDetailedInfoResponse;
-import team.waitingcatch.app.restaurant.dto.RestaurantDetailedInfoServiceRequest;
-import team.waitingcatch.app.restaurant.dto.RestaurantResponse;
+import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantBasicInfoResponse;
+import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantBasicInfoServiceRequest;
+import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantDetailedInfoResponse;
+import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantDetailedInfoServiceRequest;
+import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantResponse;
 import team.waitingcatch.app.restaurant.entity.Restaurant;
 import team.waitingcatch.app.restaurant.repository.RestaurantRepository;
 import team.waitingcatch.app.user.entitiy.User;

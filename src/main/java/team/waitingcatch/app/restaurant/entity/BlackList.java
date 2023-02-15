@@ -13,7 +13,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import team.waitingcatch.app.common.entity.TimeStamped;
-import team.waitingcatch.app.restaurant.dto.blacklist.CreateRequestBlackListEntityPassToBlackListEntityInTheBlackListService;
+import team.waitingcatch.app.restaurant.dto.blacklist.CreateBlackListInternalServiceRequest;
 import team.waitingcatch.app.user.entitiy.User;
 
 @Getter
@@ -35,8 +35,8 @@ public class BlackList extends TimeStamped {
 	private User user;
 
 	public BlackList(
-		CreateRequestBlackListEntityPassToBlackListEntityInTheBlackListService createRequestBlackListEntityPassToBlackListEntityInTheBlackListService) {
-		this.restaurant = createRequestBlackListEntityPassToBlackListEntityInTheBlackListService.getRestaurant();
-		this.user = createRequestBlackListEntityPassToBlackListEntityInTheBlackListService.getUser();
+		CreateBlackListInternalServiceRequest createBlackListInternalServiceRequest) {
+		this.restaurant = createBlackListInternalServiceRequest.getRestaurant();
+		this.user = createBlackListInternalServiceRequest.getUser();
 	}
 }

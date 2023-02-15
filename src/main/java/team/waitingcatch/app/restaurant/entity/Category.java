@@ -9,8 +9,8 @@ import javax.persistence.Id;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import team.waitingcatch.app.restaurant.dto.CreateCategoryRequest;
-import team.waitingcatch.app.restaurant.dto.UpdateCategoryServiceRequest;
+import team.waitingcatch.app.restaurant.dto.category.CreateCategoryRequest;
+import team.waitingcatch.app.restaurant.dto.category.UpdateCategoryServiceRequest;
 
 @Entity
 @Getter

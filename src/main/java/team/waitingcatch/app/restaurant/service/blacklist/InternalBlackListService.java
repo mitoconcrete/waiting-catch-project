@@ -1,9 +1,10 @@
 package team.waitingcatch.app.restaurant.service.blacklist;
 
-import team.waitingcatch.app.restaurant.dto.blacklist.CreateRequestBlackListEntityPassToBlackListEntityInTheRequestBlackListService;
+import team.waitingcatch.app.restaurant.entity.Restaurant;
+import team.waitingcatch.app.user.entitiy.User;
 
 public interface InternalBlackListService {
 	void _createBlackList(
-		CreateRequestBlackListEntityPassToBlackListEntityInTheRequestBlackListService createRequestBlackListEntityPassToBlackListEntityInTheRequestBlackListService);
+		Restaurant restaurant, User user);
 
 }
