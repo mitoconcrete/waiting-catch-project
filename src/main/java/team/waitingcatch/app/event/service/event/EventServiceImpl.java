@@ -3,9 +3,8 @@ package team.waitingcatch.app.event.service.event;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.transaction.Transactional;
-
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.event.dto.event.CreateEventControllerRequest;
@@ -95,6 +94,7 @@ public class EventServiceImpl implements EventService, InternalEventService {
 
 	//광역 이벤트를 조회한다.
 	@Override
+	@Transactional(readOnly = true)
 	public List<GetEventsResponse> getGlobalEvents() {
 		//이벤트중 restaurant이 null인것만 조회
 		List<Event> events = eventServiceRepository.findByRestaurantIsNull();
@@ -108,6 +108,7 @@ public class EventServiceImpl implements EventService, InternalEventService {
 
 	//레스토랑 이벤트를 조회한다.
 	@Override
+	@Transactional(readOnly = true)
 	public List<GetEventsResponse> getRestaurantEvents(Long restaurantId) {
 		//레스토랑 아이디로 레스토랑 객체를 찾아야함
 		Restaurant restaurant = _getRestaurantFindById(restaurantId);
@@ -121,6 +122,7 @@ public class EventServiceImpl implements EventService, InternalEventService {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public Event _getEventFindById(Long id) {
 		Event events = eventServiceRepository.findById(id).orElseThrow(
 			() -> new IllegalArgumentException("존재하지 않는 이벤트 입니다.")
@@ -129,6 +131,7 @@ public class EventServiceImpl implements EventService, InternalEventService {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public Restaurant _getRestaurantFindByUsername(String name) {
 		Restaurant restaurant = restaurantRepository.findByUsername(name)
 			.orElseThrow(
@@ -138,6 +141,7 @@ public class EventServiceImpl implements EventService, InternalEventService {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public Restaurant _getRestaurantFindById(Long id) {
 		Restaurant restaurant = restaurantRepository.findById(id)
 			.orElseThrow(

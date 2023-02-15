@@ -1,8 +1,7 @@
 package team.waitingcatch.app.event.service.couponcreator;
 
-import javax.transaction.Transactional;
-
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.event.dto.couponcreator.CreateAdminCouponCreatorServiceRequest;
@@ -89,6 +88,7 @@ public class CouponCreatorServiceImpl implements CouponCreatorService, InternalC
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public CouponCreator _getCouponCreatorFindById(Long id) {
 		CouponCreator couponCreator = couponCreatorRepository.findById(id)
 			.orElseThrow(

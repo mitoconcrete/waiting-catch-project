@@ -1,8 +1,7 @@
 package team.waitingcatch.app.event.service.usercoupon;
 
-import javax.transaction.Transactional;
-
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.event.dto.usercoupon.CreateUserCouponServiceRequest;
