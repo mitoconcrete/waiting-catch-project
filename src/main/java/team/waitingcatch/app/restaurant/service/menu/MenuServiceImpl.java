@@ -1,6 +1,8 @@
 package team.waitingcatch.app.restaurant.service.menu;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -9,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.common.util.S3Uploader;
 import team.waitingcatch.app.restaurant.dto.menu.CreateMenuEntityRequest;
 import team.waitingcatch.app.restaurant.dto.menu.CreateMenuServiceRequest;
+import team.waitingcatch.app.restaurant.dto.menu.MenuResponse;
 import team.waitingcatch.app.restaurant.entity.Menu;
 import team.waitingcatch.app.restaurant.entity.Restaurant;
 import team.waitingcatch.app.restaurant.repository.MenuRepository;
@@ -42,4 +45,19 @@ public class MenuServiceImpl implements MenuService, InternalMenuService {
 
 		menuRepository.save(menu);
 	}
+
+	@Override
+	public List<MenuResponse> getMyRestaurantMenus(Long restaurantId) {
+		return _getMenusByRestaurantId(restaurantId).stream()
+			.map(MenuResponse::new)
+			.collect(Collectors.toList());
+	}
+
+	@Override
+	public List<Menu> _getMenusByRestaurantId(Long restaurantId) {
+		return menuRepository.findAllByRestaurantId(restaurantId).orElseThrow(
+			() -> new IllegalArgumentException("해당 레스토랑에 메뉴가 없습니다.")
+		);
+	}
+
 }

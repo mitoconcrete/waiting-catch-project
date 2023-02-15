@@ -1,8 +1,11 @@
 package team.waitingcatch.app.restaurant.controller;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -13,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.restaurant.dto.menu.CreateMenuControllerRequest;
 import team.waitingcatch.app.restaurant.dto.menu.CreateMenuServiceRequest;
+import team.waitingcatch.app.restaurant.dto.menu.MenuResponse;
 import team.waitingcatch.app.restaurant.service.menu.MenuService;
 
 @RestController
@@ -31,5 +35,10 @@ public class MenuController {
 
 		CreateMenuServiceRequest serviceRequest = new CreateMenuServiceRequest(restaurantId, multipartFile, request);
 		menuService.createMenu(serviceRequest);
+	}
+
+	@GetMapping("/seller/restaurants/{restaurantId}/menus")
+	public List<MenuResponse> getMyRestaurantMenus(@PathVariable Long restaurantId) {
+		return menuService.getMyRestaurantMenus(restaurantId);
 	}
 }
