@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.common.util.S3Uploader;
 import team.waitingcatch.app.restaurant.dto.menu.CreateMenuEntityRequest;
 import team.waitingcatch.app.restaurant.dto.menu.CreateMenuServiceRequest;
+import team.waitingcatch.app.restaurant.dto.menu.CustomerMenuResponse;
 import team.waitingcatch.app.restaurant.dto.menu.MenuResponse;
 import team.waitingcatch.app.restaurant.dto.menu.UpdateMenuEntityRequest;
 import team.waitingcatch.app.restaurant.dto.menu.UpdateMenuServiceRequest;
@@ -26,6 +27,13 @@ public class MenuServiceImpl implements MenuService, InternalMenuService {
 	private final MenuRepository menuRepository;
 	private final InternalRestaurantService restaurantService;
 	private final S3Uploader s3Uploader;
+
+	@Override
+	public List<CustomerMenuResponse> getRestaurantMenus(Long restaurantId) {
+		return _getMenusByRestaurantId(restaurantId).stream()
+			.map(CustomerMenuResponse::new)
+			.collect(Collectors.toList());
+	}
 
 	@Override
 	public void createMenu(CreateMenuServiceRequest serviceRequest) {

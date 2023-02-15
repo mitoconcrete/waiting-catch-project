@@ -23,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import team.waitingcatch.app.common.util.S3Uploader;
 import team.waitingcatch.app.restaurant.dto.menu.CreateMenuServiceRequest;
+import team.waitingcatch.app.restaurant.dto.menu.CustomerMenuResponse;
 import team.waitingcatch.app.restaurant.dto.menu.MenuResponse;
 import team.waitingcatch.app.restaurant.dto.menu.UpdateMenuServiceRequest;
 import team.waitingcatch.app.restaurant.entity.Menu;
@@ -44,6 +45,24 @@ class MenuServiceImplTest {
 
 	@InjectMocks
 	private MenuServiceImpl menuService;
+
+	@Test
+	@DisplayName("선택한 매장의 메뉴 조회(Customer)")
+	void getRestaurantMenus() {
+		// given
+		List<Menu> menus = new ArrayList<>();
+		Menu menu = mock(Menu.class);
+		menus.add(menu);
+
+		when(menu.getName()).thenReturn("aaa");
+		when(menuRepository.findAllByRestaurantId(any(Long.class))).thenReturn(menus);
+
+		// when
+		List<CustomerMenuResponse> responses = menuService.getRestaurantMenus(any(Long.class));
+
+		// then
+		assertEquals("aaa", responses.get(0).getName());
+	}
 
 	@Nested
 	@DisplayName("메뉴 생성")

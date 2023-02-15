@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.restaurant.dto.menu.CreateMenuControllerRequest;
 import team.waitingcatch.app.restaurant.dto.menu.CreateMenuServiceRequest;
+import team.waitingcatch.app.restaurant.dto.menu.CustomerMenuResponse;
 import team.waitingcatch.app.restaurant.dto.menu.MenuResponse;
 import team.waitingcatch.app.restaurant.dto.menu.UpdateMenuControllerRequest;
 import team.waitingcatch.app.restaurant.dto.menu.UpdateMenuServiceRequest;
@@ -29,6 +30,10 @@ public class MenuController {
 	private final MenuService menuService;
 
 	// customer
+	@GetMapping("/restaurants/{restaurantId}/menus")
+	public List<CustomerMenuResponse> getRestaurantMenus(@PathVariable Long restaurantId) {
+		return menuService.getRestaurantMenus(restaurantId);
+	}
 
 	// seller
 	@PostMapping("/seller/restaurants/{restaurantId}/menus")
