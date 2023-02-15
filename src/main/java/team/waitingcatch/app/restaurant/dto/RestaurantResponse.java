@@ -23,11 +23,11 @@ public class RestaurantResponse {
 		this.phoneNumber = restaurant.getPhoneNumber();
 		this.restaurantName = restaurant.getName();
 		// this.category = restaurant.get;
-		this.latitude = restaurant.getPosition().getLatitude();
-		this.longitude = restaurant.getPosition().getLongitude();
-		this.province = restaurant.getAddress().getProvince();
-		this.city = restaurant.getAddress().getCity();
-		this.street = restaurant.getAddress().getStreet();
+		this.latitude = restaurant.getLatitude();
+		this.longitude = restaurant.getLongitude();
+		this.province = restaurant.getProvince();
+		this.city = restaurant.getCity();
+		this.street = restaurant.getStreet();
 		this.searchKeywords = restaurant.getSearchKeywords();
 	}
 }

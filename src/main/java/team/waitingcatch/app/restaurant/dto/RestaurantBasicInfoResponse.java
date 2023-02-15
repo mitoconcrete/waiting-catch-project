@@ -15,8 +15,8 @@ public class RestaurantBasicInfoResponse {
 	public RestaurantBasicInfoResponse(Restaurant restaurant) {
 		this.name = restaurant.getName();
 		this.images = restaurant.getImages();
-		this.province = restaurant.getAddress().getProvince();
-		this.city = restaurant.getAddress().getCity();
-		this.street = restaurant.getAddress().getStreet();
+		this.province = restaurant.getProvince();
+		this.city = restaurant.getCity();
+		this.street = restaurant.getStreet();
 	}
 }

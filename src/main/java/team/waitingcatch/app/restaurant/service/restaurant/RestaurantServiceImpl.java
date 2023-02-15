@@ -29,6 +29,7 @@ public class RestaurantServiceImpl implements RestaurantService, InternalRestaur
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public RestaurantDetailedInfoResponse getRestaurantDetailedInfo(RestaurantDetailedInfoServiceRequest request) {
 		Restaurant restaurant = _getRestaurant(request.getRestaurantId());
 		return new RestaurantDetailedInfoResponse(restaurant);

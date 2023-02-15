@@ -73,4 +73,24 @@ public class Restaurant extends TimeStamped {
 		this.capacity = 0;
 		this.user = approveSignUpSellerManagementEntityPassToRestaurantEntityRequest.getUser();
 	}
+
+	public String getProvince() {
+		return this.getAddress().getProvince();
+	}
+
+	public String getCity() {
+		return this.getAddress().getCity();
+	}
+
+	public String getStreet() {
+		return this.getAddress().getStreet();
+	}
+
+	public double getLatitude() {
+		return this.getPosition().getLatitude();
+	}
+
+	public double getLongitude() {
+		return this.getPosition().getLongitude();
+	}
 }
