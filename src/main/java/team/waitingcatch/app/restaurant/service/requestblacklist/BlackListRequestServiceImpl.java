@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.restaurant.dto.blacklist.ApproveBlackListServiceRequest;
 import team.waitingcatch.app.restaurant.dto.blacklist.CancelRequestUserBlackListByRestaurantServiceRequest;
+import team.waitingcatch.app.restaurant.dto.blacklist.CreateRequestBlackListEntityPassToBlackListEntityInTheRequestBlackListService;
 import team.waitingcatch.app.restaurant.dto.blacklist.GetRequestBlackListResponse;
 import team.waitingcatch.app.restaurant.dto.blacklist.RequestUserBlackListByRestaurantServiceRequest;
 import team.waitingcatch.app.restaurant.entity.BlackListRequest;
@@ -58,9 +59,8 @@ public class BlackListRequestServiceImpl implements BlackListRequestService, Int
 				cancelRequestUserBlackListByRestaurantServiceRequest.getUserId(),
 				cancelRequestUserBlackListByRestaurantServiceRequest.getSellerName())
 			.orElseThrow(() -> new IllegalArgumentException("Not found request blacklist"));
-		blackListRequest.checkStatus();
-		blackListRequest.cancelStatus();
-		blackListRequestRepository.save(blackListRequest);
+		blackListRequest.checkWaitingStatus();
+		blackListRequest.updateCancelStatus();
 	}
 
 	//관리자 부분
@@ -76,9 +76,13 @@ public class BlackListRequestServiceImpl implements BlackListRequestService, Int
 		BlackListRequest blackListRequest = blackListRequestRepository.findById(
 			approveBlackListServiceRequest.getBlackListRequestId()).orElseThrow(
 			() -> new IllegalArgumentException("Not found black list request"));
-		blackListRequest.checkStatus();
+		blackListRequest.checkWaitingStatus();
 		blackListRequest.updateApprovalStatus();
-		internalBlackListService._createBlackList(blackListRequest.getRestaurant(), blackListRequest.getUser());
+		CreateRequestBlackListEntityPassToBlackListEntityInTheRequestBlackListService createRequestBlackListEntityPassToBlackListEntityInTheRequestBlackListService = new CreateRequestBlackListEntityPassToBlackListEntityInTheRequestBlackListService(
+			blackListRequest.getRestaurant(),
+			blackListRequest.getUser());
+		internalBlackListService._createBlackList(
+			createRequestBlackListEntityPassToBlackListEntityInTheRequestBlackListService);
 	}
 
 }
