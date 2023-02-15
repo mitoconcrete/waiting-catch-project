@@ -39,9 +39,8 @@ public class EventServiceImpl implements EventService, InternalEventService {
 	@Override
 	public void createSellerEvent(CreateEventServiceRequest createEventServiceRequest) {
 
-		Restaurant restaurant = restaurantRepository.findById(createEventServiceRequest.getRestaurantId()).orElseThrow(
-			() -> new IllegalArgumentException("잘못된 레스토랑 Id 입니다.")
-		);
+		Restaurant restaurant = restaurantRepository.findById(createEventServiceRequest.getRestaurantId())
+			.orElseThrow(() -> new IllegalArgumentException("잘못된 레스토랑 Id 입니다."));
 		CreateEventRequest createEventRequest = new CreateEventRequest(createEventServiceRequest, restaurant);
 		Event event = new Event(createEventRequest);
 		eventServiceRepository.save(event);
@@ -58,13 +57,9 @@ public class EventServiceImpl implements EventService, InternalEventService {
 	@Override
 	public void updateSellerEvent(UpdateSellerEventServiceRequest updateSellerEventServiceRequest) {
 		Restaurant restaurant = _getRestaurantByUsername(updateSellerEventServiceRequest.getUsername());
-		Event ev = _getEventById(updateSellerEventServiceRequest.getEventId());
-
-		Event event = eventServiceRepository.findByIdAndRestaurant(updateSellerEventServiceRequest.getEventId(),
-			restaurant).orElseThrow(
-			() -> new IllegalArgumentException("매장에 해당 이벤트가 존재하지 않습니다.")
-		);
-
+		Event event = eventServiceRepository.findByIdAndIsDeletedFalseAndRestaurantIsDeletedFalse(
+				updateSellerEventServiceRequest.getEventId(), restaurant)
+			.orElseThrow(() -> new IllegalArgumentException("매장에 해당 이벤트가 존재하지 않습니다."));
 		event.updateSellerEvent(updateSellerEventServiceRequest);
 	}
 
@@ -79,12 +74,9 @@ public class EventServiceImpl implements EventService, InternalEventService {
 	@Override
 	public void deleteSellerEvent(DeleteEventServiceRequest deleteEventServiceRequest) {
 		Restaurant restaurant = _getRestaurantByUsername(deleteEventServiceRequest.getUsername());
-		Event ev = _getEventById(deleteEventServiceRequest.getEventId());
-
-		Event event = eventServiceRepository.findByIdAndRestaurant(deleteEventServiceRequest.getEventId(),
-			restaurant).orElseThrow(
-			() -> new IllegalArgumentException("매장에 해당 이벤트가 존재하지 않습니다.")
-		);
+		Event event = eventServiceRepository.findByIdAndIsDeletedFalseAndRestaurantIsDeletedFalse(
+				deleteEventServiceRequest.getEventId(), restaurant)
+			.orElseThrow(() -> new IllegalArgumentException("매장에 해당 이벤트가 존재하지 않습니다."));
 		event.deleteEvent();
 	}
 
@@ -120,9 +112,8 @@ public class EventServiceImpl implements EventService, InternalEventService {
 	@Override
 	@Transactional(readOnly = true)
 	public Event _getEventById(Long id) {
-		Event event = eventServiceRepository.findByIdAndIsDeletedFalse(id).orElseThrow(
-			() -> new IllegalArgumentException("존재하지 않는 이벤트 입니다.")
-		);
+		Event event = eventServiceRepository.findByIdAndIsDeletedFalse(id)
+			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 이벤트 입니다."));
 		return event;
 	}
 
@@ -130,9 +121,7 @@ public class EventServiceImpl implements EventService, InternalEventService {
 	@Transactional(readOnly = true)
 	public Restaurant _getRestaurantByUsername(String name) {
 		Restaurant restaurant = restaurantRepository.findByUsernameAndIsDeletedFalse(name)
-			.orElseThrow(
-				() -> new IllegalArgumentException("레스토랑을 찾을수 없습니다.")
-			);
+			.orElseThrow(() -> new IllegalArgumentException("레스토랑을 찾을수 없습니다."));
 		return restaurant;
 	}
 
@@ -140,9 +129,7 @@ public class EventServiceImpl implements EventService, InternalEventService {
 	@Transactional(readOnly = true)
 	public Restaurant _getRestaurantById(Long id) {
 		Restaurant restaurant = restaurantRepository.findByIdAndIsDeletedFalse(id)
-			.orElseThrow(
-				() -> new IllegalArgumentException("레스토랑을 찾을수 없습니다.")
-			);
+			.orElseThrow(() -> new IllegalArgumentException("레스토랑을 찾을수 없습니다."));
 		return restaurant;
 	}
 }
