@@ -61,7 +61,7 @@ public class CouponCreatorServiceImpl implements CouponCreatorService, InternalC
 	@Override
 	public void updateAdminCouponCreator(
 		UpdateAdminCouponCreatorServiceRequest updateAdminCouponCreatorServiceRequest) {
-		Event events = internalEventService._getEventById(updateAdminCouponCreatorServiceRequest.getEventId());
+		internalEventService._getEventById(updateAdminCouponCreatorServiceRequest.getEventId());
 		CouponCreator couponCreators = _getCouponCreatorById(updateAdminCouponCreatorServiceRequest.getCreatorId());
 
 		couponCreators.updateAdminCouponCreator(updateAdminCouponCreatorServiceRequest);
