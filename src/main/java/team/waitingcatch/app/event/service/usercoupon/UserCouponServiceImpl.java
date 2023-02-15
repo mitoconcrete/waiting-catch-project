@@ -24,7 +24,7 @@ public class UserCouponServiceImpl implements UserCouponService, InternalUserCou
 	//유저 쿠폰을 생성한다
 	@Override
 	public void createUserCoupon(CreateUserCouponServiceRequest createUserCouponserviceRequest) {
-		CouponCreator couponCreator = internalCouponCreatorService._getCouponCreatorFindById(
+		CouponCreator couponCreator = internalCouponCreatorService._getCouponCreatorById(
 			createUserCouponserviceRequest.getCreatorId());
 		User user = userRepository.findByUsername(createUserCouponserviceRequest.getUsername()).orElseThrow(
 			() -> new IllegalArgumentException("존재하지 않는 유저입니다.")    //도달불가.옵티널이므로 명시적 기재

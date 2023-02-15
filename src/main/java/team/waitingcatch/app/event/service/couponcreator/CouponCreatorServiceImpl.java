@@ -30,8 +30,8 @@ public class CouponCreatorServiceImpl implements CouponCreatorService, InternalC
 	@Override
 	public void createAdminCouponCreator(
 		CreateAdminCouponCreatorServiceRequest createAdminCouponCreatorServiceRequest) {
-		Event event = internalEventService._getEventById(createAdminCouponCreatorServiceRequest.getEventId());
-		CouponCreator couponCreator = new CouponCreator(createAdminCouponCreatorServiceRequest, event);
+		Event events = internalEventService._getEventById(createAdminCouponCreatorServiceRequest.getEventId());
+		CouponCreator couponCreator = new CouponCreator(createAdminCouponCreatorServiceRequest, events);
 		couponCreatorRepository.save(couponCreator);
 	}
 
@@ -43,13 +43,11 @@ public class CouponCreatorServiceImpl implements CouponCreatorService, InternalC
 			createSellerCouponCreatorServiceRequest.getUsername());
 		Event ev = internalEventService._getEventById(createSellerCouponCreatorServiceRequest.getEventId());
 
-		Event event = eventServiceRepository.findByIdAndRestaurant(
-			createSellerCouponCreatorServiceRequest.getEventId(),
-			restaurant).orElseThrow(
-			() -> new IllegalArgumentException("매장에 해당 이벤트가 존재하지 않습니다.")
-		);
+		Event events = eventServiceRepository.findByIdAndRestaurant(
+				createSellerCouponCreatorServiceRequest.getEventId(), restaurant)
+			.orElseThrow(() -> new IllegalArgumentException("매장에 해당 이벤트가 존재하지 않습니다."));
 
-		CouponCreator couponCreator = new CouponCreator(createSellerCouponCreatorServiceRequest, event);
+		CouponCreator couponCreator = new CouponCreator(createSellerCouponCreatorServiceRequest, events);
 		couponCreatorRepository.save(couponCreator);
 	}
 
@@ -57,8 +55,8 @@ public class CouponCreatorServiceImpl implements CouponCreatorService, InternalC
 	@Override
 	public void updateAdminCouponCreator(
 		UpdateAdminCouponCreatorServiceRequest updateAdminCouponCreatorServiceRequest) {
-		Event event = internalEventService._getEventById(updateAdminCouponCreatorServiceRequest.getEventId());
-		CouponCreator couponCreators = _getCouponCreatorFindById(updateAdminCouponCreatorServiceRequest.getCreatorId());
+		Event events = internalEventService._getEventById(updateAdminCouponCreatorServiceRequest.getEventId());
+		CouponCreator couponCreators = _getCouponCreatorById(updateAdminCouponCreatorServiceRequest.getCreatorId());
 
 		couponCreators.updateAdminCouponCreator(updateAdminCouponCreatorServiceRequest);
 	}
@@ -71,13 +69,11 @@ public class CouponCreatorServiceImpl implements CouponCreatorService, InternalC
 			updateSellerCouponCreatorServiceRequest.getUsername());
 		Event ev = internalEventService._getEventById(updateSellerCouponCreatorServiceRequest.getEventId());
 
-		Event event = eventServiceRepository.findByIdAndRestaurant(
-			updateSellerCouponCreatorServiceRequest.getEventId(),
-			restaurant).orElseThrow(
-			() -> new IllegalArgumentException("매장에 해당 이벤트가 존재하지 않습니다.")
-		);
+		Event events = eventServiceRepository.findByIdAndRestaurant(
+				updateSellerCouponCreatorServiceRequest.getEventId(), restaurant)
+			.orElseThrow(() -> new IllegalArgumentException("매장에 해당 이벤트가 존재하지 않습니다."));
 
-		CouponCreator couponCreators = _getCouponCreatorFindById(
+		CouponCreator couponCreators = _getCouponCreatorById(
 			updateSellerCouponCreatorServiceRequest.getCreatorId());
 
 		couponCreators.updateSellerCouponCreator(updateSellerCouponCreatorServiceRequest);
@@ -85,11 +81,9 @@ public class CouponCreatorServiceImpl implements CouponCreatorService, InternalC
 
 	@Override
 	@Transactional(readOnly = true)
-	public CouponCreator _getCouponCreatorFindById(Long id) {
+	public CouponCreator _getCouponCreatorById(Long id) {
 		CouponCreator couponCreator = couponCreatorRepository.findById(id)
-			.orElseThrow(
-				() -> new IllegalArgumentException("쿠폰 생성자를 찾을수 없습니다.")
-			);
+			.orElseThrow(() -> new IllegalArgumentException("쿠폰 생성자를 찾을수 없습니다."));
 		return couponCreator;
 	}
 }
