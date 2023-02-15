@@ -4,9 +4,35 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
+import team.waitingcatch.app.restaurant.dto.menu.CreateMenuEntityRequest;
+import team.waitingcatch.app.restaurant.dto.menu.CreateMenuServiceRequest;
+import team.waitingcatch.app.restaurant.entity.Menu;
+import team.waitingcatch.app.restaurant.entity.Restaurant;
+import team.waitingcatch.app.restaurant.repository.MenuRepository;
+import team.waitingcatch.app.restaurant.service.restaurant.InternalRestaurantService;
 
 @Service
 @RequiredArgsConstructor
 @Transactional
 public class MenuServiceImpl implements MenuService, InternalMenuService {
+	private final MenuRepository menuRepository;
+	private final InternalRestaurantService restaurantService;
+	private final S3Uploader s3Uploader;
+
+	@Override
+	public void createMenu(CreateMenuServiceRequest serviceRequest) {
+		Restaurant restaurant = restaurantService._getRestaurant(serviceRequest.getRestaurantId());
+		String name = serviceRequest.getName();
+		int price = serviceRequest.getPrice();
+		String imageUrl = "기본 메뉴 이미지 URL";
+
+		if (!serviceRequest.getMultipartFile().isEmpty()) {
+			imageUrl = s3Uploader.upload(serviceRequest.getMultipartFile(), "menu");
+		}
+
+		CreateMenuEntityRequest entityRequest = new CreateMenuEntityRequest(restaurant, name, price, imageUrl);
+		Menu menu = Menu.create(entityRequest);
+
+		menuRepository.save(menu);
+	}
 }
