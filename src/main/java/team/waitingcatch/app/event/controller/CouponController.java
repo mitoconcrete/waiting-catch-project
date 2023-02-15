@@ -48,7 +48,7 @@ public class CouponController {
 	@PostMapping("/admin/events")
 	public ResponseEntity<String> createAdminEvent(
 		@RequestBody CreateEventControllerRequest createEventControllerRequest) {
-		return ResponseEntity.status(HttpStatus.OK)
+		return ResponseEntity.status(HttpStatus.CREATED)
 			.body(eventService.createAdminEvent(createEventControllerRequest));
 	}
 
@@ -58,7 +58,7 @@ public class CouponController {
 		@RequestBody UpdateEventControllerRequest updateEventControllerRequest, @PathVariable Long eventId) {
 		UpdateEventServiceRequest updateEventServiceRequest = new UpdateEventServiceRequest(
 			updateEventControllerRequest, eventId);
-		return ResponseEntity.status(HttpStatus.OK)
+		return ResponseEntity.status(HttpStatus.CREATED)
 			.body(eventService.updateAdminEvent(updateEventServiceRequest));
 	}
 
@@ -77,7 +77,7 @@ public class CouponController {
 		@RequestBody CreateEventControllerRequest createEventControllerRequest, @PathVariable Long restaurant_id) {
 		CreateEventServiceRequest createEventServiceRequest = new CreateEventServiceRequest(
 			createEventControllerRequest, restaurant_id);
-		return ResponseEntity.status(HttpStatus.OK)
+		return ResponseEntity.status(HttpStatus.CREATED)
 			.body(eventService.createSellerEvent(createEventServiceRequest));
 	}
 
@@ -126,7 +126,7 @@ public class CouponController {
 		CreateAdminCouponCreatorServiceRequest createAdminCouponCreatorServiceRequest = new CreateAdminCouponCreatorServiceRequest(
 			createCouponCreatorControllerRequest, eventId);
 
-		return ResponseEntity.status(HttpStatus.OK)
+		return ResponseEntity.status(HttpStatus.CREATED)
 			.body(couponCreatorService.createAdminCouponCreator(createAdminCouponCreatorServiceRequest));
 
 	}
@@ -139,7 +139,7 @@ public class CouponController {
 		CreateSellerCouponCreatorServiceRequest createSellerCouponCreatorServiceRequest = new CreateSellerCouponCreatorServiceRequest(
 			createCouponCreatorControllerRequest, eventId, userDetails.getUsername());
 
-		return ResponseEntity.status(HttpStatus.OK)
+		return ResponseEntity.status(HttpStatus.CREATED)
 			.body(couponCreatorService.createSellerCouponCreator(createSellerCouponCreatorServiceRequest));
 	}
 
@@ -176,7 +176,7 @@ public class CouponController {
 		CreateUserCouponServiceRequest createUserCouponserviceRequest = new CreateUserCouponServiceRequest(creatorId,
 			userDetails.getUsername());
 
-		return ResponseEntity.status(HttpStatus.OK)
+		return ResponseEntity.status(HttpStatus.CREATED)
 			.body(userCouponService.createUserCoupon(createUserCouponserviceRequest));
 	}
 }
