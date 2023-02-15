@@ -10,7 +10,7 @@ public class RestaurantBasicInfoResponse {
 	private final String province;
 	private final String city;
 	private final String street;
-	// private final int rate;
+	private int rate;
 
 	public RestaurantBasicInfoResponse(Restaurant restaurant) {
 		this.name = restaurant.getName();

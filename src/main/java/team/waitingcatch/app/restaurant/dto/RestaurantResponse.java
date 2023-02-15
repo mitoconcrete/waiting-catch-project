@@ -22,7 +22,6 @@ public class RestaurantResponse {
 		this.email = restaurant.getUser().getEmail();
 		this.phoneNumber = restaurant.getPhoneNumber();
 		this.restaurantName = restaurant.getName();
-		// this.category = restaurant.get;
 		this.latitude = restaurant.getLatitude();
 		this.longitude = restaurant.getLongitude();
 		this.province = restaurant.getProvince();

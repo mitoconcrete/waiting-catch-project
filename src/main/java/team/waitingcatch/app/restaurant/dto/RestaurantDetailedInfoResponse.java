@@ -11,8 +11,8 @@ public class RestaurantDetailedInfoResponse {
 	private final String street;
 	private final String phoneNumber;
 	private final String description;
-	// private final String openTime;
-	// private final String closeTime;
+	private String openTime;
+	private String closeTime;
 
 	public RestaurantDetailedInfoResponse(Restaurant restaurant) {
 		this.name = restaurant.getName();
