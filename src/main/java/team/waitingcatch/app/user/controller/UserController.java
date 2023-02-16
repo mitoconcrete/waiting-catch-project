@@ -2,6 +2,8 @@ package team.waitingcatch.app.user.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.http.HttpStatus;
@@ -17,11 +19,15 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
+import team.waitingcatch.app.common.util.JwtUtil;
 import team.waitingcatch.app.user.dto.CreateUserControllerRequest;
 import team.waitingcatch.app.user.dto.CreateUserServiceRequest;
 import team.waitingcatch.app.user.dto.DeleteUserRequest;
 import team.waitingcatch.app.user.dto.FindPasswordRequest;
 import team.waitingcatch.app.user.dto.GetCustomerByIdAndRoleServiceRequest;
+import team.waitingcatch.app.user.dto.LoginRequest;
+import team.waitingcatch.app.user.dto.LoginServiceResponse;
+import team.waitingcatch.app.user.dto.LogoutRequest;
 import team.waitingcatch.app.user.dto.UpdateUserControllerRequest;
 import team.waitingcatch.app.user.dto.UpdateUserServiceRequest;
 import team.waitingcatch.app.user.dto.UserInfoResponse;
@@ -31,7 +37,24 @@ import team.waitingcatch.app.user.service.UserService;
 @RestController
 @RequiredArgsConstructor
 public class UserController {
+
+	private final JwtUtil jwtUtil;
 	private final UserService userService;
+
+	// global
+	@PostMapping({"/customer/login", "/seller/login", "/admin/login"})
+	public void login(@RequestBody LoginRequest loginRequest, HttpServletResponse response) {
+		LoginServiceResponse loginServiceResponse = userService.login(loginRequest);
+		// 엑세스 토큰을 서비스로 부터 반환 받아 헤더에 넣어준다.
+		response.setHeader(JwtUtil.AUTHORIZATION_HEADER, loginServiceResponse.getAccessToken());
+	}
+
+	@PostMapping({"/customer/logout", "/seller/logout", "/admin/logout"})
+	public void logout(HttpServletRequest request) {
+		String token = jwtUtil.resolveToken(request);
+		LogoutRequest servicePayload = new LogoutRequest(token);
+		userService.logout(servicePayload);
+	}
 
 	// customer
 	@DeleteMapping("/customer/withdraw")

@@ -8,23 +8,28 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 
 import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.common.util.JwtUtil;
+import team.waitingcatch.app.redis.service.AliveTokenService;
+import team.waitingcatch.app.redis.service.KilledAccessTokenService;
 import team.waitingcatch.app.security.service.AccessDeniedHandlerImpl;
 import team.waitingcatch.app.security.service.AuthenticationEntryPointImpl;
 import team.waitingcatch.app.security.service.JwtAuthFilter;
-import team.waitingcatch.app.user.service.UserDetailsServiceImpl;
 
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
 	private final JwtUtil jwtUtil;
-	private final UserDetailsServiceImpl userDetailsService;
+	private final UserDetailsService userDetailsService;
+	private final AliveTokenService aliveTokenService;
+	private final KilledAccessTokenService killedAccessTokenService;
 	private final AccessDeniedHandlerImpl accessDeniedHandler;
 	private final AuthenticationEntryPointImpl authenticationEntryPoint;
 
@@ -36,6 +41,10 @@ public class SecurityConfig {
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+
+		// jwt 사용을 위한, stateless설정.
+		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+
 		// CSRF 설정
 		http.csrf().disable();
 
@@ -56,7 +65,8 @@ public class SecurityConfig {
 		http.formLogin().disable();
 
 		// Custom Filter 등록하기
-		http.addFilterBefore(new JwtAuthFilter(jwtUtil, userDetailsService),
+		http.addFilterBefore(
+			new JwtAuthFilter(jwtUtil, userDetailsService, aliveTokenService, killedAccessTokenService),
 			UsernamePasswordAuthenticationFilter.class);
 
 		// 401 Error 처리, Authorization 즉, 인증과정에서 실패할 시 처리
