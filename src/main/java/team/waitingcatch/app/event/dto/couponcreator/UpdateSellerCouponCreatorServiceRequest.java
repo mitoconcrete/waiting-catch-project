@@ -36,11 +36,11 @@ public class UpdateSellerCouponCreatorServiceRequest {
 
 	private final Long creatorId;
 
-	private final String username;
+	private final Long userId;
 
 	public UpdateSellerCouponCreatorServiceRequest(
 		UpdateCouponCreatorControllerRequest updateCouponCreatorControllerRequest,
-		Long eventId, Long creatorId, String username) {
+		Long eventId, Long creatorId, Long userId) {
 		this.name = updateCouponCreatorControllerRequest.getName();
 		this.discountPrice = updateCouponCreatorControllerRequest.getDiscountPrice();
 		this.discountType = updateCouponCreatorControllerRequest.getDiscountType();
@@ -48,6 +48,6 @@ public class UpdateSellerCouponCreatorServiceRequest {
 		this.expireDate = updateCouponCreatorControllerRequest.getExpireDate();
 		this.eventId = eventId;
 		this.creatorId = creatorId;
-		this.username = username;
+		this.userId = userId;
 	}
 }

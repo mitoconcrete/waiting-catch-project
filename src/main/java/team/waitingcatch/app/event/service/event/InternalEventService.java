@@ -7,7 +7,5 @@ public interface InternalEventService {
 
 	Event _getEventById(Long id);
 
-	Restaurant _getRestaurantByUsername(String name);
-
 	Restaurant _getRestaurantById(Long id);
 }

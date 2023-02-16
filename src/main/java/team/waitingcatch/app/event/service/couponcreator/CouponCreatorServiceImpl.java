@@ -16,7 +16,6 @@ import team.waitingcatch.app.event.repository.CouponCreatorRepository;
 import team.waitingcatch.app.event.repository.EventRepository;
 import team.waitingcatch.app.event.service.event.InternalEventService;
 import team.waitingcatch.app.restaurant.entity.Restaurant;
-import team.waitingcatch.app.restaurant.repository.RestaurantRepository;
 
 @Service
 @RequiredArgsConstructor
@@ -25,7 +24,6 @@ public class CouponCreatorServiceImpl implements CouponCreatorService, InternalC
 
 	private final EventRepository eventRepository;
 	private final CouponCreatorRepository couponCreatorRepository;
-	private final RestaurantRepository restaurantRepository;
 	private final InternalEventService internalEventService;
 
 	//광역 이벤트 쿠폰생성자를 생성한다.
@@ -43,8 +41,8 @@ public class CouponCreatorServiceImpl implements CouponCreatorService, InternalC
 	@Override
 	public void createSellerCouponCreator(
 		CreateSellerCouponCreatorServiceRequest createSellerCouponCreatorServiceRequest) {
-		Restaurant restaurant = internalEventService._getRestaurantByUsername(
-			createSellerCouponCreatorServiceRequest.getUsername());
+		Restaurant restaurant = internalEventService._getRestaurantById(
+			createSellerCouponCreatorServiceRequest.getUserId());
 
 		Event event = eventRepository.findByIdAndIsDeletedFalseAndRestaurantIsDeletedFalse(
 				createSellerCouponCreatorServiceRequest.getEventId(), restaurant)
@@ -70,8 +68,8 @@ public class CouponCreatorServiceImpl implements CouponCreatorService, InternalC
 	@Override
 	public void updateSellerCouponCreator(
 		UpdateSellerCouponCreatorServiceRequest updateSellerCouponCreatorServiceRequest) {
-		Restaurant restaurant = internalEventService._getRestaurantByUsername(
-			updateSellerCouponCreatorServiceRequest.getUsername());
+		Restaurant restaurant = internalEventService._getRestaurantById(
+			updateSellerCouponCreatorServiceRequest.getUserId());
 
 		eventRepository.findByIdAndIsDeletedFalseAndRestaurantIsDeletedFalse(
 				updateSellerCouponCreatorServiceRequest.getEventId(), restaurant)

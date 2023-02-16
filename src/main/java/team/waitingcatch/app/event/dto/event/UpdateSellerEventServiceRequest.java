@@ -28,15 +28,15 @@ public class UpdateSellerEventServiceRequest {
 	private final LocalDateTime eventEndDate;
 
 	private final Long eventId;
-	
-	private final String username;
+
+	private final Long userId;
 
 	public UpdateSellerEventServiceRequest(UpdateEventControllerRequest updateEventControllerRequest, Long eventId,
-		String username) {
+		Long userId) {
 		this.name = updateEventControllerRequest.getName();
 		this.eventStartDate = updateEventControllerRequest.getEventStartDate();
 		this.eventEndDate = updateEventControllerRequest.getEventEndDate();
 		this.eventId = eventId;
-		this.username = username;
+		this.userId = userId;
 	}
 }

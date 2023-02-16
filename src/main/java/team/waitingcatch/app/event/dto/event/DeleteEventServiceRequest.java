@@ -5,10 +5,10 @@ import lombok.Getter;
 @Getter
 public class DeleteEventServiceRequest {
 	private Long eventId;
-	private String username;
+	private Long userId;
 
-	public DeleteEventServiceRequest(Long eventId, String username) {
+	public DeleteEventServiceRequest(Long eventId, Long userId) {
 		this.eventId = eventId;
-		this.username = username;
+		this.userId = userId;
 	}
 }

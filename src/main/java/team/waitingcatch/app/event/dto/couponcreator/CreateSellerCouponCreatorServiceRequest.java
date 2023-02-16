@@ -34,16 +34,16 @@ public class CreateSellerCouponCreatorServiceRequest {
 
 	private final Long eventId;
 
-	private final String username;
+	private final Long userId;
 
 	public CreateSellerCouponCreatorServiceRequest(
-		CreateCouponCreatorControllerRequest createCouponCreatorControllerRequest, Long eventId, String username) {
+		CreateCouponCreatorControllerRequest createCouponCreatorControllerRequest, Long eventId, Long userId) {
 		this.name = createCouponCreatorControllerRequest.getName();
 		this.discountPrice = createCouponCreatorControllerRequest.getDiscountPrice();
 		this.discountType = createCouponCreatorControllerRequest.getDiscountType();
 		this.quantity = createCouponCreatorControllerRequest.getQuantity();
 		this.expireDate = createCouponCreatorControllerRequest.getExpireDate();
 		this.eventId = eventId;
-		this.username = username;
+		this.userId = userId;
 	}
 }

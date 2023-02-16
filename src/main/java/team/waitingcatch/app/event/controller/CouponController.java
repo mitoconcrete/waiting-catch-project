@@ -86,7 +86,7 @@ public class CouponController {
 	public void updateSellerEvent(@RequestBody UpdateEventControllerRequest updateEventControllerRequest,
 		@PathVariable Long eventId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
 		UpdateSellerEventServiceRequest updateSellerEventServiceRequest = new UpdateSellerEventServiceRequest(
-			updateEventControllerRequest, eventId, userDetails.getUsername());
+			updateEventControllerRequest, eventId, userDetails.getId());
 		eventService.updateSellerEvent(updateSellerEventServiceRequest);
 	}
 
@@ -95,7 +95,7 @@ public class CouponController {
 	public void deleteSellerEvent(@PathVariable Long eventId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
 		DeleteEventServiceRequest deleteEventServiceRequest = new DeleteEventServiceRequest(eventId,
-			userDetails.getUsername());
+			userDetails.getId());
 		eventService.deleteSellerEvent(deleteEventServiceRequest);
 	}
 
@@ -135,7 +135,7 @@ public class CouponController {
 		@Validated @RequestBody CreateCouponCreatorControllerRequest createCouponCreatorControllerRequest,
 		@PathVariable Long eventId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
 		CreateSellerCouponCreatorServiceRequest createSellerCouponCreatorServiceRequest = new CreateSellerCouponCreatorServiceRequest(
-			createCouponCreatorControllerRequest, eventId, userDetails.getUsername());
+			createCouponCreatorControllerRequest, eventId, userDetails.getId());
 
 		couponCreatorService.createSellerCouponCreator(createSellerCouponCreatorServiceRequest);
 	}
@@ -157,7 +157,7 @@ public class CouponController {
 		@PathVariable Long eventId, @PathVariable Long creatorId,
 		@AuthenticationPrincipal UserDetailsImpl userDetails) {
 		UpdateSellerCouponCreatorServiceRequest updateSellerCouponCreatorServiceRequest = new UpdateSellerCouponCreatorServiceRequest(
-			updateCouponCreatorControllerRequest, eventId, creatorId, userDetails.getUsername());
+			updateCouponCreatorControllerRequest, eventId, creatorId, userDetails.getId());
 		couponCreatorService.updateSellerCouponCreator(updateSellerCouponCreatorServiceRequest);
 	}
 
