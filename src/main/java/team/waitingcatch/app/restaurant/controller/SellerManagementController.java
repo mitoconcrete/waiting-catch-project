@@ -14,12 +14,12 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.common.Address;
 import team.waitingcatch.app.common.Position;
-import team.waitingcatch.app.restaurant.dto.ApproveSignUpSellerResponse;
-import team.waitingcatch.app.restaurant.dto.ApproveSignUpSellerServiceRequest;
-import team.waitingcatch.app.restaurant.dto.DemandSignUpSellerControllerRequest;
-import team.waitingcatch.app.restaurant.dto.DemandSignUpSellerServiceRequest;
-import team.waitingcatch.app.restaurant.dto.GetDemandSignUpSellerResponse;
-import team.waitingcatch.app.restaurant.dto.RejectSignUpSellerServiceRequest;
+import team.waitingcatch.app.restaurant.dto.requestseller.ApproveSignUpSellerResponse;
+import team.waitingcatch.app.restaurant.dto.requestseller.ApproveSignUpSellerServiceRequest;
+import team.waitingcatch.app.restaurant.dto.requestseller.DemandSignUpSellerControllerRequest;
+import team.waitingcatch.app.restaurant.dto.requestseller.DemandSignUpSellerServiceRequest;
+import team.waitingcatch.app.restaurant.dto.requestseller.GetDemandSignUpSellerResponse;
+import team.waitingcatch.app.restaurant.dto.requestseller.RejectSignUpSellerServiceRequest;
 import team.waitingcatch.app.restaurant.service.requestseller.SellerManagementService;
 
 @RestController

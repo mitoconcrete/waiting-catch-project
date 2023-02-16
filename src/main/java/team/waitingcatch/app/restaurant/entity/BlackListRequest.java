@@ -2,6 +2,8 @@ package team.waitingcatch.app.restaurant.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -13,6 +15,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import team.waitingcatch.app.common.entity.TimeStamped;
+import team.waitingcatch.app.restaurant.enums.AcceptedStatusEnum;
 import team.waitingcatch.app.user.entitiy.User;
 
 @Getter
@@ -33,9 +36,35 @@ public class BlackListRequest extends TimeStamped {
 	@JoinColumn(name = "user_id", nullable = false)
 	private User user;
 
-	@Column(name = "is_accepted", nullable = false)
-	private boolean isAccepted;
+	@Column(nullable = false)
+	@Enumerated(value = EnumType.STRING)
+	private AcceptedStatusEnum status;
 	@Column(nullable = false)
 	private String description;
+
+	public BlackListRequest(Restaurant restaurant, User user, String description) {
+		this.restaurant = restaurant;
+		this.user = user;
+		this.description = description;
+		this.status = AcceptedStatusEnum.WAIT;
+	}
+
+	public void updateCancelStatus() {
+		this.status = AcceptedStatusEnum.CANCEL;
+	}
+
+	public void checkWaitingStatus() {
+		if (this.status == AcceptedStatusEnum.APPROVAL) {
+			throw new IllegalArgumentException("Already approve the black list request");
+		} else if (this.status == AcceptedStatusEnum.CANCEL) {
+			throw new IllegalArgumentException("Already cancel the black list request");
+		} else if (this.status == AcceptedStatusEnum.REJECTION) {
+			throw new IllegalArgumentException("Already reject the black list request");
+		}
+	}
+
+	public void updateApprovalStatus() {
+		this.status = AcceptedStatusEnum.APPROVAL;
+	}
 
 }

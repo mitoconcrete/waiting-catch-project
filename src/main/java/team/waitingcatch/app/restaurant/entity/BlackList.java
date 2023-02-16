@@ -10,10 +10,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import lombok.AccessLevel;
-
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import team.waitingcatch.app.common.entity.TimeStamped;
+import team.waitingcatch.app.restaurant.dto.blacklist.CreateBlackListInternalServiceRequest;
 import team.waitingcatch.app.user.entitiy.User;
 
 @Getter
@@ -34,4 +34,22 @@ public class BlackList extends TimeStamped {
 	@JoinColumn(name = "user_id", nullable = false)
 	private User user;
 
+	@Column(name = "is_deleted", nullable = false)
+	private boolean isDeleted;
+
+	public BlackList(
+		CreateBlackListInternalServiceRequest createBlackListInternalServiceRequest) {
+		this.restaurant = createBlackListInternalServiceRequest.getRestaurant();
+		this.user = createBlackListInternalServiceRequest.getUser();
+	}
+
+	public void deleteSuccess() {
+		this.isDeleted = true;
+	}
+
+	public void checkDeleteStatus() {
+		if (this.isDeleted) {
+			throw new IllegalArgumentException("blacklist user is already deleted");
+		}
+	}
 }

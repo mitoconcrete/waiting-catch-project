@@ -15,13 +15,13 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
-import team.waitingcatch.app.restaurant.dto.CategoryResponse;
-import team.waitingcatch.app.restaurant.dto.ChildCategoryResponse;
-import team.waitingcatch.app.restaurant.dto.CreateCategoryRequest;
-import team.waitingcatch.app.restaurant.dto.DeleteCategoryServiceRequest;
-import team.waitingcatch.app.restaurant.dto.GetChildCategoryServiceRequest;
-import team.waitingcatch.app.restaurant.dto.UpdateCategoryControllerRequest;
-import team.waitingcatch.app.restaurant.dto.UpdateCategoryServiceRequest;
+import team.waitingcatch.app.restaurant.dto.category.CategoryResponse;
+import team.waitingcatch.app.restaurant.dto.category.ChildCategoryResponse;
+import team.waitingcatch.app.restaurant.dto.category.CreateCategoryRequest;
+import team.waitingcatch.app.restaurant.dto.category.DeleteCategoryServiceRequest;
+import team.waitingcatch.app.restaurant.dto.category.GetChildCategoryServiceRequest;
+import team.waitingcatch.app.restaurant.dto.category.UpdateCategoryControllerRequest;
+import team.waitingcatch.app.restaurant.dto.category.UpdateCategoryServiceRequest;
 import team.waitingcatch.app.restaurant.service.category.CategoryService;
 
 @RestController

@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 import team.waitingcatch.app.common.Address;
 import team.waitingcatch.app.common.Position;
 import team.waitingcatch.app.common.entity.TimeStamped;
-import team.waitingcatch.app.restaurant.dto.DemandSignUpSellerServiceRequest;
+import team.waitingcatch.app.restaurant.dto.requestseller.DemandSignUpSellerServiceRequest;
 import team.waitingcatch.app.restaurant.enums.AcceptedStatusEnum;
 
 @Getter
