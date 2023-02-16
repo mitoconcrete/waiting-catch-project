@@ -44,7 +44,7 @@ public class CouponCreatorServiceImpl implements CouponCreatorService, InternalC
 		Restaurant restaurant = internalEventService._getRestaurantById(
 			createSellerCouponCreatorServiceRequest.getUserId());
 
-		Event event = eventRepository.findByIdAndIsDeletedFalseAndRestaurantIsDeletedFalse(
+		Event event = eventRepository.findByIdAndRestaurantAndIsDeletedFalse(
 				createSellerCouponCreatorServiceRequest.getEventId(), restaurant)
 			.orElseThrow(() -> new IllegalArgumentException("매장에 해당 이벤트가 존재하지 않습니다."));
 
@@ -71,7 +71,7 @@ public class CouponCreatorServiceImpl implements CouponCreatorService, InternalC
 		Restaurant restaurant = internalEventService._getRestaurantById(
 			updateSellerCouponCreatorServiceRequest.getUserId());
 
-		eventRepository.findByIdAndIsDeletedFalseAndRestaurantIsDeletedFalse(
+		eventRepository.findByIdAndRestaurantAndIsDeletedFalse(
 				updateSellerCouponCreatorServiceRequest.getEventId(), restaurant)
 			.orElseThrow(() -> new IllegalArgumentException("매장에 해당 이벤트가 존재하지 않습니다."));
 
