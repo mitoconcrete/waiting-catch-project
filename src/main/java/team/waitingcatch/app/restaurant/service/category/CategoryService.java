@@ -2,12 +2,12 @@ package team.waitingcatch.app.restaurant.service.category;
 
 import java.util.List;
 
-import team.waitingcatch.app.restaurant.dto.CategoryResponse;
-import team.waitingcatch.app.restaurant.dto.ChildCategoryResponse;
-import team.waitingcatch.app.restaurant.dto.CreateCategoryRequest;
-import team.waitingcatch.app.restaurant.dto.DeleteCategoryServiceRequest;
-import team.waitingcatch.app.restaurant.dto.GetChildCategoryServiceRequest;
-import team.waitingcatch.app.restaurant.dto.UpdateCategoryServiceRequest;
+import team.waitingcatch.app.restaurant.dto.category.CategoryResponse;
+import team.waitingcatch.app.restaurant.dto.category.ChildCategoryResponse;
+import team.waitingcatch.app.restaurant.dto.category.CreateCategoryRequest;
+import team.waitingcatch.app.restaurant.dto.category.DeleteCategoryServiceRequest;
+import team.waitingcatch.app.restaurant.dto.category.GetChildCategoryServiceRequest;
+import team.waitingcatch.app.restaurant.dto.category.UpdateCategoryServiceRequest;
 
 public interface CategoryService {
 	void createCategory(CreateCategoryRequest request);

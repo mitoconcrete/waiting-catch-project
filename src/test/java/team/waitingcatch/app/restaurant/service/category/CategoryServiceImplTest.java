@@ -1,12 +1,8 @@
 package team.waitingcatch.app.restaurant.service.category;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,12 +15,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import team.waitingcatch.app.restaurant.dto.CategoryResponse;
-import team.waitingcatch.app.restaurant.dto.ChildCategoryResponse;
-import team.waitingcatch.app.restaurant.dto.CreateCategoryRequest;
-import team.waitingcatch.app.restaurant.dto.DeleteCategoryServiceRequest;
-import team.waitingcatch.app.restaurant.dto.GetChildCategoryServiceRequest;
-import team.waitingcatch.app.restaurant.dto.UpdateCategoryServiceRequest;
+import team.waitingcatch.app.restaurant.dto.category.CategoryResponse;
+import team.waitingcatch.app.restaurant.dto.category.ChildCategoryResponse;
+import team.waitingcatch.app.restaurant.dto.category.CreateCategoryRequest;
+import team.waitingcatch.app.restaurant.dto.category.DeleteCategoryServiceRequest;
+import team.waitingcatch.app.restaurant.dto.category.GetChildCategoryServiceRequest;
+import team.waitingcatch.app.restaurant.dto.category.UpdateCategoryServiceRequest;
 import team.waitingcatch.app.restaurant.entity.Category;
 import team.waitingcatch.app.restaurant.repository.CategoryRepository;
 

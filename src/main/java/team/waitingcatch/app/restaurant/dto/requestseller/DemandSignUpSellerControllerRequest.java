@@ -1,4 +1,4 @@
-package team.waitingcatch.app.restaurant.dto;
+package team.waitingcatch.app.restaurant.dto.requestseller;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
