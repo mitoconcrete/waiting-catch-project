@@ -1,6 +1,6 @@
 package team.waitingcatch.app.redis.service;
 
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.dto.service.UpdateTokenRequest;
@@ -10,7 +10,7 @@ import team.waitingcatch.app.redis.dto.GetRefreshTokenResponse;
 import team.waitingcatch.app.redis.entity.AliveToken;
 import team.waitingcatch.app.redis.repository.AliveTokenRepository;
 
-@Component
+@Service
 @RequiredArgsConstructor
 public class AliveTokenServiceImpl implements AliveTokenService, InternalAliveTokenService {
 	private final AliveTokenRepository aliveTokenRepository;
