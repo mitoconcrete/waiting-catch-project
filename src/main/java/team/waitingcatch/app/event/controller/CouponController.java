@@ -2,6 +2,7 @@ package team.waitingcatch.app.event.controller;
 
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
@@ -46,6 +48,7 @@ public class CouponController {
 
 	//새로운 광역 이벤트를 생성한다.
 	@PostMapping("/admin/events")
+	@ResponseStatus(value = HttpStatus.CREATED)
 	public void createAdminEvent(@Validated @RequestBody CreateEventControllerRequest createEventControllerRequest) {
 		eventService.createAdminEvent(createEventControllerRequest);
 	}
@@ -70,6 +73,7 @@ public class CouponController {
 
 	//새로운 레스토랑 이벤트를 생성한다.
 	@PostMapping("/seller/restaurants/{restaurant_id}/events")
+	@ResponseStatus(value = HttpStatus.CREATED)
 	public void createSellerEvent(@Validated @RequestBody CreateEventControllerRequest createEventControllerRequest,
 		@PathVariable Long restaurant_id) {
 		CreateEventServiceRequest createEventServiceRequest = new CreateEventServiceRequest(
@@ -113,6 +117,7 @@ public class CouponController {
 
 	//광역 이벤트 쿠폰 생성자 생성
 	@PostMapping("/admin/events/{eventId}/creator")
+	@ResponseStatus(value = HttpStatus.CREATED)
 	public void createAdminCouponCreator(
 		@Validated @RequestBody CreateCouponCreatorControllerRequest createCouponCreatorControllerRequest,
 		@PathVariable Long eventId) {
@@ -125,6 +130,7 @@ public class CouponController {
 
 	//레스토랑 이벤트 쿠폰 생성자 생성
 	@PostMapping("/seller/events/{eventId}/creator")
+	@ResponseStatus(value = HttpStatus.CREATED)
 	public void createSellerCouponCreator(
 		@Validated @RequestBody CreateCouponCreatorControllerRequest createCouponCreatorControllerRequest,
 		@PathVariable Long eventId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
@@ -160,6 +166,7 @@ public class CouponController {
 
 	//유저 쿠폰 생성
 	@PostMapping("/restaurants/{restaurantId}/events/{eventId}/creators/{creatorId}")
+	@ResponseStatus(value = HttpStatus.CREATED)
 	public void createUserCoupon(@Validated @PathVariable Long creatorId,
 		@AuthenticationPrincipal UserDetailsImpl userDetails) {
 		CreateUserCouponServiceRequest createUserCouponserviceRequest = new CreateUserCouponServiceRequest(creatorId,
