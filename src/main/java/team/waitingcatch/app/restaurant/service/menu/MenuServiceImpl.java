@@ -69,7 +69,11 @@ public class MenuServiceImpl implements MenuService, InternalMenuService {
 		Menu menu = _getMenuById(serviceRequest.getMenuId());
 		String name = serviceRequest.getName();
 		int price = serviceRequest.getPrice();
-		String imageUrl = "기본 메뉴 이미지 URL";
+		String imageUrl = menu.getImages();
+
+		if (!imageUrl.equals("기본 메뉴 이미지 URL")) {
+			s3Uploader.deleteS3(imageUrl);
+		}
 
 		if (!serviceRequest.getMultipartFile().isEmpty()) {
 			try {
@@ -86,6 +90,7 @@ public class MenuServiceImpl implements MenuService, InternalMenuService {
 	@Override
 	public void deleteMenu(Long menuId) {
 		Menu menu = _getMenuById(menuId);
+		s3Uploader.deleteS3(menu.getImages());
 		menuRepository.delete(menu);
 	}
 
