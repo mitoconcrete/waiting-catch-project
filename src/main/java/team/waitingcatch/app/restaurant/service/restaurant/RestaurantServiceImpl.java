@@ -2,6 +2,7 @@ package team.waitingcatch.app.restaurant.service.restaurant;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -63,9 +64,22 @@ public class RestaurantServiceImpl implements RestaurantService, InternalRestaur
 			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 레스토랑 입니다."));
 		RestaurantInfo restaurantInfo = restaurantInfoRepository.findById(restaurant.getId())
 			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 레스토랑 정보입니다."));
-		String url = s3Uploader.upload(updateRestaurantServiceRequest.getFile(), "restaurant");
+
+		// 파일 업로드(여러개) 처리 부분
+
+		String imageName = "";
+
+		List<String> imageUrls = s3Uploader.uploadList(updateRestaurantServiceRequest.getFiles(), "restaurant");
+		for (String imageUrl : imageUrls) {
+			if (Objects.equals(imageUrl, "기본값")) {
+				imageName += "기본값" + ",";
+			}
+			imageName += imageUrl + ",";
+		}
+		String lastCommaCutURL = imageName.substring(0, imageName.length() - 1);
+
 		UpdateRestaurantEntityRequest updateRestaurantEntityRequest = new UpdateRestaurantEntityRequest(
-			updateRestaurantServiceRequest, url);
+			updateRestaurantServiceRequest, lastCommaCutURL);
 		restaurant.updateRestaurant(updateRestaurantEntityRequest);
 		restaurantInfo.updateRestaurantInfo(updateRestaurantEntityRequest);
 	}

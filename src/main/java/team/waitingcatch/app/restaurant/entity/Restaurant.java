@@ -32,7 +32,6 @@ public class Restaurant extends TimeStamped {
 	private String name;
 
 	private String images;
-
 	@Embedded
 	private Position position;
 
@@ -73,6 +72,7 @@ public class Restaurant extends TimeStamped {
 		this.businessLicenseNo = approveSignUpSellerManagementEntityPassToRestaurantEntityRequest.getBusinessLicenseNo();
 		this.capacity = 0;
 		this.user = approveSignUpSellerManagementEntityPassToRestaurantEntityRequest.getUser();
+		this.images = "기본값";
 	}
 
 	public String getProvince() {

@@ -1,5 +1,7 @@
 package team.waitingcatch.app.restaurant.dto.restaurant;
 
+import java.util.List;
+
 import javax.validation.constraints.NotNull;
 
 import org.springframework.web.multipart.MultipartFile;
@@ -10,7 +12,7 @@ import lombok.Getter;
 public class UpdateRestaurantServiceRequest {
 
 	@NotNull
-	private final MultipartFile file;
+	private final List<MultipartFile> files;
 	@NotNull
 	private final String phoneNumber;
 	@NotNull
@@ -25,8 +27,8 @@ public class UpdateRestaurantServiceRequest {
 	private String closeTime;
 
 	public UpdateRestaurantServiceRequest(UpdateRestaurantControllerRequest updateRestaurantControllerRequest,
-		MultipartFile multipartFile, String username) {
-		this.file = multipartFile;
+		List<MultipartFile> multipartFile, String username) {
+		this.files = multipartFile;
 		this.phoneNumber = updateRestaurantControllerRequest.getPhoneNumber();
 		this.capacity = updateRestaurantControllerRequest.getCapacity();
 		this.description = updateRestaurantControllerRequest.getDescription();

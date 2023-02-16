@@ -22,7 +22,8 @@ public class UpdateRestaurantEntityRequest {
 	@NotNull
 	private final String closeTime;
 
-	public UpdateRestaurantEntityRequest(UpdateRestaurantServiceRequest updateRestaurantServiceRequest, String url) {
+	public UpdateRestaurantEntityRequest(UpdateRestaurantServiceRequest updateRestaurantServiceRequest,
+		String url) {
 		this.images = url;
 		this.phoneNumber = updateRestaurantServiceRequest.getPhoneNumber();
 		this.capacity = updateRestaurantServiceRequest.getCapacity();

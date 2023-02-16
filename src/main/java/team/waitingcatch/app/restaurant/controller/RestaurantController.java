@@ -45,10 +45,10 @@ public class RestaurantController {
 	// Seller
 
 	//판매자가 자신의 레스토랑 정보를 수정한다.
-	@PutMapping("/seller/info")
+	@PutMapping("/restaurant/info")
 	public void updateRestaurant(
 		@RequestPart("updateRestaurantRequest") UpdateRestaurantControllerRequest updateRestaurantControllerRequest,
-		@RequestPart("images") MultipartFile multipartFile,
+		@RequestPart("images") List<MultipartFile> multipartFile,
 		@AuthenticationPrincipal UserDetails userDetails) throws IOException {
 		UpdateRestaurantServiceRequest updateRestaurantServiceRequest =
 			new UpdateRestaurantServiceRequest(updateRestaurantControllerRequest, multipartFile,
