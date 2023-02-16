@@ -8,12 +8,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
-import team.waitingcatch.app.restaurant.dto.ApproveSignUpSellerManagementEntityPassToRestaurantEntityRequest;
-import team.waitingcatch.app.restaurant.dto.ApproveSignUpSellerResponse;
-import team.waitingcatch.app.restaurant.dto.ApproveSignUpSellerServiceRequest;
-import team.waitingcatch.app.restaurant.dto.DemandSignUpSellerServiceRequest;
-import team.waitingcatch.app.restaurant.dto.GetDemandSignUpSellerResponse;
-import team.waitingcatch.app.restaurant.dto.RejectSignUpSellerServiceRequest;
+import team.waitingcatch.app.restaurant.dto.requestseller.ApproveSignUpSellerManagementEntityPassToRestaurantEntityRequest;
+import team.waitingcatch.app.restaurant.dto.requestseller.ApproveSignUpSellerResponse;
+import team.waitingcatch.app.restaurant.dto.requestseller.ApproveSignUpSellerServiceRequest;
+import team.waitingcatch.app.restaurant.dto.requestseller.DemandSignUpSellerServiceRequest;
+import team.waitingcatch.app.restaurant.dto.requestseller.GetDemandSignUpSellerResponse;
+import team.waitingcatch.app.restaurant.dto.requestseller.RejectSignUpSellerServiceRequest;
 import team.waitingcatch.app.restaurant.entity.Restaurant;
 import team.waitingcatch.app.restaurant.entity.SellerManagement;
 import team.waitingcatch.app.restaurant.repository.RestaurantRepository;
@@ -21,6 +21,7 @@ import team.waitingcatch.app.restaurant.repository.SellerManagementRepository;
 import team.waitingcatch.app.user.dto.CreateUserServiceRequest;
 import team.waitingcatch.app.user.entitiy.User;
 import team.waitingcatch.app.user.enums.UserRoleEnum;
+import team.waitingcatch.app.user.repository.UserRepository;
 import team.waitingcatch.app.user.service.InternalUserService;
 import team.waitingcatch.app.user.service.UserService;
 
@@ -33,10 +34,16 @@ public class SellerManagementServiceImpl implements SellerManagementService, Int
 	private final RestaurantRepository restaurantRepository;
 	private final UserService userService;
 
+	private final UserRepository userRepository;
+
 	//판매자 요청 등록 하는 메소드
 	public void demandSignUpSeller(DemandSignUpSellerServiceRequest demandSignupSellerServiceRequest) {
-		internalUserService._getUserByUsername(demandSignupSellerServiceRequest.getUsername());
-		internalUserService._getUserByEmail(demandSignupSellerServiceRequest.getEmail());
+		boolean user = userRepository.existsByUsername(demandSignupSellerServiceRequest.getUsername());
+		if (user) {
+			throw new IllegalArgumentException("해당 사용자가 존재합니다.");
+		}
+		//internalUserService._getUserByUsername(demandSignupSellerServiceRequest.getUsername());
+		//internalUserService._getUserByEmail(demandSignupSellerServiceRequest.getEmail());
 
 		SellerManagement sellerManagement = new SellerManagement(demandSignupSellerServiceRequest);
 		sellerManagementRepository.save(sellerManagement);
@@ -67,6 +74,7 @@ public class SellerManagementServiceImpl implements SellerManagementService, Int
 			= new CreateUserServiceRequest(UserRoleEnum.SELLER, sellerManagement.getName(), sellerManagement.getEmail(),
 			sellerManagement.getUsername(), uuidPassword, null, sellerManagement.getPhoneNumber());
 		userService.createUser(userCreateServiceRequest);
+
 		User seller = internalUserService._getUserByUsername(sellerManagement.getUsername());
 		// 레스토랑 만들기
 		ApproveSignUpSellerManagementEntityPassToRestaurantEntityRequest
