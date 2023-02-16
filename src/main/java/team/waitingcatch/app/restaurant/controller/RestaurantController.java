@@ -1,11 +1,17 @@
 package team.waitingcatch.app.restaurant.controller;
 
+import java.io.IOException;
 import java.util.List;
 
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.restaurant.dto.restaurant.DeleteRestaurantByAdminServiceRequest;
@@ -14,6 +20,8 @@ import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantBasicInfoServic
 import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantDetailedInfoResponse;
 import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantDetailedInfoServiceRequest;
 import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantResponse;
+import team.waitingcatch.app.restaurant.dto.restaurant.UpdateRestaurantControllerRequest;
+import team.waitingcatch.app.restaurant.dto.restaurant.UpdateRestaurantServiceRequest;
 import team.waitingcatch.app.restaurant.service.restaurant.RestaurantService;
 
 @RestController
@@ -35,6 +43,19 @@ public class RestaurantController {
 	}
 
 	// Seller
+
+	//판매자가 자신의 레스토랑 정보를 수정한다.
+	@PutMapping("/seller/info")
+	public void updateRestaurant(
+		@RequestPart("updateRestaurantRequest") UpdateRestaurantControllerRequest updateRestaurantControllerRequest,
+		@RequestPart("images") MultipartFile multipartFile,
+		@AuthenticationPrincipal UserDetails userDetails) throws IOException {
+		UpdateRestaurantServiceRequest updateRestaurantServiceRequest =
+			new UpdateRestaurantServiceRequest(updateRestaurantControllerRequest, multipartFile,
+				userDetails.getUsername());
+
+		restaurantService.updateRestaurant(updateRestaurantServiceRequest);
+	}
 
 	// Admin
 	@GetMapping("/admin/restaurants")

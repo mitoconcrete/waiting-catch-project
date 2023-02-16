@@ -16,6 +16,7 @@ import team.waitingcatch.app.common.Address;
 import team.waitingcatch.app.common.Position;
 import team.waitingcatch.app.common.entity.TimeStamped;
 import team.waitingcatch.app.restaurant.dto.requestseller.ApproveSignUpSellerManagementEntityPassToRestaurantEntityRequest;
+import team.waitingcatch.app.restaurant.dto.restaurant.UpdateRestaurantEntityRequest;
 import team.waitingcatch.app.user.entitiy.User;
 
 @Entity
@@ -100,5 +101,12 @@ public class Restaurant extends TimeStamped {
 		} else {
 			this.isDeleted = true;
 		}
+	}
+
+	public void updateRestaurant(UpdateRestaurantEntityRequest updateRestaurantEntityRequest) {
+		this.images = updateRestaurantEntityRequest.getImages();
+		this.phoneNumber = updateRestaurantEntityRequest.getPhoneNumber();
+		this.capacity = updateRestaurantEntityRequest.getCapacity();
+		this.description = updateRestaurantEntityRequest.getDescription();
 	}
 }

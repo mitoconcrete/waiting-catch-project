@@ -57,4 +57,5 @@ public class S3Uploader {
 		return amazonS3Client.getUrl(bucket, fileName).toString();
 		// https://버킷이름.s3.ap-northeast-2.amazonaws.com/menu/사진이름.확장자
 	}
+
 }
