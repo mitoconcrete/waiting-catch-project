@@ -29,6 +29,7 @@ public class MenuServiceImpl implements MenuService, InternalMenuService {
 	private final S3Uploader s3Uploader;
 
 	@Override
+	@Transactional(readOnly = true)
 	public List<CustomerMenuResponse> getRestaurantMenus(Long restaurantId) {
 		return _getMenusByRestaurantId(restaurantId).stream()
 			.map(CustomerMenuResponse::new)
