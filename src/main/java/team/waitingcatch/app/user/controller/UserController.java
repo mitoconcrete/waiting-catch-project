@@ -83,7 +83,7 @@ public class UserController {
 
 	@PutMapping("/seller/info")
 	public void updateSellerInfo(@AuthenticationPrincipal UserDetails userDetails, @RequestBody
-	UpdateUserControllerRequest controllerRequest) {
+		UpdateUserControllerRequest controllerRequest) {
 		UpdateUserServiceRequest servicePayload = new UpdateUserServiceRequest(controllerRequest.getName(),
 			controllerRequest.getEmail(), userDetails.getUsername(), controllerRequest.getNickName(),
 			controllerRequest.getPhoneNumber());

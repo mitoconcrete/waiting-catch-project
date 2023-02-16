@@ -54,7 +54,7 @@ public class RequestBlackListController {
 	public List<GetRequestBlackListResponse> getRequestBlackLists() {
 		return blackListRequestService.getRequestBlackLists();
 	}
-	
+
 	//블랙리스트요청 수락
 	@PostMapping("/admin/restaurants/blacklist-request/{blacklistrequestId}")
 	public void approveBlackListRequest(@PathVariable Long blacklistrequestId) {
