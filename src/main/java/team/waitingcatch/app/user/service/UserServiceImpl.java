@@ -11,10 +11,19 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
+import team.waitingcatch.app.common.util.JwtUtil;
+import team.waitingcatch.app.redis.dto.CreateRefreshTokenServiceRequest;
+import team.waitingcatch.app.redis.dto.KillTokenRequest;
+import team.waitingcatch.app.redis.service.AliveTokenService;
+import team.waitingcatch.app.redis.service.KilledAccessTokenService;
+import team.waitingcatch.app.redis.service.RemoveTokenRequest;
 import team.waitingcatch.app.user.dto.CreateUserServiceRequest;
 import team.waitingcatch.app.user.dto.DeleteUserRequest;
 import team.waitingcatch.app.user.dto.FindPasswordRequest;
 import team.waitingcatch.app.user.dto.GetCustomerByIdAndRoleServiceRequest;
+import team.waitingcatch.app.user.dto.LoginRequest;
+import team.waitingcatch.app.user.dto.LoginServiceResponse;
+import team.waitingcatch.app.user.dto.LogoutRequest;
 import team.waitingcatch.app.user.dto.UpdateUserServiceRequest;
 import team.waitingcatch.app.user.dto.UserInfoResponse;
 import team.waitingcatch.app.user.entitiy.User;
@@ -24,11 +33,49 @@ import team.waitingcatch.app.user.repository.UserRepository;
 @Transactional
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService, InternalUserService {
+	private final JwtUtil jwtUtil;
 	private final JavaMailSender emailSender;
 	private final UserRepository userRepository;
-
+	private final AliveTokenService refreshTokenService;
+	private final KilledAccessTokenService accessTokenService;
 	@Value("${spring.mail.username}")
 	private String smtpSenderEmail;
+
+	@Override
+	public LoginServiceResponse login(LoginRequest payload) {
+		User user = _getUserByUsername(payload.getUsername());
+
+		if (!user.isPasswordMatch(payload.getPassword())) {
+			throw new IllegalArgumentException("패스워드가 일치하지 않습니다.");
+		}
+
+		// access token 과 refresh token을 생성합니다.
+		String accessToken = jwtUtil.createAccessToken(user.getUsername(), user.getRole());
+		String refreshToken = jwtUtil.createRefreshToken(user.getUsername(), user.getRole());
+
+		/*
+		refreshToken을 redis에 저장합니다. 이 때, accessToken:RefreshToken의 형태로 저장하되, 'Bearer ' 을 제외한 토큰을 저장합니다.
+		1. refreshToken을 accessToken의 value에 맵핑하는 이유는 시큐리티 검증 시,
+		   만료된 accessToken 내에서 claim을 가져올 수 없기 때문입니다.
+		2. accessToken 토큰을 key로 두는 이유는 redis내의 값에 좀더 빠르게 접근하기 위함입니다.
+		*/
+		CreateRefreshTokenServiceRequest servicePayload = new CreateRefreshTokenServiceRequest(accessToken.substring(7),
+			refreshToken.substring(7));
+		refreshTokenService.createToken(servicePayload);
+
+		return new LoginServiceResponse(accessToken);
+	}
+
+	@Override
+	public void logout(LogoutRequest payload) {
+		KillTokenRequest servicePayload = new KillTokenRequest(payload.getAccessToken());
+
+		// refresh Token 제거
+		refreshTokenService.removeToken(new RemoveTokenRequest(servicePayload.getAccessToken()));
+
+		// kill token 리스트에 추가.
+		accessTokenService.killToken(servicePayload);
+	}
 
 	@Override
 	@Transactional(readOnly = true)
@@ -78,7 +125,7 @@ public class UserServiceImpl implements UserService, InternalUserService {
 
 	@Override
 	public void updateUser(UpdateUserServiceRequest payload) {
-		// 중복되면 안되는 값(이메일, 전화번호, 닉네임)들을 체크해준다.
+		// 중복되면 안되는 값(이메일, boolean, 닉네임)들을 체크해준다.
 		User user = _getUserByUsername(payload.getUsername());
 		user.updateBasicInfo(payload.getNickName(), payload.getName(), payload.getPhoneNumber(), payload.getEmail());
 	}
