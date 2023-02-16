@@ -44,7 +44,8 @@ public class AliveTokenServiceImpl implements AliveTokenService, InternalAliveTo
 		aliveTokenRepository.delete(aliveToken);
 	}
 
-	private AliveToken _getAliveTokenByAccessToken(String AccessToken) {
+	@Override
+	public AliveToken _getAliveTokenByAccessToken(String AccessToken) {
 		return aliveTokenRepository.findById(AccessToken).orElseThrow(
 			() -> new IllegalArgumentException("토큰이 존재하지 않습니다.")
 		);
