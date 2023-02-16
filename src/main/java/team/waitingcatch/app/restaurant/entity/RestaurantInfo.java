@@ -30,8 +30,20 @@ public class RestaurantInfo extends TimeStamped {
 	private String closeTime;
 
 	@Column(nullable = false)
+	private float rate = 0;
+
+	@Column(nullable = false)
+	private int totalReview = 0;
+
+	@Column(nullable = false)
 	private boolean isLineupActiveStatus;
 
 	@Column(nullable = false)
-	private int accumulateCount;
+	private int totalLineup;
+
+	// 리뷰 작성시 해당 레스토랑의 평균 별점을 갱신한다.
+	public void setAverageRate(float rate) {
+		this.rate = rate;
+		this.totalReview += 1;
+	}
 }
