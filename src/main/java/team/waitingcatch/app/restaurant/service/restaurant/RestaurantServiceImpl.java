@@ -56,6 +56,7 @@ public class RestaurantServiceImpl implements RestaurantService, InternalRestaur
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public List<RestaurantsWithin3kmRadiusResponse> getRestaurantsWithin3kmRadius(
 		RestaurantsWithin3kmRadiusServiceRequest request) {
 		return restaurantRepository.findRestaurantsByDistance(request.getLatitude(), request.getLongitude()).stream()
