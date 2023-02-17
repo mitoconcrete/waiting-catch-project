@@ -42,14 +42,14 @@ public class UserController {
 	private final UserService userService;
 
 	// global
-	@PostMapping({"/customer/login", "/seller/login", "/admin/login"})
+	@PostMapping({"/customer/signin", "/seller/signin", "/admin/signin"})
 	public void login(@RequestBody LoginRequest loginRequest, HttpServletResponse response) {
 		LoginServiceResponse loginServiceResponse = userService.login(loginRequest);
 		// 엑세스 토큰을 서비스로 부터 반환 받아 헤더에 넣어준다.
 		response.setHeader(JwtUtil.AUTHORIZATION_HEADER, loginServiceResponse.getAccessToken());
 	}
 
-	@PostMapping({"/customer/logout", "/seller/logout", "/admin/logout"})
+	@PostMapping({"/customer/signout", "/seller/signout", "/admin/signout"})
 	public void logout(HttpServletRequest request) {
 		String token = jwtUtil.resolveToken(request);
 		LogoutRequest servicePayload = new LogoutRequest(token);
@@ -83,7 +83,7 @@ public class UserController {
 
 	@PutMapping("/seller/info")
 	public void updateSellerInfo(@AuthenticationPrincipal UserDetails userDetails, @RequestBody
-		UpdateUserControllerRequest controllerRequest) {
+	UpdateUserControllerRequest controllerRequest) {
 		UpdateUserServiceRequest servicePayload = new UpdateUserServiceRequest(controllerRequest.getName(),
 			controllerRequest.getEmail(), userDetails.getUsername(), controllerRequest.getNickName(),
 			controllerRequest.getPhoneNumber());
