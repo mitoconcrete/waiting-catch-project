@@ -74,13 +74,12 @@ public class MenuServiceImpl implements MenuService, InternalMenuService {
 
 		if (!serviceRequest.getMultipartFile().isEmpty()) {
 			try {
+				if (!imageUrl.equals("기본 메뉴 이미지 URL")) {
+					s3Uploader.deleteS3(imageUrl);
+				}
 				imageUrl = s3Uploader.upload(serviceRequest.getMultipartFile(), "menu");
 			} catch (IOException e) {
 				throw new RuntimeException(e);
-			}
-
-			if (!imageUrl.equals("기본 메뉴 이미지 URL")) {
-				s3Uploader.deleteS3(imageUrl);
 			}
 		}
 
