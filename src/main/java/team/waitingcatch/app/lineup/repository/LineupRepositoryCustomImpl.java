@@ -10,7 +10,7 @@ import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import lombok.RequiredArgsConstructor;
-import team.waitingcatch.app.lineup.dto.PastLineupServiceResponse;
+import team.waitingcatch.app.lineup.dto.PastLineupResponse;
 import team.waitingcatch.app.lineup.dto.QPastLineupServiceResponse;
 import team.waitingcatch.app.lineup.dto.QTodayLineupResponse;
 import team.waitingcatch.app.lineup.dto.TodayLineupResponse;
@@ -19,7 +19,7 @@ import team.waitingcatch.app.lineup.dto.TodayLineupResponse;
 public class LineupRepositoryCustomImpl implements LineupRepositoryCustom {
 	private final JPAQueryFactory queryFactory;
 	@Override
-	public List<PastLineupServiceResponse> findAllByUserId(Long userId) {
+	public List<PastLineupResponse> findAllByUserId(Long userId) {
 		return queryFactory
 			.select(new QPastLineupServiceResponse(
 				lineup.restaurant.id,

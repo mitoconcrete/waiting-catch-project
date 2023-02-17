@@ -8,7 +8,7 @@ import lombok.Getter;
 import team.waitingcatch.app.lineup.enums.ArrivalStatusEnum;
 
 @Getter
-public class PastLineupServiceResponse {
+public class PastLineupResponse {
 	private final long restaurantId;
 	private final String restaurantName;
 	private final int numOfMembers;
@@ -18,7 +18,7 @@ public class PastLineupServiceResponse {
 	private final LocalDateTime endedAt;
 
 	@QueryProjection
-	public PastLineupServiceResponse(long restaurantId, String restaurantName, int numOfMembers,
+	public PastLineupResponse(long restaurantId, String restaurantName, int numOfMembers,
 		ArrivalStatusEnum status,
 		boolean isReviewed, LocalDateTime startedAt, LocalDateTime endedAt) {
 		this.restaurantId = restaurantId;

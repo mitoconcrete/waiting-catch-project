@@ -1,6 +1,5 @@
 package team.waitingcatch.app.lineup.service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -9,8 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
-import team.waitingcatch.app.lineup.dto.PastLineupControllerResponse;
-import team.waitingcatch.app.lineup.dto.PastLineupServiceResponse;
+import team.waitingcatch.app.lineup.dto.PastLineupResponse;
 import team.waitingcatch.app.lineup.dto.StartLineupEntityRequest;
 import team.waitingcatch.app.lineup.dto.StartLineupServiceRequest;
 import team.waitingcatch.app.lineup.dto.TodayLineupResponse;
@@ -49,12 +47,10 @@ public class LineupServiceImpl implements LineupService, InternalLineupService {
 	}
 
 	@Override
-	public PastLineupControllerResponse getPastLineups(Long userId) {
+	public List<PastLineupResponse> getPastLineups(Long userId) {
 		String username = internalUserService._getUsernameById(userId);
-		List<PastLineupServiceResponse> todayLineupList = lineupRepository.findAllByUserId(userId);
-		List<PastLineupServiceResponse> pastLineupList = lineupHistoryRepository.findAllByUserId(userId);
-		List<PastLineupServiceResponse> lineupRecord = Stream.concat(todayLineupList.stream(), pastLineupList.stream())
-			.collect(Collectors.toList());
-		return new PastLineupControllerResponse(username, lineupRecord);
+		List<PastLineupResponse> todayLineupList = lineupRepository.findAllByUserId(userId);
+		List<PastLineupResponse> pastLineupList = lineupHistoryRepository.findAllByUserId(userId);
+		return Stream.concat(todayLineupList.stream(), pastLineupList.stream()).collect(Collectors.toList());
 	}
 }

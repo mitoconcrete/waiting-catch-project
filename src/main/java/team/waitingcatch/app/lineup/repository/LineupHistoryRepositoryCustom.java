@@ -2,8 +2,8 @@ package team.waitingcatch.app.lineup.repository;
 
 import java.util.List;
 
-import team.waitingcatch.app.lineup.dto.PastLineupServiceResponse;
+import team.waitingcatch.app.lineup.dto.PastLineupResponse;
 
 public interface LineupHistoryRepositoryCustom {
-	List<PastLineupServiceResponse> findAllByUserId(Long userId);
+	List<PastLineupResponse> findAllByUserId(Long userId);
 }

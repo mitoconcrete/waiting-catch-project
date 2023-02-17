@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.common.dto.GenericResponse;
-import team.waitingcatch.app.lineup.dto.PastLineupControllerResponse;
+import team.waitingcatch.app.lineup.dto.PastLineupResponse;
 import team.waitingcatch.app.lineup.dto.StartLineupControllerRequest;
 import team.waitingcatch.app.lineup.dto.StartLineupServiceRequest;
 import team.waitingcatch.app.lineup.dto.TodayLineupResponse;
@@ -41,7 +41,7 @@ public class LineupController {
 	}
 
 	@GetMapping("/customer/past-lineup")
-	public PastLineupControllerResponse getPastLineups(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-		return lineupService.getPastLineups(userDetails.getId());
+	public GenericResponse<PastLineupResponse> getPastLineups(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+		return new GenericResponse(lineupService.getPastLineups(userDetails.getId()));
 	}
 }
