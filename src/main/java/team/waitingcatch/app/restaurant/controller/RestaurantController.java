@@ -13,6 +13,8 @@ import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantBasicInfoServic
 import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantDetailedInfoResponse;
 import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantDetailedInfoServiceRequest;
 import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantResponse;
+import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantsWithin3kmRadiusResponse;
+import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantsWithin3kmRadiusServiceRequest;
 import team.waitingcatch.app.restaurant.dto.restaurant.SearchRestaurantServiceRequest;
 import team.waitingcatch.app.restaurant.dto.restaurant.SearchRestaurantsResponse;
 import team.waitingcatch.app.restaurant.service.restaurant.RestaurantService;
@@ -35,11 +37,19 @@ public class RestaurantController {
 		return restaurantService.getRestaurantDetailedInfo(request);
 	}
 
-	@GetMapping("/restaurants")
+	@GetMapping("/restaurants/search")
 	public List<SearchRestaurantsResponse> searchRestaurantsByKeyword(@RequestParam String keyword,
 		@RequestParam double latitude, @RequestParam double longitude) {
 		SearchRestaurantServiceRequest request = new SearchRestaurantServiceRequest(keyword, latitude, longitude);
 		return restaurantService.searchRestaurantsByKeyword(request);
+	}
+
+	@GetMapping("/restaurants")
+	public List<RestaurantsWithin3kmRadiusResponse> getRestaurantsWithin3kmRadius(
+		@RequestParam double latitude, @RequestParam double longitude) {
+		RestaurantsWithin3kmRadiusServiceRequest request = new RestaurantsWithin3kmRadiusServiceRequest(latitude,
+			longitude);
+		return restaurantService.getRestaurantsWithin3kmRadius(request);
 	}
 
 	// Seller

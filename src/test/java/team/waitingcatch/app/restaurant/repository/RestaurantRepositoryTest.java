@@ -10,8 +10,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantsWithin3kmRadiusJpaResponse;
 import team.waitingcatch.app.restaurant.dto.restaurant.SearchRestaurantJpaResponse;
-import team.waitingcatch.app.restaurant.entity.Restaurant;
 
 @SpringBootTest
 @ExtendWith(MockitoExtension.class)
@@ -30,7 +30,7 @@ class RestaurantRepositoryTest {
 	@Test
 	void findRestaurantsByDistance() {
 
-		List<Restaurant> restaurants =
+		List<RestaurantsWithin3kmRadiusJpaResponse> restaurants =
 			restaurantRepository.findRestaurantsByDistance(37.339141, 127.082427);
 
 		assertEquals(3, restaurants.size());
