@@ -1,20 +1,13 @@
 package team.waitingcatch.app.lineup.dto;
 
-import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.lineup.enums.ArrivalStatusEnum;
 
 @Getter
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@RequiredArgsConstructor
 public class UpdateArrivalStatusServiceRequest {
-	private Long sellerId;
-	private Long lineupId;
-	private ArrivalStatusEnum status;
-
-	public UpdateArrivalStatusServiceRequest(Long sellerId, Long lineupId, ArrivalStatusEnum status) {
-		this.sellerId = sellerId;
-		this.lineupId = lineupId;
-		this.status = status;
-	}
+	private final Long sellerId;
+	private final Long lineupId;
+	private final ArrivalStatusEnum status;
 }

@@ -60,6 +60,22 @@ public class Restaurant extends TimeStamped {
 	@JoinColumn(name = "user_id", nullable = false)
 	private User user;
 
+	public Restaurant(String name, String images, Position position, Address address, String phoneNumber,
+		boolean isDeleted, String searchKeywords, String description, int capacity, String businessLicenseNo,
+		User user) {
+		this.name = name;
+		this.images = images;
+		this.position = position;
+		this.address = address;
+		this.phoneNumber = phoneNumber;
+		this.isDeleted = isDeleted;
+		this.searchKeywords = searchKeywords;
+		this.description = description;
+		this.capacity = capacity;
+		this.businessLicenseNo = businessLicenseNo;
+		this.user = user;
+	}
+
 	public Restaurant(ApproveSignUpSellerManagementEntityPassToRestaurantEntityRequest
 		approveSignUpSellerManagementEntityPassToRestaurantEntityRequest) {
 		this.name = approveSignUpSellerManagementEntityPassToRestaurantEntityRequest.getRestaurantName();

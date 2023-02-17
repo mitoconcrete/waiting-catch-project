@@ -65,7 +65,23 @@ public class Lineup extends TimeStamped {
 	}
 
 	public void updateStatus(ArrivalStatusEnum status) {
+		if (status == ArrivalStatusEnum.CALL) {
+			if (callCount > 3) {
+				throw new IllegalArgumentException("호출은 최대 3번까지 가능합니다.");
+			}
+			callCustomer();
+		} else if (status == ArrivalStatusEnum.ARRIVE) {
+			requestReview();
+		}
 		this.status = status;
+	}
+
+	public void callCustomer() {
+		
+	}
+
+	public void requestReview() {
+
 	}
 
 	public boolean isSameRestaurant(Restaurant restaurant) {
