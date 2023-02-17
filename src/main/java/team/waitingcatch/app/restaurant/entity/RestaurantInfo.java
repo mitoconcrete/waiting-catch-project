@@ -2,9 +2,12 @@ package team.waitingcatch.app.restaurant.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -21,13 +24,12 @@ public class RestaurantInfo extends TimeStamped {
 	@Column(name = "restaurant_info_id")
 	private Long id;
 
-	@Column(nullable = false)
-	private Long restaurantId;
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "restaurant_id", nullable = false, unique = true)
+	private Restaurant restaurant;
 
-	@Column(nullable = false)
 	private String openTime;
 
-	@Column(nullable = false)
 	private String closeTime;
 
 	@Column(nullable = false)
@@ -39,5 +41,9 @@ public class RestaurantInfo extends TimeStamped {
 	public void updateRestaurantInfo(UpdateRestaurantEntityRequest updateRestaurantEntityRequest) {
 		this.openTime = updateRestaurantEntityRequest.getOpenTime();
 		this.closeTime = updateRestaurantEntityRequest.getCloseTime();
+	}
+
+	public RestaurantInfo(Restaurant restaurant) {
+		this.restaurant = restaurant;
 	}
 }

@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.common.util.S3Uploader;
+import team.waitingcatch.app.restaurant.dto.requestseller.ApproveSignUpSellerManagementEntityPassToRestaurantEntityRequest;
 import team.waitingcatch.app.restaurant.dto.restaurant.DeleteRestaurantByAdminServiceRequest;
 import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantBasicInfoResponse;
 import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantBasicInfoServiceRequest;
@@ -90,16 +91,17 @@ public class RestaurantServiceImpl implements RestaurantService, InternalRestaur
 			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 레스토랑입니다."));
 	}
 
-	// @Override
-	// public Restaurant _getRestaurantFindByUsername(String name) {
-	// 	return restaurantRepository.findByName(name).orElseThrow(
-	// 		() -> new IllegalArgumentException("레스토랑을 찾을수 없습니다.")
-	// 	);
-	// }
-
 	@Override
 	public Restaurant _getRestaurantByUserId(Long userId) {
 		return restaurantRepository.findByUserId(userId)
 			.orElseThrow(() -> new IllegalArgumentException("레스토랑을 찾을수 없습니다."));
+	}
+
+	@Override
+	public void createRestaurant(ApproveSignUpSellerManagementEntityPassToRestaurantEntityRequest request) {
+		Restaurant restaurant = new Restaurant(request);
+		restaurantRepository.save(restaurant);
+		RestaurantInfo restaurantInfo = new RestaurantInfo(restaurant);
+		restaurantInfoRepository.save(restaurantInfo);
 	}
 }

@@ -60,7 +60,7 @@ public class Restaurant extends TimeStamped {
 	private String businessLicenseNo;
 
 	@OneToOne
-	@JoinColumn(name = "user_id", nullable = false)
+	@JoinColumn(name = "user_id", nullable = false, unique = true)
 	private User user;
 
 	@Column(nullable = false)
