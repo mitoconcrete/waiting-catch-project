@@ -64,6 +64,14 @@ public class Lineup extends TimeStamped {
 		return new Lineup(entityRequest);
 	}
 
+	public void updateStatus(ArrivalStatusEnum status) {
+		this.status = status;
+	}
+
+	public boolean isSameRestaurant(Restaurant restaurant) {
+		return this.restaurant.getId().equals(restaurant.getId());
+	}
+
 	private Lineup(StartLineupEntityRequest entityRequest) {
 		this.user = entityRequest.getUser();
 		this.restaurant = entityRequest.getRestaurant();
