@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -30,5 +31,10 @@ public class ReviewController {
 		CreateReviewServiceRequest serviceRequest = new CreateReviewServiceRequest(userDetails.getUser(), restaurantId,
 			controllerRequest.getRate(), controllerRequest.getContent(), images);
 		reviewService.createReview(serviceRequest);
+	}
+
+	@DeleteMapping("/admin/review/{reviewId}")
+	public void deleteReview(@PathVariable Long reviewId) {
+		reviewService.deleteReview(reviewId);
 	}
 }

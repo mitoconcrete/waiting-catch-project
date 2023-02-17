@@ -31,6 +31,14 @@ public class ReviewServiceImpl implements ReviewService, InternalReviewService {
 		List<String> imagePaths = s3Uploader.uploadList(serviceRequest.getImages(), "review");
 		CreateReviewEntityRequest entityRequest = new CreateReviewEntityRequest(serviceRequest.getUser(), restaurant,
 			serviceRequest.getRate(), serviceRequest.getContent(), imagePaths);
+
 		reviewRepository.save(Review.craeteReview(entityRequest));
+	}
+
+	@Override
+	public void deleteReview(Long reviewId) {
+		Review review = reviewRepository.findById(reviewId)
+			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 리뷰입니다."));
+		review.softDelete();
 	}
 }

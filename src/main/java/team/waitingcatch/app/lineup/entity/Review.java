@@ -56,6 +56,10 @@ public class Review extends TimeStamped {
 		return new Review(entityRequest);
 	}
 
+	public void softDelete() {
+		isDeleted = true;
+	}
+
 	private Review(CreateReviewEntityRequest entityRequest) {
 		this.user = entityRequest.getUser();
 		this.restaurant = getRestaurant();
