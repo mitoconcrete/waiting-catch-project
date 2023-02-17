@@ -31,6 +31,7 @@ import team.waitingcatch.app.user.dto.LogoutRequest;
 import team.waitingcatch.app.user.dto.UpdateUserControllerRequest;
 import team.waitingcatch.app.user.dto.UpdateUserServiceRequest;
 import team.waitingcatch.app.user.dto.UserInfoResponse;
+import team.waitingcatch.app.user.entitiy.UserDetailsImpl;
 import team.waitingcatch.app.user.enums.UserRoleEnum;
 import team.waitingcatch.app.user.service.UserService;
 
@@ -57,6 +58,11 @@ public class UserController {
 	}
 
 	// customer
+	@GetMapping("/customer/info")
+	public UserInfoResponse getCustomer(@AuthenticationPrincipal UserDetails userDetails) {
+		return new UserInfoResponse(((UserDetailsImpl)userDetails).getUser());
+	}
+
 	@DeleteMapping("/customer/withdraw")
 	public void withdrawCustomer(@AuthenticationPrincipal UserDetails userDetails) {
 		DeleteUserRequest servicePayload = new DeleteUserRequest(userDetails.getUsername());
@@ -96,7 +102,7 @@ public class UserController {
 		return userService.getCustomers();
 	}
 
-	@GetMapping({"/customer/customers/{customerId}", "/admin/customers/{customerId}"})
+	@GetMapping("/admin/customers/{customerId}")
 	public UserInfoResponse getCustomer(@PathVariable Long customerId) {
 		GetCustomerByIdAndRoleServiceRequest servicePayload =
 			new GetCustomerByIdAndRoleServiceRequest(
