@@ -96,7 +96,7 @@ public class UserController {
 		return userService.getCustomers();
 	}
 
-	@GetMapping("/admin/customers/{customerId}")
+	@GetMapping({"/customer/customers/{customerId}", "/admin/customers/{customerId}"})
 	public UserInfoResponse getCustomer(@PathVariable Long customerId) {
 		GetCustomerByIdAndRoleServiceRequest servicePayload =
 			new GetCustomerByIdAndRoleServiceRequest(
