@@ -18,7 +18,6 @@ import team.waitingcatch.app.lineup.repository.LineupHistoryRepository;
 import team.waitingcatch.app.lineup.repository.LineupRepository;
 import team.waitingcatch.app.restaurant.entity.Restaurant;
 import team.waitingcatch.app.restaurant.service.restaurant.InternalRestaurantService;
-import team.waitingcatch.app.user.service.InternalUserService;
 
 @Service
 @Transactional
@@ -27,8 +26,8 @@ public class LineupServiceImpl implements LineupService, InternalLineupService {
 	private final LineupRepository lineupRepository;
 	private final LineupHistoryRepository lineupHistoryRepository;
 
-	private final InternalUserService internalUserService;
 	private final InternalRestaurantService internalRestaurantService;
+	private final InternalLineupHistoryService internalLineupHistoryService;
 
 	@Override
 	public void openLineup(Long sellerId) {
@@ -64,7 +63,7 @@ public class LineupServiceImpl implements LineupService, InternalLineupService {
 	@Override
 	public List<PastLineupResponse> getPastLineups(Long userId) {
 		List<PastLineupResponse> todayLineupList = lineupRepository.findAllByUserId(userId);
-		List<PastLineupResponse> pastLineupList = lineupHistoryRepository.findAllByUserId(userId);
+		List<PastLineupResponse> pastLineupList = internalLineupHistoryService._getAllByUserId(userId);
 		return Stream.concat(todayLineupList.stream(), pastLineupList.stream()).collect(Collectors.toList());
 	}
 
