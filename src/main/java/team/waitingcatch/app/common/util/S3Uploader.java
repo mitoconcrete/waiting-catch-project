@@ -3,6 +3,7 @@ package team.waitingcatch.app.common.util;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -42,7 +43,7 @@ public class S3Uploader {
 		objectMetadata.setContentType(multipartFile.getContentType());
 		objectMetadata.setContentLength(size);
 
-		String fileName = directionName + "/" + originalName;
+		String fileName = directionName + "/" + UUID.randomUUID() + originalName;
 
 		return uploadS3(fileName, multipartFile, objectMetadata);
 	}
@@ -55,6 +56,11 @@ public class S3Uploader {
 		);
 
 		return amazonS3Client.getUrl(bucket, fileName).toString();
-		// https://버킷이름.s3.ap-northeast-2.amazonaws.com/menu/사진이름.확장자
+		// https://버킷이름.s3.ap-northeast-2.amazonaws.com/menu/UUID+사진이름.확장자
+	}
+
+	public void deleteS3(String imageUrl) {
+		imageUrl = imageUrl.replace("https://" + bucket + ".s3.ap-northeast-2.amazonaws.com/", "");
+		amazonS3Client.deleteObject(bucket, imageUrl);
 	}
 }
