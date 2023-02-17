@@ -27,13 +27,13 @@ public class LineupRepositoryCustomImpl implements LineupRepositoryCustom {
 				lineup.numOfMembers,
 				lineup.status,
 				lineup.isReviewed,
-				lineup.startedAt,
-				lineup.endedAt
+				lineup.createdDate,
+				lineup.arrivedAt
 			))
 			.from(lineup)
 			.join(lineup.restaurant, restaurant)
 			.where(lineup.user.id.eq(userId))
-			.orderBy(lineup.endedAt.desc())
+			.orderBy(lineup.arrivedAt.desc())
 			.fetch();
 	}
 
@@ -46,8 +46,8 @@ public class LineupRepositoryCustomImpl implements LineupRepositoryCustom {
 				lineup.numOfMembers,
 				lineup.status,
 				lineup.callCount,
-				lineup.startedAt,
-				lineup.endedAt))
+				lineup.createdDate,
+				lineup.arrivedAt))
 			.from(lineup)
 			.where(lineup.restaurant.id.eq(
 				JPAExpressions

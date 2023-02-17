@@ -52,10 +52,7 @@ public class Lineup extends TimeStamped {
 	@Column(nullable = false)
 	private int callCount;
 
-	@Column(nullable = false)
-	private LocalDateTime startedAt;
-
-	private LocalDateTime endedAt;
+	private LocalDateTime arrivedAt;
 
 	@Column(nullable = false)
 	private boolean isReviewed;
@@ -94,8 +91,7 @@ public class Lineup extends TimeStamped {
 		this.waitingNumber = entityRequest.getWaitingNumber();
 		this.numOfMembers = entityRequest.getNumOfMembers();
 		this.status = ArrivalStatusEnum.WAIT;
-		this.startedAt = entityRequest.getStartAt();
-		this.endedAt = null;
+		this.arrivedAt = null;
 		this.isReviewed = false;
 		this.callCount = 0;
 	}
