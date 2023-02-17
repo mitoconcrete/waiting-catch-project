@@ -6,7 +6,7 @@ import org.springframework.data.repository.query.Param;
 
 import team.waitingcatch.app.lineup.entity.Lineup;
 
-public interface LineupRepository extends JpaRepository<Lineup, Long> {
+public interface LineupRepository extends JpaRepository<Lineup, Long>, LineupRepositoryCustom {
 	@Query("select max(l.waitingNumber) from Lineup l where l.restaurant.id = :restaurantId")
 	Integer findLastWaitingNumberByRestaurantId(@Param("restaurantId") Long id);
 }

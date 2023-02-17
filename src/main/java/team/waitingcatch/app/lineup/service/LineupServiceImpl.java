@@ -1,11 +1,14 @@
 package team.waitingcatch.app.lineup.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.lineup.dto.StartLineupEntityRequest;
 import team.waitingcatch.app.lineup.dto.StartLineupServiceRequest;
+import team.waitingcatch.app.lineup.dto.TodayLineupResponse;
 import team.waitingcatch.app.lineup.entity.Lineup;
 import team.waitingcatch.app.lineup.repository.LineupRepository;
 import team.waitingcatch.app.restaurant.entity.Restaurant;
@@ -28,5 +31,10 @@ public class LineupServiceImpl implements LineupService, InternalLineupService {
 			lastWaitingNumber);
 		Lineup lineup = Lineup.createLineup(entityRequest);
 		lineupRepository.save(lineup);
+	}
+
+	@Override
+	public List<TodayLineupResponse> getLineups(Long sellerId) {
+		return lineupRepository.findAllBySellerId(sellerId);
 	}
 }
