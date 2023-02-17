@@ -1,8 +1,9 @@
 package team.waitingcatch.app.restaurant.service.restaurant;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +23,9 @@ import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantBasicInfoServic
 import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantDetailedInfoResponse;
 import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantDetailedInfoServiceRequest;
 import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantResponse;
+import team.waitingcatch.app.restaurant.dto.restaurant.SearchRestaurantJpaResponse;
+import team.waitingcatch.app.restaurant.dto.restaurant.SearchRestaurantServiceRequest;
+import team.waitingcatch.app.restaurant.dto.restaurant.SearchRestaurantsResponse;
 import team.waitingcatch.app.restaurant.entity.Restaurant;
 import team.waitingcatch.app.restaurant.repository.RestaurantRepository;
 import team.waitingcatch.app.user.entitiy.User;
@@ -105,6 +109,29 @@ class RestaurantServiceImplTest {
 	}
 
 	@Test
+	@DisplayName("검색 키워드로 레스토랑 목록 조회")
+	void searchRestaurantsByKeyword() {
+		// given
+		SearchRestaurantServiceRequest request = mock(SearchRestaurantServiceRequest.class);
+		List<SearchRestaurantJpaResponse> jpaResponses = new ArrayList<>();
+		SearchRestaurantJpaResponse jpaResponse = mock(SearchRestaurantJpaResponse.class);
+		jpaResponses.add(jpaResponse);
+
+		when(request.getKeyword()).thenReturn("aa");
+		when(jpaResponse.getSearchKeyword()).thenReturn("a a a");
+		when(jpaResponse.getName()).thenReturn("aaa");
+
+		when(restaurantRepository.findRestaurantsBySearchKeywordsContaining(any(String.class))).thenReturn(
+			jpaResponses);
+
+		// when
+		List<SearchRestaurantsResponse> responses = restaurantService.searchRestaurantsByKeyword(request);
+
+		// then
+		assertEquals("aaa", responses.get(0).getName());
+	}
+
+	@Test
 	@DisplayName("레스토랑 조회 메소드")
 	void _getRestaurant() {
 		// given
@@ -119,27 +146,6 @@ class RestaurantServiceImplTest {
 		// then
 		assertEquals("aaaa", restaurant1.getName());
 	}
-
-	// @Test
-	// @DisplayName("username으로 레스토링 조회")
-	// void _getRestaurantFindByUsername() {
-	// 	// given
-	// 	Restaurant restaurant = mock(Restaurant.class);
-	// 	User user = mock(User.class);
-	//
-	// 	when(restaurant.getUser()).thenReturn(user);
-	// 	when(restaurant.getUser().getUsername()).thenReturn("a");
-	// 	when(restaurant.getName()).thenReturn("aaaa");
-	//
-	// 	when(restaurantRepository.findByName(any(String.class))).thenReturn(Optional.of(restaurant));
-	//
-	// 	// when
-	// 	Restaurant restaurant1 = restaurantService._getRestaurantFindByUsername(any(String.class));
-	//
-	// 	// then
-	// 	assertEquals("aaaa", restaurant1.getName());
-	// 	assertEquals("a", restaurant1.getUser().getUsername());
-	// }
 
 	@Test
 	@DisplayName("userId로 레스토랑 조회")
