@@ -28,4 +28,19 @@ public class ReviewRepositoryCustomImpl implements ReviewRepositoryCustom {
 			.where(review.restaurant.id.eq(restaurantId))
 			.fetch();
 	}
+
+	@Override
+	public List<GetReviewResponse> findAllByUserId(Long userId) {
+		return queryFactory
+			.select(new QGetReviewResponse(
+				review.rate,
+				review.content,
+				review.imagePaths,
+				review.createdDate,
+				review.modifiedDate
+			))
+			.from(review)
+			.where(review.user.id.eq(userId))
+			.fetch();
+	}
 }
