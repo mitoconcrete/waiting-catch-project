@@ -18,11 +18,15 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import team.waitingcatch.app.common.Address;
 import team.waitingcatch.app.common.Position;
+import team.waitingcatch.app.common.util.DistanceCalculator;
 import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantBasicInfoResponse;
 import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantBasicInfoServiceRequest;
 import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantDetailedInfoResponse;
 import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantDetailedInfoServiceRequest;
 import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantResponse;
+import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantsWithin3kmRadiusJpaResponse;
+import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantsWithin3kmRadiusResponse;
+import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantsWithin3kmRadiusServiceRequest;
 import team.waitingcatch.app.restaurant.dto.restaurant.SearchRestaurantJpaResponse;
 import team.waitingcatch.app.restaurant.dto.restaurant.SearchRestaurantServiceRequest;
 import team.waitingcatch.app.restaurant.dto.restaurant.SearchRestaurantsResponse;
@@ -35,6 +39,9 @@ class RestaurantServiceImplTest {
 
 	@Mock
 	private RestaurantRepository restaurantRepository;
+
+	@Mock
+	private DistanceCalculator distanceCalculator;
 
 	@InjectMocks
 	private RestaurantServiceImpl restaurantService;
@@ -129,6 +136,34 @@ class RestaurantServiceImplTest {
 
 		// then
 		assertEquals("aaa", responses.get(0).getName());
+	}
+
+	@Test
+	@DisplayName("반경 3km 이내의 레스토랑 조회")
+	void getRestaurantsWithin3kmRadius() {
+		// given
+		RestaurantsWithin3kmRadiusServiceRequest request = mock(RestaurantsWithin3kmRadiusServiceRequest.class);
+		List<RestaurantsWithin3kmRadiusJpaResponse> jpaResponses = new ArrayList<>();
+		RestaurantsWithin3kmRadiusJpaResponse jpaResponse = mock(RestaurantsWithin3kmRadiusJpaResponse.class);
+		jpaResponses.add(jpaResponse);
+
+		when(request.getLatitude()).thenReturn(0.0);
+		when(request.getLongitude()).thenReturn(0.0);
+		when(jpaResponse.getName()).thenReturn("aaa");
+		when(jpaResponse.getSearchKeyword()).thenReturn("a a a");
+		when(jpaResponse.getLatitude()).thenReturn(0.0);
+		when(jpaResponse.getLongitude()).thenReturn(0.0);
+		when(distanceCalculator.distanceInKilometerByHaversine(
+			0.0, 0.0, 0.0, 0.0)).thenReturn(0.0);
+		when(restaurantRepository.findRestaurantsByDistance(any(double.class), any(double.class))).thenReturn(
+			jpaResponses);
+
+		// when
+		List<RestaurantsWithin3kmRadiusResponse> responses = restaurantService.getRestaurantsWithin3kmRadius(request);
+
+		// then
+		assertEquals("aaa", responses.get(0).getName());
+
 	}
 
 	@Test
