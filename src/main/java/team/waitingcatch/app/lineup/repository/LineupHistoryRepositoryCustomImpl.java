@@ -9,7 +9,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.lineup.dto.PastLineupResponse;
-import team.waitingcatch.app.lineup.dto.QPastLineupServiceResponse;
+import team.waitingcatch.app.lineup.dto.QPastLineupResponse;
 
 @RequiredArgsConstructor
 public class LineupHistoryRepositoryCustomImpl implements LineupHistoryRepositoryCustom {
@@ -18,7 +18,7 @@ public class LineupHistoryRepositoryCustomImpl implements LineupHistoryRepositor
 	@Override
 	public List<PastLineupResponse> findAllByUserId(Long userId) {
 		return queryFactory
-			.select(new QPastLineupServiceResponse(
+			.select(new QPastLineupResponse(
 				lineupHistory.restaurant.id,
 				lineupHistory.restaurant.name,
 				lineupHistory.numOfMembers,
