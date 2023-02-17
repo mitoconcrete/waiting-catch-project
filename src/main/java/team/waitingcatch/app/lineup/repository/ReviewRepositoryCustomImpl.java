@@ -25,7 +25,8 @@ public class ReviewRepositoryCustomImpl implements ReviewRepositoryCustom {
 				review.modifiedDate
 			))
 			.from(review)
-			.where(review.restaurant.id.eq(restaurantId))
+			.where(review.restaurant.id.eq(restaurantId).and(review.isDeleted.eq(false)))
+			.orderBy(review.createdDate.desc())
 			.fetch();
 	}
 
@@ -40,7 +41,8 @@ public class ReviewRepositoryCustomImpl implements ReviewRepositoryCustom {
 				review.modifiedDate
 			))
 			.from(review)
-			.where(review.user.id.eq(userId))
+			.where(review.user.id.eq(userId).and(review.isDeleted.eq(false)))
+			.orderBy(review.createdDate.desc())
 			.fetch();
 	}
 }
