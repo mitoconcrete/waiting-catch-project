@@ -43,11 +43,11 @@ public class ReviewController {
 
 	@GetMapping("/restaurants/{restaurantId}/reviews")
 	public GenericResponse<GetReviewResponse> getReviewsByRestaurant(@PathVariable Long restaurantId) {
-		return new GenericResponse(reviewService.getReviewsByRestaurantId(restaurantId));
+		return new GenericResponse<>(reviewService.getReviewsByRestaurantId(restaurantId));
 	}
 
 	@GetMapping("/customer/reviews")
 	public GenericResponse<GetReviewResponse> getReviewsByUser(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-		return new GenericResponse(reviewService.getReviewsByUserId(userDetails.getId()));
+		return new GenericResponse<>(reviewService.getReviewsByUserId(userDetails.getId()));
 	}
 }

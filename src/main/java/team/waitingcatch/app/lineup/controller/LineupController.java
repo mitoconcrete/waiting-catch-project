@@ -51,12 +51,12 @@ public class LineupController {
 
 	@GetMapping("/seller/lineup")
 	public GenericResponse<TodayLineupResponse> getLineups(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-		return new GenericResponse(lineupService.getLineups(userDetails.getId()));
+		return new GenericResponse<>(lineupService.getLineups(userDetails.getId()));
 	}
 
 	@GetMapping("/customer/past-lineup")
 	public GenericResponse<PastLineupResponse> getPastLineups(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-		return new GenericResponse(lineupService.getPastLineups(userDetails.getId()));
+		return new GenericResponse<>(lineupService.getPastLineups(userDetails.getId()));
 	}
 
 	@PutMapping("/seller/lineup/{lineupId}/status")
