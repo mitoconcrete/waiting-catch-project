@@ -11,14 +11,17 @@ public class SearchRestaurantJpaResponse {
 	private final String searchKeyword;
 	private final double latitude;
 	private final double longitude;
+	private final int currentWaitingNumber;
 
 	public SearchRestaurantJpaResponse(String name, String images, float rate, String searchKeyword,
-		Position position) {
+		Position position, int currentWaitingNumber) {
 		this.name = name;
 		this.images = images;
 		this.rate = rate;
 		this.searchKeyword = searchKeyword;
 		this.latitude = position.getLatitude();
 		this.longitude = position.getLongitude();
+		this.currentWaitingNumber = currentWaitingNumber;
+
 	}
 }

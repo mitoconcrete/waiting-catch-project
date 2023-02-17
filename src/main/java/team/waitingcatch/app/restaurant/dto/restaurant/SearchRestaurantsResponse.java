@@ -9,6 +9,7 @@ public class SearchRestaurantsResponse {
 	private final float rate;
 	private final String[] category;
 	private final double distance;
+	private final int currentWaitingNumber;
 
 	public SearchRestaurantsResponse(SearchRestaurantJpaResponse jpaResponse, double distance) {
 		this.name = jpaResponse.getName();
@@ -16,5 +17,6 @@ public class SearchRestaurantsResponse {
 		this.rate = jpaResponse.getRate();
 		this.category = jpaResponse.getSearchKeyword().split(" ");
 		this.distance = distance;
+		this.currentWaitingNumber = jpaResponse.getCurrentWaitingNumber();
 	}
 }

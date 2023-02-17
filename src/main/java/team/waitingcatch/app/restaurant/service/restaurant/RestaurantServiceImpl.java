@@ -49,7 +49,7 @@ public class RestaurantServiceImpl implements RestaurantService, InternalRestaur
 		return restaurantRepository.findRestaurantsBySearchKeywordsContaining(keyword).stream()
 			.map(response -> new SearchRestaurantsResponse(
 				response, distanceCalculator.distanceInKilometerByHaversine(
-				response.getLatitude(), response.getLongitude(), latitude, longitude)))
+				latitude, longitude, response.getLatitude(), response.getLongitude())))
 			.collect(Collectors.toList());
 	}
 
