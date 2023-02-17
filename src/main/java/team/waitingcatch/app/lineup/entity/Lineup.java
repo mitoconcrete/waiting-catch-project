@@ -17,6 +17,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import team.waitingcatch.app.common.entity.TimeStamped;
+import team.waitingcatch.app.lineup.dto.StartLineupEntityRequest;
 import team.waitingcatch.app.lineup.enums.ArrivalStatusEnum;
 import team.waitingcatch.app.restaurant.entity.Restaurant;
 import team.waitingcatch.app.user.entitiy.User;
@@ -24,8 +25,7 @@ import team.waitingcatch.app.user.entitiy.User;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class LineupHistory extends TimeStamped {
-
+public class Lineup extends TimeStamped {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "lineup_history_id")
@@ -39,17 +39,40 @@ public class LineupHistory extends TimeStamped {
 	@JoinColumn(name = "restaurant_id", nullable = false)
 	private Restaurant restaurant;
 
+	@Column(nullable = false)
+	private int waitingNumber;
+
+	@Column(nullable = false)
+	private int numOfMembers;
+
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
 	private ArrivalStatusEnum status;
 
 	@Column(nullable = false)
-	private LocalDateTime arrivedAt;
+	private int callCount;
+
+	@Column(nullable = false)
+	private LocalDateTime startedAt;
+
+	private LocalDateTime endedAt;
 
 	@Column(nullable = false)
 	private boolean isReviewed;
 
-	@Column(nullable = false)
-	private int callCount;
+	public static Lineup createLineup(StartLineupEntityRequest entityRequest) {
+		return new Lineup(entityRequest);
+	}
 
+	private Lineup(StartLineupEntityRequest entityRequest) {
+		this.user = entityRequest.getUser();
+		this.restaurant = entityRequest.getRestaurant();
+		this.waitingNumber = entityRequest.getWaitingNumber();
+		this.numOfMembers = entityRequest.getNumOfMembers();
+		this.status = ArrivalStatusEnum.WAIT;
+		this.startedAt = entityRequest.getStartAt();
+		this.endedAt = null;
+		this.isReviewed = false;
+		this.callCount = 0;
+	}
 }

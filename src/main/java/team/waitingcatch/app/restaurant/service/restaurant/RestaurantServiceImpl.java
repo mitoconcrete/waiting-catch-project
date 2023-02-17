@@ -102,4 +102,18 @@ public class RestaurantServiceImpl implements RestaurantService, InternalRestaur
 		return restaurantRepository.findByUserId(userId)
 			.orElseThrow(() -> new IllegalArgumentException("레스토랑을 찾을수 없습니다."));
 	}
+
+	@Override
+	public void startLineup(Long restaurantId) {
+		RestaurantInfo restaurantInfo = restaurantInfoRepository.findById(restaurantId)
+			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 레스토랑입니다."));
+		restaurantInfo.startLineup();
+	}
+
+	@Override
+	public void endLineup(Long restaurantId) {
+		RestaurantInfo restaurantInfo = restaurantInfoRepository.findById(restaurantId)
+			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 레스토랑입니다."));
+		restaurantInfo.endLineup();
+	}
 }
