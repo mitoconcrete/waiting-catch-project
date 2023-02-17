@@ -46,7 +46,6 @@ public class ReviewServiceImpl implements ReviewService, InternalReviewService {
 	@Transactional(readOnly = true)
 	@Override
 	public List<GetReviewResponse> getReviewsByRestaurant(Long restaurantId) {
-
-		return null;
+		return reviewRepository.findAllByRestaurantId(restaurantId);
 	}
 }
