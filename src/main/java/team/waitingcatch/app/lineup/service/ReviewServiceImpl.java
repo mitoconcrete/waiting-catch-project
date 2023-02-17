@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.common.util.S3Uploader;
 import team.waitingcatch.app.lineup.dto.CreateReviewEntityRequest;
 import team.waitingcatch.app.lineup.dto.CreateReviewServiceRequest;
+import team.waitingcatch.app.lineup.dto.GetReviewResponse;
 import team.waitingcatch.app.lineup.entity.Review;
 import team.waitingcatch.app.lineup.repository.ReviewRepository;
 import team.waitingcatch.app.restaurant.entity.Restaurant;
@@ -40,5 +41,12 @@ public class ReviewServiceImpl implements ReviewService, InternalReviewService {
 		Review review = reviewRepository.findById(reviewId)
 			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 리뷰입니다."));
 		review.softDelete();
+	}
+
+	@Transactional(readOnly = true)
+	@Override
+	public List<GetReviewResponse> getReviewsByRestaurant(Long restaurantId) {
+
+		return null;
 	}
 }
