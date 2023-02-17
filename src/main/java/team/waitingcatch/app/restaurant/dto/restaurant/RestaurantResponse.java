@@ -9,13 +9,13 @@ public class RestaurantResponse {
 	private final String email;
 	private final String phoneNumber;
 	private final String restaurantName;
-	private Long category;
 	private final double latitude;
 	private final double longitude;
 	private final String province;
 	private final String city;
 	private final String street;
 	private final String searchKeywords;
+	private Long category;
 
 	public RestaurantResponse(Restaurant restaurant) {
 		this.username = restaurant.getUser().getUsername();
