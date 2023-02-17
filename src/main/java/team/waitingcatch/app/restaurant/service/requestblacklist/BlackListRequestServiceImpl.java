@@ -44,7 +44,8 @@ public class BlackListRequestServiceImpl implements BlackListRequestService, Int
 		// 	requestUserBlackListByRestaurantServiceRequest.getSellerName());
 
 		Restaurant restaurant = restaurantRepository.findByUser_Username(
-			requestUserBlackListByRestaurantServiceRequest.getSellerName());
+				requestUserBlackListByRestaurantServiceRequest.getSellerName())
+			.orElseThrow(() -> new IllegalArgumentException("Not found restaurant"));
 
 		BlackListRequest blackListRequest = new BlackListRequest(restaurant, user,
 			requestUserBlackListByRestaurantServiceRequest.getDescription());
@@ -73,12 +74,11 @@ public class BlackListRequestServiceImpl implements BlackListRequestService, Int
 
 	public void approveBlackListRequest(ApproveBlackListServiceRequest approveBlackListServiceRequest) {
 		BlackListRequest blackListRequest = blackListRequestRepository.findById(
-			approveBlackListServiceRequest.getBlackListRequestId()).orElseThrow(
-			() -> new IllegalArgumentException("Not found black list request"));
+				approveBlackListServiceRequest.getBlackListRequestId())
+			.orElseThrow(() -> new IllegalArgumentException("Not found black list request"));
 		blackListRequest.checkWaitingStatus();
 		blackListRequest.updateApprovalStatus();
-		internalBlackListService._createBlackList(
-			blackListRequest.getRestaurant(), blackListRequest.getUser());
+		internalBlackListService._createBlackList(blackListRequest.getRestaurant(), blackListRequest.getUser());
 	}
 
 }

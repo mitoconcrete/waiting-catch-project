@@ -10,6 +10,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import team.waitingcatch.app.common.entity.TimeStamped;
+import team.waitingcatch.app.restaurant.dto.restaurant.UpdateRestaurantEntityRequest;
 
 @Entity
 @Getter
@@ -59,5 +60,10 @@ public class RestaurantInfo extends TimeStamped {
 	// 줄서기 취소, 완료시 해당 레스토랑의 현재 대기인원 수를 차감한다.
 	public void subtractLineupCount() {
 		this.currentWaitingNumber -= 1;
+  }
+
+	public void updateRestaurantInfo(UpdateRestaurantEntityRequest updateRestaurantEntityRequest) {
+		this.openTime = updateRestaurantEntityRequest.getOpenTime();
+		this.closeTime = updateRestaurantEntityRequest.getCloseTime();
 	}
 }

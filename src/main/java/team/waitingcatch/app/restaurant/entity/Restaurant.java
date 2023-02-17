@@ -1,5 +1,7 @@
 package team.waitingcatch.app.restaurant.entity;
 
+import java.util.UUID;
+
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -17,6 +19,8 @@ import team.waitingcatch.app.common.Address;
 import team.waitingcatch.app.common.Position;
 import team.waitingcatch.app.common.entity.TimeStamped;
 import team.waitingcatch.app.restaurant.dto.requestseller.ApproveSignUpSellerManagementEntityPassToRestaurantEntityRequest;
+import team.waitingcatch.app.restaurant.dto.restaurant.SaveDummyRestaurantRequest;
+import team.waitingcatch.app.restaurant.dto.restaurant.UpdateRestaurantEntityRequest;
 import team.waitingcatch.app.user.entitiy.User;
 
 @Entity
@@ -32,7 +36,6 @@ public class Restaurant extends TimeStamped {
 	private String name;
 
 	private String images;
-
 	@Embedded
 	private Position position;
 
@@ -61,6 +64,9 @@ public class Restaurant extends TimeStamped {
 	@JoinColumn(name = "user_id", nullable = false)
 	private User user;
 
+	@Column(nullable = false)
+	private String category;
+
 	public Restaurant(ApproveSignUpSellerManagementEntityPassToRestaurantEntityRequest
 		approveSignUpSellerManagementEntityPassToRestaurantEntityRequest) {
 		this.name = approveSignUpSellerManagementEntityPassToRestaurantEntityRequest.getRestaurantName();
@@ -73,6 +79,22 @@ public class Restaurant extends TimeStamped {
 		this.businessLicenseNo = approveSignUpSellerManagementEntityPassToRestaurantEntityRequest.getBusinessLicenseNo();
 		this.capacity = 0;
 		this.user = approveSignUpSellerManagementEntityPassToRestaurantEntityRequest.getUser();
+		this.images = "기본값";
+		this.category = "기본값 카테고리";
+	}
+
+	//dummy data
+	public Restaurant(SaveDummyRestaurantRequest request) {
+		this.name = request.getName();
+		this.address = request.getAddress();
+		this.businessLicenseNo = String.valueOf(UUID.randomUUID());
+		this.capacity = 30;
+		this.description = request.getName() + "은 한국 최고의 음식 입니다.";
+		this.searchKeywords = request.getCategory();
+		this.phoneNumber = request.getPhoneNumber();
+		this.position = request.getPosition();
+		this.category = request.getCategory();
+		this.user = request.getUser();
 	}
 
 	public String getProvince() {
@@ -93,5 +115,20 @@ public class Restaurant extends TimeStamped {
 
 	public double getLongitude() {
 		return this.getPosition().getLongitude();
+	}
+
+	public void deleteRestaurant() {
+		if (this.isDeleted) {
+			throw new IllegalArgumentException("해당 유저는 이미 삭제되었습니다.");
+		} else {
+			this.isDeleted = true;
+		}
+	}
+
+	public void updateRestaurant(UpdateRestaurantEntityRequest updateRestaurantEntityRequest) {
+		this.images = updateRestaurantEntityRequest.getImages();
+		this.phoneNumber = updateRestaurantEntityRequest.getPhoneNumber();
+		this.capacity = updateRestaurantEntityRequest.getCapacity();
+		this.description = updateRestaurantEntityRequest.getDescription();
 	}
 }

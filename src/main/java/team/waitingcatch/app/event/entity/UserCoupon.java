@@ -35,4 +35,8 @@ public class UserCoupon {
 	@Column(nullable = false)
 	private boolean isUsed;
 
+	public UserCoupon(User user, CouponCreator couponCreator) {
+		this.user = user;
+		this.couponCreator = couponCreator;
+	}
 }
