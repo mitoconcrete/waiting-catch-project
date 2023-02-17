@@ -5,6 +5,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -20,8 +22,9 @@ public class RestaurantInfo extends TimeStamped {
 	@Column(name = "restaurant_info_id")
 	private Long id;
 
-	@Column(nullable = false)
-	private Long restaurantId;
+	@OneToOne
+	@JoinColumn(name = "restaurant_id", nullable = false)
+	private Restaurant restaurant;
 
 	@Column(nullable = false)
 	private String openTime;

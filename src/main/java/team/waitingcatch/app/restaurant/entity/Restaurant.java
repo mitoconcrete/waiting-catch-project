@@ -58,7 +58,7 @@ public class Restaurant extends TimeStamped {
 	private String businessLicenseNo;
 
 	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "user_id", nullable = false)
+	@JoinColumn(name = "user_id", nullable = false, unique = true)
 	private User user;
 
 	public Restaurant(ApproveSignUpSellerManagementEntityPassToRestaurantEntityRequest
