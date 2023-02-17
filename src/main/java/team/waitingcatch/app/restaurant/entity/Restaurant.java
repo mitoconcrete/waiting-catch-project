@@ -16,6 +16,7 @@ import team.waitingcatch.app.common.Address;
 import team.waitingcatch.app.common.Position;
 import team.waitingcatch.app.common.entity.TimeStamped;
 import team.waitingcatch.app.restaurant.dto.requestseller.ApproveSignUpSellerManagementEntityPassToRestaurantEntityRequest;
+import team.waitingcatch.app.restaurant.dto.restaurant.UpdateRestaurantEntityRequest;
 import team.waitingcatch.app.user.entitiy.User;
 
 @Entity
@@ -31,7 +32,6 @@ public class Restaurant extends TimeStamped {
 	private String name;
 
 	private String images;
-
 	@Embedded
 	private Position position;
 
@@ -72,6 +72,7 @@ public class Restaurant extends TimeStamped {
 		this.businessLicenseNo = approveSignUpSellerManagementEntityPassToRestaurantEntityRequest.getBusinessLicenseNo();
 		this.capacity = 0;
 		this.user = approveSignUpSellerManagementEntityPassToRestaurantEntityRequest.getUser();
+		this.images = "기본값";
 	}
 
 	public String getProvince() {
@@ -92,5 +93,20 @@ public class Restaurant extends TimeStamped {
 
 	public double getLongitude() {
 		return this.getPosition().getLongitude();
+	}
+
+	public void deleteRestaurant() {
+		if (this.isDeleted) {
+			throw new IllegalArgumentException("해당 유저는 이미 삭제되었습니다.");
+		} else {
+			this.isDeleted = true;
+		}
+	}
+
+	public void updateRestaurant(UpdateRestaurantEntityRequest updateRestaurantEntityRequest) {
+		this.images = updateRestaurantEntityRequest.getImages();
+		this.phoneNumber = updateRestaurantEntityRequest.getPhoneNumber();
+		this.capacity = updateRestaurantEntityRequest.getCapacity();
+		this.description = updateRestaurantEntityRequest.getDescription();
 	}
 }
