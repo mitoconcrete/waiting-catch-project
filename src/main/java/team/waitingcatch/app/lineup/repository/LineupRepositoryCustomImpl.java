@@ -54,6 +54,7 @@ public class LineupRepositoryCustomImpl implements LineupRepositoryCustom {
 					.from(restaurant)
 					.where(user.id.eq(sellerId))
 			))
+			.orderBy(lineup.waitingNumber.asc())
 			.fetch();
 	}
 }
