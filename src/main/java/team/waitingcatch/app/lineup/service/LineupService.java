@@ -8,7 +8,11 @@ import team.waitingcatch.app.lineup.dto.TodayLineupResponse;
 import team.waitingcatch.app.lineup.dto.UpdateArrivalStatusServiceRequest;
 
 public interface LineupService {
-	void startLineup(StartLineupServiceRequest serviceRequest);
+	void openLineup(Long sellerId);
+
+	void closeLineup(Long sellerId);
+
+	void startWaiting(StartLineupServiceRequest serviceRequest);
 
 	List<TodayLineupResponse> getLineups(Long sellerId);
 

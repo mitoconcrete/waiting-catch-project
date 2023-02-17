@@ -29,6 +29,16 @@ import team.waitingcatch.app.user.entitiy.UserDetailsImpl;
 public class LineupController {
 	private final LineupService lineupService;
 
+	@PutMapping("/seller/start-lineup")
+	public void openLineup(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+		lineupService.openLineup(userDetails.getId());
+	}
+
+	@PutMapping("/seller/end-lineup")
+	public void closeLineup(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+		lineupService.closeLineup(userDetails.getId());
+	}
+
 	@PostMapping("/restaurants/{restaurantId}/waiting")
 	public void lineup(@PathVariable Long restaurantId,
 		@Valid @RequestBody StartLineupControllerRequest controllerRequest,
@@ -36,7 +46,7 @@ public class LineupController {
 
 		StartLineupServiceRequest serviceRequest = new StartLineupServiceRequest(userDetails.getUser(), restaurantId,
 			controllerRequest.getNumOfMember(), LocalDateTime.now());
-		lineupService.startLineup(serviceRequest);
+		lineupService.startWaiting(serviceRequest);
 	}
 
 	@GetMapping("/seller/lineup")

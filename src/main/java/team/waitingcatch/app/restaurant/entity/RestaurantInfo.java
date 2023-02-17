@@ -41,11 +41,11 @@ public class RestaurantInfo extends TimeStamped {
 		this.closeTime = updateRestaurantEntityRequest.getCloseTime();
 	}
 
-	public void startLineup() {
+	public void openLineup() {
 		isLineupActive = true;
 	}
 
-	public void endLineup() {
+	public void closeLineup() {
 		isLineupActive = false;
 	}
 }

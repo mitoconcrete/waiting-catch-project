@@ -9,7 +9,7 @@ public interface InternalRestaurantService {
 
 	Restaurant _getRestaurantByUserId(Long userId);
 
-	void startLineup(Long restaurantId);
+	void _openLineup(Long restaurantId);
 
-	void endLineup(Long restaurantId);
+	void _closeLineup(Long restaurantId);
 }

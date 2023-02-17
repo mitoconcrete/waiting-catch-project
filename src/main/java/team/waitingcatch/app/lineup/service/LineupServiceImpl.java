@@ -31,7 +31,19 @@ public class LineupServiceImpl implements LineupService, InternalLineupService {
 	private final InternalRestaurantService internalRestaurantService;
 
 	@Override
-	public void startLineup(StartLineupServiceRequest serviceRequest) {
+	public void openLineup(Long sellerId) {
+		Long restaurantId = internalRestaurantService._getRestaurant(sellerId).getId();
+		internalRestaurantService._openLineup(restaurantId);
+	}
+
+	@Override
+	public void closeLineup(Long sellerId) {
+		Long restaurantId = internalRestaurantService._getRestaurant(sellerId).getId();
+		internalRestaurantService._closeLineup(restaurantId);
+	}
+
+	@Override
+	public void startWaiting(StartLineupServiceRequest serviceRequest) {
 		Long restaurantId = serviceRequest.getRestaurantId();
 		Restaurant restaurant = internalRestaurantService._getRestaurant(restaurantId);
 		// if (isLineupActive()) RestaurantInfo 수정 후 추가

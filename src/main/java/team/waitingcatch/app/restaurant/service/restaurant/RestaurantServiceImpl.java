@@ -104,16 +104,16 @@ public class RestaurantServiceImpl implements RestaurantService, InternalRestaur
 	}
 
 	@Override
-	public void startLineup(Long restaurantId) {
+	public void _openLineup(Long restaurantId) {
 		RestaurantInfo restaurantInfo = restaurantInfoRepository.findById(restaurantId)
 			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 레스토랑입니다."));
-		restaurantInfo.startLineup();
+		restaurantInfo.openLineup();
 	}
 
 	@Override
-	public void endLineup(Long restaurantId) {
+	public void _closeLineup(Long restaurantId) {
 		RestaurantInfo restaurantInfo = restaurantInfoRepository.findById(restaurantId)
 			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 레스토랑입니다."));
-		restaurantInfo.endLineup();
+		restaurantInfo.closeLineup();
 	}
 }

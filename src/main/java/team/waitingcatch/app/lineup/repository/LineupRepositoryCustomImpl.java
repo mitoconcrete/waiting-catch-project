@@ -39,6 +39,7 @@ public class LineupRepositoryCustomImpl implements LineupRepositoryCustom {
 
 	@Override
 	public List<TodayLineupResponse> findAllBySellerId(Long sellerId) {
+
 		return queryFactory
 			.select(new QTodayLineupResponse(
 				lineup.waitingNumber,
