@@ -30,6 +30,7 @@ dependencies {
     implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 
     runtimeOnly 'com.mysql:mysql-connector-j'
+    runtimeOnly 'com.h2database:h2'
 
     compileOnly group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.2'
     runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.2'
@@ -63,8 +64,7 @@ tasks.named('test') {
 }
 
 clean {
-    delete file('src/main/generated')
-    delete file('src/test/generated_tests')
+    delete ('out', 'src/main/generated', 'src/test/generated_tests')
 }
 
 /* for Continuous Deployment
@@ -72,4 +72,3 @@ jar {
 	enabled = false
 }
  */
-
