@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
-
 import team.waitingcatch.app.common.util.DistanceCalculator;
 import team.waitingcatch.app.common.util.S3Uploader;
 import team.waitingcatch.app.restaurant.dto.restaurant.DeleteRestaurantByAdminServiceRequest;
@@ -59,7 +58,7 @@ public class RestaurantServiceImpl implements RestaurantService, InternalRestaur
 		double latitude = request.getLatitude();
 		double longitude = request.getLongitude();
 
-		return restaurantRepository.findRestaurantsBySearchKeywordsContaining(keyword).stream()
+		return restaurantInfoRepository.findRestaurantsBySearchKeywordsContaining(keyword).stream()
 			.map(response -> new SearchRestaurantsResponse(
 				response, distanceCalculator.distanceInKilometerByHaversine(
 				latitude, longitude, response.getLatitude(), response.getLongitude())))
@@ -70,7 +69,8 @@ public class RestaurantServiceImpl implements RestaurantService, InternalRestaur
 	@Transactional(readOnly = true)
 	public List<RestaurantsWithin3kmRadiusResponse> getRestaurantsWithin3kmRadius(
 		RestaurantsWithin3kmRadiusServiceRequest request) {
-		return restaurantRepository.findRestaurantsByDistance(request.getLatitude(), request.getLongitude()).stream()
+		return restaurantInfoRepository.findRestaurantsByDistance(request.getLatitude(), request.getLongitude())
+			.stream()
 			.map(response -> new RestaurantsWithin3kmRadiusResponse(
 				response, distanceCalculator.distanceInKilometerByHaversine(
 				request.getLatitude(), request.getLongitude(), response.getLatitude(), response.getLongitude())))

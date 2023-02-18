@@ -31,6 +31,7 @@ import team.waitingcatch.app.restaurant.dto.restaurant.SearchRestaurantJpaRespon
 import team.waitingcatch.app.restaurant.dto.restaurant.SearchRestaurantServiceRequest;
 import team.waitingcatch.app.restaurant.dto.restaurant.SearchRestaurantsResponse;
 import team.waitingcatch.app.restaurant.entity.Restaurant;
+import team.waitingcatch.app.restaurant.repository.RestaurantInfoRepository;
 import team.waitingcatch.app.restaurant.repository.RestaurantRepository;
 import team.waitingcatch.app.user.entitiy.User;
 
@@ -39,6 +40,9 @@ class RestaurantServiceImplTest {
 
 	@Mock
 	private RestaurantRepository restaurantRepository;
+
+	@Mock
+	private RestaurantInfoRepository restaurantInfoRepository;
 
 	@Mock
 	private DistanceCalculator distanceCalculator;
@@ -60,8 +64,8 @@ class RestaurantServiceImplTest {
 
 		when(restaurantRepository.findAll()).thenReturn(restaurants);
 		when(restaurant.getUser()).thenReturn(user);
-		when(restaurant.getPosition()).thenReturn(position);
-		when(restaurant.getAddress()).thenReturn(address);
+		// when(restaurant.getPosition()).thenReturn(position);
+		// when(restaurant.getAddress()).thenReturn(address);
 		when(restaurant.getName()).thenReturn("aaaa");
 
 		// when
@@ -80,9 +84,9 @@ class RestaurantServiceImplTest {
 		Address address = mock(Address.class);
 
 		when(restaurant.getName()).thenReturn("aaaa");
-		when(restaurant.getAddress()).thenReturn(address);
-		when(restaurant.getAddress().getProvince()).thenReturn("a");
-		when(restaurant.getAddress().getCity()).thenReturn("A");
+		// when(restaurant.getAddress()).thenReturn(address);
+		// when(restaurant.getAddress().getProvince()).thenReturn("a");
+		// when(restaurant.getAddress().getCity()).thenReturn("A");
 
 		when(restaurantRepository.findById(any(Long.class))).thenReturn(Optional.of(restaurant));
 
@@ -102,9 +106,9 @@ class RestaurantServiceImplTest {
 		Address address = mock(Address.class);
 
 		when(restaurant.getName()).thenReturn("aaaa");
-		when(restaurant.getAddress()).thenReturn(address);
-		when(restaurant.getAddress().getProvince()).thenReturn("a");
-		when(restaurant.getAddress().getCity()).thenReturn("A");
+		// when(restaurant.getAddress()).thenReturn(address);
+		// when(restaurant.getAddress().getProvince()).thenReturn("a");
+		// when(restaurant.getAddress().getCity()).thenReturn("A");
 
 		when(restaurantRepository.findById(any(Long.class))).thenReturn(Optional.of(restaurant));
 
@@ -128,7 +132,7 @@ class RestaurantServiceImplTest {
 		when(jpaResponse.getSearchKeyword()).thenReturn("a a a");
 		when(jpaResponse.getName()).thenReturn("aaa");
 
-		when(restaurantRepository.findRestaurantsBySearchKeywordsContaining(any(String.class))).thenReturn(
+		when(restaurantInfoRepository.findRestaurantsBySearchKeywordsContaining(any(String.class))).thenReturn(
 			jpaResponses);
 
 		// when
@@ -155,7 +159,7 @@ class RestaurantServiceImplTest {
 		when(jpaResponse.getLongitude()).thenReturn(0.0);
 		when(distanceCalculator.distanceInKilometerByHaversine(
 			0.0, 0.0, 0.0, 0.0)).thenReturn(0.0);
-		when(restaurantRepository.findRestaurantsByDistance(any(double.class), any(double.class))).thenReturn(
+		when(restaurantInfoRepository.findRestaurantsByDistance(any(double.class), any(double.class))).thenReturn(
 			jpaResponses);
 
 		// when

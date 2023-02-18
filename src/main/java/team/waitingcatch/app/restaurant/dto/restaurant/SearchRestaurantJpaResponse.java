@@ -1,5 +1,7 @@
 package team.waitingcatch.app.restaurant.dto.restaurant;
 
+import com.querydsl.core.annotations.QueryProjection;
+
 import lombok.Getter;
 import team.waitingcatch.app.common.Position;
 
@@ -14,6 +16,7 @@ public class SearchRestaurantJpaResponse {
 	private final int currentWaitingNumber;
 	private final boolean isLineupActive;
 
+	@QueryProjection
 	public SearchRestaurantJpaResponse(String name, String images, float rate, String searchKeyword,
 		Position position, int currentWaitingNumber, boolean isLineupActive) {
 		this.name = name;
