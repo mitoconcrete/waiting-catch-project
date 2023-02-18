@@ -3,7 +3,6 @@ package team.waitingcatch.app.restaurant.controller;
 import java.util.List;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,33 +17,33 @@ import team.waitingcatch.app.restaurant.dto.blacklist.GetRequestBlackListRespons
 import team.waitingcatch.app.restaurant.dto.blacklist.RequestUserBlackListByRestaurantControllerRequest;
 import team.waitingcatch.app.restaurant.dto.blacklist.RequestUserBlackListByRestaurantServiceRequest;
 import team.waitingcatch.app.restaurant.service.requestblacklist.BlackListRequestService;
+import team.waitingcatch.app.user.entitiy.UserDetailsImpl;
 
 @RestController
 @RequiredArgsConstructor
 public class RequestBlackListController {
 
 	private final BlackListRequestService blackListRequestService;
-
 	//판매자 권한 부분
 
 	//판매자->관리자에게 고객 블랙리스트 추가 요청
-	@PostMapping("/seller/blacklist/{userId}")
+	@PostMapping("/seller/blacklist-request/{userId}")
 	public void requestUserBlackListByRestaurant(
 		@RequestBody RequestUserBlackListByRestaurantControllerRequest demandSignUpControllerRequest,
 		@PathVariable Long userId,
-		@AuthenticationPrincipal UserDetails userDetails) {
+		@AuthenticationPrincipal UserDetailsImpl userDetails) {
 
 		RequestUserBlackListByRestaurantServiceRequest requestUserBlackListByRestaurantServiceRequest
 			= new RequestUserBlackListByRestaurantServiceRequest(
-			demandSignUpControllerRequest.getDescription(), userId, userDetails.getUsername());
+			demandSignUpControllerRequest.getDescription(), userId, userDetails.getId());
 		blackListRequestService.requestUserBlackList(requestUserBlackListByRestaurantServiceRequest);
 	}
 
-	@PutMapping("/seller/blacklist/{userId}")
-	public void cancelRequestUserBlackListByRestaurant(@PathVariable Long userId,
-		@AuthenticationPrincipal UserDetails userDetails) {
+	@PutMapping("/seller/blacklist-request/{requestBlackListId}")
+	public void cancelRequestUserBlackListByRestaurant(@PathVariable Long requestBlackListId,
+		@AuthenticationPrincipal UserDetailsImpl userDetails) {
 		CancelRequestUserBlackListByRestaurantServiceRequest cancelRequestUserBlackListByRestaurantServiceRequest
-			= new CancelRequestUserBlackListByRestaurantServiceRequest(userId, userDetails.getUsername());
+			= new CancelRequestUserBlackListByRestaurantServiceRequest(requestBlackListId, userDetails.getId());
 		blackListRequestService.cancelRequestUserBlackList(cancelRequestUserBlackListByRestaurantServiceRequest);
 	}
 

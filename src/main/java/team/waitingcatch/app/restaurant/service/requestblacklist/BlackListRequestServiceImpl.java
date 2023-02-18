@@ -13,6 +13,7 @@ import team.waitingcatch.app.restaurant.dto.blacklist.GetRequestBlackListRespons
 import team.waitingcatch.app.restaurant.dto.blacklist.RequestUserBlackListByRestaurantServiceRequest;
 import team.waitingcatch.app.restaurant.entity.BlackListRequest;
 import team.waitingcatch.app.restaurant.entity.Restaurant;
+import team.waitingcatch.app.restaurant.enums.AcceptedStatusEnum;
 import team.waitingcatch.app.restaurant.repository.BlackListRequestRepository;
 import team.waitingcatch.app.restaurant.repository.RestaurantRepository;
 import team.waitingcatch.app.restaurant.service.blacklist.InternalBlackListService;
@@ -32,19 +33,28 @@ public class BlackListRequestServiceImpl implements BlackListRequestService, Int
 	//판매자가 한명의 고객을 블랙리스트 요청을 한다.
 	public void requestUserBlackList(
 		RequestUserBlackListByRestaurantServiceRequest requestUserBlackListByRestaurantServiceRequest) {
-		// 리팩토링 필요함
-		//	User user = internalUserService._findById(requestUserBlackListByRestaurantServiceRequest.getUserId());
 		User user = userRepository.findById(requestUserBlackListByRestaurantServiceRequest.getUserId()).orElseThrow();
-		if (user.getRole() == UserRoleEnum.SELLER) {
+		if (user.getRole() == UserRoleEnum.SELLER || user.getRole() == UserRoleEnum.ADMIN) {
 			throw new IllegalArgumentException("잘못된 요청입니다.");
 		}
-		//Internal service 내부로직에서 중복체크를 해주면 여기서 따로 해줄 필요가 없음.
-		// 리팩토링 필요함
-		//Restaurant restaurant = internalRestaurantService._findBySellerName(
-		// 	requestUserBlackListByRestaurantServiceRequest.getSellerName());
+		List<BlackListRequest> blackListRequestCheck = blackListRequestRepository.findByUser_IdAndRestaurant_User_Id(
+			requestUserBlackListByRestaurantServiceRequest.getUserId(),
+			requestUserBlackListByRestaurantServiceRequest.getSellerId()
+		);
 
-		Restaurant restaurant = restaurantRepository.findByUser_Username(
-				requestUserBlackListByRestaurantServiceRequest.getSellerName())
+		if (blackListRequestCheck.size() >= 1) {
+			for (BlackListRequest blackListRequest : blackListRequestCheck) {
+				if (blackListRequest.getStatus() == AcceptedStatusEnum.WAIT) {
+					throw new IllegalArgumentException("이미 해당유저의 블랙리스트 요청을 하셨습니다.");
+				}
+				if (blackListRequest.getStatus() == AcceptedStatusEnum.APPROVAL) {
+					throw new IllegalArgumentException("이미 해당유저의 블랙리스트 승인을 하였습니다.");
+				}
+			}
+		}
+
+		Restaurant restaurant = restaurantRepository.findByUserId(
+				requestUserBlackListByRestaurantServiceRequest.getSellerId())
 			.orElseThrow(() -> new IllegalArgumentException("Not found restaurant"));
 
 		BlackListRequest blackListRequest = new BlackListRequest(restaurant, user,
@@ -55,10 +65,10 @@ public class BlackListRequestServiceImpl implements BlackListRequestService, Int
 	//판매자가 요청한 한명의 고객의 블랙리스트 요청을 판매자가 취소한다.
 	public void cancelRequestUserBlackList(
 		CancelRequestUserBlackListByRestaurantServiceRequest cancelRequestUserBlackListByRestaurantServiceRequest) {
-		BlackListRequest blackListRequest = blackListRequestRepository.findByUser_IdAndRestaurant_User_Username(
-				cancelRequestUserBlackListByRestaurantServiceRequest.getUserId(),
-				cancelRequestUserBlackListByRestaurantServiceRequest.getSellerName())
-			.orElseThrow(() -> new IllegalArgumentException("Not found request blacklist"));
+		BlackListRequest blackListRequest = blackListRequestRepository.findByIdAndRestaurantUserId(
+				cancelRequestUserBlackListByRestaurantServiceRequest.getRequestBlackListId(),
+				cancelRequestUserBlackListByRestaurantServiceRequest.getSellerId())
+			.orElseThrow(() -> new IllegalArgumentException("Not found black list request"));
 		blackListRequest.checkWaitingStatus();
 		blackListRequest.updateCancelStatus();
 	}
@@ -73,6 +83,7 @@ public class BlackListRequestServiceImpl implements BlackListRequestService, Int
 	}
 
 	public void approveBlackListRequest(ApproveBlackListServiceRequest approveBlackListServiceRequest) {
+
 		BlackListRequest blackListRequest = blackListRequestRepository.findById(
 				approveBlackListServiceRequest.getBlackListRequestId())
 			.orElseThrow(() -> new IllegalArgumentException("Not found black list request"));

@@ -36,6 +36,13 @@ public class RestaurantInfo extends TimeStamped {
 	@Column(nullable = false)
 	private int accumulateCount;
 
+	public RestaurantInfo(Long restaurantId, String openTime, String closeTime) {
+		this.restaurantId = restaurantId;
+		this.openTime = openTime;
+		this.closeTime = closeTime;
+		this.accumulateCount = 0;
+	}
+
 	public void updateRestaurantInfo(UpdateRestaurantEntityRequest updateRestaurantEntityRequest) {
 		this.openTime = updateRestaurantEntityRequest.getOpenTime();
 		this.closeTime = updateRestaurantEntityRequest.getCloseTime();

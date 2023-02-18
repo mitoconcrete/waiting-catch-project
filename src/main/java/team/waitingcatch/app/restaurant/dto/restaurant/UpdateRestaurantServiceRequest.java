@@ -11,7 +11,6 @@ import lombok.Getter;
 @Getter
 public class UpdateRestaurantServiceRequest {
 
-	@NotNull
 	private final List<MultipartFile> files;
 	@NotNull
 	private final String phoneNumber;
@@ -20,19 +19,19 @@ public class UpdateRestaurantServiceRequest {
 	@NotNull
 	private final String description;
 	@NotNull
-	private final String sellerName;
+	private final Long sellerId;
 	@NotNull
-	private String openTime;
+	private final String openTime;
 	@NotNull
-	private String closeTime;
+	private final String closeTime;
 
 	public UpdateRestaurantServiceRequest(UpdateRestaurantControllerRequest updateRestaurantControllerRequest,
-		List<MultipartFile> multipartFile, String username) {
+		List<MultipartFile> multipartFile, Long userId) {
 		this.files = multipartFile;
 		this.phoneNumber = updateRestaurantControllerRequest.getPhoneNumber();
 		this.capacity = updateRestaurantControllerRequest.getCapacity();
 		this.description = updateRestaurantControllerRequest.getDescription();
-		this.sellerName = username;
+		this.sellerId = userId;
 		this.openTime = updateRestaurantControllerRequest.getOpenTime();
 		this.closeTime = updateRestaurantControllerRequest.getCloseTime();
 	}

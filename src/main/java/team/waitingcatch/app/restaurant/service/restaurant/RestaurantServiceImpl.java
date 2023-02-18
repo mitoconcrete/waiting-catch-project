@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.common.util.S3Uploader;
@@ -54,34 +55,45 @@ public class RestaurantServiceImpl implements RestaurantService, InternalRestaur
 	@Override
 	public void deleteRestaurantByAdmin(DeleteRestaurantByAdminServiceRequest deleteRestaurantByAdminServiceRequest) {
 		Restaurant restaurant = _getRestaurant(deleteRestaurantByAdminServiceRequest.getRestaurantId());
+		String transferToString[] = restaurant.getImages().split(",");
+		for (int i = 0; i < transferToString.length; i++) {
+			s3Uploader.deleteS3(transferToString[i]);
+		}
 		restaurant.deleteRestaurant();
 	}
 
+	// 현재 있는 것은
+
+	//업데이트시 -> 현재 있는것은 1.있는것 2. 있는것 3. 새로 4.새로
+	//업데이트시 -> 현재 있는것은 1.새로 2. 새로 3. 새로 4.새로
 	@Override
 	public void updateRestaurant(UpdateRestaurantServiceRequest updateRestaurantServiceRequest) throws IOException {
-		Restaurant restaurant = restaurantRepository.findByUser_Username(
-				updateRestaurantServiceRequest.getSellerName())
+		Restaurant restaurant = restaurantRepository.findByUserId(updateRestaurantServiceRequest.getSellerId())
 			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 레스토랑 입니다."));
 		RestaurantInfo restaurantInfo = restaurantInfoRepository.findById(restaurant.getId())
 			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 레스토랑 정보입니다."));
-
-		// 파일 업로드(여러개) 처리 부분
-
 		String imageName = "";
-
-		List<String> imageUrls = s3Uploader.uploadList(updateRestaurantServiceRequest.getFiles(), "restaurant");
-		for (String imageUrl : imageUrls) {
-			if (Objects.equals(imageUrl, "기본값")) {
-				imageName += "기본값" + ",";
+		if (updateRestaurantServiceRequest.getFiles().size() >= 1) {
+			for (MultipartFile multipartFile : updateRestaurantServiceRequest.getFiles()) {
+				String originalName = multipartFile.getOriginalFilename();
+				if (Objects.equals(originalName, "기본값")) {
+					System.out.println("변화없음");
+				} else {
+					String imageUrls = s3Uploader.upload(multipartFile, "restaurant");
+					imageName += imageUrls + ",";
+				}
+				String lastCommaCutURL = imageName.substring(0, imageName.length() - 1);
+				UpdateRestaurantEntityRequest updateRestaurantEntityRequest = new UpdateRestaurantEntityRequest(
+					updateRestaurantServiceRequest, lastCommaCutURL);
+				restaurant.updateRestaurant(updateRestaurantEntityRequest);
+				restaurantInfo.updateRestaurantInfo(updateRestaurantEntityRequest);
 			}
-			imageName += imageUrl + ",";
 		}
-		String lastCommaCutURL = imageName.substring(0, imageName.length() - 1);
-
 		UpdateRestaurantEntityRequest updateRestaurantEntityRequest = new UpdateRestaurantEntityRequest(
-			updateRestaurantServiceRequest, lastCommaCutURL);
+			updateRestaurantServiceRequest, "기본URL");
 		restaurant.updateRestaurant(updateRestaurantEntityRequest);
 		restaurantInfo.updateRestaurantInfo(updateRestaurantEntityRequest);
+
 	}
 
 	@Override

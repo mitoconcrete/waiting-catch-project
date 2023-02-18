@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.List;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,6 +22,7 @@ import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantResponse;
 import team.waitingcatch.app.restaurant.dto.restaurant.UpdateRestaurantControllerRequest;
 import team.waitingcatch.app.restaurant.dto.restaurant.UpdateRestaurantServiceRequest;
 import team.waitingcatch.app.restaurant.service.restaurant.RestaurantService;
+import team.waitingcatch.app.user.entitiy.UserDetailsImpl;
 
 @RestController
 @RequiredArgsConstructor
@@ -48,11 +48,13 @@ public class RestaurantController {
 	@PutMapping("/restaurant/info")
 	public void updateRestaurant(
 		@RequestPart("updateRestaurantRequest") UpdateRestaurantControllerRequest updateRestaurantControllerRequest,
-		@RequestPart("images") List<MultipartFile> multipartFile,
-		@AuthenticationPrincipal UserDetails userDetails) throws IOException {
+		@RequestPart(value = "images", required = false) List<MultipartFile> multipartFile,
+		@AuthenticationPrincipal UserDetailsImpl userDetails) throws IOException {
+
+		System.out.println("###################확인해보기널값 레스토랑54" + multipartFile);
 		UpdateRestaurantServiceRequest updateRestaurantServiceRequest =
 			new UpdateRestaurantServiceRequest(updateRestaurantControllerRequest, multipartFile,
-				userDetails.getUsername());
+				userDetails.getId());
 
 		restaurantService.updateRestaurant(updateRestaurantServiceRequest);
 	}

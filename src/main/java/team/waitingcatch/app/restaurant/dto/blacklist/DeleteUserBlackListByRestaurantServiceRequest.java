@@ -7,12 +7,12 @@ import lombok.Getter;
 @Getter
 public class DeleteUserBlackListByRestaurantServiceRequest {
 	@NotNull
-	private final Long userId;
+	private final Long blacklistId;
 	@NotNull
-	private final String sellerName;
+	private final Long sellerId;
 
-	public DeleteUserBlackListByRestaurantServiceRequest(Long userId, String sellerName) {
-		this.userId = userId;
-		this.sellerName = sellerName;
+	public DeleteUserBlackListByRestaurantServiceRequest(Long blacklistId, Long sellerId) {
+		this.blacklistId = blacklistId;
+		this.sellerId = sellerId;
 	}
 }
