@@ -53,7 +53,7 @@ public class User extends TimeStamped {
 
 	@Column(nullable = false)
 	private boolean isBanned;
-	
+
 	@Column(nullable = false)
 	private boolean isDeleted;
 

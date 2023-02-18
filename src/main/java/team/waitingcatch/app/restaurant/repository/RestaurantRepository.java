@@ -14,7 +14,7 @@ import team.waitingcatch.app.restaurant.entity.Restaurant;
 public interface RestaurantRepository extends JpaRepository<Restaurant, Long> {
 	Optional<Restaurant> findByUserId(Long userId);
 
-	Restaurant findByUser_Username(String sellerName);
+	Optional<Restaurant> findByUser_Username(String sellerName);
 
 	@Query(value = "select new team.waitingcatch.app.restaurant.dto.restaurant.SearchRestaurantJpaResponse("
 		+ "r.name, r.images, i.rate, r.searchKeywords, r.position, i.currentWaitingNumber, i.isLineupActiveStatus) "
