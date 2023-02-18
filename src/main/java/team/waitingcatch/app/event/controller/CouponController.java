@@ -174,4 +174,10 @@ public class CouponController {
 
 		userCouponService.createUserCoupon(createUserCouponserviceRequest);
 	}
+
+	//유저 쿠폰 조회
+	@PostMapping("/customer/coupons")
+	public void GetUserCoupon(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+		userCouponService.getUserCoupon(userDetails.getUser());
+	}
 }
