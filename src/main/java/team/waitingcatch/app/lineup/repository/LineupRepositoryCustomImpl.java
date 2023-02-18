@@ -10,7 +10,9 @@ import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import lombok.RequiredArgsConstructor;
+import team.waitingcatch.app.lineup.dto.CallCustomerInfoResponse;
 import team.waitingcatch.app.lineup.dto.PastLineupResponse;
+import team.waitingcatch.app.lineup.dto.QCallCustomerInfoResponse;
 import team.waitingcatch.app.lineup.dto.QPastLineupResponse;
 import team.waitingcatch.app.lineup.dto.QTodayLineupResponse;
 import team.waitingcatch.app.lineup.dto.TodayLineupResponse;
@@ -57,5 +59,16 @@ public class LineupRepositoryCustomImpl implements LineupRepositoryCustom {
 			))
 			.orderBy(lineup.waitingNumber.asc())
 			.fetch();
+	}
+
+	@Override
+	public CallCustomerInfoResponse findCallCustomerInfoById(Long lineupId) {
+		return queryFactory
+			.select(new QCallCustomerInfoResponse(user.phoneNumber, restaurant.name, lineup.waitingNumber))
+			.from(lineup)
+			.join(lineup.user, user)
+			.join(lineup.restaurant, restaurant)
+			.where(lineup.id.eq(lineupId))
+			.fetchOne();
 	}
 }
