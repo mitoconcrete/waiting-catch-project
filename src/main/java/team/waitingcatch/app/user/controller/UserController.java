@@ -31,6 +31,7 @@ import team.waitingcatch.app.user.dto.LogoutRequest;
 import team.waitingcatch.app.user.dto.UpdateUserControllerRequest;
 import team.waitingcatch.app.user.dto.UpdateUserServiceRequest;
 import team.waitingcatch.app.user.dto.UserInfoResponse;
+import team.waitingcatch.app.user.entitiy.UserDetailsImpl;
 import team.waitingcatch.app.user.enums.UserRoleEnum;
 import team.waitingcatch.app.user.service.UserService;
 
@@ -42,14 +43,14 @@ public class UserController {
 	private final UserService userService;
 
 	// global
-	@PostMapping({"/customer/login", "/seller/login", "/admin/login"})
-	public void login(@RequestBody LoginRequest loginRequest, HttpServletResponse response) {
+	@PostMapping({"/customer/signin", "/seller/signin", "/admin/signin"})
+	public void login(@RequestBody @Valid LoginRequest loginRequest, HttpServletResponse response) {
 		LoginServiceResponse loginServiceResponse = userService.login(loginRequest);
 		// 엑세스 토큰을 서비스로 부터 반환 받아 헤더에 넣어준다.
 		response.setHeader(JwtUtil.AUTHORIZATION_HEADER, loginServiceResponse.getAccessToken());
 	}
 
-	@PostMapping({"/customer/logout", "/seller/logout", "/admin/logout"})
+	@PostMapping({"/customer/signout", "/seller/signout", "/admin/signout"})
 	public void logout(HttpServletRequest request) {
 		String token = jwtUtil.resolveToken(request);
 		LogoutRequest servicePayload = new LogoutRequest(token);
@@ -57,6 +58,11 @@ public class UserController {
 	}
 
 	// customer
+	@GetMapping("/customer/info")
+	public UserInfoResponse getCustomer(@AuthenticationPrincipal UserDetails userDetails) {
+		return new UserInfoResponse(((UserDetailsImpl)userDetails).getUser());
+	}
+
 	@DeleteMapping("/customer/withdraw")
 	public void withdrawCustomer(@AuthenticationPrincipal UserDetails userDetails) {
 		DeleteUserRequest servicePayload = new DeleteUserRequest(userDetails.getUsername());
@@ -83,7 +89,7 @@ public class UserController {
 
 	@PutMapping("/seller/info")
 	public void updateSellerInfo(@AuthenticationPrincipal UserDetails userDetails, @RequestBody
-		UpdateUserControllerRequest controllerRequest) {
+	@Valid UpdateUserControllerRequest controllerRequest) {
 		UpdateUserServiceRequest servicePayload = new UpdateUserServiceRequest(controllerRequest.getName(),
 			controllerRequest.getEmail(), userDetails.getUsername(), controllerRequest.getNickName(),
 			controllerRequest.getPhoneNumber());
