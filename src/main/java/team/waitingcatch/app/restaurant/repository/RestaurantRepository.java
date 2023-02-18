@@ -18,23 +18,24 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, Long> {
 
 	@Query(value = "select new team.waitingcatch.app.restaurant.dto.restaurant.SearchRestaurantJpaResponse("
 		+ "r.name, r.images, i.rate, r.searchKeywords, r.position, i.currentWaitingNumber, i.isLineupActiveStatus) "
-		+ "from Restaurant r join fetch RestaurantInfo i on r.id = i.restaurantId "
+		+ "from Restaurant r join fetch RestaurantInfo i on r.id = i.restaurant.id "
 		+ "where r.searchKeywords like %:keyword%")
 	List<SearchRestaurantJpaResponse> findRestaurantsBySearchKeywordsContaining(String keyword);
 
-	@Query(value = "select new team.waitingcatch.app.restaurant.dto.restaurant.RestaurantsWithin3kmRadiusJpaResponse("
-		+ "r.name, r.images, i.rate, r.searchKeywords, r.position, i.currentWaitingNumber, i.isLineupActiveStatus) "
-		+ "from Restaurant r join fetch RestaurantInfo i on r.id = i.restaurantId "
-		+ "where (6371 * acos(cos(radians(:latitude)) * cos(radians(r.position.latitude)) "
-		+ "* cos(radians(r.position.longitude) - radians(:longitude)) + sin(radians(:latitude)) "
-		+ "* sin(radians(r.position.latitude)))) < 3")
-	List<RestaurantsWithin3kmRadiusJpaResponse> findRestaurantsByDistance(
-		@Param("latitude") double latitude, @Param("longitude") double longitude);
-
-	// @Query("select r, "
-	// 	+ "ST_Distance_Sphere(Point(:latitude, :longitude), Point(r.position.latitude, r.position.longitude)) "
-	// 	+ "as distance from Restaurant r where distance < 3000")
-	// List<Restaurant> findRestaurantsByDistance(
+	// @Query(value = "select new team.waitingcatch.app.restaurant.dto.restaurant.RestaurantsWithin3kmRadiusJpaResponse("
+	// 	+ "r.name, r.images, i.rate, r.searchKeywords, r.position, i.currentWaitingNumber, i.isLineupActiveStatus) "
+	// 	+ "from Restaurant r join fetch RestaurantInfo i on r.id = i.restaurant.id "
+	// 	+ "where (6371 * acos(cos(radians(:latitude)) * cos(radians(r.position.latitude)) "
+	// 	+ "* cos(radians(r.position.longitude) - radians(:longitude)) + sin(radians(:latitude)) "
+	// 	+ "* sin(radians(r.position.latitude)))) < 3")
+	// List<RestaurantsWithin3kmRadiusJpaResponse> findRestaurantsByDistance(
 	// 	@Param("latitude") double latitude, @Param("longitude") double longitude);
 
+	//
+	@Query("select new team.waitingcatch.app.restaurant.dto.restaurant.RestaurantsWithin3kmRadiusJpaResponse("
+		+ "r.name, r.images, i.rate, r.searchKeywords, r.position, i.currentWaitingNumber, i.isLineupActiveStatus) "
+		+ "from Restaurant r join fetch RestaurantInfo i on r.id = i.restaurant.id "
+		+ "where ST_Distance_Sphere(Point(:longitude, :latitude), Point(r.position.longitude, r.position.latitude)) / 1000 < 3")
+	List<RestaurantsWithin3kmRadiusJpaResponse> findRestaurantsByDistance(
+		@Param("latitude") double latitude, @Param("longitude") double longitude);
 }
