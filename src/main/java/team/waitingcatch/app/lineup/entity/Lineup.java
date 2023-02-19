@@ -62,12 +62,18 @@ public class Lineup extends TimeStamped {
 	}
 
 	public ArrivalStatusEnum updateStatus(ArrivalStatusEnum status) {
+		if (this.status == ArrivalStatusEnum.CANCEL) {
+			throw new IllegalArgumentException("이미 취소된 줄서기입니다.");
+		}
+		if (this.status == ArrivalStatusEnum.ARRIVE) {
+			throw new IllegalArgumentException("이미 완료된 줄서기입니다.");
+		}
+
 		if (status == ArrivalStatusEnum.CALL) {
 			if (callCount > 3) {
 				throw new IllegalArgumentException("호출은 최대 3번까지 가능합니다.");
 			}
-		} else if (status == ArrivalStatusEnum.ARRIVE) {
-			requestReview();
+			callCount++;
 		}
 		this.status = status;
 		return this.status;
@@ -77,12 +83,12 @@ public class Lineup extends TimeStamped {
 		isReviewed = true;
 	}
 
-	public void requestReview() {
-
-	}
-
 	public boolean isSameRestaurant(Restaurant restaurant) {
 		return this.restaurant.getId().equals(restaurant.getId());
+	}
+
+	public Long getUserId() {
+		return user.getId();
 	}
 
 	private Lineup(StartLineupEntityRequest entityRequest) {

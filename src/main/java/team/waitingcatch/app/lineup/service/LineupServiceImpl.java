@@ -17,9 +17,10 @@ import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.common.util.sms.SmsService;
 import team.waitingcatch.app.common.util.sms.dto.MessageRequest;
 import team.waitingcatch.app.lineup.dto.CallCustomerInfoResponse;
+import team.waitingcatch.app.lineup.dto.CancelWaitingRequest;
 import team.waitingcatch.app.lineup.dto.LineupRecordWithTypeResponse;
 import team.waitingcatch.app.lineup.dto.StartLineupEntityRequest;
-import team.waitingcatch.app.lineup.dto.StartLineupServiceRequest;
+import team.waitingcatch.app.lineup.dto.StartWaitingServiceRequest;
 import team.waitingcatch.app.lineup.dto.TodayLineupResponse;
 import team.waitingcatch.app.lineup.dto.UpdateArrivalStatusServiceRequest;
 import team.waitingcatch.app.lineup.entity.Lineup;
@@ -53,27 +54,39 @@ public class LineupServiceImpl implements LineupService, InternalLineupService {
 	}
 
 	@Override
-	public void startWaiting(StartLineupServiceRequest serviceRequest) {
+	public void startWaiting(StartWaitingServiceRequest serviceRequest) {
 		Long restaurantId = serviceRequest.getRestaurantId();
 		Restaurant restaurant = internalRestaurantService._getRestaurant(restaurantId);
-		// if (isLineupActive()) RestaurantInfo 수정 후 추가
+		// if (isLineupActive()) RestaurantInfo merge 후 추가
+		// if (isBlackList())
 		Integer lastWaitingNumber = lineupRepository.findLastWaitingNumberByRestaurantId(restaurantId);
-		StartLineupEntityRequest entityRequest = new StartLineupEntityRequest(serviceRequest, restaurant,
-			lastWaitingNumber);
+		int waitingNumber = getWaitingNumber(lastWaitingNumber);
+		StartLineupEntityRequest entityRequest = new StartLineupEntityRequest(serviceRequest, restaurant, waitingNumber);
 		Lineup lineup = Lineup.createLineup(entityRequest);
 		lineupRepository.save(lineup);
+		// restaurant.addLineupCount() RestaurantInfo merge 후 추가
+	}
+
+	@Override
+	public void cancelWaiting(CancelWaitingRequest request) {
+		Lineup lineup = lineupRepository.findByUserIdAndRestaurantIdAndStatus(request.getUserId(),
+				request.getRestaurantId(), ArrivalStatusEnum.WAIT)
+			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 줄서기입니다."));
+		lineup.updateStatus(ArrivalStatusEnum.CANCEL);
+
+		// restaurant.subtractLineupCount() RestaurantInfo merge 후 추가
 	}
 
 	@Transactional(readOnly = true)
 	@Override
 	public List<TodayLineupResponse> getLineups(Long sellerId) {
-		return lineupRepository.findAllBySellerId(sellerId);
+		return lineupRepository.findAllTodayBySellerId(sellerId);
 	}
 
 	@Transactional(readOnly = true)
 	@Override
-	public List<LineupRecordWithTypeResponse> getPastLineups(Long userId) {
-		List<LineupRecordWithTypeResponse> todayLineupList = lineupRepository.findAllByUserId(userId)
+	public List<LineupRecordWithTypeResponse> getLineupRecords(Long userId) {
+		List<LineupRecordWithTypeResponse> todayLineupList = lineupRepository.findAllRecordByUserId(userId)
 			.stream()
 			.map(lineupRecord -> LineupRecordWithTypeResponse.of(lineupRecord, StoredLineupTableNameEnum.LINEUP))
 			.collect(Collectors.toList());
@@ -88,15 +101,20 @@ public class LineupServiceImpl implements LineupService, InternalLineupService {
 
 	@Override
 	public void updateArrivalStatus(UpdateArrivalStatusServiceRequest serviceRequest) {
-		Lineup restaurantInCustomer = _getById(serviceRequest.getLineupId());
+		Lineup restaurantInCustomer = _getByIdWithUser(serviceRequest.getLineupId());
 		Restaurant restaurantBySeller = internalRestaurantService._getRestaurantByUserId(serviceRequest.getSellerId());
 		if (!restaurantInCustomer.isSameRestaurant(restaurantBySeller)) {
 			throw new IllegalArgumentException("현재 레스토랑의 손님이 아닙니다.");
 		}
 
-		ArrivalStatusEnum updateStatus = restaurantInCustomer.updateStatus(serviceRequest.getStatus());
-		if (updateStatus == ArrivalStatusEnum.CALL) {
+		ArrivalStatusEnum updatedStatus = restaurantInCustomer.updateStatus(serviceRequest.getStatus());
+		if (updatedStatus == ArrivalStatusEnum.CALL) {
 			callCustomer(restaurantInCustomer.getId());
+		} else if (updatedStatus == ArrivalStatusEnum.ARRIVE) {
+			lineupRepository.findAllByUserId(restaurantInCustomer.getUserId())
+				.stream()
+				.filter(lineup -> lineup.getStatus() == (ArrivalStatusEnum.WAIT))
+				.forEach(lineup -> lineup.updateStatus(ArrivalStatusEnum.CANCEL));
 		}
 	}
 
@@ -115,9 +133,19 @@ public class LineupServiceImpl implements LineupService, InternalLineupService {
 		}
 	}
 
+	private int getWaitingNumber(Integer lastWaitingNumber) {
+		return lastWaitingNumber != null ? lastWaitingNumber + 1 : 1;
+	}
+
 	@Transactional(readOnly = true)
 	@Override
 	public Lineup _getById(Long id) {
 		return lineupRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 줄서기입니다."));
+	}
+
+	@Override
+	public Lineup _getByIdWithUser(Long id) {
+		return lineupRepository.findByIdWithUser(id)
+			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 줄서기입니다."));
 	}
 }

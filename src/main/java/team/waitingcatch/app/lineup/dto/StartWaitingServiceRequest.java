@@ -8,7 +8,7 @@ import team.waitingcatch.app.user.entitiy.User;
 
 @Getter
 @RequiredArgsConstructor
-public class StartLineupServiceRequest {
+public class StartWaitingServiceRequest {
 	private final User user;
 	private final long restaurantId;
 	private final int numOfMembers;

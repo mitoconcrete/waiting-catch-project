@@ -16,12 +16,12 @@ public class StartLineupEntityRequest {
 	private final int numOfMembers;
 	private final LocalDateTime startAt;
 
-	public StartLineupEntityRequest(StartLineupServiceRequest serviceRequest, Restaurant restaurant,
-		Integer lastWaitingNumber) {
+	public StartLineupEntityRequest(StartWaitingServiceRequest serviceRequest, Restaurant restaurant,
+		int waitingNumber) {
 
 		this.user = serviceRequest.getUser();
 		this.restaurant = restaurant;
-		this.waitingNumber = lastWaitingNumber != null ? lastWaitingNumber + 1 : 1;
+		this.waitingNumber = waitingNumber;
 		this.numOfMembers = serviceRequest.getNumOfMembers();
 		this.startAt = serviceRequest.getStartAt();
 	}

@@ -1,5 +1,6 @@
 package team.waitingcatch.app.lineup.repository;
 
+import static com.querydsl.jpa.JPAExpressions.*;
 import static team.waitingcatch.app.lineup.entity.QLineup.*;
 import static team.waitingcatch.app.restaurant.entity.QRestaurant.*;
 import static team.waitingcatch.app.user.entitiy.QUser.*;
@@ -22,7 +23,7 @@ public class LineupRepositoryCustomImpl implements LineupRepositoryCustom {
 	private final JPAQueryFactory queryFactory;
 
 	@Override
-	public List<LineupRecordResponse> findAllByUserId(Long userId) {
+	public List<LineupRecordResponse> findAllRecordByUserId(Long userId) {
 		return queryFactory
 			.select(new QLineupRecordResponse(
 				lineup.id,
@@ -42,7 +43,7 @@ public class LineupRepositoryCustomImpl implements LineupRepositoryCustom {
 	}
 
 	@Override
-	public List<TodayLineupResponse> findAllBySellerId(Long sellerId) {
+	public List<TodayLineupResponse> findAllTodayBySellerId(Long sellerId) {
 		return queryFactory
 			.select(new QTodayLineupResponse(
 				lineup.waitingNumber,
@@ -53,8 +54,7 @@ public class LineupRepositoryCustomImpl implements LineupRepositoryCustom {
 				lineup.arrivedAt))
 			.from(lineup)
 			.where(lineup.restaurant.id.eq(
-				JPAExpressions
-					.select(restaurant.id)
+				select(restaurant.id)
 					.from(restaurant)
 					.where(user.id.eq(sellerId))
 			))

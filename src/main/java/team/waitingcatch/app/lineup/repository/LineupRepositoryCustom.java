@@ -7,9 +7,9 @@ import team.waitingcatch.app.lineup.dto.LineupRecordResponse;
 import team.waitingcatch.app.lineup.dto.TodayLineupResponse;
 
 public interface LineupRepositoryCustom {
-	List<LineupRecordResponse> findAllByUserId(Long userId);
+	List<LineupRecordResponse> findAllRecordByUserId(Long userId);
 
-	List<TodayLineupResponse> findAllBySellerId(Long sellerId);
+	List<TodayLineupResponse> findAllTodayBySellerId(Long sellerId);
 
 	CallCustomerInfoResponse findCallCustomerInfoById(Long lineupId);
 }
