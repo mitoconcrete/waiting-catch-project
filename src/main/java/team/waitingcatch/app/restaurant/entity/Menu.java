@@ -12,6 +12,8 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import team.waitingcatch.app.common.entity.TimeStamped;
+import team.waitingcatch.app.restaurant.dto.menu.CreateMenuEntityRequest;
+import team.waitingcatch.app.restaurant.dto.menu.UpdateMenuEntityRequest;
 
 @Entity
 @Getter
@@ -33,4 +35,21 @@ public class Menu extends TimeStamped {
 	private int price;
 
 	private String images;
+
+	public Menu(Restaurant restaurant, String name, int price, String images) {
+		this.restaurant = restaurant;
+		this.name = name;
+		this.price = price;
+		this.images = images;
+	}
+
+	public static Menu create(CreateMenuEntityRequest request) {
+		return new Menu(request.getRestaurant(), request.getName(), request.getPrice(), request.getImage());
+	}
+
+	public void update(UpdateMenuEntityRequest request) {
+		this.name = request.getName();
+		this.price = request.getPrice();
+		this.images = request.getImageUrl();
+	}
 }

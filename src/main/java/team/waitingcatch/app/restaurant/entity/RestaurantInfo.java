@@ -10,6 +10,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import team.waitingcatch.app.common.entity.TimeStamped;
+import team.waitingcatch.app.restaurant.dto.restaurant.UpdateRestaurantEntityRequest;
 
 @Entity
 @Getter
@@ -34,4 +35,9 @@ public class RestaurantInfo extends TimeStamped {
 
 	@Column(nullable = false)
 	private int accumulateCount;
+
+	public void updateRestaurantInfo(UpdateRestaurantEntityRequest updateRestaurantEntityRequest) {
+		this.openTime = updateRestaurantEntityRequest.getOpenTime();
+		this.closeTime = updateRestaurantEntityRequest.getCloseTime();
+	}
 }
