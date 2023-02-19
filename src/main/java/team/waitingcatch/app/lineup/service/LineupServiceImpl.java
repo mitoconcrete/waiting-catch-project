@@ -78,7 +78,7 @@ public class LineupServiceImpl implements LineupService, InternalLineupService {
 			.map(lineupRecord -> LineupRecordWithTypeResponse.of(lineupRecord, StoredLineupTableNameEnum.LINEUP))
 			.collect(Collectors.toList());
 
-		List<LineupRecordWithTypeResponse> pastLineupList = internalLineupHistoryService._getAllByUserId(userId)
+		List<LineupRecordWithTypeResponse> pastLineupList = internalLineupHistoryService._getAllRecordByUserId(userId)
 			.stream()
 			.map(lineupRecord -> LineupRecordWithTypeResponse.of(lineupRecord, StoredLineupTableNameEnum.LINEUP_HISTORY))
 			.collect(Collectors.toList());
@@ -88,7 +88,7 @@ public class LineupServiceImpl implements LineupService, InternalLineupService {
 
 	@Override
 	public void updateArrivalStatus(UpdateArrivalStatusServiceRequest serviceRequest) {
-		Lineup restaurantInCustomer = _getLineupById(serviceRequest.getLineupId());
+		Lineup restaurantInCustomer = _getById(serviceRequest.getLineupId());
 		Restaurant restaurantBySeller = internalRestaurantService._getRestaurantByUserId(serviceRequest.getSellerId());
 		if (!restaurantInCustomer.isSameRestaurant(restaurantBySeller)) {
 			throw new IllegalArgumentException("현재 레스토랑의 손님이 아닙니다.");
@@ -117,7 +117,7 @@ public class LineupServiceImpl implements LineupService, InternalLineupService {
 
 	@Transactional(readOnly = true)
 	@Override
-	public Lineup _getLineupById(Long id) {
-		return lineupRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 유저입니다."));
+	public Lineup _getById(Long id) {
+		return lineupRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 줄서기입니다."));
 	}
 }

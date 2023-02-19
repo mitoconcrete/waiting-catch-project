@@ -7,7 +7,7 @@ import team.waitingcatch.app.lineup.enums.ArrivalStatusEnum;
 @Getter
 @RequiredArgsConstructor
 public class UpdateArrivalStatusServiceRequest {
-	private final Long sellerId;
-	private final Long lineupId;
+	private final long sellerId;
+	private final long lineupId;
 	private final ArrivalStatusEnum status;
 }

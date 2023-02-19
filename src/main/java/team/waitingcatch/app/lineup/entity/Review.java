@@ -19,7 +19,6 @@ import lombok.NoArgsConstructor;
 import team.waitingcatch.app.common.entity.TimeStamped;
 import team.waitingcatch.app.common.util.StringListConverter;
 import team.waitingcatch.app.lineup.dto.CreateReviewEntityRequest;
-import team.waitingcatch.app.lineup.dto.CreateReviewServiceRequest;
 import team.waitingcatch.app.restaurant.entity.Restaurant;
 import team.waitingcatch.app.user.entitiy.User;
 

@@ -73,6 +73,10 @@ public class Lineup extends TimeStamped {
 		return this.status;
 	}
 
+	public void updateIsReviewed() {
+		isReviewed = true;
+	}
+
 	public void requestReview() {
 
 	}

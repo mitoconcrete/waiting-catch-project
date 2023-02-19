@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.lineup.dto.LineupRecordResponse;
+import team.waitingcatch.app.lineup.entity.LineupHistory;
 import team.waitingcatch.app.lineup.repository.LineupHistoryRepository;
 
 @Service
@@ -15,8 +16,16 @@ import team.waitingcatch.app.lineup.repository.LineupHistoryRepository;
 public class LineupHistoryServiceImpl implements LineupHistoryService, InternalLineupHistoryService {
 	private final LineupHistoryRepository lineupHistoryRepository;
 
+	@Transactional(readOnly = true)
 	@Override
-	public List<LineupRecordResponse> _getAllByUserId(Long userId) {
+	public LineupHistory _getById(Long id) {
+		return lineupHistoryRepository.findById(id)
+			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 줄서기 히스토리입니다."));
+	}
+
+	@Transactional(readOnly = true)
+	@Override
+	public List<LineupRecordResponse> _getAllRecordByUserId(Long userId) {
 		return lineupHistoryRepository.findAllByUserId(userId);
 	}
 }

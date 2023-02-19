@@ -57,4 +57,8 @@ public class LineupHistory {
 
 	@Column(nullable = false)
 	private boolean isReviewed;
+
+	public void updateIsReviewed() {
+		isReviewed = true;
+	}
 }

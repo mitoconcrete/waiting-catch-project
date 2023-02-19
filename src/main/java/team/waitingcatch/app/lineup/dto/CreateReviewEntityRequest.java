@@ -3,15 +3,7 @@ package team.waitingcatch.app.lineup.dto;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
-
-import org.hibernate.validator.constraints.Range;
-import org.springframework.web.multipart.MultipartFile;
-
-import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import team.waitingcatch.app.restaurant.entity.Restaurant;
 import team.waitingcatch.app.user.entitiy.User;
 

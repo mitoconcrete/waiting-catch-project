@@ -11,7 +11,10 @@ import team.waitingcatch.app.common.util.S3Uploader;
 import team.waitingcatch.app.lineup.dto.CreateReviewEntityRequest;
 import team.waitingcatch.app.lineup.dto.CreateReviewServiceRequest;
 import team.waitingcatch.app.lineup.dto.GetReviewResponse;
+import team.waitingcatch.app.lineup.entity.Lineup;
+import team.waitingcatch.app.lineup.entity.LineupHistory;
 import team.waitingcatch.app.lineup.entity.Review;
+import team.waitingcatch.app.lineup.enums.StoredLineupTableNameEnum;
 import team.waitingcatch.app.lineup.repository.ReviewRepository;
 import team.waitingcatch.app.restaurant.entity.Restaurant;
 import team.waitingcatch.app.restaurant.service.restaurant.InternalRestaurantService;
@@ -23,6 +26,8 @@ public class ReviewServiceImpl implements ReviewService, InternalReviewService {
 	private final ReviewRepository reviewRepository;
 
 	private final InternalRestaurantService internalRestaurantService;
+	private final InternalLineupService internalLineupService;
+	private final InternalLineupHistoryService internalLineupHistoryService;
 
 	private final S3Uploader s3Uploader;
 
@@ -34,6 +39,14 @@ public class ReviewServiceImpl implements ReviewService, InternalReviewService {
 			serviceRequest.getRate(), serviceRequest.getContent(), imagePaths);
 
 		reviewRepository.save(Review.craeteReview(entityRequest));
+
+		if (serviceRequest.getType() == StoredLineupTableNameEnum.LINEUP) {
+			Lineup lineup = internalLineupService._getById(serviceRequest.getLineupId());
+			lineup.updateIsReviewed();
+		} else {
+			LineupHistory lineupHistory = internalLineupHistoryService._getById(serviceRequest.getLineupId());
+			lineupHistory.updateIsReviewed();
+		}
 	}
 
 	@Override

@@ -20,6 +20,7 @@ import team.waitingcatch.app.lineup.dto.TodayLineupResponse;
 @RequiredArgsConstructor
 public class LineupRepositoryCustomImpl implements LineupRepositoryCustom {
 	private final JPAQueryFactory queryFactory;
+
 	@Override
 	public List<LineupRecordResponse> findAllByUserId(Long userId) {
 		return queryFactory
