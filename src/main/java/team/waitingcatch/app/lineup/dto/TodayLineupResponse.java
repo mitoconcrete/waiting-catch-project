@@ -10,18 +10,18 @@ import team.waitingcatch.app.lineup.enums.ArrivalStatusEnum;
 @Getter
 public class TodayLineupResponse {
 	private final int waitingNumber;
-	private final int numOfMember;
+	private final int numOfMembers;
 	private final ArrivalStatusEnum status;
 	private final int callCount;
 	private final LocalDateTime startedAt;
 	private final LocalDateTime endedAt;
 
 	@QueryProjection
-	public TodayLineupResponse(int waitingNumber, int numOfMember, ArrivalStatusEnum status, int callCount,
+	public TodayLineupResponse(int waitingNumber, int numOfMembers, ArrivalStatusEnum status, int callCount,
 		LocalDateTime startedAt, LocalDateTime endedAt) {
 
 		this.waitingNumber = waitingNumber;
-		this.numOfMember = numOfMember;
+		this.numOfMembers = numOfMembers;
 		this.status = status;
 		this.callCount = callCount;
 		this.startedAt = startedAt;
