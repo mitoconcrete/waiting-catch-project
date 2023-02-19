@@ -60,6 +60,7 @@ public class LineupServiceImpl implements LineupService, InternalLineupService {
 		Restaurant restaurant = internalRestaurantService._getRestaurant(restaurantId);
 		// if (isLineupActive()) RestaurantInfo merge 후 추가
 		// if (isBlackList())
+		// if (!in2000Meter()) Restaurant merge 후 추가
 		Integer lastWaitingNumber = lineupRepository.findLastWaitingNumberByRestaurantId(restaurantId);
 		int waitingNumber = getWaitingNumber(lastWaitingNumber);
 		StartLineupEntityRequest entityRequest = new StartLineupEntityRequest(serviceRequest, restaurant, waitingNumber);

@@ -16,6 +16,7 @@ import javax.persistence.ManyToOne;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import team.waitingcatch.app.common.entity.TimeStamped;
 import team.waitingcatch.app.lineup.enums.ArrivalStatusEnum;
 import team.waitingcatch.app.restaurant.entity.Restaurant;
 import team.waitingcatch.app.user.entitiy.User;
@@ -23,7 +24,7 @@ import team.waitingcatch.app.user.entitiy.User;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class LineupHistory {
+public class LineupHistory extends TimeStamped {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "lineup_history_id")
@@ -57,6 +58,23 @@ public class LineupHistory {
 
 	@Column(nullable = false)
 	private boolean isReviewed;
+
+	public static LineupHistory createLineupHistory(Lineup lineup) {
+		return new LineupHistory(lineup);
+	}
+
+	public LineupHistory(Lineup lineup) {
+		this.user = lineup.getUser();
+		this.restaurant = lineup.getRestaurant();
+		this.waitingNumber = lineup.getWaitingNumber();
+		this.numOfMembers = lineup.getNumOfMembers();
+		this.status = lineup.getStatus();
+		this.callCount = lineup.getCallCount();
+		this.startedAt = lineup.getCreatedDate();
+		this.arrivedAt = lineup.getArrivedAt();
+		this.isReviewed = lineup.isReviewed();
+	}
+
 
 	public void updateIsReviewed() {
 		isReviewed = true;

@@ -12,8 +12,10 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.lineup.dto.CallCustomerInfoResponse;
+import team.waitingcatch.app.lineup.dto.CustomerLineupInfoResponse;
 import team.waitingcatch.app.lineup.dto.LineupRecordResponse;
 import team.waitingcatch.app.lineup.dto.QCallCustomerInfoResponse;
+import team.waitingcatch.app.lineup.dto.QCustomerLineupInfoResponse;
 import team.waitingcatch.app.lineup.dto.QLineupRecordResponse;
 import team.waitingcatch.app.lineup.dto.QTodayLineupResponse;
 import team.waitingcatch.app.lineup.dto.TodayLineupResponse;
@@ -75,6 +77,21 @@ public class LineupRepositoryCustomImpl implements LineupRepositoryCustom {
 			.join(lineup.restaurant, restaurant)
 			.where(lineup.id.eq(lineupId))
 			.fetchOne();
+	}
+
+	@Override
+	public List<CustomerLineupInfoResponse> findCustomerLineupInfoByIsReviewedFalse() {
+		return queryFactory
+			.select(new QCustomerLineupInfoResponse(
+				user.name,
+				user.phoneNumber,
+				restaurant.name
+			))
+			.from(lineup)
+			.join(lineup.user, user)
+			.join(lineup.restaurant, restaurant)
+			.where(lineup.isReviewed.isFalse())
+			.fetch();
 	}
 
 	private BooleanExpression statusEq(ArrivalStatusEnum statusCond) {
