@@ -10,7 +10,7 @@ import team.waitingcatch.app.user.entitiy.User;
 @RequiredArgsConstructor
 public class StartLineupServiceRequest {
 	private final User user;
-	private final Long restaurantId;
+	private final long restaurantId;
 	private final int numOfMembers;
 	private final LocalDateTime startAt;
 }

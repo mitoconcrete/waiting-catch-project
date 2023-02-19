@@ -11,9 +11,9 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.lineup.dto.CallCustomerInfoResponse;
-import team.waitingcatch.app.lineup.dto.PastLineupResponse;
+import team.waitingcatch.app.lineup.dto.LineupRecordResponse;
 import team.waitingcatch.app.lineup.dto.QCallCustomerInfoResponse;
-import team.waitingcatch.app.lineup.dto.QPastLineupResponse;
+import team.waitingcatch.app.lineup.dto.QLineupRecordResponse;
 import team.waitingcatch.app.lineup.dto.QTodayLineupResponse;
 import team.waitingcatch.app.lineup.dto.TodayLineupResponse;
 
@@ -21,11 +21,12 @@ import team.waitingcatch.app.lineup.dto.TodayLineupResponse;
 public class LineupRepositoryCustomImpl implements LineupRepositoryCustom {
 	private final JPAQueryFactory queryFactory;
 	@Override
-	public List<PastLineupResponse> findAllByUserId(Long userId) {
+	public List<LineupRecordResponse> findAllByUserId(Long userId) {
 		return queryFactory
-			.select(new QPastLineupResponse(
+			.select(new QLineupRecordResponse(
+				lineup.id,
 				lineup.restaurant.id,
-				lineup.restaurant.name,
+				restaurant.name,
 				lineup.numOfMembers,
 				lineup.status,
 				lineup.isReviewed,
@@ -41,7 +42,6 @@ public class LineupRepositoryCustomImpl implements LineupRepositoryCustom {
 
 	@Override
 	public List<TodayLineupResponse> findAllBySellerId(Long sellerId) {
-
 		return queryFactory
 			.select(new QTodayLineupResponse(
 				lineup.waitingNumber,
@@ -64,7 +64,10 @@ public class LineupRepositoryCustomImpl implements LineupRepositoryCustom {
 	@Override
 	public CallCustomerInfoResponse findCallCustomerInfoById(Long lineupId) {
 		return queryFactory
-			.select(new QCallCustomerInfoResponse(user.phoneNumber, restaurant.name, lineup.waitingNumber))
+			.select(new QCallCustomerInfoResponse(
+				user.phoneNumber,
+				restaurant.name,
+				lineup.waitingNumber))
 			.from(lineup)
 			.join(lineup.user, user)
 			.join(lineup.restaurant, restaurant)

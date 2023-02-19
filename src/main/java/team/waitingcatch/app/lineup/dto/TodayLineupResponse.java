@@ -19,6 +19,7 @@ public class TodayLineupResponse {
 	@QueryProjection
 	public TodayLineupResponse(int waitingNumber, int numOfMember, ArrivalStatusEnum status, int callCount,
 		LocalDateTime startedAt, LocalDateTime endedAt) {
+
 		this.waitingNumber = waitingNumber;
 		this.numOfMember = numOfMember;
 		this.status = status;

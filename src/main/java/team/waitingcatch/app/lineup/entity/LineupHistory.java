@@ -53,7 +53,7 @@ public class LineupHistory {
 	@Column(nullable = false)
 	private LocalDateTime startedAt;
 
-	private LocalDateTime endedAt;
+	private LocalDateTime arrivedAt;
 
 	@Column(nullable = false)
 	private boolean isReviewed;

@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.common.dto.GenericResponse;
-import team.waitingcatch.app.lineup.dto.PastLineupResponse;
+import team.waitingcatch.app.lineup.dto.LineupRecordWithTypeResponse;
 import team.waitingcatch.app.lineup.dto.StartLineupControllerRequest;
 import team.waitingcatch.app.lineup.dto.StartLineupServiceRequest;
 import team.waitingcatch.app.lineup.dto.TodayLineupResponse;
@@ -40,7 +40,8 @@ public class LineupController {
 	}
 
 	@PostMapping("/restaurants/{restaurantId}/waiting")
-	public void lineup(@PathVariable Long restaurantId,
+	public void lineup(
+		@PathVariable Long restaurantId,
 		@Valid @RequestBody StartLineupControllerRequest controllerRequest,
 		@AuthenticationPrincipal UserDetailsImpl userDetails) {
 
@@ -55,12 +56,15 @@ public class LineupController {
 	}
 
 	@GetMapping("/customer/past-lineup")
-	public GenericResponse<PastLineupResponse> getPastLineups(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+	public GenericResponse<LineupRecordWithTypeResponse> getPastLineups(
+		@AuthenticationPrincipal UserDetailsImpl userDetails) {
+
 		return new GenericResponse<>(lineupService.getPastLineups(userDetails.getId()));
 	}
 
 	@PutMapping("/seller/lineup/{lineupId}/status")
-	public void updateArrivalStatus(@PathVariable Long lineupId,
+	public void updateArrivalStatus(
+		@PathVariable Long lineupId,
 		@Valid @RequestBody UpdateArrivalStatusControllerRequest controllerRequest,
 		@AuthenticationPrincipal UserDetailsImpl userDetails) {
 

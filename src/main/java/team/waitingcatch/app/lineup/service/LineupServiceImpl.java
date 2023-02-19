@@ -17,13 +17,14 @@ import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.common.util.sms.SmsService;
 import team.waitingcatch.app.common.util.sms.dto.MessageRequest;
 import team.waitingcatch.app.lineup.dto.CallCustomerInfoResponse;
-import team.waitingcatch.app.lineup.dto.PastLineupResponse;
+import team.waitingcatch.app.lineup.dto.LineupRecordWithTypeResponse;
 import team.waitingcatch.app.lineup.dto.StartLineupEntityRequest;
 import team.waitingcatch.app.lineup.dto.StartLineupServiceRequest;
 import team.waitingcatch.app.lineup.dto.TodayLineupResponse;
 import team.waitingcatch.app.lineup.dto.UpdateArrivalStatusServiceRequest;
 import team.waitingcatch.app.lineup.entity.Lineup;
 import team.waitingcatch.app.lineup.enums.ArrivalStatusEnum;
+import team.waitingcatch.app.lineup.enums.StoredLineupTableNameEnum;
 import team.waitingcatch.app.lineup.repository.LineupRepository;
 import team.waitingcatch.app.restaurant.entity.Restaurant;
 import team.waitingcatch.app.restaurant.service.restaurant.InternalRestaurantService;
@@ -71,9 +72,17 @@ public class LineupServiceImpl implements LineupService, InternalLineupService {
 
 	@Transactional(readOnly = true)
 	@Override
-	public List<PastLineupResponse> getPastLineups(Long userId) {
-		List<PastLineupResponse> todayLineupList = lineupRepository.findAllByUserId(userId);
-		List<PastLineupResponse> pastLineupList = internalLineupHistoryService._getAllByUserId(userId);
+	public List<LineupRecordWithTypeResponse> getPastLineups(Long userId) {
+		List<LineupRecordWithTypeResponse> todayLineupList = lineupRepository.findAllByUserId(userId)
+			.stream()
+			.map(lineupRecord -> LineupRecordWithTypeResponse.of(lineupRecord, StoredLineupTableNameEnum.LINEUP))
+			.collect(Collectors.toList());
+
+		List<LineupRecordWithTypeResponse> pastLineupList = internalLineupHistoryService._getAllByUserId(userId)
+			.stream()
+			.map(lineupRecord -> LineupRecordWithTypeResponse.of(lineupRecord, StoredLineupTableNameEnum.LINEUP_HISTORY))
+			.collect(Collectors.toList());
+
 		return Stream.concat(todayLineupList.stream(), pastLineupList.stream()).collect(Collectors.toList());
 	}
 

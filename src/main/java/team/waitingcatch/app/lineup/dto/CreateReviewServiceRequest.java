@@ -11,12 +11,12 @@ import team.waitingcatch.app.user.entitiy.User;
 @Getter
 public class CreateReviewServiceRequest {
 	private final User user;
-	private final Long restaurantId;
+	private final long restaurantId;
 	private final int rate;
 	private final String content;
 	private final List<MultipartFile> images = new ArrayList<>();
 
-	public CreateReviewServiceRequest(User user, Long restaurantId, int rate, String content,
+	public CreateReviewServiceRequest(User user, long restaurantId, int rate, String content,
 		List<MultipartFile> images) {
 
 		this.user = user;

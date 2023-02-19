@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
-import team.waitingcatch.app.lineup.dto.PastLineupResponse;
+import team.waitingcatch.app.lineup.dto.LineupRecordResponse;
 import team.waitingcatch.app.lineup.repository.LineupHistoryRepository;
 
 @Service
@@ -16,7 +16,7 @@ public class LineupHistoryServiceImpl implements LineupHistoryService, InternalL
 	private final LineupHistoryRepository lineupHistoryRepository;
 
 	@Override
-	public List<PastLineupResponse> _getAllByUserId(Long userId) {
+	public List<LineupRecordResponse> _getAllByUserId(Long userId) {
 		return lineupHistoryRepository.findAllByUserId(userId);
 	}
 }

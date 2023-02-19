@@ -16,7 +16,9 @@ public class StartLineupEntityRequest {
 	private final int numOfMembers;
 	private final LocalDateTime startAt;
 
-	public StartLineupEntityRequest(StartLineupServiceRequest serviceRequest, Restaurant restaurant, Integer lastWaitingNumber) {
+	public StartLineupEntityRequest(StartLineupServiceRequest serviceRequest, Restaurant restaurant,
+		Integer lastWaitingNumber) {
+
 		this.user = serviceRequest.getUser();
 		this.restaurant = restaurant;
 		this.waitingNumber = lastWaitingNumber != null ? lastWaitingNumber + 1 : 1;
