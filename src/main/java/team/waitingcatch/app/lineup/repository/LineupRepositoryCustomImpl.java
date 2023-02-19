@@ -7,7 +7,7 @@ import static team.waitingcatch.app.user.entitiy.QUser.*;
 
 import java.util.List;
 
-import com.querydsl.jpa.JPAExpressions;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import lombok.RequiredArgsConstructor;
@@ -17,13 +17,14 @@ import team.waitingcatch.app.lineup.dto.QCallCustomerInfoResponse;
 import team.waitingcatch.app.lineup.dto.QLineupRecordResponse;
 import team.waitingcatch.app.lineup.dto.QTodayLineupResponse;
 import team.waitingcatch.app.lineup.dto.TodayLineupResponse;
+import team.waitingcatch.app.lineup.enums.ArrivalStatusEnum;
 
 @RequiredArgsConstructor
 public class LineupRepositoryCustomImpl implements LineupRepositoryCustom {
 	private final JPAQueryFactory queryFactory;
 
 	@Override
-	public List<LineupRecordResponse> findAllRecordByUserId(Long userId) {
+	public List<LineupRecordResponse> findRecordsByUserIdAndStatus(Long userId, ArrivalStatusEnum statusCond) {
 		return queryFactory
 			.select(new QLineupRecordResponse(
 				lineup.id,
@@ -37,13 +38,13 @@ public class LineupRepositoryCustomImpl implements LineupRepositoryCustom {
 			))
 			.from(lineup)
 			.join(lineup.restaurant, restaurant)
-			.where(lineup.user.id.eq(userId))
+			.where(lineup.user.id.eq(userId), statusEq(statusCond))
 			.orderBy(lineup.arrivedAt.desc())
 			.fetch();
 	}
 
 	@Override
-	public List<TodayLineupResponse> findAllTodayBySellerId(Long sellerId) {
+	public List<TodayLineupResponse> findTodayLineupsBySellerId(Long sellerId) {
 		return queryFactory
 			.select(new QTodayLineupResponse(
 				lineup.waitingNumber,
@@ -74,5 +75,9 @@ public class LineupRepositoryCustomImpl implements LineupRepositoryCustom {
 			.join(lineup.restaurant, restaurant)
 			.where(lineup.id.eq(lineupId))
 			.fetchOne();
+	}
+
+	private BooleanExpression statusEq(ArrivalStatusEnum statusCond) {
+		return statusCond != null ? lineup.status.eq(statusCond) : null;
 	}
 }

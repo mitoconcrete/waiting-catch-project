@@ -3,19 +3,24 @@ package team.waitingcatch.app.lineup.controller;
 import java.time.LocalDateTime;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Pattern;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.common.dto.GenericResponse;
+import team.waitingcatch.app.lineup.dto.CancelWaitingRequest;
+import team.waitingcatch.app.lineup.dto.GetLineupRecordsServiceRequest;
 import team.waitingcatch.app.lineup.dto.LineupRecordWithTypeResponse;
 import team.waitingcatch.app.lineup.dto.StartLineupControllerRequest;
 import team.waitingcatch.app.lineup.dto.StartWaitingServiceRequest;
@@ -27,6 +32,7 @@ import team.waitingcatch.app.lineup.service.LineupService;
 import team.waitingcatch.app.user.entitiy.UserDetailsImpl;
 
 @RestController
+@Validated
 @RequiredArgsConstructor
 public class LineupController {
 	private final LineupService lineupService;
@@ -41,7 +47,7 @@ public class LineupController {
 		lineupService.closeLineup(userDetails.getId());
 	}
 
-	@PostMapping("/restaurants/{restaurantId}/waiting")
+	@PostMapping("/restaurants/{restaurantId}/lineup")
 	@ResponseStatus(HttpStatus.CREATED)
 	public void startWaiting(
 		@PathVariable long restaurantId,
@@ -53,21 +59,24 @@ public class LineupController {
 		lineupService.startWaiting(serviceRequest);
 	}
 
-	@PutMapping("/restaurants/{restaurantId}/waiting")
-	public void cancelWaiting(@PathVariable long restaurantId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-		// lineupService.cancelWaiting(new CancelWaitingRequest(restaurantId, userDetails.getId()));
+	@PutMapping("/restaurants/lineup/{lineupId}")
+	public void cancelWaiting(@PathVariable long lineupId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+		lineupService.cancelWaiting(new CancelWaitingRequest(lineupId, userDetails.getId()));
 	}
 
 	@GetMapping("/seller/lineup")
 	public GenericResponse<TodayLineupResponse> getLineups(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-		return new GenericResponse<>(lineupService.getLineups(userDetails.getId()));
+		return new GenericResponse<>(lineupService.getTodayLineups(userDetails.getId()));
 	}
 
 	@GetMapping("/customer/lineup-records")
 	public GenericResponse<LineupRecordWithTypeResponse> getLineupRecords(
+		@RequestParam @Pattern(regexp = "^(WAIT|CALL|CANCEL|ARRIVE)$") String arrivalStatus,
 		@AuthenticationPrincipal UserDetailsImpl userDetails) {
 
-		return new GenericResponse<>(lineupService.getLineupRecords(userDetails.getId()));
+		GetLineupRecordsServiceRequest serviceRequest = new GetLineupRecordsServiceRequest(
+			userDetails.getId(), ArrivalStatusEnum.valueOf(arrivalStatus));
+		return new GenericResponse<>(lineupService.getLineupRecords(serviceRequest));
 	}
 
 	@PutMapping("/seller/lineup/{lineupId}/status")

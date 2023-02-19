@@ -3,6 +3,7 @@ package team.waitingcatch.app.lineup.service;
 import java.util.List;
 
 import team.waitingcatch.app.lineup.dto.CancelWaitingRequest;
+import team.waitingcatch.app.lineup.dto.GetLineupRecordsServiceRequest;
 import team.waitingcatch.app.lineup.dto.LineupRecordWithTypeResponse;
 import team.waitingcatch.app.lineup.dto.StartWaitingServiceRequest;
 import team.waitingcatch.app.lineup.dto.TodayLineupResponse;
@@ -17,9 +18,9 @@ public interface LineupService {
 
 	void cancelWaiting(CancelWaitingRequest request);
 
-	List<TodayLineupResponse> getLineups(Long sellerId);
+	List<TodayLineupResponse> getTodayLineups(Long sellerId);
 
-	List<LineupRecordWithTypeResponse> getLineupRecords(Long userId);
+	List<LineupRecordWithTypeResponse> getLineupRecords(GetLineupRecordsServiceRequest serviceRequest);
 
 	void updateArrivalStatus(UpdateArrivalStatusServiceRequest serviceRequest);
 }

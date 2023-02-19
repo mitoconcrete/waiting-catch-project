@@ -18,6 +18,7 @@ import team.waitingcatch.app.common.util.sms.SmsService;
 import team.waitingcatch.app.common.util.sms.dto.MessageRequest;
 import team.waitingcatch.app.lineup.dto.CallCustomerInfoResponse;
 import team.waitingcatch.app.lineup.dto.CancelWaitingRequest;
+import team.waitingcatch.app.lineup.dto.GetLineupRecordsServiceRequest;
 import team.waitingcatch.app.lineup.dto.LineupRecordWithTypeResponse;
 import team.waitingcatch.app.lineup.dto.StartLineupEntityRequest;
 import team.waitingcatch.app.lineup.dto.StartWaitingServiceRequest;
@@ -69,9 +70,10 @@ public class LineupServiceImpl implements LineupService, InternalLineupService {
 
 	@Override
 	public void cancelWaiting(CancelWaitingRequest request) {
-		Lineup lineup = lineupRepository.findByUserIdAndRestaurantIdAndStatus(request.getUserId(),
-				request.getRestaurantId(), ArrivalStatusEnum.WAIT)
-			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 줄서기입니다."));
+		Lineup lineup = _getByIdWithUser(request.getLineupId());
+		if (!lineup.isSameUserId(request.getUserId())) {
+			throw new IllegalArgumentException("유저 정보가 일치하지 않습니다");
+		}
 		lineup.updateStatus(ArrivalStatusEnum.CANCEL);
 
 		// restaurant.subtractLineupCount() RestaurantInfo merge 후 추가
@@ -79,19 +81,21 @@ public class LineupServiceImpl implements LineupService, InternalLineupService {
 
 	@Transactional(readOnly = true)
 	@Override
-	public List<TodayLineupResponse> getLineups(Long sellerId) {
-		return lineupRepository.findAllTodayBySellerId(sellerId);
+	public List<TodayLineupResponse> getTodayLineups(Long sellerId) {
+		return lineupRepository.findTodayLineupsBySellerId(sellerId);
 	}
 
 	@Transactional(readOnly = true)
 	@Override
-	public List<LineupRecordWithTypeResponse> getLineupRecords(Long userId) {
-		List<LineupRecordWithTypeResponse> todayLineupList = lineupRepository.findAllRecordByUserId(userId)
+	public List<LineupRecordWithTypeResponse> getLineupRecords(GetLineupRecordsServiceRequest serviceRequest) {
+		List<LineupRecordWithTypeResponse> todayLineupList = lineupRepository.findRecordsByUserIdAndStatus(
+				serviceRequest.getUserId(), serviceRequest.getStatus())
 			.stream()
 			.map(lineupRecord -> LineupRecordWithTypeResponse.of(lineupRecord, StoredLineupTableNameEnum.LINEUP))
 			.collect(Collectors.toList());
 
-		List<LineupRecordWithTypeResponse> pastLineupList = internalLineupHistoryService._getAllRecordByUserId(userId)
+		List<LineupRecordWithTypeResponse> pastLineupList = internalLineupHistoryService._getRecordsByUserId(
+				serviceRequest.getUserId(), serviceRequest.getStatus())
 			.stream()
 			.map(lineupRecord -> LineupRecordWithTypeResponse.of(lineupRecord, StoredLineupTableNameEnum.LINEUP_HISTORY))
 			.collect(Collectors.toList());

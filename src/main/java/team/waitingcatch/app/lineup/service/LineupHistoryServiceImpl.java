@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.lineup.dto.LineupRecordResponse;
 import team.waitingcatch.app.lineup.entity.LineupHistory;
+import team.waitingcatch.app.lineup.enums.ArrivalStatusEnum;
 import team.waitingcatch.app.lineup.repository.LineupHistoryRepository;
 
 @Service
@@ -25,7 +26,7 @@ public class LineupHistoryServiceImpl implements LineupHistoryService, InternalL
 
 	@Transactional(readOnly = true)
 	@Override
-	public List<LineupRecordResponse> _getAllRecordByUserId(Long userId) {
-		return lineupHistoryRepository.findAllByUserId(userId);
+	public List<LineupRecordResponse> _getRecordsByUserId(Long userId, ArrivalStatusEnum statusCond) {
+		return lineupHistoryRepository.findLineupRecordsByUserIdAndStatus(userId, statusCond);
 	}
 }

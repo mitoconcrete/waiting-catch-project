@@ -83,6 +83,10 @@ public class Lineup extends TimeStamped {
 		isReviewed = true;
 	}
 
+	public boolean isSameUserId(Long userId) {
+		return this.getUserId().equals(userId);
+	}
+
 	public boolean isSameRestaurant(Restaurant restaurant) {
 		return this.restaurant.getId().equals(restaurant.getId());
 	}
