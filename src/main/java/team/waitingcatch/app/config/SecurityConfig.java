@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
@@ -13,6 +14,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.common.util.JwtUtil;
@@ -25,7 +28,7 @@ import team.waitingcatch.app.security.service.JwtAuthFilter;
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
-public class SecurityConfig {
+public class SecurityConfig implements WebMvcConfigurer {
 	private final JwtUtil jwtUtil;
 	private final UserDetailsService userDetailsService;
 	private final AliveTokenService aliveTokenService;
@@ -48,14 +51,19 @@ public class SecurityConfig {
 		// CSRF 설정
 		http.csrf().disable();
 
-		// 프론트엔드 접속 시, CORS 를 허용합니다.
+		http.authorizeRequests()
+			.antMatchers(HttpMethod.OPTIONS, "/**").permitAll();
+
+		//프론트엔드 접속 시, CORS 를 허용합니다.
 		http.cors().configurationSource(request -> {
+
 			var cors = new CorsConfiguration();
 			// CORS 를 허용할 주소를 아래에 리스트 형태로 넣어주세요.
-			cors.setAllowedOrigins(List.of("http://localhost:3000"));
+			cors.setAllowedOrigins(List.of("*"));
 			cors.setAllowedMethods(List.of("*"));
 			cors.setAllowedHeaders(List.of("*"));
-			cors.setAllowCredentials(true);
+			cors.addExposedHeader("Authorization");
+			//cors.setAllowCredentials(true);
 			return cors;
 		});
 
@@ -78,4 +86,11 @@ public class SecurityConfig {
 		return http.build();
 	}
 
+	@Override
+	public void addCorsMappings(CorsRegistry registry) {
+		registry.addMapping("/**")
+			.allowedOrigins("http://localhost:3000", "http://localhost:5500")
+			.allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD")
+			.exposedHeaders("Authorization");
+	}
 }
