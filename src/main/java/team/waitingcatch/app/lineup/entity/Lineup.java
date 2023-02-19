@@ -70,7 +70,7 @@ public class Lineup extends TimeStamped {
 		}
 
 		if (status == ArrivalStatusEnum.CALL) {
-			if (callCount > 3) {
+			if (callCount >= 3) {
 				throw new IllegalArgumentException("호출은 최대 3번까지 가능합니다.");
 			}
 			callCount++;
