@@ -5,12 +5,14 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -29,7 +31,9 @@ public class ReviewController {
 	private final ReviewService reviewService;
 
 	@PostMapping("/restaurants/{restaurantId}/reviews")
-	public void createReview(@PathVariable long restaurantId,
+	@ResponseStatus(HttpStatus.CREATED)
+	public void createReview(
+		@PathVariable long restaurantId,
 		@Valid @RequestPart CreateReviewControllerRequest controllerRequest,
 		@RequestPart(required = false) List<MultipartFile> images,
 		@AuthenticationPrincipal UserDetailsImpl userDetails) throws IOException {
