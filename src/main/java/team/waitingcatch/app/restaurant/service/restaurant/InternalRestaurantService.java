@@ -8,4 +8,8 @@ public interface InternalRestaurantService {
 	// Restaurant _getRestaurantFindByUsername(String name);
 
 	Restaurant _getRestaurantByUserId(Long userId);
+
+	void _openLineup(Long restaurantId);
+
+	void _closeLineup(Long restaurantId);
 }
