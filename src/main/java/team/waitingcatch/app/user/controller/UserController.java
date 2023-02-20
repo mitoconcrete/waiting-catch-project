@@ -85,6 +85,8 @@ public class UserController {
 	public void withdrawSeller(@AuthenticationPrincipal UserDetails userDetails) {
 		DeleteUserRequest servicePayload = new DeleteUserRequest(userDetails.getUsername());
 		userService.deleteUser(servicePayload);
+		// restaturant 도 삭제
+		// 관련 데이터 모두 삭제
 	}
 
 	@PutMapping("/seller/info")

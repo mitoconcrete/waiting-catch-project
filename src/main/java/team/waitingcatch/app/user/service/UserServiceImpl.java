@@ -159,6 +159,11 @@ public class UserServiceImpl implements UserService, InternalUserService {
 	}
 
 	@Override
+	public String _getUsernameById(Long id) {
+		return userRepository.findUsernameById(id);
+	}
+
+	@Override
 	@Transactional(readOnly = true)
 	public User _getUserByUsername(String username) {
 		return userRepository.findByUsernameAndIsDeletedFalse(username).orElseThrow(
@@ -174,4 +179,3 @@ public class UserServiceImpl implements UserService, InternalUserService {
 		);
 	}
 }
-

@@ -17,6 +17,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import team.waitingcatch.app.common.entity.TimeStamped;
+import team.waitingcatch.app.lineup.dto.StartLineupEntityRequest;
 import team.waitingcatch.app.lineup.enums.ArrivalStatusEnum;
 import team.waitingcatch.app.restaurant.entity.Restaurant;
 import team.waitingcatch.app.user.entitiy.User;
@@ -24,7 +25,7 @@ import team.waitingcatch.app.user.entitiy.User;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class LineupHistory extends TimeStamped {
+public class Lineup extends TimeStamped {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "lineup_history_id")
@@ -51,9 +52,6 @@ public class LineupHistory extends TimeStamped {
 	@Column(nullable = false)
 	private int callCount;
 
-	@Column(nullable = false)
-	private LocalDateTime startedAt;
-
 	private LocalDateTime arrivedAt;
 
 	@Column(nullable = false)
@@ -62,24 +60,53 @@ public class LineupHistory extends TimeStamped {
 	@Column(name = "is_deleted", nullable = false)
 	private boolean isDeleted;
 
-	public static LineupHistory createLineupHistory(Lineup lineup) {
-		return new LineupHistory(lineup);
+	public static Lineup createLineup(StartLineupEntityRequest entityRequest) {
+		return new Lineup(entityRequest);
 	}
 
-	public LineupHistory(Lineup lineup) {
-		this.user = lineup.getUser();
-		this.restaurant = lineup.getRestaurant();
-		this.waitingNumber = lineup.getWaitingNumber();
-		this.numOfMembers = lineup.getNumOfMembers();
-		this.status = lineup.getStatus();
-		this.callCount = lineup.getCallCount();
-		this.startedAt = lineup.getCreatedDate();
-		this.arrivedAt = lineup.getArrivedAt();
-		this.isReviewed = lineup.isReviewed();
-		this.isDeleted = false;
+	public ArrivalStatusEnum updateStatus(ArrivalStatusEnum status) {
+		if (this.status == ArrivalStatusEnum.CANCEL) {
+			throw new IllegalArgumentException("이미 취소된 줄서기입니다.");
+		}
+		if (this.status == ArrivalStatusEnum.ARRIVE) {
+			throw new IllegalArgumentException("이미 완료된 줄서기입니다.");
+		}
+
+		if (status == ArrivalStatusEnum.CALL) {
+			if (callCount >= 2) {
+				throw new IllegalArgumentException("호출은 최대 2번까지 가능합니다.");
+			}
+			callCount++;
+		}
+		this.status = status;
+		return this.status;
 	}
 
 	public void updateIsReviewed() {
 		isReviewed = true;
+	}
+
+	public boolean isSameUserId(Long userId) {
+		return this.getUserId().equals(userId);
+	}
+
+	public boolean isSameRestaurant(Restaurant restaurant) {
+		return this.restaurant.getId().equals(restaurant.getId());
+	}
+
+	public Long getUserId() {
+		return user.getId();
+	}
+
+	private Lineup(StartLineupEntityRequest entityRequest) {
+		this.user = entityRequest.getUser();
+		this.restaurant = entityRequest.getRestaurant();
+		this.waitingNumber = entityRequest.getWaitingNumber();
+		this.numOfMembers = entityRequest.getNumOfMembers();
+		this.status = ArrivalStatusEnum.WAIT;
+		this.arrivedAt = null;
+		this.isReviewed = false;
+		this.isDeleted = false;
+		this.callCount = 0;
 	}
 }
