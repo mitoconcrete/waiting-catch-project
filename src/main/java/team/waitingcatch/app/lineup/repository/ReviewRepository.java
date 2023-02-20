@@ -9,6 +9,6 @@ import team.waitingcatch.app.lineup.entity.Review;
 
 public interface ReviewRepository extends JpaRepository<Review, Long>, ReviewRepositoryCustom {
 	@Modifying
-	@Query(value = "update Review r set r.is_deleted=true where r.restaurant_id = :restaurantId", nativeQuery = true)
+	@Query(value = "update Review r set r.isDeleted = true where r.restaurant.id = :restaurantId")
 	void bulkSoftDeleteByRestaurantId(@Param("restaurantId") Long restaurantId);
 }

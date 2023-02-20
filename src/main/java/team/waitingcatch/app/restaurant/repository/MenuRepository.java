@@ -14,6 +14,6 @@ public interface MenuRepository extends JpaRepository<Menu, Long> {
 	List<Menu> findAllByRestaurantId(@Param("restaurantId") Long restaurantId);
 
 	@Modifying
-	@Query(value = "update Menu m set m.is_deleted = true where m.restaurant_id = :restaurantId", nativeQuery = true)
+	@Query(value = "update Menu m set m.isDeleted = true where m.restaurant.id = :restaurantId")
 	void bulkSoftDeleteByRestaurantId(@Param("restaurantId") Long restaurantId);
 }

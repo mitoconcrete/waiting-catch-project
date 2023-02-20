@@ -9,6 +9,6 @@ import team.waitingcatch.app.lineup.entity.LineupHistory;
 
 public interface LineupHistoryRepository extends JpaRepository<LineupHistory, Long>, LineupHistoryRepositoryCustom {
 	@Modifying
-	@Query(value = "update LineupHistory l set l.is_deleted = true where l.restaurant_id = :restaurantId", nativeQuery = true)
+	@Query(value = "update LineupHistory l set l.isDeleted = true where l.restaurant.id = :restaurantId")
 	void bulkSoftDeleteByRestaurantId(@Param("restaurantId") Long restaurantId);
 }
