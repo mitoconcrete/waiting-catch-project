@@ -176,8 +176,8 @@ public class CouponController {
 	}
 
 	//유저 쿠폰 조회
-	@PostMapping("/customer/coupons")
-	public void GetUserCoupon(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-		userCouponService.getUserCoupon(userDetails.getUser());
+	@GetMapping("/customer/coupons")
+	public void getUserCoupon(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+		userCouponService.getUserCoupons(userDetails.getUser());
 	}
 }

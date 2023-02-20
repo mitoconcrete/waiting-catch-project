@@ -90,8 +90,8 @@ public class EventServiceImpl implements EventService, InternalEventService {
 	public List<GetEventsResponse> getGlobalEvents() {
 		//이벤트중 restaurant이 null인것만 조회
 		List<Event> events = eventRepository.findByRestaurantIsNullAndIsDeletedFalse();
-		List<GetEventsResponse> GetEventsResponse = new ArrayList<>();
-		return _GetEventsResponse(events, GetEventsResponse);
+		List<GetEventsResponse> getEventsResponse = new ArrayList<>();
+		return _getEventsResponse(events, getEventsResponse);
 
 	}
 
@@ -103,8 +103,8 @@ public class EventServiceImpl implements EventService, InternalEventService {
 		Restaurant restaurant = _getRestaurantById(restaurantId);
 		//찾은 객체로 이벤트 검색
 		List<Event> events = eventRepository.findByRestaurantAndIsDeletedFalse(restaurant);
-		List<GetEventsResponse> GetEventsResponse = new ArrayList<>();
-		return _GetEventsResponse(events, GetEventsResponse);
+		List<GetEventsResponse> getEventsResponse = new ArrayList<>();
+		return _getEventsResponse(events, getEventsResponse);
 
 	}
 
@@ -126,7 +126,7 @@ public class EventServiceImpl implements EventService, InternalEventService {
 
 	//이벤트 목록 + 쿠폰생성자를 DTO형태로 리턴
 	@Override
-	public List<GetEventsResponse> _GetEventsResponse(List<Event> events, List<GetEventsResponse> GetEventsResponse) {
+	public List<GetEventsResponse> _getEventsResponse(List<Event> events, List<GetEventsResponse> GetEventsResponse) {
 		for (Event event : events) {
 			List<CouponCreator> couponCreators = couponCreatorRepository.findByEventAndIsDeletedFalse(event);
 			List<GetCouponCreatorResponse> getCouponCreatorResponses = new ArrayList<>();
