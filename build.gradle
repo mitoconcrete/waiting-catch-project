@@ -53,9 +53,11 @@ dependencies {
         exclude group: "org.slf4j", module: "slf4j-simple"
     }
 
-    //테스트에서 lombok 사용
+    // 테스트에서 lombok 사용
     testCompileOnly 'org.projectlombok:lombok'
     testAnnotationProcessor 'org.projectlombok:lombok'
+
+    testRuntimeOnly 'com.h2database:h2'
 }
 
 tasks.named('test') {
@@ -63,8 +65,7 @@ tasks.named('test') {
 }
 
 clean {
-    delete file('src/main/generated')
-    delete file('src/test/generated_tests')
+    delete ('out', 'src/main/generated', 'src/test/generated_tests')
 }
 
 /* for Continuous Deployment
@@ -72,4 +73,3 @@ jar {
 	enabled = false
 }
  */
-
