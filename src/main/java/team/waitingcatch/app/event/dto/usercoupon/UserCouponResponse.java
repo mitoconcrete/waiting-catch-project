@@ -6,8 +6,8 @@ import team.waitingcatch.app.event.entity.UserCoupon;
 
 @Getter
 public class UserCouponResponse {
-	private UserCoupon userCoupon;
-	private CouponCreator couponCreator;
+	private final UserCoupon userCoupon;
+	private final CouponCreator couponCreator;
 
 	public UserCouponResponse(UserCoupon userCoupon, CouponCreator couponCreator) {
 		this.userCoupon = userCoupon;
