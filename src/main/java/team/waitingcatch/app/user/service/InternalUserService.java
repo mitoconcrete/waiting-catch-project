@@ -11,5 +11,5 @@ public interface InternalUserService {
 
 	User _getUserByUserId(Long id);
 
-	void deleteSellerAndRelatedInformation(Long userId);
+	void _deleteSellerAndRelatedInformation(Long userId);
 }
