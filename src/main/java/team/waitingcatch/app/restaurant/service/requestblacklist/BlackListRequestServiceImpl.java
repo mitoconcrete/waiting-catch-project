@@ -13,6 +13,7 @@ import team.waitingcatch.app.restaurant.dto.blacklist.GetRequestBlackListRespons
 import team.waitingcatch.app.restaurant.dto.blacklist.RequestUserBlackListByRestaurantServiceRequest;
 import team.waitingcatch.app.restaurant.entity.BlackListRequest;
 import team.waitingcatch.app.restaurant.entity.Restaurant;
+import team.waitingcatch.app.restaurant.enums.AcceptedStatusEnum;
 import team.waitingcatch.app.restaurant.repository.BlackListRequestRepository;
 import team.waitingcatch.app.restaurant.repository.RestaurantRepository;
 import team.waitingcatch.app.restaurant.service.blacklist.InternalBlackListService;
@@ -68,7 +69,7 @@ public class BlackListRequestServiceImpl implements BlackListRequestService, Int
 	//블랙리스트 요청 전체조회
 	@Transactional(readOnly = true)
 	public List<GetRequestBlackListResponse> getRequestBlackLists() {
-		List<BlackListRequest> blackListRequests = blackListRequestRepository.findAll();
+		List<BlackListRequest> blackListRequests = blackListRequestRepository.findAllByStatus(AcceptedStatusEnum.WAIT);
 		return blackListRequests.stream().map(GetRequestBlackListResponse::new).collect(Collectors.toList());
 	}
 
