@@ -61,19 +61,7 @@ public class UserServiceImpl implements UserService, InternalUserService {
 			throw new IllegalArgumentException("패스워드가 일치하지 않습니다.");
 		}
 
-		// access token 과 refresh token을 생성합니다.
-		String accessToken = jwtUtil.createAccessToken(user.getUsername(), user.getRole());
-		String refreshToken = jwtUtil.createRefreshToken(user.getUsername(), user.getRole());
-
-		/*
-		refreshToken을 redis에 저장합니다. 이 때, accessToken:RefreshToken의 형태로 저장하되, 'Bearer ' 을 제외한 토큰을 저장합니다.
-		1. refreshToken을 accessToken의 value에 맵핑하는 이유는 시큐리티 검증 시,
-		   만료된 accessToken 내에서 claim을 가져올 수 없기 때문입니다.
-		2. accessToken 토큰을 key로 두는 이유는 redis내의 값에 좀더 빠르게 접근하기 위함입니다.
-		*/
-		CreateRefreshTokenServiceRequest servicePayload = new CreateRefreshTokenServiceRequest(accessToken.substring(7),
-			refreshToken.substring(7));
-		refreshTokenService.createToken(servicePayload);
+		String accessToken = _createAccessTokensByUser(user);
 
 		return new LoginServiceResponse(accessToken);
 	}
@@ -172,6 +160,15 @@ public class UserServiceImpl implements UserService, InternalUserService {
 	}
 
 	@Override
+	public LoginServiceResponse createAccessTokenByEmail(String email) {
+		User user = _getUserByEmail(email);
+
+		String accessToken = _createAccessTokensByUser(user);
+
+		return new LoginServiceResponse(accessToken);
+	}
+
+	@Override
 	public void _deleteSellerAndRelatedInformation(Long userId) {
 		User seller = _getUserByUserId(userId);
 		userRepository.deleteById(seller.getId());
@@ -207,5 +204,22 @@ public class UserServiceImpl implements UserService, InternalUserService {
 	@Transactional(readOnly = true)
 	public User _getUserByUserId(Long id) {
 		return userRepository.findByUserId(id).orElseThrow(() -> new IllegalArgumentException("유저가 존재하지 않습니다."));
+	}
+
+	private String _createAccessTokensByUser(User user) {
+		// access token 과 refresh token을 생성합니다.
+		String accessToken = jwtUtil.createAccessToken(user.getUsername(), user.getRole());
+		String refreshToken = jwtUtil.createRefreshToken(user.getUsername(), user.getRole());
+
+		/*
+		refreshToken을 redis에 저장합니다. 이 때, accessToken:RefreshToken의 형태로 저장하되, 'Bearer ' 을 제외한 토큰을 저장합니다.
+		1. refreshToken을 accessToken의 value에 맵핑하는 이유는 시큐리티 검증 시,
+		   만료된 accessToken 내에서 claim을 가져올 수 없기 때문입니다.
+		2. accessToken 토큰을 key로 두는 이유는 redis내의 값에 좀더 빠르게 접근하기 위함입니다.
+		*/
+		CreateRefreshTokenServiceRequest servicePayload = new CreateRefreshTokenServiceRequest(accessToken.substring(7),
+			refreshToken.substring(7));
+		refreshTokenService.createToken(servicePayload);
+		return accessToken;
 	}
 }

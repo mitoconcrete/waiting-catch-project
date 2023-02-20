@@ -29,5 +29,5 @@ public interface UserService {
 
 	void findUserAndSendEmail(FindPasswordRequest payload);
 
-	void deleteSellerAndRelatedInformation(Long userId);
+	LoginServiceResponse createAccessTokenByEmail(String email);
 }

@@ -5,6 +5,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import javax.validation.constraints.Pattern;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -115,10 +117,30 @@ public class UserController {
 		return userService.getByUserIdAndRole(servicePayload);
 	}
 
+	@GetMapping("/admin/sellers/{sellerId}")
+	public UserInfoResponse getSeller(@PathVariable Long sellerId) {
+		GetCustomerByIdAndRoleServiceRequest servicePayload =
+			new GetCustomerByIdAndRoleServiceRequest(
+				sellerId,
+				UserRoleEnum.SELLER
+			);
+
+		return userService.getByUserIdAndRole(servicePayload);
+	}
+
 	@PostMapping("/admin/signup")
 	@ResponseStatus(HttpStatus.CREATED)
 	public void createAdmin(@RequestBody @Valid CreateUserControllerRequest controllerRequest) {
 		_createUserService(UserRoleEnum.ADMIN, controllerRequest);
+	}
+
+	@GetMapping("/google/callback")
+	@ResponseStatus(HttpStatus.CREATED)
+	public void createTokenByEmail(
+		@RequestParam @Valid @Pattern(regexp = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+.[A-Za-z]{2,6}$",
+			message = "이메일 형식을 맞춰주세요.") String email, HttpServletResponse response) {
+		LoginServiceResponse responsePayload = userService.createAccessTokenByEmail(email);
+		response.addHeader(JwtUtil.AUTHORIZATION_HEADER, responsePayload.getAccessToken());
 	}
 
 	private void _createUserService(UserRoleEnum role, CreateUserControllerRequest controllerRequest) {
