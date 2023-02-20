@@ -10,4 +10,6 @@ public interface InternalUserService {
 	User _getUserByEmail(String email);
 
 	User _getUserByUserId(Long id);
+
+	void deleteSellerAndRelatedInformation(Long userId);
 }

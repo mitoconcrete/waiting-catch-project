@@ -146,6 +146,7 @@ public class UserServiceImpl implements UserService, InternalUserService {
 	public void deleteUser(DeleteUserRequest payload) {
 		User user = _getUserByUsername(payload.getUsername());
 		userRepository.deleteById(user.getId());
+		deleteSellerAndRelatedInformation(user.getId());
 	}
 
 	@Override
@@ -171,7 +172,7 @@ public class UserServiceImpl implements UserService, InternalUserService {
 	}
 
 	@Override
-	public void deleteSellerAndRelatedInformation(Long userId) {
+	public void _deleteSellerAndRelatedInformation(Long userId) {
 		User seller = _getUserByUserId(userId);
 		userRepository.deleteById(seller.getId());
 		Restaurant restaurant = internalRestaurantService._deleteRestaurantBySellerId(seller.getId());
