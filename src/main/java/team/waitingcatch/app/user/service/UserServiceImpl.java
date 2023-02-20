@@ -166,7 +166,7 @@ public class UserServiceImpl implements UserService, InternalUserService {
 	public void deleteSellerAndRelatedInformation(Long userId) {
 		User seller = _getUserByUserId(userId);
 		userRepository.deleteById(seller.getId());
-		internalRestaurantService._deleteRestaurantBySeller(seller.getId());
+		internalRestaurantService._deleteRestaurantBySellerId(seller.getId());
 	}
 
 	@Override

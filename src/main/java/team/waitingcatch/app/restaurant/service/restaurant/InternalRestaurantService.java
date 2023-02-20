@@ -14,4 +14,5 @@ public interface InternalRestaurantService {
 	void _closeLineup(Long restaurantId);
 
 	void _deleteRestaurantBySellerId(Long sellerId);
+	
 }
