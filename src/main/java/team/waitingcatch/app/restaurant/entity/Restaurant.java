@@ -1,5 +1,7 @@
 package team.waitingcatch.app.restaurant.entity;
 
+import java.util.UUID;
+
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -16,6 +18,7 @@ import team.waitingcatch.app.common.Address;
 import team.waitingcatch.app.common.Position;
 import team.waitingcatch.app.common.entity.TimeStamped;
 import team.waitingcatch.app.restaurant.dto.requestseller.ApproveSignUpSellerManagementEntityPassToRestaurantEntityRequest;
+import team.waitingcatch.app.restaurant.dto.restaurant.SaveDummyRestaurantRequest;
 import team.waitingcatch.app.restaurant.dto.restaurant.UpdateRestaurantEntityRequest;
 import team.waitingcatch.app.user.entitiy.User;
 
@@ -60,21 +63,8 @@ public class Restaurant extends TimeStamped {
 	@JoinColumn(name = "user_id", nullable = false)
 	private User user;
 
-	public Restaurant(String name, String images, Position position, Address address, String phoneNumber,
-		boolean isDeleted, String searchKeywords, String description, int capacity, String businessLicenseNo,
-		User user) {
-		this.name = name;
-		this.images = images;
-		this.position = position;
-		this.address = address;
-		this.phoneNumber = phoneNumber;
-		this.isDeleted = isDeleted;
-		this.searchKeywords = searchKeywords;
-		this.description = description;
-		this.capacity = capacity;
-		this.businessLicenseNo = businessLicenseNo;
-		this.user = user;
-	}
+	@Column(nullable = false)
+	private String category;
 
 	public Restaurant(ApproveSignUpSellerManagementEntityPassToRestaurantEntityRequest
 		approveSignUpSellerManagementEntityPassToRestaurantEntityRequest) {
@@ -89,6 +79,21 @@ public class Restaurant extends TimeStamped {
 		this.capacity = 0;
 		this.user = approveSignUpSellerManagementEntityPassToRestaurantEntityRequest.getUser();
 		this.images = "기본값";
+		this.category = "기본값 카테고리";
+	}
+
+	//dummy data
+	public Restaurant(SaveDummyRestaurantRequest request) {
+		this.name = request.getName();
+		this.address = request.getAddress();
+		this.businessLicenseNo = String.valueOf(UUID.randomUUID());
+		this.capacity = 30;
+		this.description = request.getName() + "은 한국 최고의 음식 입니다.";
+		this.searchKeywords = request.getCategory();
+		this.phoneNumber = request.getPhoneNumber();
+		this.position = request.getPosition();
+		this.category = request.getCategory();
+		this.user = request.getUser();
 	}
 
 	public String getProvince() {
