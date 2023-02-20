@@ -8,4 +8,6 @@ public interface InternalEventService {
 	Event _getEventById(Long id);
 
 	Restaurant _getRestaurantById(Long id);
+
+	void _bulkSoftDeleteByRestaurantId(Long restaurantId);
 }

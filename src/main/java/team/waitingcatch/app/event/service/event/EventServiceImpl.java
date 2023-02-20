@@ -125,4 +125,9 @@ public class EventServiceImpl implements EventService, InternalEventService {
 		return restaurant;
 	}
 
+	@Override
+	public void _bulkSoftDeleteByRestaurantId(Long restaurantId) {
+		eventRepository.softDeleteByRestaurantId(restaurantId);
+	}
+
 }

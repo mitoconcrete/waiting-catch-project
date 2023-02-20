@@ -10,6 +10,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.common.util.S3Uploader;
+import team.waitingcatch.app.event.service.event.InternalEventService;
+import team.waitingcatch.app.lineup.service.InternalLineupHistoryService;
+import team.waitingcatch.app.lineup.service.InternalLineupService;
+import team.waitingcatch.app.lineup.service.InternalReviewService;
 import team.waitingcatch.app.restaurant.dto.restaurant.DeleteRestaurantByAdminServiceRequest;
 import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantBasicInfoResponse;
 import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantBasicInfoServiceRequest;
@@ -30,6 +34,14 @@ public class RestaurantServiceImpl implements RestaurantService, InternalRestaur
 	private final RestaurantRepository restaurantRepository;
 	private final RestaurantInfoRepository restaurantInfoRepository;
 	private final S3Uploader s3Uploader;
+
+	private final InternalLineupService internalLineupService;
+
+	private final InternalEventService internalEventService;
+
+	private final InternalReviewService internalReviewService;
+
+	private final InternalLineupHistoryService internalLineupHistoryService;
 
 	@Override
 	@Transactional(readOnly = true)
@@ -115,5 +127,14 @@ public class RestaurantServiceImpl implements RestaurantService, InternalRestaur
 		RestaurantInfo restaurantInfo = restaurantInfoRepository.findById(restaurantId)
 			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 레스토랑입니다."));
 		restaurantInfo.closeLineup();
+	}
+
+	@Override
+	public void _deleteRestaurantBySellerId(Long sellerId) {
+		Restaurant restaurant = _getRestaurantByUserId(sellerId);
+		internalReviewService._bulkSoftDeleteByRestaurantId(restaurant.getId());
+		internalLineupService._bulkSoftDeleteByRestaurantId(restaurant.getId());
+		internalLineupHistoryService._bulkSoftDeleteByRestaurantId(restaurant.getId());
+		internalEventService._bulkSoftDeleteByRestaurantId(restaurant.getId());
 	}
 }

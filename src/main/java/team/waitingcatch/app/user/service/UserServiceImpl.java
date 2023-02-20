@@ -17,6 +17,7 @@ import team.waitingcatch.app.redis.dto.KillTokenRequest;
 import team.waitingcatch.app.redis.service.AliveTokenService;
 import team.waitingcatch.app.redis.service.KilledAccessTokenService;
 import team.waitingcatch.app.redis.service.RemoveTokenRequest;
+import team.waitingcatch.app.restaurant.service.restaurant.InternalRestaurantService;
 import team.waitingcatch.app.user.dto.CreateUserServiceRequest;
 import team.waitingcatch.app.user.dto.DeleteUserRequest;
 import team.waitingcatch.app.user.dto.FindPasswordRequest;
@@ -38,6 +39,9 @@ public class UserServiceImpl implements UserService, InternalUserService {
 	private final UserRepository userRepository;
 	private final AliveTokenService refreshTokenService;
 	private final KilledAccessTokenService accessTokenService;
+
+	private final InternalRestaurantService internalRestaurantService;
+
 	@Value("${spring.mail.username}")
 	private String smtpSenderEmail;
 
@@ -159,6 +163,13 @@ public class UserServiceImpl implements UserService, InternalUserService {
 	}
 
 	@Override
+	public void deleteSellerAndRelatedInformation(Long userId) {
+		User seller = _getUserByUserId(userId);
+		userRepository.deleteById(seller.getId());
+		internalRestaurantService._deleteRestaurantBySeller(seller.getId());
+	}
+
+	@Override
 	public String _getUsernameById(Long id) {
 		return userRepository.findUsernameById(id);
 	}
@@ -177,5 +188,11 @@ public class UserServiceImpl implements UserService, InternalUserService {
 		return userRepository.findByEmailAndIsDeletedFalse(email).orElseThrow(
 			() -> new IllegalArgumentException("유저가 존재하지 않습니다.")
 		);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public User _getUserByUserId(Long id) {
+		return userRepository.findByUserId(id).orElseThrow(() -> new IllegalArgumentException("유저가 존재하지 않습니다."));
 	}
 }

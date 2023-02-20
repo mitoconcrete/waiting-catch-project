@@ -63,7 +63,8 @@ public class LineupServiceImpl implements LineupService, InternalLineupService {
 		// if (!in2000Meter()) Restaurant merge 후 추가
 		Integer lastWaitingNumber = lineupRepository.findLastWaitingNumberByRestaurantId(restaurantId);
 		int waitingNumber = getWaitingNumber(lastWaitingNumber);
-		StartLineupEntityRequest entityRequest = new StartLineupEntityRequest(serviceRequest, restaurant, waitingNumber);
+		StartLineupEntityRequest entityRequest = new StartLineupEntityRequest(serviceRequest, restaurant,
+			waitingNumber);
 		Lineup lineup = Lineup.createLineup(entityRequest);
 		lineupRepository.save(lineup);
 		// restaurant.addLineupCount() RestaurantInfo merge 후 추가
@@ -98,7 +99,8 @@ public class LineupServiceImpl implements LineupService, InternalLineupService {
 		List<LineupRecordWithTypeResponse> pastLineupList = internalLineupHistoryService._getRecordsByUserId(
 				serviceRequest.getUserId(), serviceRequest.getStatus())
 			.stream()
-			.map(lineupRecord -> LineupRecordWithTypeResponse.of(lineupRecord, StoredLineupTableNameEnum.LINEUP_HISTORY))
+			.map(
+				lineupRecord -> LineupRecordWithTypeResponse.of(lineupRecord, StoredLineupTableNameEnum.LINEUP_HISTORY))
 			.collect(Collectors.toList());
 
 		return Stream.concat(todayLineupList.stream(), pastLineupList.stream()).collect(Collectors.toList());
@@ -152,5 +154,10 @@ public class LineupServiceImpl implements LineupService, InternalLineupService {
 	public Lineup _getByIdWithUser(Long id) {
 		return lineupRepository.findByIdWithUser(id)
 			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 줄서기입니다."));
+	}
+
+	@Override
+	public void _bulkSoftDeleteByRestaurantId(Long restaurantId) {
+		lineupRepository.bulkSoftDeleteByRestaurantId(restaurantId);
 	}
 }
