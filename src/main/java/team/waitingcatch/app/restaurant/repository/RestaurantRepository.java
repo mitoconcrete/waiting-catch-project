@@ -3,6 +3,8 @@ package team.waitingcatch.app.restaurant.repository;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import team.waitingcatch.app.restaurant.entity.Restaurant;
 
@@ -12,7 +14,7 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, Long> {
 
 	Optional<Restaurant> findByUserId(Long userId);
 
-	Restaurant findByUser_Username(String sellerName);
+	Optional<Restaurant> findByUser_Username(String sellerName);
 
 	// Optional<Restaurant> findByName(String name);
 }
