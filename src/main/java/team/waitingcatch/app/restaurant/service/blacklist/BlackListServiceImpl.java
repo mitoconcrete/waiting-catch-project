@@ -1,7 +1,6 @@
 package team.waitingcatch.app.restaurant.service.blacklist;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -31,13 +30,12 @@ public class BlackListServiceImpl implements BlackListService, InternalBlackList
 
 	public void _createBlackList(
 		Restaurant restaurant, User user) {
-		Optional<BlackList> blackList = blackListRepository.findByUserIdAndRestaurantUserIdAndIsDeletedFalse(
-			user.getId(), restaurant.getUser().getId());
 
-		if (blackList.isPresent()) {
+		blackListRepository.findByUserIdAndRestaurantUserIdAndIsDeletedFalse(
+			user.getId(), restaurant.getUser().getId()).ifPresent(a -> {
 			throw new IllegalArgumentException("이미 차단된 사용자 입니다");
-		}
-		
+		});
+
 		CreateBlackListInternalServiceRequest createBlackListInternalServiceRequest
 			= new CreateBlackListInternalServiceRequest(restaurant, user);
 		BlackList newBlackList = new BlackList(createBlackListInternalServiceRequest);
@@ -56,7 +54,6 @@ public class BlackListServiceImpl implements BlackListService, InternalBlackList
 		BlackListRequest blackListRequest = blackListRequestRepository.findByUser_IdAndRestaurant_User_IdAndStatus(
 			blackList.getUser().getId(), blackList.getRestaurant()
 				.getId());
-		System.out.println("###############" + blackListRequest.getUser().getId());
 		blackList.checkDeleteStatus();
 		blackList.deleteSuccess();
 		blackListRequest.updateCancelStatus();
@@ -66,9 +63,9 @@ public class BlackListServiceImpl implements BlackListService, InternalBlackList
 	public List<GetBlackListResponse> getBlackListByRestaurantIdRequest(
 		GetBlackListByRestaurantIdServiceRequest getBlackListByRestaurantIdServiceRequest) {
 		Restaurant restaurant = internalRestaurantService._getRestaurantByUserId(
-			getBlackListByRestaurantIdServiceRequest.getUserId());
-		List<BlackList> blackList = blackListRepository.findAllByRestaurantId(
-			restaurant.getId());
+			getBlackListByRestaurantIdServiceRequest.getSellerId());
+		List<BlackList> blackList = blackListRepository.findAllByRestaurant(
+			restaurant);
 		return blackList.stream().map(GetBlackListResponse::new).collect(Collectors.toList());
 	}
 }

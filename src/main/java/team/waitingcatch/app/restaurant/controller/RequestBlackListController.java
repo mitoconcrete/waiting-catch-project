@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.restaurant.dto.blacklist.ApproveBlackListServiceRequest;
-import team.waitingcatch.app.restaurant.dto.blacklist.CancelRequestUserBlackListByRestaurantServiceRequest;
+import team.waitingcatch.app.restaurant.dto.blacklist.CancelRequestBlackListBySellerServiceRequest;
 import team.waitingcatch.app.restaurant.dto.blacklist.GetRequestBlackListResponse;
 import team.waitingcatch.app.restaurant.dto.blacklist.RequestUserBlackListByRestaurantControllerRequest;
 import team.waitingcatch.app.restaurant.dto.blacklist.RequestUserBlackListByRestaurantServiceRequest;
@@ -40,11 +40,11 @@ public class RequestBlackListController {
 	}
 
 	@PutMapping("/seller/blacklist-request/{requestBlackListId}")
-	public void cancelRequestUserBlackListByRestaurant(@PathVariable Long requestBlackListId,
+	public void cancelRequestBlackListBySeller(@PathVariable Long requestBlackListId,
 		@AuthenticationPrincipal UserDetailsImpl userDetails) {
-		CancelRequestUserBlackListByRestaurantServiceRequest cancelRequestUserBlackListByRestaurantServiceRequest
-			= new CancelRequestUserBlackListByRestaurantServiceRequest(requestBlackListId, userDetails.getId());
-		blackListRequestService.cancelRequestUserBlackList(cancelRequestUserBlackListByRestaurantServiceRequest);
+		CancelRequestBlackListBySellerServiceRequest cancelRequestBlackListBySellerServiceRequest
+			= new CancelRequestBlackListBySellerServiceRequest(requestBlackListId, userDetails.getId());
+		blackListRequestService.cancelRequestUserBlackList(cancelRequestBlackListBySellerServiceRequest);
 	}
 
 	//관리자 부분

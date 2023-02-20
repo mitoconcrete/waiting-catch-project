@@ -50,8 +50,6 @@ public class RestaurantController {
 		@RequestPart("updateRestaurantRequest") UpdateRestaurantControllerRequest updateRestaurantControllerRequest,
 		@RequestPart(value = "images", required = false) List<MultipartFile> multipartFile,
 		@AuthenticationPrincipal UserDetailsImpl userDetails) throws IOException {
-
-		System.out.println("###################확인해보기널값 레스토랑54" + multipartFile);
 		UpdateRestaurantServiceRequest updateRestaurantServiceRequest =
 			new UpdateRestaurantServiceRequest(updateRestaurantControllerRequest, multipartFile,
 				userDetails.getId());

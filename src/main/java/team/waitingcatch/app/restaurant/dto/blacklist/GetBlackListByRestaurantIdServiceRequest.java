@@ -4,9 +4,9 @@ import lombok.Getter;
 
 @Getter
 public class GetBlackListByRestaurantIdServiceRequest {
-	private final Long userId;
+	private final Long sellerId;
 
 	public GetBlackListByRestaurantIdServiceRequest(Long restaurantId) {
-		this.userId = restaurantId;
+		this.sellerId = restaurantId;
 	}
 }

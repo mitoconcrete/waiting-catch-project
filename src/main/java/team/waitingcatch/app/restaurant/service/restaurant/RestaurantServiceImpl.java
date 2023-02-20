@@ -76,12 +76,20 @@ public class RestaurantServiceImpl implements RestaurantService, InternalRestaur
 		if (updateRestaurantServiceRequest.getFiles().size() >= 1) {
 			for (MultipartFile multipartFile : updateRestaurantServiceRequest.getFiles()) {
 				String originalName = multipartFile.getOriginalFilename();
-				if (Objects.equals(originalName, "기본값")) {
-					System.out.println("변화없음");
-				} else {
-					String imageUrls = s3Uploader.upload(multipartFile, "restaurant");
-					imageName += imageUrls + ",";
+				if (!Objects.equals(originalName, "기본URL")) {
+					{
+						String imageUrls = s3Uploader.upload(multipartFile, "restaurant");
+						imageName += imageUrls + ",";
+
+						String lastCommaCutURL = imageName.substring(0, imageName.length() - 1);
+
+						UpdateRestaurantEntityRequest updateRestaurantEntityRequest = new UpdateRestaurantEntityRequest(
+							updateRestaurantServiceRequest, lastCommaCutURL);
+						restaurant.updateRestaurant(updateRestaurantEntityRequest);
+						restaurantInfo.updateRestaurantInfo(updateRestaurantEntityRequest);
+					}
 				}
+				imageName += "기본URL" + ",";
 				String lastCommaCutURL = imageName.substring(0, imageName.length() - 1);
 				UpdateRestaurantEntityRequest updateRestaurantEntityRequest = new UpdateRestaurantEntityRequest(
 					updateRestaurantServiceRequest, lastCommaCutURL);
@@ -89,10 +97,6 @@ public class RestaurantServiceImpl implements RestaurantService, InternalRestaur
 				restaurantInfo.updateRestaurantInfo(updateRestaurantEntityRequest);
 			}
 		}
-		UpdateRestaurantEntityRequest updateRestaurantEntityRequest = new UpdateRestaurantEntityRequest(
-			updateRestaurantServiceRequest, "기본URL");
-		restaurant.updateRestaurant(updateRestaurantEntityRequest);
-		restaurantInfo.updateRestaurantInfo(updateRestaurantEntityRequest);
 
 	}
 
