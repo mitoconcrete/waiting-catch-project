@@ -20,7 +20,7 @@ public class CreateReviewControllerRequest {
 
 	private long lineupId;
 
-	@Range(min = 1, max = 5)
+	@Range(min = 0, max = 5)
 	private int rate;
 
 	@Size(min = 10, max = 500)

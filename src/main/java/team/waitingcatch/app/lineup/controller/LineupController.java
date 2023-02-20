@@ -8,6 +8,7 @@ import javax.validation.constraints.Pattern;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -59,7 +60,7 @@ public class LineupController {
 		lineupService.startWaiting(serviceRequest);
 	}
 
-	@PutMapping("/restaurants/lineup/{lineupId}")
+	@DeleteMapping("/restaurants/lineup/{lineupId}")
 	public void cancelWaiting(@PathVariable long lineupId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
 		lineupService.cancelWaiting(new CancelWaitingRequest(lineupId, userDetails.getId()));
 	}
@@ -71,11 +72,11 @@ public class LineupController {
 
 	@GetMapping("/customer/lineup-records")
 	public GenericResponse<LineupRecordWithTypeResponse> getLineupRecords(
-		@RequestParam @Pattern(regexp = "^(WAIT|CALL|CANCEL|ARRIVE)$") String arrivalStatus,
+		@RequestParam(required = false) @Pattern(regexp = "^(WAIT|CALL|CANCEL|ARRIVE)$") String arrivalStatus,
 		@AuthenticationPrincipal UserDetailsImpl userDetails) {
 
 		GetLineupRecordsServiceRequest serviceRequest = new GetLineupRecordsServiceRequest(
-			userDetails.getId(), ArrivalStatusEnum.valueOf(arrivalStatus));
+			userDetails.getId(), arrivalStatus != null ? ArrivalStatusEnum.valueOf(arrivalStatus) : null);
 		return new GenericResponse<>(lineupService.getLineupRecords(serviceRequest));
 	}
 
