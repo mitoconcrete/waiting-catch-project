@@ -12,11 +12,16 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.common.util.JwtUtil;
+import team.waitingcatch.app.event.service.event.InternalEventService;
+import team.waitingcatch.app.lineup.service.InternalLineupHistoryService;
+import team.waitingcatch.app.lineup.service.InternalLineupService;
+import team.waitingcatch.app.lineup.service.InternalReviewService;
 import team.waitingcatch.app.redis.dto.CreateRefreshTokenServiceRequest;
 import team.waitingcatch.app.redis.dto.KillTokenRequest;
 import team.waitingcatch.app.redis.service.AliveTokenService;
 import team.waitingcatch.app.redis.service.KilledAccessTokenService;
 import team.waitingcatch.app.redis.service.RemoveTokenRequest;
+import team.waitingcatch.app.restaurant.entity.Restaurant;
 import team.waitingcatch.app.restaurant.service.restaurant.InternalRestaurantService;
 import team.waitingcatch.app.user.dto.CreateUserServiceRequest;
 import team.waitingcatch.app.user.dto.DeleteUserRequest;
@@ -39,8 +44,11 @@ public class UserServiceImpl implements UserService, InternalUserService {
 	private final UserRepository userRepository;
 	private final AliveTokenService refreshTokenService;
 	private final KilledAccessTokenService accessTokenService;
-
 	private final InternalRestaurantService internalRestaurantService;
+	private final InternalLineupService internalLineupService;
+	private final InternalLineupHistoryService internalLineupHistoryService;
+	private final InternalEventService internalEventService;
+	private final InternalReviewService internalReviewService;
 
 	@Value("${spring.mail.username}")
 	private String smtpSenderEmail;
@@ -166,7 +174,11 @@ public class UserServiceImpl implements UserService, InternalUserService {
 	public void deleteSellerAndRelatedInformation(Long userId) {
 		User seller = _getUserByUserId(userId);
 		userRepository.deleteById(seller.getId());
-		internalRestaurantService._deleteRestaurantBySellerId(seller.getId());
+		Restaurant restaurant = internalRestaurantService._deleteRestaurantBySellerId(seller.getId());
+		internalLineupHistoryService._bulkSoftDeleteByRestaurantId(restaurant.getId());
+		internalLineupService._bulkSoftDeleteByRestaurantId(restaurant.getId());
+		internalEventService._bulkSoftDeleteByRestaurantId(restaurant.getId());
+		internalReviewService._bulkSoftDeleteByRestaurantId(restaurant.getId());
 	}
 
 	@Override

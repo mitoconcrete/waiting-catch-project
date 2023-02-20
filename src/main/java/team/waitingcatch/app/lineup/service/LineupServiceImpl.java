@@ -36,7 +36,6 @@ import team.waitingcatch.app.restaurant.service.restaurant.InternalRestaurantSer
 @RequiredArgsConstructor
 public class LineupServiceImpl implements LineupService, InternalLineupService {
 	private final LineupRepository lineupRepository;
-
 	private final InternalRestaurantService internalRestaurantService;
 	private final InternalLineupHistoryService internalLineupHistoryService;
 
