@@ -73,7 +73,7 @@ public class LineupServiceImpl implements LineupService, InternalLineupService {
 	public void cancelWaiting(CancelWaitingRequest request) {
 		Lineup lineup = _getByIdWithUser(request.getLineupId());
 		if (!lineup.isSameUserId(request.getUserId())) {
-			throw new IllegalArgumentException("유저 정보가 일치하지 않습니다");
+			throw new IllegalArgumentException("유저 정보가 일치하지 않습니다.");
 		}
 		lineup.updateStatus(ArrivalStatusEnum.CANCEL);
 
