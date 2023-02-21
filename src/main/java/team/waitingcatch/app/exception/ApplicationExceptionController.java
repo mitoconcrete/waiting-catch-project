@@ -1,9 +1,9 @@
 package team.waitingcatch.app.exception;
 
-import java.util.Objects;
-
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -16,8 +16,14 @@ public class ApplicationExceptionController {
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public BasicExceptionResponse handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
+		BindingResult bindingResult = e.getBindingResult();
+		StringBuilder builder = new StringBuilder();
+		for (FieldError fieldError : bindingResult.getFieldErrors()) {
+			builder.append(fieldError.getDefaultMessage());
+			builder.append("/");
+		}
 		return new BasicExceptionResponse(HttpStatus.BAD_REQUEST,
-			Objects.requireNonNull(e.getFieldError()).getDefaultMessage());
+			builder.deleteCharAt(builder.lastIndexOf("/")).toString());
 	}
 
 	@ExceptionHandler({IllegalArgumentException.class})
