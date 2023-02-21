@@ -15,6 +15,8 @@ public class UserInfoResponse {
 	private final String name;
 	private final UserRoleEnum role;
 	private final boolean isBanned;
+
+	private final String phoneNumber;
 	private final boolean isDeleted;
 	private final LocalDateTime createdDate;
 	private final LocalDateTime modifiedDate;
@@ -26,6 +28,7 @@ public class UserInfoResponse {
 		this.email = user.getEmail();
 		this.name = user.getName();
 		this.role = user.getRole();
+		this.phoneNumber = user.getPhoneNumber();
 		this.isBanned = user.isBanned();
 		this.isDeleted = user.isDeleted();
 		this.createdDate = user.getCreatedDate();
