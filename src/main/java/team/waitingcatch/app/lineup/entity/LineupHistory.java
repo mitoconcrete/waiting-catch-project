@@ -59,7 +59,7 @@ public class LineupHistory extends TimeStamped {
 	@Column(nullable = false)
 	private boolean isReviewed;
 
-	@Column(name = "is_deleted", nullable = false)
+	@Column(nullable = false)
 	private boolean isDeleted;
 
 	public static LineupHistory createLineupHistory(Lineup lineup) {

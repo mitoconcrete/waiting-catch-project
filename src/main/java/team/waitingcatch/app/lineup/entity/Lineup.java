@@ -57,7 +57,7 @@ public class Lineup extends TimeStamped {
 	@Column(nullable = false)
 	private boolean isReviewed;
 
-	@Column(name = "is_deleted", nullable = false)
+	@Column(nullable = false)
 	private boolean isDeleted;
 
 	public static Lineup createLineup(StartLineupEntityRequest entityRequest) {

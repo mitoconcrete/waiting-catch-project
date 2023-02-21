@@ -36,7 +36,7 @@ public class Menu extends TimeStamped {
 
 	private String images;
 
-	@Column(name = "is_deleted", nullable = false)
+	@Column(nullable = false)
 	private boolean isDeleted;
 
 	public Menu(Restaurant restaurant, String name, int price, String images) {

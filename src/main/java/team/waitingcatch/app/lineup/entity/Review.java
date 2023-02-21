@@ -48,7 +48,7 @@ public class Review extends TimeStamped {
 	@Column(nullable = false)
 	private String content;
 
-	@Column(name = "is_deleted", nullable = false)
+	@Column(nullable = false)
 	private boolean isDeleted;
 
 	public static Review craeteReview(CreateReviewEntityRequest entityRequest) {
