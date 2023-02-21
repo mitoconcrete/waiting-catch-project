@@ -41,6 +41,7 @@ import team.waitingcatch.app.user.service.UserService;
 
 @RequestMapping("/api")
 @RestController
+@Validated
 @RequiredArgsConstructor
 public class UserController {
 
@@ -140,7 +141,7 @@ public class UserController {
 	@GetMapping("/google/callback")
 	@ResponseStatus(HttpStatus.CREATED)
 	public void createTokenByEmail(
-		@RequestParam @Validated @Pattern(regexp = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+.[A-Za-z]{2,6}$",
+		@RequestParam @Pattern(regexp = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+.[A-Za-z]{2,6}$",
 			message = "이메일 형식을 맞춰주세요.") String email, HttpServletResponse response) {
 		LoginServiceResponse responsePayload = userService.createAccessTokenByEmail(email);
 		response.addHeader(JwtUtil.AUTHORIZATION_HEADER, responsePayload.getAccessToken());
