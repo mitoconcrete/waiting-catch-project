@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -48,14 +49,14 @@ public class SellerLineupController {
 		return "seller/lineup";
 	}
 
-	@GetMapping("/lineup/{lineupId}/status")
-	public String updateArrivalStatus(
+	@PutMapping("/lineup/{lineupId}/status")
+	@ResponseBody
+	public void updateArrivalStatus(
 		@PathVariable long lineupId,
 		@Valid @ModelAttribute UpdateArrivalStatusControllerRequest controllerRequest,
 		@AuthenticationPrincipal UserDetailsImpl userDetails) {
 
 		ArrivalStatusEnum status = ArrivalStatusEnum.valueOf(controllerRequest.getStatus());
 		lineupService.updateArrivalStatus(new UpdateArrivalStatusServiceRequest(userDetails.getId(), lineupId, status));
-		return "redirect:/seller/lineup-page";
 	}
 }

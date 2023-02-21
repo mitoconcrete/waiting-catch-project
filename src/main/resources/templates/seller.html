@@ -38,7 +38,7 @@
     function openLineup() {
         $.ajax({
             url: '/seller/open-lineup',
-            method: 'PUT',
+            type: 'PUT',
             headers: {
                 'Authorization': localStorage.getItem('accessToken')
             },
@@ -54,7 +54,7 @@
     function closeLineup() {
         $.ajax({
             url: '/seller/close-lineup',
-            method: 'PUT',
+            type: 'PUT',
             headers: {
                 'Authorization': localStorage.getItem('accessToken')
             },
@@ -77,7 +77,7 @@
 
     function sendTokenLogout() {
         fetch("/seller/logout", {
-            method: 'get',
+            type: 'get',
             headers: {
                 'content-type': 'application/json',
                 'Authorization': localStorage.getItem("accessToken"),
@@ -88,7 +88,7 @@
 
     function sendTokenDelete() {
         fetch("/seller/delete", {
-            method: 'get',
+            type: 'get',
             headers: {
                 'content-type': 'application/json',
                 'Authorization': localStorage.getItem("accessToken"),

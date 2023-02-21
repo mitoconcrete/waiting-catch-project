@@ -21,14 +21,72 @@
             <td th:text="${lineup.status.value}">대기</td>
             <td th:text="${lineup.startedAt}">2023-03-01T11:00:00</td>
             <td th:text="${lineup.arrivedAt}">2023-03-01T12:00:00</td>
-            <td><a href="lineup.html" th:href="@{/lineup/{lineupId}/status(status='CALL', lineupId=${lineup.id})}"
-                   th:text="|고객 호출 ${lineup.callCount} 회|">고객 호출</a></td>
-            <td><a href="lineup.html" th:href="@{/lineup/{lineupId}/status(staus='ARRIVE', lineupId=${lineup.id})}">고객
-                도착</a></td>
-            <td><a href="lineup.html" th:href="@{/lineup/{lineupId}/status(staus='CANCEL', lineupId=${lineup.id})}">대기
-                취소</a></td>
+            <td><button type="button" th:onclick="call([[${lineup.id}]])">고객 호출</button></td>
+            <td><button type="button" th:onclick="arrive([[${lineup.id}]])">고객 도착</button></td>
+            <td><button type="button" th:onclick="cancel([[${lineup.id}]])">취소</button></td>
         </tr>
         </tbody>
     </table>
 </div>
+<script>
+    function call(lineupId) {
+        const status = 'CALL';
+        $.ajax({
+            url: `/seller/lineup/${lineupId}/status`,
+            data: {
+                'status': status
+            },
+            type: 'PUT',
+            headers: {
+                'Authorization': localStorage.getItem('accessToken')
+            },
+            success: function () {
+                window.location.reload();
+            },
+            error: function (response) {
+                console.log(response);
+            }
+        })
+    }
+
+    function arrive(lineupId) {
+        const status = 'ARRIVE';
+        $.ajax({
+            url: `/seller/lineup/${lineupId}/status`,
+            data: {
+                'status': status
+            },
+            type: 'PUT',
+            headers: {
+                'Authorization': localStorage.getItem('accessToken')
+            },
+            success: function () {
+                window.location.reload();
+            },
+            error: function (response) {
+                console.log(response);
+            }
+        })
+    }
+
+    function cancel(lineupId) {
+        const status = 'CANCEL';
+        $.ajax({
+            url: `/seller/lineup/${lineupId}/status`,
+            data: {
+                'status': status
+            },
+            type: 'PUT',
+            headers: {
+                'Authorization': localStorage.getItem('accessToken')
+            },
+            success: function () {
+                window.location.reload();
+            },
+            error: function (response) {
+                console.log(response);
+            }
+        })
+    }
+</script>
 </html>
