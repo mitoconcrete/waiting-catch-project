@@ -7,7 +7,6 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.SQLDelete;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -21,7 +20,7 @@ import team.waitingcatch.app.user.enums.UserRoleEnum;
 
 @Entity
 @Getter
-@SQLDelete(sql = "UPDATE user SET is_deleted = true WHERE id = ?")
+@SQLDelete(sql = "UPDATE user SET is_deleted = true WHERE user_id = ?")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User extends TimeStamped {
 	@Id
@@ -30,39 +29,31 @@ public class User extends TimeStamped {
 	private Long id;
 
 	// 아이디는 고유해야하므로, unique 값으로 둡니다.
-	@NotNull
 	@Column(nullable = false, unique = true)
 	private String username;
 
-	@NotNull
 	@Column(nullable = false)
 	private String password;
 
-	@NotNull
 	@Column(nullable = false, unique = true)
 	private String email;
 
 	@Column(unique = true)
 	private String nickname;
 
-	@NotNull
 	@Column(nullable = false)
 	private String name;
 
-	@NotNull
 	@Column(nullable = false, unique = true)
 	private String phoneNumber;
 
-	@NotNull
 	@Column(nullable = false)
 	@Enumerated(EnumType.STRING)
 	private UserRoleEnum role;
 
-	@NotNull
 	@Column(nullable = false)
 	private boolean isBanned;
 
-	@NotNull
 	@Column(nullable = false)
 	private boolean isDeleted;
 
@@ -106,5 +97,10 @@ public class User extends TimeStamped {
 	public void updatePassword(String password) {
 		PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 		this.password = passwordEncoder.encode(password);
+	}
+
+	public boolean isPasswordMatch(String password) {
+		PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+		return passwordEncoder.matches(password, this.password);
 	}
 }

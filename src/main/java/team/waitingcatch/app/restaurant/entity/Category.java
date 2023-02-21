@@ -9,6 +9,8 @@ import javax.persistence.Id;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import team.waitingcatch.app.restaurant.dto.category.CreateCategoryRequest;
+import team.waitingcatch.app.restaurant.dto.category.UpdateCategoryServiceRequest;
 
 @Entity
 @Getter
@@ -23,4 +25,17 @@ public class Category {
 
 	@Column(nullable = false)
 	private String name;
+
+	public Category(Long parentId, String name) {
+		this.parentId = parentId;
+		this.name = name;
+	}
+
+	public static Category create(CreateCategoryRequest request) {
+		return new Category(request.getParentId(), request.getName());
+	}
+
+	public void update(UpdateCategoryServiceRequest serviceRequest) {
+		this.name = serviceRequest.getName();
+	}
 }

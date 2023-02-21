@@ -15,6 +15,7 @@ import lombok.NoArgsConstructor;
 import team.waitingcatch.app.common.Address;
 import team.waitingcatch.app.common.Position;
 import team.waitingcatch.app.common.entity.TimeStamped;
+import team.waitingcatch.app.restaurant.dto.requestseller.DemandSignUpSellerServiceRequest;
 import team.waitingcatch.app.restaurant.enums.AcceptedStatusEnum;
 
 @Getter
@@ -29,6 +30,8 @@ public class SellerManagement extends TimeStamped {
 	@Column(nullable = false)
 	private String username;
 	@Column(nullable = false)
+	private String name;
+	@Column(nullable = false)
 	private String email;
 	@Column(name = "phone_number", nullable = false)
 	private String phoneNumber;
@@ -40,8 +43,7 @@ public class SellerManagement extends TimeStamped {
 	private Position position;
 	@Column(nullable = false)
 	private String description;
-	@Column(name = "business_license_no", nullable = false)
-	private String businessLicenseNo;
+
 	@Column(nullable = false)
 	@Enumerated(value = EnumType.STRING)
 	private AcceptedStatusEnum status;
@@ -49,5 +51,41 @@ public class SellerManagement extends TimeStamped {
 	private String categories;
 	@Column(name = "search_keywords", nullable = false)
 	private String searchKeyWords;
+	@Column(name = "business_license_no", nullable = false)
+	private String businessLicenseNo;
 
+	public SellerManagement(DemandSignUpSellerServiceRequest demandSignupSellerServiceRequest) {
+		this.username = demandSignupSellerServiceRequest.getUsername();
+		this.email = demandSignupSellerServiceRequest.getEmail();
+		this.phoneNumber = demandSignupSellerServiceRequest.getPhoneNumber();
+		this.restaurantName = demandSignupSellerServiceRequest.getRestaurantName();
+		this.address = demandSignupSellerServiceRequest.getAddress();
+		this.position = demandSignupSellerServiceRequest.getPosition();
+		this.description = demandSignupSellerServiceRequest.getDescription();
+		this.status = AcceptedStatusEnum.WAIT;
+		this.categories = demandSignupSellerServiceRequest.getCategories();
+		this.searchKeyWords = demandSignupSellerServiceRequest.getSearchKeyWords();
+		this.businessLicenseNo = demandSignupSellerServiceRequest.getBusinessLicenseNo();
+		this.name = demandSignupSellerServiceRequest.getName();
+	}
+
+	public void approveUpdateStatus() {
+		this.status = AcceptedStatusEnum.APPROVAL;
+	}
+
+	public void rejectUpdateStatus() {
+		this.status = AcceptedStatusEnum.REJECTION;
+	}
+
+	public void checkReject() {
+		if (this.status == AcceptedStatusEnum.REJECTION) {
+			throw new IllegalArgumentException("This request already reject please request seller again");
+		}
+	}
+
+	public void checkApprove() {
+		if (this.status == AcceptedStatusEnum.APPROVAL) {
+			throw new IllegalArgumentException("This request already Approve please request seller again");
+		}
+	}
 }

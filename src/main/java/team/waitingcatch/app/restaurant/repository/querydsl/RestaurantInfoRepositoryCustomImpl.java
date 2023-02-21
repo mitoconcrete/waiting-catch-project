@@ -1,5 +1,12 @@
 package team.waitingcatch.app.restaurant.repository.querydsl;
 
+import static com.querydsl.core.types.dsl.Expressions.asNumber;
+import static com.querydsl.core.types.dsl.MathExpressions.acos;
+import static com.querydsl.core.types.dsl.MathExpressions.cos;
+import static com.querydsl.core.types.dsl.MathExpressions.radians;
+import static com.querydsl.core.types.dsl.MathExpressions.sin;
+import static team.waitingcatch.app.restaurant.entity.QRestaurant.restaurant;
+import static team.waitingcatch.app.restaurant.entity.QRestaurantInfo.restaurantInfo;
 import static com.querydsl.core.types.dsl.Expressions.*;
 import static com.querydsl.core.types.dsl.MathExpressions.*;
 import static team.waitingcatch.app.restaurant.entity.QRestaurant.*;
