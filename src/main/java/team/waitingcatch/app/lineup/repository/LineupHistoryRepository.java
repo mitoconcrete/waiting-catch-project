@@ -8,7 +8,7 @@ import org.springframework.data.repository.query.Param;
 import team.waitingcatch.app.lineup.entity.LineupHistory;
 
 public interface LineupHistoryRepository extends JpaRepository<LineupHistory, Long>, LineupHistoryRepositoryCustom {
-	@Modifying
+	@Modifying(clearAutomatically = true, flushAutomatically = true)
 	@Query(value = "update LineupHistory l set l.isDeleted = true where l.restaurant.id = :restaurantId")
 	void bulkSoftDeleteByRestaurantId(@Param("restaurantId") Long restaurantId);
 }

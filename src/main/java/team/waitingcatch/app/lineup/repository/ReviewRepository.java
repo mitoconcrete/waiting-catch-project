@@ -8,7 +8,7 @@ import org.springframework.data.repository.query.Param;
 import team.waitingcatch.app.lineup.entity.Review;
 
 public interface ReviewRepository extends JpaRepository<Review, Long>, ReviewRepositoryCustom {
-	@Modifying
+	@Modifying(clearAutomatically = true, flushAutomatically = true)
 	@Query(value = "update Review r set r.isDeleted = true where r.restaurant.id = :restaurantId")
 	void bulkSoftDeleteByRestaurantId(@Param("restaurantId") Long restaurantId);
 }

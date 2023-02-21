@@ -25,7 +25,7 @@ public interface LineupRepository extends JpaRepository<Lineup, Long>, LineupRep
 	@Query("select max(l.waitingNumber) from Lineup l where l.restaurant.id = :restaurantId")
 	Integer findLastWaitingNumberByRestaurantId(@Param("restaurantId") Long id);
 
-	@Modifying
+	@Modifying(clearAutomatically = true, flushAutomatically = true)
 	@Query(value = "update Lineup l set l.isDeleted = true where l.restaurant.id = :restaurantId")
 	void bulkSoftDeleteByRestaurantId(@Param("restaurantId") Long restaurantId);
 }

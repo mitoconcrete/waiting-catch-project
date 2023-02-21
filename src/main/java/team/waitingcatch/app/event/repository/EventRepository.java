@@ -23,7 +23,7 @@ public interface EventRepository extends JpaRepository<Event, Long> {
 
 	Optional<Event> findByIdAndRestaurantAndIsDeletedFalse(Long id, Restaurant restaurant);
 
-	@Modifying
+	@Modifying(clearAutomatically = true, flushAutomatically = true)
 	@Query("update Event e set e.isDeleted = true where e.restaurant.id = :restaurantId")
 	void softDeleteByRestaurantId(@Param("restaurantId") Long restaurantId);
 }
