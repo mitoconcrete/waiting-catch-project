@@ -28,4 +28,6 @@ public interface UserService {
 	void deleteUser(DeleteUserRequest payload);
 
 	void findUserAndSendEmail(FindPasswordRequest payload);
+
+	LoginServiceResponse createAccessTokenByEmail(String email);
 }

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -23,4 +24,8 @@ public interface LineupRepository extends JpaRepository<Lineup, Long>, LineupRep
 
 	@Query("select max(l.waitingNumber) from Lineup l where l.restaurant.id = :restaurantId")
 	Integer findLastWaitingNumberByRestaurantId(@Param("restaurantId") Long id);
+
+	@Modifying(clearAutomatically = true, flushAutomatically = true)
+	@Query(value = "update Lineup l set l.isDeleted = true where l.restaurant.id = :restaurantId")
+	void bulkSoftDeleteByRestaurantId(@Param("restaurantId") Long restaurantId);
 }

@@ -40,7 +40,7 @@ public class UserCouponServiceImpl implements UserCouponService, InternalUserCou
 
 	//유저 쿠폰을 조회한다.
 	@Override
-	public List<GetUserCouponResponse> getUserCoupon(User user) {
+	public List<GetUserCouponResponse> getUserCoupons(User user) {
 		List<UserCoupon> userCoupons = userCouponRepository.findByUserAndIsUsedFalse(user);
 		List<GetUserCouponResponse> getUserCouponResponses = new ArrayList<>();
 

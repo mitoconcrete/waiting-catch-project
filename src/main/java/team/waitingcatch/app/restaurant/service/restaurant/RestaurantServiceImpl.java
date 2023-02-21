@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
+import team.waitingcatch.app.common.util.DistanceCalculator;
 import team.waitingcatch.app.common.util.S3Uploader;
 import team.waitingcatch.app.restaurant.dto.restaurant.DeleteRestaurantByAdminServiceRequest;
 import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantBasicInfoResponse;
@@ -16,6 +17,10 @@ import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantBasicInfoServic
 import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantDetailedInfoResponse;
 import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantDetailedInfoServiceRequest;
 import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantResponse;
+import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantsWithinRadiusResponse;
+import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantsWithinRadiusServiceRequest;
+import team.waitingcatch.app.restaurant.dto.restaurant.SearchRestaurantServiceRequest;
+import team.waitingcatch.app.restaurant.dto.restaurant.SearchRestaurantsResponse;
 import team.waitingcatch.app.restaurant.dto.restaurant.UpdateRestaurantEntityRequest;
 import team.waitingcatch.app.restaurant.dto.restaurant.UpdateRestaurantServiceRequest;
 import team.waitingcatch.app.restaurant.entity.Restaurant;
@@ -28,6 +33,7 @@ import team.waitingcatch.app.restaurant.repository.RestaurantRepository;
 @Transactional
 public class RestaurantServiceImpl implements RestaurantService, InternalRestaurantService {
 	private final RestaurantRepository restaurantRepository;
+	private final DistanceCalculator distanceCalculator;
 	private final RestaurantInfoRepository restaurantInfoRepository;
 	private final S3Uploader s3Uploader;
 
@@ -43,6 +49,33 @@ public class RestaurantServiceImpl implements RestaurantService, InternalRestaur
 	public RestaurantDetailedInfoResponse getRestaurantDetailedInfo(RestaurantDetailedInfoServiceRequest request) {
 		Restaurant restaurant = _getRestaurant(request.getRestaurantId());
 		return new RestaurantDetailedInfoResponse(restaurant);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public List<SearchRestaurantsResponse> searchRestaurantsByKeyword(SearchRestaurantServiceRequest request) {
+		String keyword = request.getKeyword();
+		double latitude = request.getLatitude();
+		double longitude = request.getLongitude();
+
+		return restaurantInfoRepository.findRestaurantsBySearchKeywordsContaining(keyword).stream()
+			.map(response -> new SearchRestaurantsResponse(
+				response, distanceCalculator.distanceInKilometerByHaversine(
+				latitude, longitude, response.getLatitude(), response.getLongitude())))
+			.collect(Collectors.toList());
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public List<RestaurantsWithinRadiusResponse> getRestaurantsWithinRadius(
+		RestaurantsWithinRadiusServiceRequest request) {
+		return restaurantInfoRepository.findRestaurantsByDistance(request.getLatitude(), request.getLongitude(),
+				request.getDistance())
+			.stream()
+			.map(response -> new RestaurantsWithinRadiusResponse(
+				response, distanceCalculator.distanceInKilometerByHaversine(
+				request.getLatitude(), request.getLongitude(), response.getLatitude(), response.getLongitude())))
+			.collect(Collectors.toList());
 	}
 
 	@Override
@@ -90,13 +123,6 @@ public class RestaurantServiceImpl implements RestaurantService, InternalRestaur
 			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 레스토랑입니다."));
 	}
 
-	// @Override
-	// public Restaurant _getRestaurantFindByUsername(String name) {
-	// 	return restaurantRepository.findByName(name).orElseThrow(
-	// 		() -> new IllegalArgumentException("레스토랑을 찾을수 없습니다.")
-	// 	);
-	// }
-
 	@Override
 	public Restaurant _getRestaurantByUserId(Long userId) {
 		return restaurantRepository.findByUserId(userId)
@@ -115,5 +141,12 @@ public class RestaurantServiceImpl implements RestaurantService, InternalRestaur
 		RestaurantInfo restaurantInfo = restaurantInfoRepository.findById(restaurantId)
 			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 레스토랑입니다."));
 		restaurantInfo.closeLineup();
+	}
+
+	@Override
+	public Restaurant _deleteRestaurantBySellerId(Long sellerId) {
+		Restaurant restaurant = _getRestaurantByUserId(sellerId);
+		restaurant.deleteRestaurant();
+		return restaurant;
 	}
 }

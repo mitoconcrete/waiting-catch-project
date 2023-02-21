@@ -63,7 +63,7 @@ public class SecurityConfig implements WebMvcConfigurer {
 			cors.setAllowedMethods(List.of("*"));
 			cors.setAllowedHeaders(List.of("*"));
 			cors.addExposedHeader("Authorization");
-			//cors.setAllowCredentials(true);
+			cors.setAllowCredentials(true);
 			return cors;
 		});
 

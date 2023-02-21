@@ -9,5 +9,5 @@ import team.waitingcatch.app.user.entitiy.User;
 public interface UserCouponService {
 	void createUserCoupon(CreateUserCouponServiceRequest createUserCouponserviceRequest);
 
-	List<GetUserCouponResponse> getUserCoupon(User user);
+	List<GetUserCouponResponse> getUserCoupons(User user);
 }

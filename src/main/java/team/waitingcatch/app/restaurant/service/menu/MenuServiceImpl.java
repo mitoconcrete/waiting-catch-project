@@ -106,4 +106,9 @@ public class MenuServiceImpl implements MenuService, InternalMenuService {
 		);
 	}
 
+	@Override
+	public void _bulkSoftDeleteByRestaurantId(Long restaurantId) {
+		menuRepository.bulkSoftDeleteByRestaurantId(restaurantId);
+	}
+
 }
