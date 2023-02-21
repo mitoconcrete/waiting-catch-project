@@ -12,4 +12,6 @@ public interface BlackListService {
 
 	List<GetBlackListResponse> getBlackListByRestaurantIdRequest(
 		GetBlackListByRestaurantIdServiceRequest getBlackListByRestaurantIdServiceRequest);
+
+	List<GetBlackListResponse> getBlacklist();
 }

@@ -38,5 +38,11 @@ public class BlackListController {
 			= new GetBlackListByRestaurantIdServiceRequest(restaurantId);
 		return blackListService.getBlackListByRestaurantIdRequest(getBlackListByRestaurantIdServiceRequest);
 	}
+
+	// 전체 블랙리스트 조회
+	@GetMapping("/admin/blacklist")
+	public List<GetBlackListResponse> getBlacklist() {
+		return blackListService.getBlacklist();
+	}
 }
 

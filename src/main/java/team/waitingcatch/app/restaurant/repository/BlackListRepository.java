@@ -13,4 +13,6 @@ public interface BlackListRepository extends JpaRepository<BlackList, Long> {
 	List<BlackList> findByRestaurant_Id(Long restaurantId);
 
 	List<BlackList> findAllByRestaurant_Id(Long restaurantId);
+
+	List<BlackList> findAllByIsDeletedFalse();
 }
