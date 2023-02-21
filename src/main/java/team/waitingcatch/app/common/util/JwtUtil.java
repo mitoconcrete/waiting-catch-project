@@ -65,6 +65,7 @@ public class JwtUtil {
 	// Header에서 토큰 가져오기
 	public String resolveToken(HttpServletRequest request) {
 		String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
+
 		if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER_PREFIX)) {
 			return bearerToken.substring(7);
 		}

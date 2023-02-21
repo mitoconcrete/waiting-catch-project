@@ -43,7 +43,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 		throws ServletException, IOException {
 
 		String token = jwtUtils.resolveToken(request);
-
 		if (token != null) {
 			try {
 				// 1. token이 만료되지 않았다면, authentication principal를 등록한다.

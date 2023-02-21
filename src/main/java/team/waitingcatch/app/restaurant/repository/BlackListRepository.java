@@ -12,7 +12,7 @@ import team.waitingcatch.app.restaurant.entity.Restaurant;
 
 public interface BlackListRepository extends JpaRepository<BlackList, Long> {
 
-	@Query(value = "select b from BlackList b join fetch  b.user where b.restaurant.id =:res1")
+	@Query(value = "select b from BlackList b join fetch b.user where b.restaurant.id =:res1")
 	List<BlackList> findAllByRestaurant(@Param("res1") Restaurant restaurant);
 
 	@Query(value = "select b from BlackList b where b.id =:black1 and b.restaurant.user.id =:seller1")

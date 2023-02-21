@@ -20,7 +20,7 @@ import team.waitingcatch.app.restaurant.service.restaurant.ApiService;
 @RestController
 @RequiredArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class APiController {
+public class RestaurantDummyDataAPiController {
 
 	private final ApiService apiService;
 

@@ -1,15 +1,15 @@
 package team.waitingcatch.app.restaurant.controller;
 
-import java.util.List;
-
 import javax.validation.Valid;
 
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
 import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.common.Address;
@@ -18,7 +18,6 @@ import team.waitingcatch.app.restaurant.dto.requestseller.ApproveSignUpSellerRes
 import team.waitingcatch.app.restaurant.dto.requestseller.ApproveSignUpSellerServiceRequest;
 import team.waitingcatch.app.restaurant.dto.requestseller.DemandSignUpSellerControllerRequest;
 import team.waitingcatch.app.restaurant.dto.requestseller.DemandSignUpSellerServiceRequest;
-import team.waitingcatch.app.restaurant.dto.requestseller.GetDemandSignUpSellerResponse;
 import team.waitingcatch.app.restaurant.dto.requestseller.RejectSignUpSellerServiceRequest;
 import team.waitingcatch.app.restaurant.service.requestseller.SellerManagementService;
 
@@ -52,9 +51,11 @@ public class SellerManagementController {
 	//관리자 권한 부분
 
 	//판매자 요청 조회
-	@GetMapping("/admin/seller-managements")
-	public List<GetDemandSignUpSellerResponse> getDemandSignUpSellers() {
-		return sellerManagementService.getDemandSignUpSellers();
+	@GetMapping("/admin/seller-management")
+	public ModelAndView sellerManagementPage(Model model) {
+		model.addAttribute("requestSeller", sellerManagementService.getDemandSignUpSellers());
+
+		return new ModelAndView("/admin/seller-management");
 	}
 
 	@PostMapping("/admin/seller-managements/{sellerManagementId}")

@@ -55,13 +55,12 @@ public class RestaurantServiceImpl implements RestaurantService, InternalRestaur
 	@Override
 	public void deleteRestaurantByAdmin(DeleteRestaurantByAdminServiceRequest deleteRestaurantByAdminServiceRequest) {
 		Restaurant restaurant = _getRestaurant(deleteRestaurantByAdminServiceRequest.getRestaurantId());
-		String transferToString[] = restaurant.getImages().split(",");
-		for (int i = 0; i < transferToString.length; i++) {
-			s3Uploader.deleteS3(transferToString[i]);
-		}
+		//String transferToString[] = restaurant.getImages().split(",");
+		// for (int i = 0; i < transferToString.length; i++) {
+		// 	s3Uploader.deleteS3(transferToString[i]);
+		// }
 		restaurant.deleteRestaurant();
 	}
-
 	// 현재 있는 것은
 
 	//업데이트시 -> 현재 있는것은 1.있는것 2. 있는것 3. 새로 4.새로
