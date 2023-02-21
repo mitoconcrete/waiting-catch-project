@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
-import team.waitingcatch.app.restaurant.dto.blacklist.ApproveBlacklistServiceRequest;
+import team.waitingcatch.app.restaurant.dto.blacklist.ApproveBlackListServiceRequest;
 import team.waitingcatch.app.restaurant.dto.blacklist.CancelBlacklistByRestaurantServiceRequest;
 import team.waitingcatch.app.restaurant.dto.blacklist.GetRequestBlacklistResponse;
 import team.waitingcatch.app.restaurant.dto.blacklist.DemandBlacklistByRestaurantServiceRequest;
@@ -72,7 +72,7 @@ public class BlacklistRequestServiceImpl implements BlacklistRequestService, Int
 		return blacklistRequests.stream().map(GetRequestBlacklistResponse::new).collect(Collectors.toList());
 	}
 
-	public void approveBlacklistRequest(ApproveBlacklistServiceRequest serviceRequest) {
+	public void approveBlacklistRequest(ApproveBlackListServiceRequest serviceRequest) {
 		BlacklistRequest blackListRequest = blacklistRequestRepository.findById(serviceRequest.getBlacklistRequestId())
 			.orElseThrow(() -> new IllegalArgumentException("Not found black list request"));
 		blackListRequest.checkWaitingStatus();

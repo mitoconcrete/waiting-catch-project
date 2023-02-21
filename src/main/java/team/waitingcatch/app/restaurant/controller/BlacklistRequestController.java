@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 
 import lombok.RequiredArgsConstructor;
-import team.waitingcatch.app.restaurant.dto.blacklist.ApproveBlacklistServiceRequest;
+import team.waitingcatch.app.restaurant.dto.blacklist.ApproveBlackListServiceRequest;
 import team.waitingcatch.app.restaurant.dto.blacklist.CancelBlacklistByRestaurantServiceRequest;
 import team.waitingcatch.app.restaurant.dto.blacklist.DemandBlacklistByRestaurantControllerRequest;
 import team.waitingcatch.app.restaurant.dto.blacklist.DemandBlacklistByRestaurantServiceRequest;
@@ -51,7 +51,7 @@ public class BlacklistRequestController {
 
 	@PostMapping("/admin/restaurants/blacklist-request/{blacklistRequestId}")
 	public void approveBlacklistRequest(@PathVariable Long blacklistRequestId) {
-		var serviceRequest = new ApproveBlacklistServiceRequest(blacklistRequestId);
+		var serviceRequest = new ApproveBlackListServiceRequest(blacklistRequestId);
 		blackListRequestService.approveBlacklistRequest(serviceRequest);
 	}
 }

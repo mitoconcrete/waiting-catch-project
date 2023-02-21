@@ -26,7 +26,6 @@ import team.waitingcatch.app.lineup.enums.StoredLineupTableNameEnum;
 import team.waitingcatch.app.lineup.service.ReviewService;
 import team.waitingcatch.app.user.entitiy.UserDetailsImpl;
 
-@RequestMapping("/api")
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor

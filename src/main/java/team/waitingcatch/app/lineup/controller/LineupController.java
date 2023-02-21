@@ -33,7 +33,6 @@ import team.waitingcatch.app.lineup.enums.ArrivalStatusEnum;
 import team.waitingcatch.app.lineup.service.LineupService;
 import team.waitingcatch.app.user.entitiy.UserDetailsImpl;
 
-@RequestMapping("/api")
 @RestController
 @RequestMapping("/api")
 @Validated
