@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+
+    <meta charset="UTF-8">
+    <title>메뉴</title>
+</head>
+<body>
+<h1>메뉴</h1>
+
+<a href="/menu/new">
+    <button type="button">메뉴추가</button>
+</a>
+
+<div class="container">
+    <div>
+        <table>
+            <thead>
+            <tr>
+                <th>메뉴 아이디</th>
+                <th>메뉴 이름</th>
+                <th>메뉴 가격</th>
+                <th>메뉴 이미지URL</th>
+                <th>메뉴 수정</th>
+                <th>메뉴 삭제</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="item : ${menus}">
+                <td th:text="${item.menuId}"></td>
+                <td th:text="${item.name}"></td>
+                <td th:text="${item.price}"></td>
+                <td th:text="${item.imageUrl}"></td>
+                <td>
+                    <a th:href="@{/menu/update/{menuId}(menuId=${item.menuId})}">
+                        <button type="button">수정</button>
+                    </a>
+                </td>
+                <td>
+                    <a th:href="@{/menu/delete/{menuId}(menuId=${item.menuId})}" th:method="delete">
+                        <button type="button">삭제</button>
+                    </a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div> <!-- /container -->
+
+
+</body>
+</html>

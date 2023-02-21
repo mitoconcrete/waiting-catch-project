@@ -100,13 +100,13 @@ public class CouponController {
 	}
 
 	/*  유저  */
-	//광역 이벤트 목록 출력
+	//광역 이벤트 목록 출력 + 해당 이벤트의 쿠폰생성자 출력
 	@GetMapping("/events")
 	public List<GetEventsResponse> getEvents() {
 		return eventService.getGlobalEvents();
 	}
 
-	//레스토랑 이벤트 목록 출력
+	//레스토랑 이벤트 목록 출력 + 해당 이벤트의 쿠폰생성자 출력
 	@GetMapping("/restaurants/{restaurantId}/events")
 	public List<GetEventsResponse> getRestaurantEvents(@PathVariable Long restaurantId) {
 		return eventService.getRestaurantEvents(restaurantId);
@@ -173,5 +173,11 @@ public class CouponController {
 			userDetails.getUsername());
 
 		userCouponService.createUserCoupon(createUserCouponserviceRequest);
+	}
+
+	//유저 쿠폰 조회
+	@PostMapping("/customer/coupons")
+	public void GetUserCoupon(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+		userCouponService.getUserCoupon(userDetails.getUser());
 	}
 }

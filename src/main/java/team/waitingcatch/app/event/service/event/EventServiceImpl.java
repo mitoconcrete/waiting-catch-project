@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
+import team.waitingcatch.app.event.dto.couponcreator.GetCouponCreatorResponse;
 import team.waitingcatch.app.event.dto.event.CreateEventControllerRequest;
 import team.waitingcatch.app.event.dto.event.CreateEventRequest;
 import team.waitingcatch.app.event.dto.event.CreateEventServiceRequest;
@@ -15,7 +16,9 @@ import team.waitingcatch.app.event.dto.event.DeleteEventServiceRequest;
 import team.waitingcatch.app.event.dto.event.GetEventsResponse;
 import team.waitingcatch.app.event.dto.event.UpdateEventServiceRequest;
 import team.waitingcatch.app.event.dto.event.UpdateSellerEventServiceRequest;
+import team.waitingcatch.app.event.entity.CouponCreator;
 import team.waitingcatch.app.event.entity.Event;
+import team.waitingcatch.app.event.repository.CouponCreatorRepository;
 import team.waitingcatch.app.event.repository.EventRepository;
 import team.waitingcatch.app.restaurant.entity.Restaurant;
 import team.waitingcatch.app.restaurant.repository.RestaurantRepository;
@@ -27,6 +30,7 @@ public class EventServiceImpl implements EventService, InternalEventService {
 
 	private final EventRepository eventRepository;
 	private final RestaurantRepository restaurantRepository;
+	private final CouponCreatorRepository couponCreatorRepository;
 
 	//광역 이벤트를 생성한다.
 	@Override
@@ -87,10 +91,7 @@ public class EventServiceImpl implements EventService, InternalEventService {
 		//이벤트중 restaurant이 null인것만 조회
 		List<Event> events = eventRepository.findByRestaurantIsNullAndIsDeletedFalse();
 		List<GetEventsResponse> GetEventsResponse = new ArrayList<>();
-		for (Event event : events) {
-			GetEventsResponse.add(new GetEventsResponse(event));
-		}
-		return GetEventsResponse;
+		return _GetEventsResponse(events, GetEventsResponse);
 
 	}
 
@@ -103,10 +104,8 @@ public class EventServiceImpl implements EventService, InternalEventService {
 		//찾은 객체로 이벤트 검색
 		List<Event> events = eventRepository.findByRestaurantAndIsDeletedFalse(restaurant);
 		List<GetEventsResponse> GetEventsResponse = new ArrayList<>();
-		for (Event event : events) {
-			GetEventsResponse.add(new GetEventsResponse(event));
-		}
-		return GetEventsResponse;
+		return _GetEventsResponse(events, GetEventsResponse);
+
 	}
 
 	@Override
@@ -123,6 +122,21 @@ public class EventServiceImpl implements EventService, InternalEventService {
 		Restaurant restaurant = restaurantRepository.findByUserId(id)
 			.orElseThrow(() -> new IllegalArgumentException("레스토랑을 찾을수 없습니다."));
 		return restaurant;
+	}
+
+	//이벤트 목록 + 쿠폰생성자를 DTO형태로 리턴
+	@Override
+	public List<GetEventsResponse> _GetEventsResponse(List<Event> events, List<GetEventsResponse> GetEventsResponse) {
+		for (Event event : events) {
+			List<CouponCreator> couponCreators = couponCreatorRepository.findByEventAndIsDeletedFalse(event);
+			List<GetCouponCreatorResponse> getCouponCreatorResponses = new ArrayList<>();
+			for (CouponCreator couponCreator : couponCreators) {
+				GetCouponCreatorResponse getCouponCreatorResponse = new GetCouponCreatorResponse(couponCreator);
+				getCouponCreatorResponses.add(getCouponCreatorResponse);
+			}
+			GetEventsResponse.add(new GetEventsResponse(event, getCouponCreatorResponses));
+		}
+		return GetEventsResponse;
 	}
 
 }
