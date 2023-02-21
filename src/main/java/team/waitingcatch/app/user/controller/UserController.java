@@ -10,6 +10,7 @@ import javax.validation.constraints.Pattern;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -137,7 +138,7 @@ public class UserController {
 	@GetMapping("/google/callback")
 	@ResponseStatus(HttpStatus.CREATED)
 	public void createTokenByEmail(
-		@RequestParam @Valid @Pattern(regexp = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+.[A-Za-z]{2,6}$",
+		@RequestParam @Validated @Pattern(regexp = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+.[A-Za-z]{2,6}$",
 			message = "이메일 형식을 맞춰주세요.") String email, HttpServletResponse response) {
 		LoginServiceResponse responsePayload = userService.createAccessTokenByEmail(email);
 		response.addHeader(JwtUtil.AUTHORIZATION_HEADER, responsePayload.getAccessToken());
