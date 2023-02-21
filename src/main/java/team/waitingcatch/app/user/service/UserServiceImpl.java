@@ -131,7 +131,7 @@ public class UserServiceImpl implements UserService, InternalUserService {
 	}
 
 	@Override
-	@Transactional(readOnly = true)
+	@Transactional
 	public void findUserAndSendEmail(FindPasswordRequest payload) {
 		User user = userRepository.findByUsernameAndEmailAndIsDeletedFalse(payload.getUsername(), payload.getEmail())
 			.orElseThrow(
