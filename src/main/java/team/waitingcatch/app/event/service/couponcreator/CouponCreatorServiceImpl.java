@@ -42,6 +42,7 @@ public class CouponCreatorServiceImpl implements CouponCreatorService, InternalC
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public List<GetCouponCreatorResponse> getAdminCouponCreator(Long eventId) {
 		return couponCreatorRepository.findAllByEventId(eventId).stream()
 			.map(GetCouponCreatorResponse::new)
