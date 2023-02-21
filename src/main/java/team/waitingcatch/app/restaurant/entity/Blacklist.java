@@ -19,7 +19,7 @@ import team.waitingcatch.app.user.entitiy.User;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class BlackList extends TimeStamped {
+public class Blacklist extends TimeStamped {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,13 +34,12 @@ public class BlackList extends TimeStamped {
 	@JoinColumn(name = "user_id", nullable = false)
 	private User user;
 
-	@Column(name = "is_deleted", nullable = false)
+	@Column(nullable = false)
 	private boolean isDeleted;
 
-	public BlackList(
-		CreateBlacklistInternalServiceRequest createBlackListInternalServiceRequest) {
-		this.restaurant = createBlackListInternalServiceRequest.getRestaurant();
-		this.user = createBlackListInternalServiceRequest.getUser();
+	public Blacklist(CreateBlacklistInternalServiceRequest serviceRequest) {
+		this.restaurant = serviceRequest.getRestaurant();
+		this.user = serviceRequest.getUser();
 	}
 
 	public boolean isSameRequester(Long sellerId) {

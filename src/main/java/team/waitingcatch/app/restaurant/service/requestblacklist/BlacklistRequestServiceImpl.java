@@ -7,15 +7,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
-import team.waitingcatch.app.restaurant.dto.blacklist.ApproveBlackListServiceRequest;
-import team.waitingcatch.app.restaurant.dto.blacklist.CancelRequestUserBlackListByRestaurantServiceRequest;
+import team.waitingcatch.app.restaurant.dto.blacklist.ApproveBlacklistServiceRequest;
+import team.waitingcatch.app.restaurant.dto.blacklist.CancelBlacklistByRestaurantServiceRequest;
 import team.waitingcatch.app.restaurant.dto.blacklist.GetRequestBlacklistResponse;
-import team.waitingcatch.app.restaurant.dto.blacklist.RequestUserBlacklistByRestaurantServiceRequest;
-import team.waitingcatch.app.restaurant.entity.BlackListRequest;
+import team.waitingcatch.app.restaurant.dto.blacklist.DemandBlacklistByRestaurantServiceRequest;
+import team.waitingcatch.app.restaurant.entity.BlacklistRequest;
 import team.waitingcatch.app.restaurant.entity.Restaurant;
-import team.waitingcatch.app.restaurant.repository.BlackListRequestRepository;
+import team.waitingcatch.app.restaurant.repository.BlacklistRequestRepository;
 import team.waitingcatch.app.restaurant.repository.RestaurantRepository;
-import team.waitingcatch.app.restaurant.service.blacklist.InternalBlackListService;
+import team.waitingcatch.app.restaurant.service.blacklist.InternalBlacklistService;
 import team.waitingcatch.app.user.entitiy.User;
 import team.waitingcatch.app.user.enums.UserRoleEnum;
 import team.waitingcatch.app.user.repository.UserRepository;
@@ -23,18 +23,17 @@ import team.waitingcatch.app.user.repository.UserRepository;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class BlackListRequestServiceImpl implements BlackListRequestService, InternalBlackListRequestService {
-	private final BlackListRequestRepository blackListRequestRepository;
+public class BlacklistRequestServiceImpl implements BlacklistRequestService, InternalBlacklistRequestService {
+	private final BlacklistRequestRepository blacklistRequestRepository;
 	private final UserRepository userRepository;
 	private final RestaurantRepository restaurantRepository;
-	private final InternalBlackListService internalBlackListService;
+	private final InternalBlacklistService internalBlackListService;
 
 	//판매자가 한명의 고객을 블랙리스트 요청을 한다.
-	public void requestUserBlackList(
-		RequestUserBlacklistByRestaurantServiceRequest requestUserBlackListByRestaurantServiceRequest) {
+	public void requestUserBlackList(DemandBlacklistByRestaurantServiceRequest serviceRequest) {
 		// 리팩토링 필요함
 		//	User user = internalUserService._findById(requestUserBlackListByRestaurantServiceRequest.getUserId());
-		User user = userRepository.findById(requestUserBlackListByRestaurantServiceRequest.getUserId()).orElseThrow();
+		User user = userRepository.findById(serviceRequest.getUserId()).orElseThrow();
 		if (user.getRole() == UserRoleEnum.SELLER) {
 			throw new IllegalArgumentException("잘못된 요청입니다.");
 		}
@@ -43,22 +42,21 @@ public class BlackListRequestServiceImpl implements BlackListRequestService, Int
 		//Restaurant restaurant = internalRestaurantService._findBySellerName(
 		// 	requestUserBlackListByRestaurantServiceRequest.getSellerName());
 
-		Restaurant restaurant = restaurantRepository.findByUser_Username(
-				requestUserBlackListByRestaurantServiceRequest.getSellerName())
+		Restaurant restaurant = restaurantRepository.findByUserId(serviceRequest.getSellerId())
 			.orElseThrow(() -> new IllegalArgumentException("Not found restaurant"));
 
-		BlackListRequest blackListRequest = new BlackListRequest(restaurant, user,
-			requestUserBlackListByRestaurantServiceRequest.getDescription());
-		blackListRequestRepository.save(blackListRequest);
+		BlacklistRequest blackListRequest = new BlacklistRequest(restaurant, user, serviceRequest.getDescription());
+		blacklistRequestRepository.save(blackListRequest);
 	}
 
 	//판매자가 요청한 한명의 고객의 블랙리스트 요청을 판매자가 취소한다.
-	public void cancelRequestUserBlackList(CancelRequestUserBlackListByRestaurantServiceRequest serviceRequest) {
-		BlackListRequest blackListRequest = blackListRequestRepository.findByIdWithRestaurant(
+	public void cancelRequestUserBlacklist(
+		CancelBlacklistByRestaurantServiceRequest serviceRequest) {
+		BlacklistRequest blackListRequest = blacklistRequestRepository.findByIdWithRestaurant(
 				serviceRequest.getBlacklistId())
 			.orElseThrow(() -> new IllegalArgumentException("Not found request blacklist"));
 
-		if (!blackListRequest.isSameRequester(serviceRequest.getSellerId())) {
+		if (!blackListRequest.getUser().getId().equals(serviceRequest.getSellerId())) {
 			throw new IllegalArgumentException("잘못된 접근입니다.");
 		}
 		blackListRequest.checkWaitingStatus();
@@ -69,14 +67,13 @@ public class BlackListRequestServiceImpl implements BlackListRequestService, Int
 
 	//블랙리스트 요청 전체조회
 	@Transactional(readOnly = true)
-	public List<GetRequestBlacklistResponse> getRequestBlackLists() {
-		List<BlackListRequest> blackListRequests = blackListRequestRepository.findAll();
-		return blackListRequests.stream().map(GetRequestBlacklistResponse::new).collect(Collectors.toList());
+	public List<GetRequestBlacklistResponse> getRequestBlacklist() {
+		List<BlacklistRequest> blacklistRequests = blacklistRequestRepository.findAll();
+		return blacklistRequests.stream().map(GetRequestBlacklistResponse::new).collect(Collectors.toList());
 	}
 
-	public void approveBlackListRequest(ApproveBlackListServiceRequest approveBlackListServiceRequest) {
-		BlackListRequest blackListRequest = blackListRequestRepository.findById(
-				approveBlackListServiceRequest.getBlacklistRequestId())
+	public void approveBlacklistRequest(ApproveBlacklistServiceRequest serviceRequest) {
+		BlacklistRequest blackListRequest = blacklistRequestRepository.findById(serviceRequest.getBlacklistRequestId())
 			.orElseThrow(() -> new IllegalArgumentException("Not found black list request"));
 		blackListRequest.checkWaitingStatus();
 		blackListRequest.updateApprovalStatus();

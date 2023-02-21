@@ -21,7 +21,7 @@ import team.waitingcatch.app.user.entitiy.User;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class BlackListRequest extends TimeStamped {
+public class BlacklistRequest extends TimeStamped {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,15 +42,11 @@ public class BlackListRequest extends TimeStamped {
 	@Column(nullable = false)
 	private String description;
 
-	public BlackListRequest(Restaurant restaurant, User user, String description) {
+	public BlacklistRequest(Restaurant restaurant, User user, String description) {
 		this.restaurant = restaurant;
 		this.user = user;
 		this.description = description;
 		this.status = AcceptedStatusEnum.WAIT;
-	}
-
-	public boolean isSameRequester(Long sellerId) {
-		return getRestaurant().getUser().getId().equals(sellerId);
 	}
 
 	public void updateCancelStatus() {
