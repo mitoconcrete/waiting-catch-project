@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
-import team.waitingcatch.app.common.util.S3Uploader;
+import team.waitingcatch.app.common.util.ImageUploader;
 import team.waitingcatch.app.restaurant.dto.menu.CreateMenuEntityRequest;
 import team.waitingcatch.app.restaurant.dto.menu.CreateMenuServiceRequest;
 import team.waitingcatch.app.restaurant.dto.menu.CustomerMenuResponse;
@@ -26,7 +26,7 @@ import team.waitingcatch.app.restaurant.service.restaurant.InternalRestaurantSer
 public class MenuServiceImpl implements MenuService, InternalMenuService {
 	private final MenuRepository menuRepository;
 	private final InternalRestaurantService restaurantService;
-	private final S3Uploader s3Uploader;
+	private final ImageUploader imageUploader;
 
 	@Override
 	@Transactional(readOnly = true)
@@ -45,7 +45,7 @@ public class MenuServiceImpl implements MenuService, InternalMenuService {
 
 		if (!serviceRequest.getMultipartFile().isEmpty()) {
 			try {
-				imageUrl = s3Uploader.upload(serviceRequest.getMultipartFile(), "menu");
+				imageUrl = imageUploader.upload(serviceRequest.getMultipartFile(), "menu");
 			} catch (IOException e) {
 				throw new RuntimeException(e);
 			}
@@ -73,12 +73,12 @@ public class MenuServiceImpl implements MenuService, InternalMenuService {
 		String imageUrl = menu.getImages();
 
 		if (!imageUrl.equals("기본 메뉴 이미지 URL")) {
-			s3Uploader.deleteS3(imageUrl);
+			imageUploader.delete(imageUrl);
 		}
 
 		if (!serviceRequest.getMultipartFile().isEmpty()) {
 			try {
-				imageUrl = s3Uploader.upload(serviceRequest.getMultipartFile(), "menu");
+				imageUrl = imageUploader.upload(serviceRequest.getMultipartFile(), "menu");
 			} catch (IOException e) {
 				throw new RuntimeException(e);
 			}
@@ -91,7 +91,7 @@ public class MenuServiceImpl implements MenuService, InternalMenuService {
 	@Override
 	public void deleteMenu(Long menuId) {
 		Menu menu = _getMenuById(menuId);
-		s3Uploader.deleteS3(menu.getImages());
+		imageUploader.delete(menu.getImages());
 		menuRepository.delete(menu);
 	}
 
