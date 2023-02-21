@@ -67,4 +67,9 @@ public class ReviewServiceImpl implements ReviewService, InternalReviewService {
 	public List<GetReviewResponse> getReviewsByUserId(Long userId) {
 		return reviewRepository.findAllByUserId(userId);
 	}
+
+	@Override
+	public void _bulkSoftDeleteByRestaurantId(Long restaurantId) {
+		reviewRepository.bulkSoftDeleteByRestaurantId(restaurantId);
+	}
 }

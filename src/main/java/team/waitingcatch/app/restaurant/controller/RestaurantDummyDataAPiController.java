@@ -9,6 +9,7 @@ import java.net.URL;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -17,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.restaurant.dto.restaurant.DummyApiRequest;
 import team.waitingcatch.app.restaurant.service.restaurant.ApiService;
 
+@RequestMapping("/api")
 @RestController
 @RequiredArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)

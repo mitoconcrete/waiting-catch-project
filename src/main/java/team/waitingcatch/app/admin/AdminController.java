@@ -3,12 +3,14 @@ package team.waitingcatch.app.admin;
 import javax.validation.Valid;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -17,6 +19,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.restaurant.dto.category.CreateCategoryRequest;
+import team.waitingcatch.app.restaurant.dto.category.DeleteCategoryServiceRequest;
+import team.waitingcatch.app.restaurant.dto.category.UpdateCategoryControllerRequest;
+import team.waitingcatch.app.restaurant.dto.category.UpdateCategoryServiceRequest;
 import team.waitingcatch.app.restaurant.dto.restaurant.DeleteRestaurantByAdminServiceRequest;
 import team.waitingcatch.app.restaurant.service.category.CategoryService;
 import team.waitingcatch.app.restaurant.service.requestseller.SellerManagementService;
@@ -24,6 +29,7 @@ import team.waitingcatch.app.restaurant.service.restaurant.RestaurantService;
 import team.waitingcatch.app.user.dto.CreateUserControllerRequest;
 import team.waitingcatch.app.user.dto.CreateUserServiceRequest;
 import team.waitingcatch.app.user.dto.GetCustomerByIdAndRoleServiceRequest;
+import team.waitingcatch.app.user.entitiy.UserDetailsImpl;
 import team.waitingcatch.app.user.enums.UserRoleEnum;
 import team.waitingcatch.app.user.service.UserService;
 
@@ -77,9 +83,8 @@ public class AdminController {
 
 	//판매자요청
 	@GetMapping("/seller-management")
-	public ModelAndView sellerManagementPage(Model model) {
+	public ModelAndView sellerManagementPage(Model model, @AuthenticationPrincipal UserDetailsImpl userDetails) {
 		model.addAttribute("requestSeller", sellerManagementService.getDemandSignUpSellers());
-
 		return new ModelAndView("/admin/seller-management");
 	}
 	//유저
@@ -153,6 +158,7 @@ public class AdminController {
 	public ModelAndView categoryPage(Model model) {
 		model.addAttribute("categories", categoryService.getParentCategories());
 		model.addAttribute("CreateCategoryRequest", new CreateCategoryRequest());
+		model.addAttribute("UpdateCategoryControllerRequest", new UpdateCategoryControllerRequest());
 		return new ModelAndView("/admin/category");
 	}
 
@@ -160,6 +166,22 @@ public class AdminController {
 	@ResponseStatus(value = HttpStatus.CREATED)
 	public void createCategory(@ModelAttribute @RequestBody @Valid CreateCategoryRequest request) {
 		categoryService.createCategory(request);
+	}
+
+	@PutMapping("/categories/{categoryId}")
+	public void updateCategory(@PathVariable Long categoryId,
+		@ModelAttribute @RequestBody @Valid UpdateCategoryControllerRequest controllerRequest) {
+
+		UpdateCategoryServiceRequest serviceRequest =
+			new UpdateCategoryServiceRequest(categoryId, controllerRequest.getName());
+
+		categoryService.updateCategory(serviceRequest);
+	}
+
+	@DeleteMapping("/categories/{categoryId}")
+	public void deleteCategory(@PathVariable Long categoryId) {
+		DeleteCategoryServiceRequest request = new DeleteCategoryServiceRequest(categoryId);
+		categoryService.deleteCategory(request);
 	}
 
 }

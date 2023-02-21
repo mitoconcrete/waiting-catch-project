@@ -51,7 +51,7 @@ public class BlackListServiceImpl implements BlackListService, InternalBlackList
 		if (blackList.isDeleted()) {
 			throw new IllegalArgumentException("이미 블랙리스트에서 삭제된 고객입니다. 블랙리스트를 원하시면 다시 신청해주세요.");
 		}
-		BlackListRequest blackListRequest = blackListRequestRepository.findByUser_IdAndRestaurant_User_IdAndStatus(
+		BlackListRequest blackListRequest = blackListRequestRepository.findByUser_IdAndRestaurant_User_IdAndStatusApproval(
 			blackList.getUser().getId(), blackList.getRestaurant()
 				.getId());
 		blackList.checkDeleteStatus();

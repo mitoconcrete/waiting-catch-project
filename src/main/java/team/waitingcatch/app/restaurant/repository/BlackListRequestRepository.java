@@ -13,13 +13,13 @@ public interface BlackListRequestRepository extends JpaRepository<BlackListReque
 	List<BlackListRequest> findByUser_IdAndRestaurant_User_Id(Long userId,
 		Long sellerId);
 
-	@Query(value = "select b from BlackListRequest b where b.id =:user1 and b.restaurant.user.id =:seller1")
+	@Query(value = "select b from BlackListRequest b where b.user.id =:user1 and b.restaurant.user.id =:seller1")
 	Optional<BlackListRequest> findByIdAndRestaurantUserId(@Param("user1") Long userId,
 		@Param("seller1") Long sellerId);
 
 	@Query(value = "select b from BlackListRequest b where b.user.id =:user1 and b.restaurant.user.id =:seller11 "
 		+ "and b.status = team.waitingcatch.app.restaurant.enums.AcceptedStatusEnum.APPROVAL")
-	BlackListRequest findByUser_IdAndRestaurant_User_IdAndStatus(@Param("user1") Long userId,
+	BlackListRequest findByUser_IdAndRestaurant_User_IdAndStatusApproval(@Param("user1") Long userId,
 		@Param("seller11") Long sellerId);
 
 }

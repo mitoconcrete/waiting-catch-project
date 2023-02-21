@@ -29,4 +29,9 @@ public class LineupHistoryServiceImpl implements LineupHistoryService, InternalL
 	public List<LineupRecordResponse> _getRecordsByUserId(Long userId, ArrivalStatusEnum statusCond) {
 		return lineupHistoryRepository.findLineupRecordsByUserIdAndStatus(userId, statusCond);
 	}
+
+	@Override
+	public void _bulkSoftDeleteByRestaurantId(Long restaurantId) {
+		lineupHistoryRepository.bulkSoftDeleteByRestaurantId(restaurantId);
+	}
 }
