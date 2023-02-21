@@ -180,6 +180,7 @@ public class UserServiceImpl implements UserService, InternalUserService {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public String _getUsernameById(Long id) {
 		return userRepository.findUsernameById(id);
 	}
