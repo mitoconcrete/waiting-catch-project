@@ -28,6 +28,7 @@ import team.waitingcatch.app.user.entitiy.UserDetailsImpl;
 
 @RequestMapping("/api")
 @RestController
+@RequestMapping("/api")
 @RequiredArgsConstructor
 public class ReviewController {
 	private final ReviewService reviewService;

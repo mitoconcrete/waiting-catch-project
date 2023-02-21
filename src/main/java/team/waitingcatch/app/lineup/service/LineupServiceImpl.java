@@ -43,13 +43,13 @@ public class LineupServiceImpl implements LineupService, InternalLineupService {
 
 	@Override
 	public void openLineup(Long sellerId) {
-		Long restaurantId = internalRestaurantService._getRestaurant(sellerId).getId();
+		Long restaurantId = internalRestaurantService._getRestaurantByUserId(sellerId).getId();
 		internalRestaurantService._openLineup(restaurantId);
 	}
 
 	@Override
 	public void closeLineup(Long sellerId) {
-		Long restaurantId = internalRestaurantService._getRestaurant(sellerId).getId();
+		Long restaurantId = internalRestaurantService._getRestaurantByUserId(sellerId).getId();
 		internalRestaurantService._closeLineup(restaurantId);
 	}
 

@@ -35,6 +35,7 @@ import team.waitingcatch.app.user.entitiy.UserDetailsImpl;
 
 @RequestMapping("/api")
 @RestController
+@RequestMapping("/api")
 @Validated
 @RequiredArgsConstructor
 public class LineupController {

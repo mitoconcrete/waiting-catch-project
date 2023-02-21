@@ -1,29 +1,79 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>판매자 관리</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
 </head>
 <body>
 <h1>판매자 관리</h1>
-<td>
-    <a th:href="@{/hello}" th:method="get" enctype="multipart/form-data">
-        <button onclick="sendTokenLogout()" type=" button">로그아웃
-        </button>
-    </a>
-</td>
-<td>
-    <a th:href="@{/hello}" th:method="get" enctype="multipart/form-data">
-        <button onclick="sendTokenDelete()" type=" button">회원탈퇴
-        </button>
-    </a>
-</td>
-<a th:href="@{/seller/infos}" th:method="get" enctype="multipart/form-data">
+<a href="hello.html" th:href="@{/hello}" th:method="get">
+    <button onclick="sendTokenLogout()" type="button">로그아웃</button>
+</a>
+
+<a href="hello.html" th:href="@{/hello}" th:method="get">
+    <button onclick="sendTokenDelete()" type="button">회원탈퇴</button>
+</a>
+
+<a href="seller-infos.html" th:href="@{/seller/infos}" th:method="get">
     <button type="button">판매자 정보 수정</button>
 </a>
 
-<script>
+<button type="button" onclick="getLineup()">줄서기 관리</button>
 
+<button type="button" onclick="openLineup()">줄서기 오픈</button>
+
+<button type="button" onclick="closeLineup()">줄서기 마감</button>
+
+<button type="button" onclick="demandBlackListRequest()">블랙리스트 요청</button>
+
+<button type="button" onclick="cancelBlackListRequest()">블랙리스트 취소</button>
+
+</body>
+<script>
+    function getLineup() {
+        window.location.href = '/seller/lineup-page';
+    }
+
+    function openLineup() {
+        $.ajax({
+            url: '/seller/open-lineup',
+            method: 'PUT',
+            headers: {
+                'Authorization': localStorage.getItem('accessToken')
+            },
+            success: function () {
+                window.location.reload();
+            },
+            error: function (response) {
+                console.log(response);
+            }
+        })
+    }
+
+    function closeLineup() {
+        $.ajax({
+            url: '/seller/close-lineup',
+            method: 'PUT',
+            headers: {
+                'Authorization': localStorage.getItem('accessToken')
+            },
+            success: function () {
+                window.location.reload();
+            },
+            error: function (response) {
+                console.log(response);
+            }
+        })
+    }
+
+    function demandBlackListRequest() {
+
+    }
+
+    function cancelBlackListRequest() {
+
+    }
 
     function sendTokenLogout() {
         fetch("/seller/logout", {
@@ -46,7 +96,5 @@
         })
         localStorage.removeItem('accessToken');
     }
-
 </script>
-</body>
 </html>

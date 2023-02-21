@@ -33,14 +33,13 @@
     }
 
     function login() {
-
         let username = $('#username').val();
         let password = $('#password').val();
 
-        if (username == '') {
+        if (username === '') {
             alert('ID를 입력해주세요');
             return;
-        } else if (password == '') {
+        } else if (password === '') {
             alert('비밀번호를 입력해주세요');
             return;
         }
@@ -55,8 +54,6 @@
                     let host = window.location.host;
                     let url = host + '/hello';
 
-                    document.cookie =
-                        'Authorization' + '=' + xhr.getResponseHeader('Authorization') + ';path=/';
                     window.location.href = 'http://' + url;
                     localStorage.setItem('accessToken', xhr.getResponseHeader('Authorization'))
                 } else {
@@ -66,6 +63,5 @@
             }
         })
     }
-
 </script>
 </html>

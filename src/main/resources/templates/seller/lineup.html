@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>줄서기 현황</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+</head>
+<body>
+<div id="lineupList"></div>
+</body>
+<script>
+    $(document).ready(function () {
+        $.ajax({
+            url: '/seller/lineup',
+            method: 'GET',
+            headers: {
+                'Authorization': localStorage.getItem('accessToken')
+            }
+        }).done(function (result) {
+            $('#lineupList').replaceWith(result);
+        })
+    });
+</script>
+</html>
