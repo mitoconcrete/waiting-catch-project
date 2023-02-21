@@ -25,7 +25,6 @@ import team.waitingcatch.app.user.entitiy.User;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class LineupHistory extends TimeStamped {
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "lineup_history_id")
@@ -39,17 +38,48 @@ public class LineupHistory extends TimeStamped {
 	@JoinColumn(name = "restaurant_id", nullable = false)
 	private Restaurant restaurant;
 
+	@Column(nullable = false)
+	private int waitingNumber;
+
+	@Column(nullable = false)
+	private int numOfMembers;
+
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
 	private ArrivalStatusEnum status;
 
 	@Column(nullable = false)
+	private int callCount;
+
+	@Column(nullable = false)
+	private LocalDateTime startedAt;
+
 	private LocalDateTime arrivedAt;
 
 	@Column(nullable = false)
 	private boolean isReviewed;
 
 	@Column(nullable = false)
-	private int callCount;
+	private boolean isDeleted;
 
+	public static LineupHistory createLineupHistory(Lineup lineup) {
+		return new LineupHistory(lineup);
+	}
+
+	public LineupHistory(Lineup lineup) {
+		this.user = lineup.getUser();
+		this.restaurant = lineup.getRestaurant();
+		this.waitingNumber = lineup.getWaitingNumber();
+		this.numOfMembers = lineup.getNumOfMembers();
+		this.status = lineup.getStatus();
+		this.callCount = lineup.getCallCount();
+		this.startedAt = lineup.getCreatedDate();
+		this.arrivedAt = lineup.getArrivedAt();
+		this.isReviewed = lineup.isReviewed();
+		this.isDeleted = false;
+	}
+
+	public void updateIsReviewed() {
+		isReviewed = true;
+	}
 }

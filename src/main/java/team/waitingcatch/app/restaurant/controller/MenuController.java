@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,6 +25,7 @@ import team.waitingcatch.app.restaurant.dto.menu.UpdateMenuControllerRequest;
 import team.waitingcatch.app.restaurant.dto.menu.UpdateMenuServiceRequest;
 import team.waitingcatch.app.restaurant.service.menu.MenuService;
 
+@RequestMapping("/api")
 @RestController
 @RequiredArgsConstructor
 public class MenuController {

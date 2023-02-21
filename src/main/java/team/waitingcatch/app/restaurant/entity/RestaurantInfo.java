@@ -43,7 +43,7 @@ public class RestaurantInfo extends TimeStamped {
 	private int totalLineup;
 
 	@Column(nullable = false)
-	private boolean isLineupActiveStatus;
+	private boolean isLineupActive;
 
 	@Column(nullable = false)
 	private int currentWaitingNumber = 0;
@@ -68,5 +68,13 @@ public class RestaurantInfo extends TimeStamped {
 	public void updateRestaurantInfo(UpdateRestaurantEntityRequest updateRestaurantEntityRequest) {
 		this.openTime = updateRestaurantEntityRequest.getOpenTime();
 		this.closeTime = updateRestaurantEntityRequest.getCloseTime();
+	}
+
+	public void openLineup() {
+		isLineupActive = true;
+	}
+
+	public void closeLineup() {
+		isLineupActive = false;
 	}
 }
