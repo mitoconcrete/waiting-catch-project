@@ -8,8 +8,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -21,8 +21,8 @@ import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantBasicInfoServic
 import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantDetailedInfoResponse;
 import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantDetailedInfoServiceRequest;
 import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantResponse;
-import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantsWithin3kmRadiusResponse;
-import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantsWithin3kmRadiusServiceRequest;
+import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantsWithinRadiusResponse;
+import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantsWithinRadiusServiceRequest;
 import team.waitingcatch.app.restaurant.dto.restaurant.SearchRestaurantServiceRequest;
 import team.waitingcatch.app.restaurant.dto.restaurant.SearchRestaurantsResponse;
 import team.waitingcatch.app.restaurant.dto.restaurant.UpdateRestaurantControllerRequest;
@@ -55,11 +55,11 @@ public class RestaurantController {
 	}
 
 	@GetMapping("/restaurants")
-	public List<RestaurantsWithin3kmRadiusResponse> getRestaurantsWithin3kmRadius(
+	public List<RestaurantsWithinRadiusResponse> getRestaurantsWithinRadius(
 		@RequestParam double latitude, @RequestParam double longitude) {
-		RestaurantsWithin3kmRadiusServiceRequest request = new RestaurantsWithin3kmRadiusServiceRequest(latitude,
-			longitude);
-		return restaurantService.getRestaurantsWithin3kmRadius(request);
+		RestaurantsWithinRadiusServiceRequest request = new RestaurantsWithinRadiusServiceRequest(latitude,
+			longitude, 3);
+		return restaurantService.getRestaurantsWithinRadius(request);
 	}
 
 	// Seller

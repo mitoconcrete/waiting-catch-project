@@ -9,8 +9,8 @@ import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantBasicInfoServic
 import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantDetailedInfoResponse;
 import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantDetailedInfoServiceRequest;
 import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantResponse;
-import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantsWithin3kmRadiusResponse;
-import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantsWithin3kmRadiusServiceRequest;
+import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantsWithinRadiusResponse;
+import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantsWithinRadiusServiceRequest;
 import team.waitingcatch.app.restaurant.dto.restaurant.SearchRestaurantServiceRequest;
 import team.waitingcatch.app.restaurant.dto.restaurant.SearchRestaurantsResponse;
 import team.waitingcatch.app.restaurant.dto.restaurant.UpdateRestaurantServiceRequest;
@@ -22,8 +22,8 @@ public interface RestaurantService {
 
 	List<SearchRestaurantsResponse> searchRestaurantsByKeyword(SearchRestaurantServiceRequest request);
 
-	List<RestaurantsWithin3kmRadiusResponse> getRestaurantsWithin3kmRadius(
-		RestaurantsWithin3kmRadiusServiceRequest request);
+	List<RestaurantsWithinRadiusResponse> getRestaurantsWithinRadius(
+		RestaurantsWithinRadiusServiceRequest request);
 
 	List<RestaurantResponse> getRestaurants();
 

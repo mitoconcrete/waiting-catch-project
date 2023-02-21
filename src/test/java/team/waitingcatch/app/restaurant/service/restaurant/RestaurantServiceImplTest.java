@@ -24,9 +24,9 @@ import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantBasicInfoServic
 import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantDetailedInfoResponse;
 import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantDetailedInfoServiceRequest;
 import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantResponse;
-import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantsWithin3kmRadiusJpaResponse;
-import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantsWithin3kmRadiusResponse;
-import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantsWithin3kmRadiusServiceRequest;
+import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantsWithinRadiusJpaResponse;
+import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantsWithinRadiusResponse;
+import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantsWithinRadiusServiceRequest;
 import team.waitingcatch.app.restaurant.dto.restaurant.SearchRestaurantJpaResponse;
 import team.waitingcatch.app.restaurant.dto.restaurant.SearchRestaurantServiceRequest;
 import team.waitingcatch.app.restaurant.dto.restaurant.SearchRestaurantsResponse;
@@ -146,9 +146,9 @@ class RestaurantServiceImplTest {
 	@DisplayName("반경 3km 이내의 레스토랑 조회")
 	void getRestaurantsWithin3kmRadius() {
 		// given
-		RestaurantsWithin3kmRadiusServiceRequest request = mock(RestaurantsWithin3kmRadiusServiceRequest.class);
-		List<RestaurantsWithin3kmRadiusJpaResponse> jpaResponses = new ArrayList<>();
-		RestaurantsWithin3kmRadiusJpaResponse jpaResponse = mock(RestaurantsWithin3kmRadiusJpaResponse.class);
+		RestaurantsWithinRadiusServiceRequest request = mock(RestaurantsWithinRadiusServiceRequest.class);
+		List<RestaurantsWithinRadiusJpaResponse> jpaResponses = new ArrayList<>();
+		RestaurantsWithinRadiusJpaResponse jpaResponse = mock(RestaurantsWithinRadiusJpaResponse.class);
 		jpaResponses.add(jpaResponse);
 
 		when(request.getLatitude()).thenReturn(0.0);
@@ -163,7 +163,7 @@ class RestaurantServiceImplTest {
 			jpaResponses);
 
 		// when
-		List<RestaurantsWithin3kmRadiusResponse> responses = restaurantService.getRestaurantsWithin3kmRadius(request);
+		List<RestaurantsWithinRadiusResponse> responses = restaurantService.getRestaurantsWithinRadius(request);
 
 		// then
 		assertEquals("aaa", responses.get(0).getName());

@@ -16,7 +16,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.restaurant.dto.restaurant.QRestaurantsWithin3kmRadiusJpaResponse;
 import team.waitingcatch.app.restaurant.dto.restaurant.QSearchRestaurantJpaResponse;
-import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantsWithin3kmRadiusJpaResponse;
+import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantsWithinRadiusJpaResponse;
 import team.waitingcatch.app.restaurant.dto.restaurant.SearchRestaurantJpaResponse;
 
 @RequiredArgsConstructor
@@ -37,7 +37,8 @@ public class RestaurantInfoRepositoryCustomImpl implements RestaurantInfoReposit
 	}
 
 	@Override
-	public List<RestaurantsWithin3kmRadiusJpaResponse> findRestaurantsByDistance(double latitude, double longitude) {
+	public List<RestaurantsWithinRadiusJpaResponse> findRestaurantsByDistance(double latitude, double longitude,
+		int distance) {
 		NumberExpression<Double> radiansCurrentLat = radians(asNumber(latitude));
 		NumberExpression<Double> radiansCurrentLot = radians(asNumber(longitude));
 		NumberExpression<Double> radiansLat = radians(restaurant.position.latitude);
@@ -54,7 +55,7 @@ public class RestaurantInfoRepositoryCustomImpl implements RestaurantInfoReposit
 				.multiply(cos(radiansLot.subtract(radiansCurrentLot)))
 				.add(sin(radiansCurrentLat).multiply(sin(radiansLat))))
 				.multiply(asNumber(6371))
-				.lt(asNumber(3))
+				.lt(asNumber(distance))
 				.and(restaurant.isDeleted.isFalse()))
 			.fetch();
 

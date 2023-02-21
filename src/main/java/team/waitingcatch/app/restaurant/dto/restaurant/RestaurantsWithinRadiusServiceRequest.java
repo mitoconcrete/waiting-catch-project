@@ -3,12 +3,14 @@ package team.waitingcatch.app.restaurant.dto.restaurant;
 import lombok.Getter;
 
 @Getter
-public class RestaurantsWithin3kmRadiusServiceRequest {
+public class RestaurantsWithinRadiusServiceRequest {
 	private final double latitude;
 	private final double longitude;
+	private final int distance;
 
-	public RestaurantsWithin3kmRadiusServiceRequest(double latitude, double longitude) {
+	public RestaurantsWithinRadiusServiceRequest(double latitude, double longitude, int distance) {
 		this.latitude = latitude;
 		this.longitude = longitude;
+		this.distance = distance;
 	}
 }

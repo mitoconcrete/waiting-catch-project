@@ -17,8 +17,8 @@ import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantBasicInfoServic
 import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantDetailedInfoResponse;
 import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantDetailedInfoServiceRequest;
 import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantResponse;
-import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantsWithin3kmRadiusResponse;
-import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantsWithin3kmRadiusServiceRequest;
+import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantsWithinRadiusResponse;
+import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantsWithinRadiusServiceRequest;
 import team.waitingcatch.app.restaurant.dto.restaurant.SearchRestaurantServiceRequest;
 import team.waitingcatch.app.restaurant.dto.restaurant.SearchRestaurantsResponse;
 import team.waitingcatch.app.restaurant.dto.restaurant.UpdateRestaurantEntityRequest;
@@ -67,11 +67,12 @@ public class RestaurantServiceImpl implements RestaurantService, InternalRestaur
 
 	@Override
 	@Transactional(readOnly = true)
-	public List<RestaurantsWithin3kmRadiusResponse> getRestaurantsWithin3kmRadius(
-		RestaurantsWithin3kmRadiusServiceRequest request) {
-		return restaurantInfoRepository.findRestaurantsByDistance(request.getLatitude(), request.getLongitude())
+	public List<RestaurantsWithinRadiusResponse> getRestaurantsWithinRadius(
+		RestaurantsWithinRadiusServiceRequest request) {
+		return restaurantInfoRepository.findRestaurantsByDistance(request.getLatitude(), request.getLongitude(),
+				request.getDistance())
 			.stream()
-			.map(response -> new RestaurantsWithin3kmRadiusResponse(
+			.map(response -> new RestaurantsWithinRadiusResponse(
 				response, distanceCalculator.distanceInKilometerByHaversine(
 				request.getLatitude(), request.getLongitude(), response.getLatitude(), response.getLongitude())))
 			.collect(Collectors.toList());

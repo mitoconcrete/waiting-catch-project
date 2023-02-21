@@ -6,7 +6,7 @@ import lombok.Getter;
 import team.waitingcatch.app.common.Position;
 
 @Getter
-public class RestaurantsWithin3kmRadiusJpaResponse {
+public class RestaurantsWithinRadiusJpaResponse {
 	private final String name;
 	private final String images;
 	private final float rate;
@@ -17,7 +17,7 @@ public class RestaurantsWithin3kmRadiusJpaResponse {
 	private final boolean isLineupActive;
 
 	@QueryProjection
-	public RestaurantsWithin3kmRadiusJpaResponse(String name, String images, float rate, String searchKeyword,
+	public RestaurantsWithinRadiusJpaResponse(String name, String images, float rate, String searchKeyword,
 		Position position, int currentWaitingNumber, boolean isLineupActive) {
 		this.name = name;
 		this.images = images;

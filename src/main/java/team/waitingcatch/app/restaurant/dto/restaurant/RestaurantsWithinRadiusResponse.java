@@ -3,7 +3,7 @@ package team.waitingcatch.app.restaurant.dto.restaurant;
 import lombok.Getter;
 
 @Getter
-public class RestaurantsWithin3kmRadiusResponse {
+public class RestaurantsWithinRadiusResponse {
 	private final String name;
 	private final String imageUrl;
 	private final float rate;
@@ -12,7 +12,7 @@ public class RestaurantsWithin3kmRadiusResponse {
 	private final int currentWaitingNumber;
 	private final boolean isLineupActive;
 
-	public RestaurantsWithin3kmRadiusResponse(RestaurantsWithin3kmRadiusJpaResponse jpaResponse, double distance) {
+	public RestaurantsWithinRadiusResponse(RestaurantsWithinRadiusJpaResponse jpaResponse, double distance) {
 		this.name = jpaResponse.getName();
 		this.imageUrl = jpaResponse.getImages();
 		this.rate = jpaResponse.getRate();
