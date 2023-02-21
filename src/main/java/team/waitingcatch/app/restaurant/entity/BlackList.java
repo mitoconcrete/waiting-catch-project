@@ -34,7 +34,7 @@ public class BlackList extends TimeStamped {
 	@JoinColumn(name = "user_id", nullable = false)
 	private User user;
 
-	@Column(name = "is_deleted", nullable = false)
+	@Column(nullable = false)
 	private boolean isDeleted;
 
 	public BlackList(

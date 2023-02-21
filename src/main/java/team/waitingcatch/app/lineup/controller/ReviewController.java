@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,6 +26,7 @@ import team.waitingcatch.app.lineup.enums.StoredLineupTableNameEnum;
 import team.waitingcatch.app.lineup.service.ReviewService;
 import team.waitingcatch.app.user.entitiy.UserDetailsImpl;
 
+@RequestMapping("/api")
 @RestController
 @RequiredArgsConstructor
 public class ReviewController {

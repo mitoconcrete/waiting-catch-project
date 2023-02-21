@@ -116,4 +116,11 @@ public class RestaurantServiceImpl implements RestaurantService, InternalRestaur
 			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 레스토랑입니다."));
 		restaurantInfo.closeLineup();
 	}
+
+	@Override
+	public Restaurant _deleteRestaurantBySellerId(Long sellerId) {
+		Restaurant restaurant = _getRestaurantByUserId(sellerId);
+		restaurant.deleteRestaurant();
+		return restaurant;
+	}
 }

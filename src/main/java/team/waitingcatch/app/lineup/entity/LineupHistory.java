@@ -59,6 +59,9 @@ public class LineupHistory extends TimeStamped {
 	@Column(nullable = false)
 	private boolean isReviewed;
 
+	@Column(nullable = false)
+	private boolean isDeleted;
+
 	public static LineupHistory createLineupHistory(Lineup lineup) {
 		return new LineupHistory(lineup);
 	}
@@ -73,8 +76,8 @@ public class LineupHistory extends TimeStamped {
 		this.startedAt = lineup.getCreatedDate();
 		this.arrivedAt = lineup.getArrivedAt();
 		this.isReviewed = lineup.isReviewed();
+		this.isDeleted = false;
 	}
-
 
 	public void updateIsReviewed() {
 		isReviewed = true;

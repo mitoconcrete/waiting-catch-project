@@ -10,4 +10,6 @@ public interface InternalLineupHistoryService {
 	LineupHistory _getById(Long lineupId);
 
 	List<LineupRecordResponse> _getRecordsByUserId(Long userId, ArrivalStatusEnum statusCond);
+
+	void _bulkSoftDeleteByRestaurantId(Long restaurantId);
 }

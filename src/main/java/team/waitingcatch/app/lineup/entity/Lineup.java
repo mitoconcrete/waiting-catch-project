@@ -57,6 +57,9 @@ public class Lineup extends TimeStamped {
 	@Column(nullable = false)
 	private boolean isReviewed;
 
+	@Column(nullable = false)
+	private boolean isDeleted;
+
 	public static Lineup createLineup(StartLineupEntityRequest entityRequest) {
 		return new Lineup(entityRequest);
 	}
@@ -103,6 +106,7 @@ public class Lineup extends TimeStamped {
 		this.status = ArrivalStatusEnum.WAIT;
 		this.arrivedAt = null;
 		this.isReviewed = false;
+		this.isDeleted = false;
 		this.callCount = 0;
 	}
 }
