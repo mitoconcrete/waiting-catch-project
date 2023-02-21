@@ -7,6 +7,10 @@ import static com.querydsl.core.types.dsl.MathExpressions.radians;
 import static com.querydsl.core.types.dsl.MathExpressions.sin;
 import static team.waitingcatch.app.restaurant.entity.QRestaurant.restaurant;
 import static team.waitingcatch.app.restaurant.entity.QRestaurantInfo.restaurantInfo;
+import static com.querydsl.core.types.dsl.Expressions.*;
+import static com.querydsl.core.types.dsl.MathExpressions.*;
+import static team.waitingcatch.app.restaurant.entity.QRestaurant.*;
+import static team.waitingcatch.app.restaurant.entity.QRestaurantInfo.*;
 
 import java.util.List;
 
@@ -14,7 +18,7 @@ import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import lombok.RequiredArgsConstructor;
-import team.waitingcatch.app.restaurant.dto.restaurant.QRestaurantsWithin3kmRadiusJpaResponse;
+import team.waitingcatch.app.restaurant.dto.restaurant.QRestaurantsWithinRadiusJpaResponse;
 import team.waitingcatch.app.restaurant.dto.restaurant.QSearchRestaurantJpaResponse;
 import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantsWithinRadiusJpaResponse;
 import team.waitingcatch.app.restaurant.dto.restaurant.SearchRestaurantJpaResponse;
@@ -28,7 +32,7 @@ public class RestaurantInfoRepositoryCustomImpl implements RestaurantInfoReposit
 		return jpaQueryFactory
 			.select(new QSearchRestaurantJpaResponse(restaurant.name, restaurant.images, restaurantInfo.rate,
 				restaurant.searchKeywords, restaurant.position, restaurantInfo.currentWaitingNumber,
-				restaurantInfo.isLineupActiveStatus))
+				restaurantInfo.isLineupActive))
 			.from(restaurantInfo)
 			.join(restaurantInfo.restaurant, restaurant)
 			.where(restaurant.searchKeywords.contains(keyword)
@@ -45,9 +49,9 @@ public class RestaurantInfoRepositoryCustomImpl implements RestaurantInfoReposit
 		NumberExpression<Double> radiansLot = radians(restaurant.position.longitude);
 
 		return jpaQueryFactory
-			.select(new QRestaurantsWithin3kmRadiusJpaResponse(restaurant.name, restaurant.images, restaurantInfo.rate,
+			.select(new QRestaurantsWithinRadiusJpaResponse(restaurant.name, restaurant.images, restaurantInfo.rate,
 				restaurant.searchKeywords, restaurant.position, restaurantInfo.currentWaitingNumber,
-				restaurantInfo.isLineupActiveStatus))
+				restaurantInfo.isLineupActive))
 			.from(restaurantInfo)
 			.join(restaurantInfo.restaurant, restaurant)
 			.where(acos(cos(radiansCurrentLat)

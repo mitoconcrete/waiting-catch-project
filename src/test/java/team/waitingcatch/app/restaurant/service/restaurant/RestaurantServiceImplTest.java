@@ -1,9 +1,8 @@
 package team.waitingcatch.app.restaurant.service.restaurant;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -159,7 +158,8 @@ class RestaurantServiceImplTest {
 		when(jpaResponse.getLongitude()).thenReturn(0.0);
 		when(distanceCalculator.distanceInKilometerByHaversine(
 			0.0, 0.0, 0.0, 0.0)).thenReturn(0.0);
-		when(restaurantInfoRepository.findRestaurantsByDistance(any(double.class), any(double.class))).thenReturn(
+		when(restaurantInfoRepository.findRestaurantsByDistance(any(double.class), any(double.class),
+			any(int.class))).thenReturn(
 			jpaResponses);
 
 		// when
