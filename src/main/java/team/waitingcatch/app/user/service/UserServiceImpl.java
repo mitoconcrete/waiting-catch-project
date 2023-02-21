@@ -131,13 +131,6 @@ public class UserServiceImpl implements UserService, InternalUserService {
 	}
 
 	@Override
-	public void deleteUser(DeleteUserRequest payload) {
-		User user = _getUserByUsername(payload.getUsername());
-		userRepository.deleteById(user.getId());
-		_deleteSellerAndRelatedInformation(user.getId());
-	}
-
-	@Override
 	@Transactional(readOnly = true)
 	public void findUserAndSendEmail(FindPasswordRequest payload) {
 		User user = userRepository.findByUsernameAndEmailAndIsDeletedFalse(payload.getUsername(), payload.getEmail())
@@ -166,6 +159,19 @@ public class UserServiceImpl implements UserService, InternalUserService {
 		String accessToken = _createAccessTokensByUser(user);
 
 		return new LoginServiceResponse(accessToken);
+	}
+
+	@Override
+	public void deleteCustomer(DeleteUserRequest payload) {
+		User user = _getUserByUsername(payload.getUsername());
+		userRepository.deleteById(user.getId());
+	}
+
+	@Override
+	public void deleteSeller(DeleteUserRequest payload) {
+		User user = _getUserByUsername(payload.getUsername());
+		userRepository.deleteById(user.getId());
+		_deleteSellerAndRelatedInformation(user.getId());
 	}
 
 	@Override
