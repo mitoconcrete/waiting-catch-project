@@ -7,8 +7,10 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class RequestUserBlackListByRestaurantControllerRequest {
+public class DemandBlacklistByRestaurantControllerRequest {
+	@NotNull
+	private Long userId;
+
 	@NotNull
 	private String description;
-
 }

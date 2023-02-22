@@ -1,6 +1,5 @@
 package team.waitingcatch.app.restaurant.service.menu;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -77,7 +76,7 @@ public class MenuServiceImpl implements MenuService, InternalMenuService {
 				if (!imageUrl.equals("기본 메뉴 이미지 URL")) {
 					s3Uploader.deleteS3(imageUrl);
 				}
-				imageUrl = s3Uploader.upload(serviceRequest.getMultipartFile(), "menu");
+				imageUrl = imageUploder.upload(serviceRequest.getMultipartFile(), "menu");
 			} catch (IOException e) {
 				throw new RuntimeException(e);
 			}

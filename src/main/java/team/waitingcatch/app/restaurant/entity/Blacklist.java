@@ -13,13 +13,13 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import team.waitingcatch.app.common.entity.TimeStamped;
-import team.waitingcatch.app.restaurant.dto.blacklist.CreateBlackListInternalServiceRequest;
+import team.waitingcatch.app.restaurant.dto.blacklist.CreateBlacklistInternalServiceRequest;
 import team.waitingcatch.app.user.entitiy.User;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class BlackList extends TimeStamped {
+public class Blacklist extends TimeStamped {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,10 +37,13 @@ public class BlackList extends TimeStamped {
 	@Column(nullable = false)
 	private boolean isDeleted;
 
-	public BlackList(
-		CreateBlackListInternalServiceRequest createBlackListInternalServiceRequest) {
-		this.restaurant = createBlackListInternalServiceRequest.getRestaurant();
-		this.user = createBlackListInternalServiceRequest.getUser();
+	public Blacklist(CreateBlacklistInternalServiceRequest serviceRequest) {
+		this.restaurant = serviceRequest.getRestaurant();
+		this.user = serviceRequest.getUser();
+	}
+
+	public boolean isSameRequester(Long sellerId) {
+		return restaurant.getUser().getId().equals(sellerId);
 	}
 
 	public void deleteSuccess() {

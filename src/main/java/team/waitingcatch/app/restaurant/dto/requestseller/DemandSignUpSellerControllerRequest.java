@@ -7,8 +7,10 @@ import javax.validation.constraints.Size;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
+@Setter
 @NoArgsConstructor
 public class DemandSignUpSellerControllerRequest {
 	@NotEmpty(message = "사용자 아이디는 필수 입력값입니다.")

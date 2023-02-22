@@ -7,9 +7,9 @@ import lombok.Getter;
 @Getter
 public class ApproveBlackListServiceRequest {
 	@NotNull
-	private final Long blackListRequestId;
+	private final Long blacklistRequestId;
 
-	public ApproveBlackListServiceRequest(Long blackListRequestId) {
-		this.blackListRequestId = blackListRequestId;
+	public ApproveBlackListServiceRequest(Long blacklistRequestId) {
+		this.blacklistRequestId = blacklistRequestId;
 	}
 }

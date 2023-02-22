@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>메뉴수정</title>
+</head>
+<body>
+<h1>메뉴수정</h1>
+<form th:action="@{/menu/update/{menuId}(menuId=${menuId})}" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="_method" value="PUT"/>
+    <label for="name">name</label>
+    <input type="text" id="name" name="name"><br>
+    <label for="price">price</label>
+    <input type="text" id="price" name="price"><br>
+    <label for="image">이미지 선택:</label>
+    <input type="file" id="image" name="image"><br>
+    <button type="submit">등록</button>
+</form>
+</body>
+</html>
