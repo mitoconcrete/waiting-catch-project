@@ -19,23 +19,20 @@ import team.waitingcatch.app.user.entitiy.UserDetailsImpl;
 @RequestMapping("/api")
 @RequiredArgsConstructor
 public class BlacklistApiController {
-	private final BlacklistService blackListService;
+	private final BlacklistService blacklistService;
 
-	//판매자 권한 부분
-	//판매자 고객 블랙리스트 삭제
-	@DeleteMapping("/blacklists/{blacklistId}")
-	public void deleteUserBlackListByRestaurant(
+	@DeleteMapping("/seller/blacklists/{blacklistId}")
+	public void deleteBlacklist(
 		@PathVariable Long blacklistId,
 		@AuthenticationPrincipal UserDetailsImpl userDetails) {
 
 		var serviceRequest = new DeleteBlacklistByRestaurantServiceRequest(blacklistId, userDetails.getId());
-		blackListService.deleteBlacklistByRestaurant(serviceRequest);
+		blacklistService.deleteBlackList(serviceRequest);
 	}
 
-	//레스토랑 별 블랙리스트 조회
-	@GetMapping("/admin/restaurants/{restaurantId}/blacklist")
-	public GenericResponse<GetBlacklistResponse> getBlacklistByRestaurantId(@PathVariable Long restaurantId) {
+	@GetMapping("/admin/restaurants/{restaurantId}/blacklists")
+	public GenericResponse<GetBlacklistResponse> getBlacklistsByRestaurant(@PathVariable Long restaurantId) {
 		var serviceRequest = new GetBlacklistByRestaurantIdServiceRequest(restaurantId);
-		return new GenericResponse<>(blackListService.getBlacklistByRestaurantIdRequest(serviceRequest));
+		return new GenericResponse<>(blacklistService.getBlacklistByRestaurantIdRequest(serviceRequest));
 	}
 }

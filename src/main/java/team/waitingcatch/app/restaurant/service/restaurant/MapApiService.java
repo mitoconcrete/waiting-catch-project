@@ -7,9 +7,7 @@ import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.RequiredArgsConstructor;
@@ -25,20 +23,18 @@ import team.waitingcatch.app.user.repository.UserRepository;
 
 @Service
 @RequiredArgsConstructor
-public class ApiService {
+public class MapApiService {
 	private final RestaurantRepository restaurantRepository;
 	private final RestaurantInfoRepository restaurantInfoRepository;
 	private final UserRepository userRepository;
 
-	public HashMap<String, String> getXYMapfromJson(String jsonString) {
+	public void getXYMapFromJson(String jsonString) {
 		User user = userRepository.findByUsernameAndIsDeletedFalse("seller15").orElseThrow();
 		ObjectMapper mapper = new ObjectMapper();
 		HashMap<String, String> XYMap = new HashMap<>();
 
 		try {
-			TypeReference<Map<String, Object>> typeRef
-				= new TypeReference<>() {
-			};
+			TypeReference<Map<String, Object>> typeRef = new TypeReference<>() {};
 			Map<String, Object> jsonMap = mapper.readValue(jsonString, typeRef);
 
 			@SuppressWarnings("unchecked")
@@ -74,14 +70,8 @@ public class ApiService {
 				RestaurantInfo restaurantInfo = new RestaurantInfo(restaurant, "08:00", "22:00");
 				restaurantInfoRepository.save(restaurantInfo);
 			}
-
-		} catch (JsonParseException e) {
-			e.printStackTrace();
-		} catch (JsonMappingException e) {
-			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return XYMap;
 	}
 }

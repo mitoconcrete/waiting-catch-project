@@ -20,10 +20,9 @@ import team.waitingcatch.app.user.entitiy.User;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class Blacklist extends TimeStamped {
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "black_list_id")
+	@Column(name = "blacklist_id")
 	private Long id;
 
 	@ManyToOne(fetch = FetchType.LAZY)

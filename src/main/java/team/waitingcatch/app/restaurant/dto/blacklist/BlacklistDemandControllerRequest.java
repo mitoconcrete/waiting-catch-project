@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class DemandBlacklistRequestControllerRequest {
+public class BlacklistDemandControllerRequest {
 	@NotNull
 	private Long userId;
 

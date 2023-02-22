@@ -66,7 +66,7 @@ public class RestaurantInfo extends TimeStamped {
 		this.currentWaitingNumber -= 1;
 	}
 
-	public RestaurantInfo(Restaurant restaurant) {
+	public RestaurantInfo(Restaurant restaurant, String openTime, String closeTime) {
 		this.restaurant = restaurant;
 		this.openTime = openTime;
 		this.closeTime = closeTime;

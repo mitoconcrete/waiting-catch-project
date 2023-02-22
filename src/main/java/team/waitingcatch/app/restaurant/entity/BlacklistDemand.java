@@ -21,10 +21,10 @@ import team.waitingcatch.app.user.entitiy.User;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class BlacklistRequest extends TimeStamped {
+public class BlacklistDemand extends TimeStamped {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "black_list_request_id")
+	@Column(name = "blacklist_demand_id")
 	private Long id;
 
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -38,10 +38,11 @@ public class BlacklistRequest extends TimeStamped {
 	@Column(nullable = false)
 	@Enumerated(value = EnumType.STRING)
 	private AcceptedStatusEnum status;
+
 	@Column(nullable = false)
 	private String description;
 
-	public BlacklistRequest(Restaurant restaurant, User user, String description) {
+	public BlacklistDemand(Restaurant restaurant, User user, String description) {
 		this.restaurant = restaurant;
 		this.user = user;
 		this.description = description;
@@ -53,28 +54,28 @@ public class BlacklistRequest extends TimeStamped {
 	}
 
 	public void updateRejectionStatus() {
-		this.status = AcceptedStatusEnum.REJECTION;
+		this.status = AcceptedStatusEnum.REJECT;
 	}
 
 	public void checkWaitingStatus() {
-		if (this.status == AcceptedStatusEnum.APPROVAL) {
+		if (this.status == AcceptedStatusEnum.APPROVE) {
 			throw new IllegalArgumentException("Already approve the black list request");
 		} else if (this.status == AcceptedStatusEnum.CANCEL) {
 			throw new IllegalArgumentException("Already cancel the black list request");
-		} else if (this.status == AcceptedStatusEnum.REJECTION) {
+		} else if (this.status == AcceptedStatusEnum.REJECT) {
 			throw new IllegalArgumentException("Already reject the black list request");
 		}
 	}
 
 	public void updateApprovalStatus() {
-		this.status = AcceptedStatusEnum.APPROVAL;
+		this.status = AcceptedStatusEnum.APPROVE;
 	}
 
 	public void checkBlacklistRequest() {
 		if (this.status == AcceptedStatusEnum.WAIT) {
 			throw new IllegalArgumentException("이미 해당유저의 블랙리스트 요청을 하셨습니다.");
 		}
-		if (this.status == AcceptedStatusEnum.APPROVAL) {
+		if (this.status == AcceptedStatusEnum.APPROVE) {
 			throw new IllegalArgumentException("이미 해당유저의 블랙리스트 승인을 하였습니다.");
 		}
 	}

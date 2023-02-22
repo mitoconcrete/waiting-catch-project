@@ -36,6 +36,7 @@ public class Restaurant extends TimeStamped {
 	private String name;
 
 	private String images;
+
 	@Embedded
 	private Position position;
 

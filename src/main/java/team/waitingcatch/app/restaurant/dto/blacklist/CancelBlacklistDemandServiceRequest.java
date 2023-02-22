@@ -3,12 +3,12 @@ package team.waitingcatch.app.restaurant.dto.blacklist;
 import lombok.Getter;
 
 @Getter
-public class CancelBlacklistRequestServiceRequest {
-	private final Long blacklistRequestId;
+public class CancelBlacklistDemandServiceRequest {
+	private final Long blacklistDemandId;
 	private final Long sellerId;
 
-	public CancelBlacklistRequestServiceRequest(Long blacklistRequestId, Long sellerId) {
-		this.blacklistRequestId = blacklistRequestId;
+	public CancelBlacklistDemandServiceRequest(Long blacklistDemandId, Long sellerId) {
+		this.blacklistDemandId = blacklistDemandId;
 		this.sellerId = sellerId;
 	}
 }
