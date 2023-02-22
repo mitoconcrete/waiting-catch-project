@@ -18,7 +18,9 @@ import team.waitingcatch.app.restaurant.dto.requestseller.DemandSignUpSellerServ
 import team.waitingcatch.app.restaurant.dto.requestseller.GetDemandSignUpSellerResponse;
 import team.waitingcatch.app.restaurant.dto.requestseller.RejectSignUpSellerServiceRequest;
 import team.waitingcatch.app.restaurant.entity.Restaurant;
+import team.waitingcatch.app.restaurant.entity.RestaurantInfo;
 import team.waitingcatch.app.restaurant.entity.SellerManagement;
+import team.waitingcatch.app.restaurant.repository.RestaurantInfoRepository;
 import team.waitingcatch.app.restaurant.repository.RestaurantRepository;
 import team.waitingcatch.app.restaurant.repository.SellerManagementRepository;
 import team.waitingcatch.app.user.dto.CreateUserServiceRequest;
@@ -39,6 +41,7 @@ public class SellerManagementServiceImpl implements SellerManagementService, Int
 	private final JavaMailSender emailSender;
 	private final UserRepository userRepository;
 
+	private final RestaurantInfoRepository restaurantInfoRepository;
 	@Value("${spring.mail.username}")
 	private String smtpSenderEmail;
 
@@ -88,6 +91,9 @@ public class SellerManagementServiceImpl implements SellerManagementService, Int
 			= new ApproveSignUpSellerManagementEntityPassToRestaurantEntityRequest(sellerManagement, seller);
 		Restaurant restaurant = new Restaurant(approveSignUpSellerManagementEntityPassToRestaurantEntityRequest);
 		restaurantRepository.save(restaurant);
+
+		RestaurantInfo restaurantInfo = new RestaurantInfo(restaurant);
+		restaurantInfoRepository.save(restaurantInfo);
 
 		// 저장된 번호를 유저에게 메일로 전달한다.
 		SimpleMailMessage message = new SimpleMailMessage();

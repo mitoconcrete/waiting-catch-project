@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,7 +18,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.restaurant.dto.category.CreateCategoryRequest;
+import team.waitingcatch.app.restaurant.dto.category.DeleteCategoryControllerRequest;
 import team.waitingcatch.app.restaurant.dto.category.DeleteCategoryServiceRequest;
+import team.waitingcatch.app.restaurant.dto.category.GetChildCategoryServiceRequest;
 import team.waitingcatch.app.restaurant.dto.category.UpdateCategoryControllerRequest;
 import team.waitingcatch.app.restaurant.dto.category.UpdateCategoryServiceRequest;
 import team.waitingcatch.app.restaurant.dto.restaurant.DeleteRestaurantByAdminServiceRequest;
@@ -61,7 +62,7 @@ public class AdminController {
 	@PostMapping("/register")
 	@ResponseStatus(HttpStatus.CREATED)
 	public void createAdmin(
-		@ModelAttribute("CreateUserControllerRequest") @RequestBody @Valid CreateUserControllerRequest controllerRequest) {
+		@ModelAttribute("CreateUserControllerRequest") @Valid CreateUserControllerRequest controllerRequest) {
 		_createUserService(UserRoleEnum.ADMIN, controllerRequest);
 	}
 
@@ -158,30 +159,47 @@ public class AdminController {
 	public ModelAndView categoryPage(Model model) {
 		model.addAttribute("categories", categoryService.getParentCategories());
 		model.addAttribute("CreateCategoryRequest", new CreateCategoryRequest());
+		model.addAttribute("DeleteCategoryControllerRequest", new DeleteCategoryControllerRequest());
 		model.addAttribute("UpdateCategoryControllerRequest", new UpdateCategoryControllerRequest());
 		return new ModelAndView("/admin/category");
 	}
 
 	@PostMapping("/category")
 	@ResponseStatus(value = HttpStatus.CREATED)
-	public void createCategory(@ModelAttribute @RequestBody @Valid CreateCategoryRequest request) {
+	public void createCategory(@ModelAttribute @Valid CreateCategoryRequest request) {
 		categoryService.createCategory(request);
 	}
 
-	@PutMapping("/categories/{categoryId}")
-	public void updateCategory(@PathVariable Long categoryId,
-		@ModelAttribute @RequestBody @Valid UpdateCategoryControllerRequest controllerRequest) {
-
+	@PutMapping("/categories-update")
+	public void updateCategory(@ModelAttribute @Valid UpdateCategoryControllerRequest controllerRequest) {
 		UpdateCategoryServiceRequest serviceRequest =
-			new UpdateCategoryServiceRequest(categoryId, controllerRequest.getName());
-
+			new UpdateCategoryServiceRequest(controllerRequest.getCategoryId(), controllerRequest.getName());
 		categoryService.updateCategory(serviceRequest);
 	}
 
-	@DeleteMapping("/categories/{categoryId}")
-	public void deleteCategory(@PathVariable Long categoryId) {
-		DeleteCategoryServiceRequest request = new DeleteCategoryServiceRequest(categoryId);
+	@DeleteMapping("/categories-form-delete")
+	public void deleteCategory(@ModelAttribute DeleteCategoryControllerRequest deleteCategoryControllerRequest) {
+		DeleteCategoryServiceRequest request = new DeleteCategoryServiceRequest(
+			deleteCategoryControllerRequest.getCategoryId());
 		categoryService.deleteCategory(request);
+	}
+
+	@DeleteMapping("/categories-direct-delete/{categoryId}")
+	public void deleteCategory(@PathVariable Long categoryId) {
+		DeleteCategoryServiceRequest request = new DeleteCategoryServiceRequest(
+			categoryId);
+		categoryService.deleteCategory(request);
+	}
+
+	@GetMapping("/categories/{categoryId}")
+	public ModelAndView getChildCategories(@PathVariable Long categoryId, Model model) {
+		GetChildCategoryServiceRequest request = new GetChildCategoryServiceRequest(categoryId);
+		model.addAttribute("abc", categoryService.getChildCategories(request).getChildCategories());
+		model.addAttribute("categoryAll", categoryService.getAllCategories());
+		model.addAttribute("category", categoryService.getChildCategories(request));
+		model.addAttribute("DeleteCategoryControllerRequest", new DeleteCategoryControllerRequest());
+		model.addAttribute("UpdateCategoryControllerRequest", new UpdateCategoryControllerRequest());
+		return new ModelAndView("/admin/category-view");
 	}
 
 }
