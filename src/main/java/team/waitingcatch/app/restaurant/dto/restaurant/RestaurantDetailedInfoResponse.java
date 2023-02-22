@@ -6,6 +6,7 @@ import team.waitingcatch.app.restaurant.entity.RestaurantInfo;
 
 @Getter
 public class RestaurantDetailedInfoResponse {
+	private final Long id;
 	private final String name;
 	private final String province;
 	private final String city;
@@ -14,8 +15,12 @@ public class RestaurantDetailedInfoResponse {
 	private final String description;
 	private final String openTime;
 	private final String closeTime;
+	private final String[] category;
+	private final float rate;
 
 	public RestaurantDetailedInfoResponse(Restaurant restaurant, RestaurantInfo restaurantInfo) {
+		this.id = restaurant.getId();
+		this.category = restaurant.getSearchKeywords().split(" ");
 		this.name = restaurant.getName();
 		this.province = restaurant.getProvince();
 		this.city = restaurant.getCity();
@@ -24,5 +29,6 @@ public class RestaurantDetailedInfoResponse {
 		this.description = restaurant.getDescription();
 		this.openTime = restaurantInfo.getOpenTime();
 		this.closeTime = restaurantInfo.getCloseTime();
+		this.rate = restaurantInfo.getRate();
 	}
 }
