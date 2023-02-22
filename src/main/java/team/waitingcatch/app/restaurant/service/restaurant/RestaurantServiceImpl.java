@@ -7,11 +7,10 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.common.util.DistanceCalculator;
-import team.waitingcatch.app.common.util.S3Uploader;
+import team.waitingcatch.app.common.util.ImageUploader;
 import team.waitingcatch.app.restaurant.dto.restaurant.DeleteRestaurantByAdminServiceRequest;
 import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantBasicInfoResponse;
 import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantBasicInfoServiceRequest;
@@ -36,7 +35,7 @@ public class RestaurantServiceImpl implements RestaurantService, InternalRestaur
 	private final RestaurantRepository restaurantRepository;
 	private final DistanceCalculator distanceCalculator;
 	private final RestaurantInfoRepository restaurantInfoRepository;
-	private final S3Uploader s3Uploader;
+	private final ImageUploader imageUploader;
 
 	@Override
 	@Transactional(readOnly = true)
@@ -105,31 +104,20 @@ public class RestaurantServiceImpl implements RestaurantService, InternalRestaur
 		RestaurantInfo restaurantInfo = restaurantInfoRepository.findById(restaurant.getId())
 			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 레스토랑 정보입니다."));
 		String imageName = "";
-		if (updateRestaurantServiceRequest.getFiles().size() >= 1) {
-			for (MultipartFile multipartFile : updateRestaurantServiceRequest.getFiles()) {
-				String originalName = multipartFile.getOriginalFilename();
-				if (!Objects.equals(originalName, "기본URL")) {
-					{
-						String imageUrls = s3Uploader.upload(multipartFile, "restaurant");
-						imageName += imageUrls + ",";
 
-						String lastCommaCutURL = imageName.substring(0, imageName.length() - 1);
-
-						UpdateRestaurantEntityRequest updateRestaurantEntityRequest = new UpdateRestaurantEntityRequest(
-							updateRestaurantServiceRequest, lastCommaCutURL);
-						restaurant.updateRestaurant(updateRestaurantEntityRequest);
-						restaurantInfo.updateRestaurantInfo(updateRestaurantEntityRequest);
-					}
-				}
-				imageName += "기본URL" + ",";
-				String lastCommaCutURL = imageName.substring(0, imageName.length() - 1);
-				UpdateRestaurantEntityRequest updateRestaurantEntityRequest = new UpdateRestaurantEntityRequest(
-					updateRestaurantServiceRequest, lastCommaCutURL);
-				restaurant.updateRestaurant(updateRestaurantEntityRequest);
-				restaurantInfo.updateRestaurantInfo(updateRestaurantEntityRequest);
+		List<String> imageUrls = imageUploader.uploadList(updateRestaurantServiceRequest.getFiles(), "restaurant");
+		for (String imageUrl : imageUrls) {
+			if (Objects.equals(imageUrl, "기본값")) {
+				imageName += "기본값" + ",";
 			}
+			imageName += imageUrl + ",";
 		}
+		String lastCommaCutURL = imageName.substring(0, imageName.length() - 1);
 
+		UpdateRestaurantEntityRequest updateRestaurantEntityRequest = new UpdateRestaurantEntityRequest(
+			updateRestaurantServiceRequest, lastCommaCutURL);
+		restaurant.updateRestaurant(updateRestaurantEntityRequest);
+		restaurantInfo.updateRestaurantInfo(updateRestaurantEntityRequest);
 	}
 
 	@Override
