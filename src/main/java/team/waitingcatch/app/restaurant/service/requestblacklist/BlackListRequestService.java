@@ -18,4 +18,5 @@ public interface BlackListRequestService {
 
 	void approveBlackListRequest(ApproveBlackListServiceRequest approveBlackListServiceRequest);
 
+	void rejectBlacklistRequest(Long blacklistRequestId);
 }

@@ -65,5 +65,10 @@ public class RequestBlackListController {
 		blackListRequestService.approveBlackListRequest(approveBlackListServiceRequest);
 	}
 
+	@PutMapping("/admin/restaurants/blacklist-request/{blacklistRequestId}")
+	public void rejectBlacklistRequest(@PathVariable Long blacklistRequestId) {
+		blackListRequestService.rejectBlacklistRequest(blacklistRequestId);
+	}
+
 }
 

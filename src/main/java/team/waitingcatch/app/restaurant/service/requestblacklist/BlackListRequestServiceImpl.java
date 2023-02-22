@@ -73,6 +73,7 @@ public class BlackListRequestServiceImpl implements BlackListRequestService, Int
 		return blackListRequests.stream().map(GetRequestBlackListResponse::new).collect(Collectors.toList());
 	}
 
+	// 블랙리스트 요청 승인
 	public void approveBlackListRequest(ApproveBlackListServiceRequest approveBlackListServiceRequest) {
 		BlackListRequest blackListRequest = blackListRequestRepository.findById(
 				approveBlackListServiceRequest.getBlackListRequestId())
@@ -80,6 +81,15 @@ public class BlackListRequestServiceImpl implements BlackListRequestService, Int
 		blackListRequest.checkWaitingStatus();
 		blackListRequest.updateApprovalStatus();
 		internalBlackListService._createBlackList(blackListRequest.getRestaurant(), blackListRequest.getUser());
+	}
+
+	// 블랙리스트 요청 거절
+	@Override
+	public void rejectBlacklistRequest(Long blacklistRequestId) {
+		BlackListRequest blackListRequest = blackListRequestRepository.findById(blacklistRequestId)
+			.orElseThrow(() -> new IllegalArgumentException("Not found blacklist request"));
+		blackListRequest.checkWaitingStatus();
+		blackListRequest.updateRejectionStatus();
 	}
 
 }
