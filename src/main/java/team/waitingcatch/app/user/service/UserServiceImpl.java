@@ -204,7 +204,7 @@ public class UserServiceImpl implements UserService, InternalUserService {
 	@Override
 	@Transactional(readOnly = true)
 	public User _getUserByUserId(Long id) {
-		return userRepository.findByUserId(id).orElseThrow(() -> new IllegalArgumentException("유저가 존재하지 않습니다."));
+		return userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("유저가 존재하지 않습니다."));
 	}
 
 	private String _createAccessTokensByUser(User user) {

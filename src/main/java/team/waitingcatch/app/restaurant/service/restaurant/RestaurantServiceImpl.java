@@ -9,8 +9,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
-import team.waitingcatch.app.common.util.DistanceCalculator;
 import team.waitingcatch.app.common.util.S3Uploader;
+import team.waitingcatch.app.restaurant.dto.requestseller.ApproveSignUpSellerManagementEntityPassToRestaurantEntityRequest;
+import team.waitingcatch.app.common.util.DistanceCalculator;
+import team.waitingcatch.app.common.util.ImageUploader;
 import team.waitingcatch.app.restaurant.dto.restaurant.DeleteRestaurantByAdminServiceRequest;
 import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantBasicInfoResponse;
 import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantBasicInfoServiceRequest;
@@ -35,7 +37,7 @@ public class RestaurantServiceImpl implements RestaurantService, InternalRestaur
 	private final RestaurantRepository restaurantRepository;
 	private final DistanceCalculator distanceCalculator;
 	private final RestaurantInfoRepository restaurantInfoRepository;
-	private final S3Uploader s3Uploader;
+	private final ImageUploader imageUploader;
 
 	@Override
 	@Transactional(readOnly = true)
@@ -87,22 +89,25 @@ public class RestaurantServiceImpl implements RestaurantService, InternalRestaur
 	@Override
 	public void deleteRestaurantByAdmin(DeleteRestaurantByAdminServiceRequest deleteRestaurantByAdminServiceRequest) {
 		Restaurant restaurant = _getRestaurant(deleteRestaurantByAdminServiceRequest.getRestaurantId());
+		//String transferToString[] = restaurant.getImages().split(",");
+		// for (int i = 0; i < transferToString.length; i++) {
+		// 	s3Uploader.deleteS3(transferToString[i]);
+		// }
 		restaurant.deleteRestaurant();
 	}
+	// 현재 있는 것은
 
+	//업데이트시 -> 현재 있는것은 1.있는것 2. 있는것 3. 새로 4.새로
+	//업데이트시 -> 현재 있는것은 1.새로 2. 새로 3. 새로 4.새로
 	@Override
 	public void updateRestaurant(UpdateRestaurantServiceRequest updateRestaurantServiceRequest) throws IOException {
-		Restaurant restaurant = restaurantRepository.findByUser_Username(
-				updateRestaurantServiceRequest.getSellerName())
+		Restaurant restaurant = restaurantRepository.findByUserId(updateRestaurantServiceRequest.getSellerId())
 			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 레스토랑 입니다."));
 		RestaurantInfo restaurantInfo = restaurantInfoRepository.findById(restaurant.getId())
 			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 레스토랑 정보입니다."));
-
-		// 파일 업로드(여러개) 처리 부분
-
 		String imageName = "";
 
-		List<String> imageUrls = s3Uploader.uploadList(updateRestaurantServiceRequest.getFiles(), "restaurant");
+		List<String> imageUrls = imageUploader.uploadList(updateRestaurantServiceRequest.getFiles(), "restaurant");
 		for (String imageUrl : imageUrls) {
 			if (Objects.equals(imageUrl, "기본값")) {
 				imageName += "기본값" + ",";
@@ -130,6 +135,13 @@ public class RestaurantServiceImpl implements RestaurantService, InternalRestaur
 	}
 
 	@Override
+	public void createRestaurant(ApproveSignUpSellerManagementEntityPassToRestaurantEntityRequest request) {
+		Restaurant restaurant = new Restaurant(request);
+		restaurantRepository.save(restaurant);
+		RestaurantInfo restaurantInfo = new RestaurantInfo(restaurant);
+		restaurantInfoRepository.save(restaurantInfo);
+	}
+
 	public void _openLineup(Long restaurantId) {
 		RestaurantInfo restaurantInfo = restaurantInfoRepository.findByRestaurantId(restaurantId)
 			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 레스토랑입니다."));

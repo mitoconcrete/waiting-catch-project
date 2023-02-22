@@ -13,27 +13,27 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 
 import lombok.RequiredArgsConstructor;
-import team.waitingcatch.app.restaurant.dto.blacklist.ApproveBlackListServiceRequest;
-import team.waitingcatch.app.restaurant.dto.blacklist.CancelBlacklistByRestaurantServiceRequest;
-import team.waitingcatch.app.restaurant.dto.blacklist.DemandBlacklistByRestaurantControllerRequest;
+import team.waitingcatch.app.restaurant.dto.blacklist.ApproveBlacklistDemandServiceRequest;
+import team.waitingcatch.app.restaurant.dto.blacklist.CancelBlacklistDemandServiceRequest;
+import team.waitingcatch.app.restaurant.dto.blacklist.BlacklistDemandControllerRequest;
 import team.waitingcatch.app.restaurant.dto.blacklist.DemandBlacklistByRestaurantServiceRequest;
-import team.waitingcatch.app.restaurant.dto.blacklist.GetRequestBlacklistResponse;
-import team.waitingcatch.app.restaurant.service.requestblacklist.BlacklistRequestService;
+import team.waitingcatch.app.restaurant.dto.blacklist.GetBlacklistDemandResponse;
+import team.waitingcatch.app.restaurant.service.requestblacklist.BlacklistDemandService;
 import team.waitingcatch.app.user.entitiy.UserDetailsImpl;
 
 @Controller
 @RequiredArgsConstructor
 public class BlacklistRequestController {
-	private final BlacklistRequestService blackListRequestService;
+	private final BlacklistDemandService blackListDemandService;
 
 	@PostMapping("/blacklists")
 	public void requestUBlacklistByRestaurant(
-		@Valid @ModelAttribute DemandBlacklistByRestaurantControllerRequest controllerRequest,
+		@Valid @ModelAttribute BlacklistDemandControllerRequest controllerRequest,
 		@AuthenticationPrincipal UserDetailsImpl userDetails) {
 
 		var serviceRequest = new DemandBlacklistByRestaurantServiceRequest(userDetails.getId(),
 			controllerRequest.getUserId(), controllerRequest.getDescription());
-		blackListRequestService.requestUserBlackList(serviceRequest);
+		blackListDemandService.submitBlacklistDemand(serviceRequest);
 	}
 
 	@PutMapping("/blacklists/{blacklistId}")
@@ -41,17 +41,17 @@ public class BlacklistRequestController {
 		@PathVariable Long blacklistId,
 		@AuthenticationPrincipal UserDetailsImpl userDetails) {
 
-		var serviceRequest = new CancelBlacklistByRestaurantServiceRequest(blacklistId, userDetails.getId());
-		blackListRequestService.cancelRequestUserBlacklist(serviceRequest);
+		var serviceRequest = new CancelBlacklistDemandServiceRequest(blacklistId, userDetails.getId());
+		blackListDemandService.cancelBlacklistDemand(serviceRequest);
 	}
 	@GetMapping("/admin/restaurants/blacklist-request")
-	public List<GetRequestBlacklistResponse> getRequestBlacklists() {
-		return blackListRequestService.getRequestBlacklist();
+	public List<GetBlacklistDemandResponse> getRequestBlacklists() {
+		return blackListDemandService.getBlacklistDemands();
 	}
 
 	@PostMapping("/admin/restaurants/blacklist-request/{blacklistRequestId}")
 	public void approveBlacklistRequest(@PathVariable Long blacklistRequestId) {
-		var serviceRequest = new ApproveBlackListServiceRequest(blacklistRequestId);
-		blackListRequestService.approveBlacklistRequest(serviceRequest);
+		var serviceRequest = new ApproveBlacklistDemandServiceRequest(blacklistRequestId);
+		blackListDemandService.approveBlacklistDemand(serviceRequest);
 	}
 }

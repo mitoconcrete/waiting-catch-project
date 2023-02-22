@@ -2,6 +2,7 @@ package team.waitingcatch.app.exception;
 
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -37,5 +38,11 @@ public class ApplicationExceptionController {
 	public BasicExceptionResponse handleDataIntegrityViolationException() {
 		return new BasicExceptionResponse(HttpStatus.BAD_REQUEST,
 			"데이터 무결성 오류 발생 : Unique 한 데이터를 넣어주어야합니다.");
+	}
+
+	@ExceptionHandler({HttpMessageNotReadableException.class})
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	public BasicExceptionResponse httpMessageNotReadableExceptionHandler(HttpMessageNotReadableException ex) {
+		return new BasicExceptionResponse(HttpStatus.BAD_REQUEST, ex.getRootCause().getMessage());
 	}
 }
