@@ -60,17 +60,16 @@ public class BlacklistDemandApiController {
 		blacklistDemandService.approveBlacklistDemand(serviceRequest);
 	}
 
-<<<<<<< Updated upstream
 	@PutMapping("/admin/restaurants/blacklist-demand/{blacklistDemandId}")
 	public void rejectBlacklistDemand(@PathVariable Long blacklistDemandId) {
 		blacklistDemandService.rejectBlacklistDemand(blacklistDemandId);
-=======
+	}
+
 	@GetMapping("/seller/restaurant/blacklist-demands")
 	public List<GetBlacklistDemandResponse> getBlackListDemandByRestaurant(
 		@AuthenticationPrincipal UserDetailsImpl userDetails) {
 		GetBlackListDemandByRestaurantServiceRequest getBlackListDemandByRestaurantControllerRequest = new
 			GetBlackListDemandByRestaurantServiceRequest(userDetails.getId());
 		return blacklistDemandService.getBlackListDemandsByRestaurant(getBlackListDemandByRestaurantControllerRequest);
->>>>>>> Stashed changes
 	}
 }
