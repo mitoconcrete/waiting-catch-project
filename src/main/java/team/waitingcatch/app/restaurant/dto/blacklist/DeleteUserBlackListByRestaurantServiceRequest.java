@@ -1,18 +1,14 @@
 package team.waitingcatch.app.restaurant.dto.blacklist;
 
-import javax.validation.constraints.NotNull;
-
 import lombok.Getter;
 
 @Getter
 public class DeleteUserBlackListByRestaurantServiceRequest {
-	@NotNull
-	private final Long userId;
-	@NotNull
-	private final String sellerName;
+	private final Long blacklistId;
+	private final Long sellerId;
 
-	public DeleteUserBlackListByRestaurantServiceRequest(Long userId, String sellerName) {
-		this.userId = userId;
-		this.sellerName = sellerName;
+	public DeleteUserBlackListByRestaurantServiceRequest(Long blacklistId, Long sellerId) {
+		this.blacklistId = blacklistId;
+		this.sellerId = sellerId;
 	}
 }

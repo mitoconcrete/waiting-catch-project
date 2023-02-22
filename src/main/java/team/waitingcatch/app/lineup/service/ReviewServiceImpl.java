@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
-import team.waitingcatch.app.common.util.S3Uploader;
+import team.waitingcatch.app.common.util.ImageUploader;
 import team.waitingcatch.app.lineup.dto.CreateReviewEntityRequest;
 import team.waitingcatch.app.lineup.dto.CreateReviewServiceRequest;
 import team.waitingcatch.app.lineup.dto.GetReviewResponse;
@@ -29,12 +29,12 @@ public class ReviewServiceImpl implements ReviewService, InternalReviewService {
 	private final InternalLineupService internalLineupService;
 	private final InternalLineupHistoryService internalLineupHistoryService;
 
-	private final S3Uploader s3Uploader;
+	private final ImageUploader imageUploader;
 
 	@Override
 	public void createReview(CreateReviewServiceRequest serviceRequest) throws IOException {
 		Restaurant restaurant = internalRestaurantService._getRestaurant(serviceRequest.getRestaurantId());
-		List<String> imagePaths = s3Uploader.uploadList(serviceRequest.getImages(), "review");
+		List<String> imagePaths = imageUploader.uploadList(serviceRequest.getImages(), "review");
 		CreateReviewEntityRequest entityRequest = new CreateReviewEntityRequest(serviceRequest.getUser(), restaurant,
 			serviceRequest.getRate(), serviceRequest.getContent(), imagePaths);
 
