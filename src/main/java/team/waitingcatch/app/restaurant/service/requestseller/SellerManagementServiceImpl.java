@@ -23,6 +23,7 @@ import team.waitingcatch.app.restaurant.entity.SellerManagement;
 import team.waitingcatch.app.restaurant.repository.RestaurantInfoRepository;
 import team.waitingcatch.app.restaurant.repository.RestaurantRepository;
 import team.waitingcatch.app.restaurant.repository.SellerManagementRepository;
+import team.waitingcatch.app.restaurant.service.restaurant.InternalRestaurantService;
 import team.waitingcatch.app.user.dto.CreateUserServiceRequest;
 import team.waitingcatch.app.user.entitiy.User;
 import team.waitingcatch.app.user.enums.UserRoleEnum;
@@ -36,11 +37,11 @@ import team.waitingcatch.app.user.service.UserService;
 public class SellerManagementServiceImpl implements SellerManagementService, InternalSellerManagementService {
 	private final SellerManagementRepository sellerManagementRepository;
 	private final InternalUserService internalUserService;
-	private final RestaurantRepository restaurantRepository;
+	private final InternalRestaurantService restaurantService;
 	private final UserService userService;
 	private final JavaMailSender emailSender;
 	private final UserRepository userRepository;
-
+	private final RestaurantRepository restaurantRepository;
 	private final RestaurantInfoRepository restaurantInfoRepository;
 	@Value("${spring.mail.username}")
 	private String smtpSenderEmail;
@@ -89,6 +90,8 @@ public class SellerManagementServiceImpl implements SellerManagementService, Int
 		ApproveSignUpSellerManagementEntityPassToRestaurantEntityRequest
 			approveSignUpSellerManagementEntityPassToRestaurantEntityRequest
 			= new ApproveSignUpSellerManagementEntityPassToRestaurantEntityRequest(sellerManagement, seller);
+		restaurantService.createRestaurant(approveSignUpSellerManagementEntityPassToRestaurantEntityRequest);
+
 		Restaurant restaurant = new Restaurant(approveSignUpSellerManagementEntityPassToRestaurantEntityRequest);
 		restaurantRepository.save(restaurant);
 

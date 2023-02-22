@@ -2,6 +2,7 @@ package team.waitingcatch.app.restaurant.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -23,14 +24,14 @@ public class RestaurantInfo extends TimeStamped {
 	@Column(name = "restaurant_info_id")
 	private Long id;
 
-	@OneToOne
-	@JoinColumn(name = "restaurant_id", nullable = false)
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "restaurant_id", nullable = false, unique = true)
 	private Restaurant restaurant;
 
-	@Column
+	@Column(nullable = false)
 	private String openTime;
 
-	@Column
+	@Column(nullable = false)
 	private String closeTime;
 
 	@Column(nullable = false)
@@ -63,9 +64,9 @@ public class RestaurantInfo extends TimeStamped {
 	// 줄서기 취소, 완료시 해당 레스토랑의 현재 대기인원 수를 차감한다.
 	public void subtractLineupCount() {
 		this.currentWaitingNumber -= 1;
-	}
+  }
 
-	public RestaurantInfo(Restaurant restaurant) {
+	public RestaurantInfo(Restaurant restaurant, String openTime, String closeTime) {
 		this.restaurant = restaurant;
 		this.openTime = openTime;
 		this.closeTime = closeTime;
@@ -75,6 +76,10 @@ public class RestaurantInfo extends TimeStamped {
 	public void updateRestaurantInfo(UpdateRestaurantEntityRequest updateRestaurantEntityRequest) {
 		this.openTime = updateRestaurantEntityRequest.getOpenTime();
 		this.closeTime = updateRestaurantEntityRequest.getCloseTime();
+	}
+
+	public RestaurantInfo(Restaurant restaurant) {
+		this.restaurant = restaurant;
 	}
 
 	public void openLineup() {

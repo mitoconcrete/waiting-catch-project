@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
+import team.waitingcatch.app.common.util.S3Uploader;
+import team.waitingcatch.app.restaurant.dto.requestseller.ApproveSignUpSellerManagementEntityPassToRestaurantEntityRequest;
 import team.waitingcatch.app.common.util.DistanceCalculator;
 import team.waitingcatch.app.common.util.ImageUploader;
 import team.waitingcatch.app.restaurant.dto.restaurant.DeleteRestaurantByAdminServiceRequest;
@@ -133,6 +135,13 @@ public class RestaurantServiceImpl implements RestaurantService, InternalRestaur
 	}
 
 	@Override
+	public void createRestaurant(ApproveSignUpSellerManagementEntityPassToRestaurantEntityRequest request) {
+		Restaurant restaurant = new Restaurant(request);
+		restaurantRepository.save(restaurant);
+		RestaurantInfo restaurantInfo = new RestaurantInfo(restaurant);
+		restaurantInfoRepository.save(restaurantInfo);
+	}
+
 	public void _openLineup(Long restaurantId) {
 		RestaurantInfo restaurantInfo = restaurantInfoRepository.findById(restaurantId)
 			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 레스토랑입니다."));
