@@ -29,7 +29,7 @@ public class RestaurantInfoRepositoryCustomImpl implements RestaurantInfoReposit
 					restaurantInfo.isLineupActive))
 			.from(restaurantInfo)
 			.join(restaurantInfo.restaurant, restaurant)
-			.where(restaurant.searchKeywords.contains(keyword)
+			.where(restaurant.searchKeywords.contains(keyword).or(restaurant.name.contains(keyword))
 				.and(restaurant.isDeleted.isFalse()))
 			.fetch();
 	}
