@@ -9,8 +9,8 @@ public class UserCouponResponse {
 	private final UserCoupon userCoupon;
 	private final CouponCreator couponCreator;
 
-	public UserCouponResponse(UserCoupon userCoupon, CouponCreator couponCreator) {
+	public UserCouponResponse(UserCoupon userCoupon) {
 		this.userCoupon = userCoupon;
-		this.couponCreator = couponCreator;
+		this.couponCreator = userCoupon.getCouponCreator();
 	}
 }
