@@ -6,6 +6,7 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,7 +33,8 @@ import team.waitingcatch.app.user.entitiy.UserDetailsImpl;
 public class ReviewController {
 	private final ReviewService reviewService;
 
-	@PostMapping("/restaurants/{restaurantId}/reviews")
+	@PostMapping(value = "/restaurants/{restaurantId}/reviews", consumes = {MediaType.APPLICATION_JSON_VALUE,
+		MediaType.MULTIPART_FORM_DATA_VALUE})
 	@ResponseStatus(HttpStatus.CREATED)
 	public void createReview(
 		@PathVariable long restaurantId,

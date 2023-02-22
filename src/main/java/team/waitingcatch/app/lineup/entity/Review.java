@@ -61,7 +61,7 @@ public class Review extends TimeStamped {
 
 	private Review(CreateReviewEntityRequest entityRequest) {
 		this.user = entityRequest.getUser();
-		this.restaurant = getRestaurant();
+		this.restaurant = entityRequest.getRestaurant();
 		this.rate = entityRequest.getRate();
 		this.imagePaths.addAll(entityRequest.getImagePaths());
 		this.content = entityRequest.getContent();
