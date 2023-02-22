@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.common.util.DistanceCalculator;
-import team.waitingcatch.app.common.util.S3Uploader;
+import team.waitingcatch.app.common.util.ImageUploader;
 import team.waitingcatch.app.restaurant.dto.restaurant.DeleteRestaurantByAdminServiceRequest;
 import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantBasicInfoResponse;
 import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantBasicInfoServiceRequest;
@@ -35,7 +35,7 @@ public class RestaurantServiceImpl implements RestaurantService, InternalRestaur
 	private final RestaurantRepository restaurantRepository;
 	private final DistanceCalculator distanceCalculator;
 	private final RestaurantInfoRepository restaurantInfoRepository;
-	private final S3Uploader s3Uploader;
+	private final ImageUploader imageUploader;
 
 	@Override
 	@Transactional(readOnly = true)
@@ -102,7 +102,7 @@ public class RestaurantServiceImpl implements RestaurantService, InternalRestaur
 
 		String imageName = "";
 
-		List<String> imageUrls = s3Uploader.uploadList(updateRestaurantServiceRequest.getFiles(), "restaurant");
+		List<String> imageUrls = imageUploader.uploadList(updateRestaurantServiceRequest.getFiles(), "restaurant");
 		for (String imageUrl : imageUrls) {
 			if (Objects.equals(imageUrl, "기본값")) {
 				imageName += "기본값" + ",";
