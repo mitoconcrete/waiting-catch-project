@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.multipart.MultipartFile;
@@ -136,15 +137,26 @@ public class SellerController {
 	@PostMapping("/menu/new")
 	@ResponseStatus(value = HttpStatus.CREATED)
 	public String createMenu(
-		//@RequestPart("images") MultipartFile multipartFile,
+		@RequestPart("image") MultipartFile multipartFile,
 		@Valid CreateMenuControllerRequest request) {
-		//restaurantId -> 쓸지말지 모르겠음. 임시로 값 입력 , multipartFile -> 사용법모르겠음. 임시로 값입력
+		//MultipartFile multipartFile = null;
 		Long restaurantId = Long.parseLong("1");
-		MultipartFile multipartFile = null;
+		System.out.println(multipartFile + " dd " + request + " dd ");
 		CreateMenuServiceRequest serviceRequest = new CreateMenuServiceRequest(restaurantId, multipartFile, request);
 		menuService.createMenu(serviceRequest);
 		return "redirect:/menu";
 	}
+
+	// // seller
+	// @PostMapping("/seller/restaurants/{restaurantId}/menus")
+	// @ResponseStatus(value = HttpStatus.CREATED)
+	// public void createMenu(@PathVariable Long restaurantId,
+	// 	@RequestPart("images") MultipartFile multipartFile,
+	// 	@RequestPart("requestDto") @Valid CreateMenuControllerRequest request) {
+	//
+	// 	CreateMenuServiceRequest serviceRequest = new CreateMenuServiceRequest(restaurantId, multipartFile, request);
+	// 	menuService.createMenu(serviceRequest);
+	// }
 
 	@GetMapping("/menu/update/{menuId}")
 	public String updateMenu(Model model, @PathVariable Long menuId) {

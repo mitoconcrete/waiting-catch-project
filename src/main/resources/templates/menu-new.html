@@ -6,7 +6,7 @@
 </head>
 <body>
 <h1>메뉴추가</h1>
-<form action="/menu/new" method="post">
+<form th:action="@{/menu/new}" method="post" enctype="multipart/form-data">
     <label for="name">name</label>
     <input type="text" id="name" name="name"><br>
     <label for="price">price</label>
