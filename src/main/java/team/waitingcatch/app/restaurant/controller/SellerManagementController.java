@@ -19,6 +19,9 @@ import team.waitingcatch.app.restaurant.dto.requestseller.ApproveSignUpSellerRes
 import team.waitingcatch.app.restaurant.dto.requestseller.ApproveSignUpSellerServiceRequest;
 import team.waitingcatch.app.restaurant.dto.requestseller.DemandSignUpSellerControllerRequest;
 import team.waitingcatch.app.restaurant.dto.requestseller.DemandSignUpSellerServiceRequest;
+import team.waitingcatch.app.restaurant.dto.requestseller.GetDemandSignUpSellerResponse;
+import team.waitingcatch.app.restaurant.dto.requestseller.GetRequestSellerByRestaurantRequest;
+import team.waitingcatch.app.restaurant.dto.requestseller.GetRequestSellerControllerRequest;
 import team.waitingcatch.app.restaurant.dto.requestseller.RejectSignUpSellerServiceRequest;
 import team.waitingcatch.app.restaurant.service.requestseller.SellerManagementService;
 
@@ -48,6 +51,14 @@ public class SellerManagementController {
 		DemandSignUpSellerServiceRequest demandSignupSellerServiceRequest = new DemandSignUpSellerServiceRequest(
 			demandSignUpControllerRequest, address, position);
 		sellerManagementService.demandSignUpSeller(demandSignupSellerServiceRequest);
+	}
+
+	@GetMapping("/seller/seller-management")
+	public GetDemandSignUpSellerResponse getRequestSellerByRestaurant(
+		@RequestBody GetRequestSellerControllerRequest getRequestSellerControllerRequest) {
+		GetRequestSellerByRestaurantRequest getRequestSellerByRestaurantRequest = new GetRequestSellerByRestaurantRequest(
+			getRequestSellerControllerRequest.getRequestSellerName(), getRequestSellerControllerRequest.getEmail());
+		return sellerManagementService.getRequestSellerByRestaurant(getRequestSellerByRestaurantRequest);
 	}
 
 	//관리자 권한 부분
