@@ -48,11 +48,11 @@ public class AdminController {
 		return new ModelAndView("/admin/event");
 	}
 
-	// @GetMapping("/blacklist")
-	// public ModelAndView blacklistPage(Model model) {
-	// 	model.addAttribute("blacklist", blackListRequestService.getRequestBlackLists());
-	// 	return new ModelAndView("/admin/blacklist");
-	// }
+	@GetMapping("/blacklist")
+	public ModelAndView blacklistPage(Model model) {
+		model.addAttribute("blacklist", blackListRequestService.getRequestBlackLists());
+		return new ModelAndView("/admin/blacklist");
+	}
 
 	@GetMapping("/review")
 	public ModelAndView censorReview() {

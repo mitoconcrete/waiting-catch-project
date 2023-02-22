@@ -147,4 +147,103 @@ header > a > div {
     background-color: #8B60C7;
 
     padding: 0 5px 0 5px;
+    margin: 0 5px 0 5px;
+}
+
+.createEvent {
+    max-width: 1000px;
+    width: 100%;
+
+    margin: 10px auto 10px auto;
+    padding: 5px 5px 5px 5px;
+
+    border: 1px solid dimgray;
+    border-radius: 5px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.createEvent > div {
+    margin: 5px auto 5px auto;
+}
+
+.long-btn {
+    color: white;
+    background-color: #8B60C7;
+
+    padding: 0 50px 0 50px;
+    margin: 5px 5px 5px 5px;
+}
+
+.eventBtn {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.updateEvent {
+    max-width: 1000px;
+    width: 100%;
+
+    margin: 10px auto 10px auto;
+    padding: 5px 5px 5px 5px;
+
+    border: 1px solid dimgray;
+    border-radius: 5px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.coupon {
+    max-width: 1000px;
+    width: 100%;
+
+    margin: 10px auto 10px auto;
+    padding: 5px 5px 5px 5px;
+
+    border: 1px solid dimgray;
+    border-radius: 5px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.long-btn-group {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.updateCoupon {
+    max-width: 1000px;
+    width: 100%;
+
+    margin: 10px auto 10px auto;
+    padding: 5px 5px 5px 5px;
+
+    border: 1px solid dimgray;
+    border-radius: 5px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn2 {
+    color: white;
+    background-color: #B896E7;
+
+    padding: 0 5px 0 5px;
+    margin: 0 5px 0 5px;
 }
