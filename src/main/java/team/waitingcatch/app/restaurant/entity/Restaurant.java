@@ -36,6 +36,7 @@ public class Restaurant extends TimeStamped {
 	private String name;
 
 	private String images;
+
 	@Embedded
 	private Position position;
 
@@ -67,20 +68,18 @@ public class Restaurant extends TimeStamped {
 	@Column(nullable = false)
 	private String category;
 
-	public Restaurant(ApproveSignUpSellerManagementEntityPassToRestaurantEntityRequest
-		approveSignUpSellerManagementEntityPassToRestaurantEntityRequest) {
-		this.name = approveSignUpSellerManagementEntityPassToRestaurantEntityRequest.getRestaurantName();
-		this.position = approveSignUpSellerManagementEntityPassToRestaurantEntityRequest.getPosition();
-		this.address = approveSignUpSellerManagementEntityPassToRestaurantEntityRequest.getAddress();
-		this.phoneNumber = approveSignUpSellerManagementEntityPassToRestaurantEntityRequest.getPhoneNumber();
+	public Restaurant(ApproveSignUpSellerManagementEntityPassToRestaurantEntityRequest entityRequest) {
+		this.name = entityRequest.getRestaurantName();
+		this.position = entityRequest.getPosition();
+		this.address = entityRequest.getAddress();
+		this.phoneNumber = entityRequest.getPhoneNumber();
 		this.isDeleted = false;
-		this.searchKeywords = approveSignUpSellerManagementEntityPassToRestaurantEntityRequest.getSearchKeyWords();
-		this.description = approveSignUpSellerManagementEntityPassToRestaurantEntityRequest.getDescription();
-		this.businessLicenseNo = approveSignUpSellerManagementEntityPassToRestaurantEntityRequest.getBusinessLicenseNo();
+		this.searchKeywords = entityRequest.getSearchKeyWords();
+		this.description = entityRequest.getDescription();
+		this.businessLicenseNo = entityRequest.getBusinessLicenseNo();
 		this.capacity = 0;
-		this.user = approveSignUpSellerManagementEntityPassToRestaurantEntityRequest.getUser();
-		this.images = "기본값";
-		this.category = "기본값 카테고리";
+		this.user = entityRequest.getUser();
+		this.category = entityRequest.getCategories();
 	}
 
 	//dummy data

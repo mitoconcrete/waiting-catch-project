@@ -21,7 +21,7 @@
 // import org.mockito.junit.jupiter.MockitoExtension;
 // import org.springframework.web.multipart.MultipartFile;
 //
-// import team.waitingcatch.app.common.util.S3Uploader;
+// import team.waitingcatch.app.common.util.image.S3Uploader;
 // import team.waitingcatch.app.restaurant.dto.menu.CreateMenuServiceRequest;
 // import team.waitingcatch.app.restaurant.dto.menu.CustomerMenuResponse;
 // import team.waitingcatch.app.restaurant.dto.menu.MenuResponse;

@@ -16,15 +16,15 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 
 import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.restaurant.dto.restaurant.DummyApiRequest;
-import team.waitingcatch.app.restaurant.service.restaurant.ApiService;
+import team.waitingcatch.app.restaurant.service.restaurant.MapApiService;
 
-@RequestMapping("/api")
 @RestController
-@RequiredArgsConstructor
+@RequestMapping("/api")
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@RequiredArgsConstructor
 public class RestaurantDummyDataAPiController {
 
-	private final ApiService apiService;
+	private final MapApiService mapApiService;
 
 	@Value("${kakao.key}")
 	private String kakao;
@@ -46,7 +46,7 @@ public class RestaurantDummyDataAPiController {
 		}
 		jsonString = result.toString();
 		br.close();
-		apiService.getXYMapfromJson(jsonString);
+		mapApiService.getXYMapFromJson(jsonString);
 		return jsonString;
 	}
 

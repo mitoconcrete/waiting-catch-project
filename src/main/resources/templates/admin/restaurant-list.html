@@ -41,7 +41,7 @@
         <a href="/admin/templates/customers">유저 목록</a>
         <a href="/admin/templates/restaurants" style="color: #8B60C7">레스토랑 목록</a>
         <a href="/admin/templates/event">이벤트</a>
-        <a href="/admin/templates/blacklist" >블랙리스트</a>
+        <a href="/admin/templates/blacklist">블랙리스트</a>
         <a href="/admin/templates/review">리뷰 검열</a>
         <a href="/admin/templates/category">카테고리</a>
     </ul>
@@ -71,7 +71,7 @@
 
             </div>
 
-                <div th:each="restaurant, iStat : ${restaurants}">
+            <div th:each="restaurant, iStat : ${restaurants}">
                 <div class="num" scope="row" th:text="${restaurant.id}">1</div>
                 <div div class="writer" th:text="${restaurant.name}"></div>
                 <div div class="writer" th:text="${restaurant.images}"></div>
