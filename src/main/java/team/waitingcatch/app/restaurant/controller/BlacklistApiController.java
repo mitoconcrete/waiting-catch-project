@@ -1,5 +1,7 @@
 package team.waitingcatch.app.restaurant.controller;
 
+import java.util.List;
+
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.common.dto.GenericResponse;
 import team.waitingcatch.app.restaurant.dto.blacklist.DeleteBlacklistByRestaurantServiceRequest;
+import team.waitingcatch.app.restaurant.dto.blacklist.GetBlackListByRestaurantServiceRequest;
 import team.waitingcatch.app.restaurant.dto.blacklist.GetBlacklistByRestaurantIdServiceRequest;
 import team.waitingcatch.app.restaurant.dto.blacklist.GetBlacklistResponse;
 import team.waitingcatch.app.restaurant.service.blacklist.BlacklistService;
@@ -36,8 +39,17 @@ public class BlacklistApiController {
 		return new GenericResponse<>(blacklistService.getBlackListByRestaurantId(serviceRequest));
 	}
 
+<<<<<<< Updated upstream
 	@GetMapping("/admin/blacklists")
 	public GenericResponse<GetBlacklistResponse> getBlacklist() {
 		return new GenericResponse<>(blacklistService.getBlacklist());
+=======
+	@GetMapping("/seller/restaurant/blacklist")
+	public List<GetBlacklistResponse> getBlackListByRestaurant(
+		@AuthenticationPrincipal UserDetailsImpl userDetails) {
+		GetBlackListByRestaurantServiceRequest getBlackListByRestaurantServiceRequest = new
+			GetBlackListByRestaurantServiceRequest(userDetails.getId());
+		return blacklistService.getBlackListByRestaurant(getBlackListByRestaurantServiceRequest);
+>>>>>>> Stashed changes
 	}
 }

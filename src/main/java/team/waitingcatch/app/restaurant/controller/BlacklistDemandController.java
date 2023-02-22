@@ -17,6 +17,7 @@ import team.waitingcatch.app.restaurant.dto.blacklist.ApproveBlacklistDemandServ
 import team.waitingcatch.app.restaurant.dto.blacklist.BlacklistDemandControllerRequest;
 import team.waitingcatch.app.restaurant.dto.blacklist.CancelBlacklistDemandServiceRequest;
 import team.waitingcatch.app.restaurant.dto.blacklist.CreateBlacklistDemandServiceRequest;
+import team.waitingcatch.app.restaurant.dto.blacklist.GetBlackListDemandByRestaurantServiceRequest;
 import team.waitingcatch.app.restaurant.dto.blacklist.GetBlacklistDemandResponse;
 import team.waitingcatch.app.restaurant.service.requestblacklist.BlacklistDemandService;
 import team.waitingcatch.app.user.entitiy.UserDetailsImpl;
@@ -54,5 +55,13 @@ public class BlacklistDemandController {
 	public void approveBlacklistDemand(@PathVariable Long blacklistDemandId) {
 		var serviceRequest = new ApproveBlacklistDemandServiceRequest(blacklistDemandId);
 		blacklistDemandService.approveBlacklistDemand(serviceRequest);
+	}
+
+	@GetMapping("/seller/restaurant/blacklist-demands")
+	public List<GetBlacklistDemandResponse> getBlackListDemandByRestaurant(
+		@AuthenticationPrincipal UserDetailsImpl userDetails) {
+		GetBlackListDemandByRestaurantServiceRequest getBlackListDemandByRestaurantControllerRequest = new
+			GetBlackListDemandByRestaurantServiceRequest(userDetails.getId());
+		return blacklistDemandService.getBlackListDemandsByRestaurant(getBlackListDemandByRestaurantControllerRequest);
 	}
 }

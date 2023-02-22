@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.restaurant.dto.blacklist.ApproveBlacklistDemandServiceRequest;
 import team.waitingcatch.app.restaurant.dto.blacklist.CancelBlacklistDemandServiceRequest;
 import team.waitingcatch.app.restaurant.dto.blacklist.CreateBlacklistDemandServiceRequest;
+import team.waitingcatch.app.restaurant.dto.blacklist.GetBlackListDemandByRestaurantServiceRequest;
 import team.waitingcatch.app.restaurant.dto.blacklist.GetBlacklistDemandResponse;
 import team.waitingcatch.app.restaurant.entity.BlacklistDemand;
 import team.waitingcatch.app.restaurant.entity.Restaurant;
@@ -83,5 +84,17 @@ public class BlacklistDemandServiceImpl implements BlacklistDemandService, Inter
 			.orElseThrow(() -> new IllegalArgumentException("Not found blacklist request"));
 		blacklistDemand.checkWaitingStatus();
 		blacklistDemand.updateRejectionStatus();
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public List<GetBlacklistDemandResponse> getBlackListDemandsByRestaurant(
+		GetBlackListDemandByRestaurantServiceRequest getBlackListDemandByRestaurantControllerRequest) {
+		Restaurant restaurant = restaurantRepository.findByUserId(
+				getBlackListDemandByRestaurantControllerRequest.getSellerId())
+			.orElseThrow(() -> new IllegalArgumentException("Not found restaurant request"));
+		List<BlacklistDemand> blacklistDemands = blacklistDemandRepository.findAllByRestaurant_Id(restaurant.getId());
+
+		return blacklistDemands.stream().map(GetBlacklistDemandResponse::new).collect(Collectors.toList());
 	}
 }

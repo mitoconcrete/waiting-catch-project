@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.restaurant.dto.blacklist.CreateBlacklistInternalServiceRequest;
 import team.waitingcatch.app.restaurant.dto.blacklist.DeleteBlacklistByRestaurantServiceRequest;
+import team.waitingcatch.app.restaurant.dto.blacklist.GetBlackListByRestaurantServiceRequest;
 import team.waitingcatch.app.restaurant.dto.blacklist.GetBlacklistByRestaurantIdServiceRequest;
 import team.waitingcatch.app.restaurant.dto.blacklist.GetBlacklistResponse;
 import team.waitingcatch.app.restaurant.entity.Blacklist;
@@ -16,6 +17,7 @@ import team.waitingcatch.app.restaurant.entity.BlacklistDemand;
 import team.waitingcatch.app.restaurant.entity.Restaurant;
 import team.waitingcatch.app.restaurant.repository.BlacklistDemandRepository;
 import team.waitingcatch.app.restaurant.repository.BlacklistRepository;
+import team.waitingcatch.app.restaurant.repository.RestaurantRepository;
 import team.waitingcatch.app.restaurant.service.restaurant.InternalRestaurantService;
 import team.waitingcatch.app.user.entitiy.User;
 
@@ -25,7 +27,7 @@ import team.waitingcatch.app.user.entitiy.User;
 public class BlacklistServiceImpl implements BlacklistService, InternalBlacklistService {
 	private final BlacklistRepository blacklistRepository;
 	private final InternalRestaurantService internalRestaurantService;
-
+	private final RestaurantRepository restaurantRepository;
 	private final BlacklistDemandRepository blacklistDemandRepository;
 
 	@Override
@@ -64,6 +66,17 @@ public class BlacklistServiceImpl implements BlacklistService, InternalBlacklist
 		return blacklistRepository.findAllByIsDeletedFalse().stream()
 			.map(GetBlacklistResponse::new)
 			.collect(Collectors.toList());
+	}
+
+	@Transactional(readOnly = true)
+	@Override
+	public List<GetBlacklistResponse> getBlackListByRestaurant(
+		GetBlackListByRestaurantServiceRequest getBlackListByRestaurantServiceRequest) {
+		Restaurant restaurant = restaurantRepository.findById(getBlackListByRestaurantServiceRequest.getSellerId())
+			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 레스토랑 요청입니다."));
+		System.out.println(restaurant.getId());
+		List<Blacklist> blackList = blacklistRepository.findAllByRestaurant_Id(restaurant.getId());
+		return blackList.stream().map(GetBlacklistResponse::new).collect(Collectors.toList());
 	}
 
 	@Override

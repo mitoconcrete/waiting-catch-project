@@ -6,6 +6,7 @@ import team.waitingcatch.app.restaurant.dto.requestseller.ApproveSignUpSellerRes
 import team.waitingcatch.app.restaurant.dto.requestseller.ApproveSignUpSellerServiceRequest;
 import team.waitingcatch.app.restaurant.dto.requestseller.DemandSignUpSellerServiceRequest;
 import team.waitingcatch.app.restaurant.dto.requestseller.GetDemandSignUpSellerResponse;
+import team.waitingcatch.app.restaurant.dto.requestseller.GetRequestSellerByRestaurantRequest;
 import team.waitingcatch.app.restaurant.dto.requestseller.RejectSignUpSellerServiceRequest;
 
 public interface SellerManagementService {
@@ -18,4 +19,6 @@ public interface SellerManagementService {
 
 	void rejectSignUpSeller(RejectSignUpSellerServiceRequest rejectSignUpSellerServiceRequest);
 
+	GetDemandSignUpSellerResponse getRequestSellerByRestaurant(
+		GetRequestSellerByRestaurantRequest getRequestSellerByRestaurantRequest);
 }

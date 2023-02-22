@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.restaurant.dto.blacklist.DeleteBlacklistByRestaurantServiceRequest;
+import team.waitingcatch.app.restaurant.dto.blacklist.GetBlackListByRestaurantServiceRequest;
 import team.waitingcatch.app.restaurant.dto.blacklist.GetBlacklistByRestaurantIdServiceRequest;
 import team.waitingcatch.app.restaurant.dto.blacklist.GetBlacklistResponse;
 import team.waitingcatch.app.restaurant.service.blacklist.BlacklistService;
@@ -33,5 +34,13 @@ public class BlacklistController {
 	public List<GetBlacklistResponse> getBlacklistsByRestaurant(@PathVariable Long restaurantId) {
 		var serviceRequest = new GetBlacklistByRestaurantIdServiceRequest(restaurantId);
 		return blacklistService.getBlackListByRestaurantId(serviceRequest);
+	}
+
+	@GetMapping("/seller/restaurants/blacklist")
+	public List<GetBlacklistResponse> getBlackListByRestaurant(
+		@AuthenticationPrincipal UserDetailsImpl userDetails) {
+		GetBlackListByRestaurantServiceRequest getBlackListByRestaurantServiceRequest = new
+			GetBlackListByRestaurantServiceRequest(userDetails.getId());
+		return blacklistService.getBlackListByRestaurant(getBlackListByRestaurantServiceRequest);
 	}
 }

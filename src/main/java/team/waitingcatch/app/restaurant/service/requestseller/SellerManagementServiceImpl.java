@@ -16,6 +16,7 @@ import team.waitingcatch.app.restaurant.dto.requestseller.ApproveSignUpSellerRes
 import team.waitingcatch.app.restaurant.dto.requestseller.ApproveSignUpSellerServiceRequest;
 import team.waitingcatch.app.restaurant.dto.requestseller.DemandSignUpSellerServiceRequest;
 import team.waitingcatch.app.restaurant.dto.requestseller.GetDemandSignUpSellerResponse;
+import team.waitingcatch.app.restaurant.dto.requestseller.GetRequestSellerByRestaurantRequest;
 import team.waitingcatch.app.restaurant.dto.requestseller.RejectSignUpSellerServiceRequest;
 import team.waitingcatch.app.restaurant.entity.Restaurant;
 import team.waitingcatch.app.restaurant.entity.RestaurantInfo;
@@ -124,6 +125,15 @@ public class SellerManagementServiceImpl implements SellerManagementService, Int
 		message.setText("안녕하세요. WaitingCatching 판매자 동록 거절 메일 입니다. 회원님의 정보에 오류가"
 			+ "있는것으로 판단되므로 확인하고 다시 재신청 부탁드리겠습니다. 감사합니다.");
 		emailSender.send(message);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public GetDemandSignUpSellerResponse getRequestSellerByRestaurant(
+		GetRequestSellerByRestaurantRequest getRequestSellerByRestaurantRequest) {
+		SellerManagement sellerManagement = sellerManagementRepository.findTopByUsernameAndEmailOrderByCreatedDateDesc(
+			getRequestSellerByRestaurantRequest.getRequestSellerName(), getRequestSellerByRestaurantRequest.getEmail());
+		return new GetDemandSignUpSellerResponse(sellerManagement);
 	}
 
 }
