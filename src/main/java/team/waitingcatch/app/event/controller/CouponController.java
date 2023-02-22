@@ -32,6 +32,7 @@ import team.waitingcatch.app.event.dto.event.UpdateEventControllerRequest;
 import team.waitingcatch.app.event.dto.event.UpdateEventServiceRequest;
 import team.waitingcatch.app.event.dto.event.UpdateSellerEventServiceRequest;
 import team.waitingcatch.app.event.dto.usercoupon.CreateUserCouponServiceRequest;
+import team.waitingcatch.app.event.dto.usercoupon.GetUserCouponResponse;
 import team.waitingcatch.app.event.service.couponcreator.CouponCreatorService;
 import team.waitingcatch.app.event.service.event.EventService;
 import team.waitingcatch.app.event.service.usercoupon.UserCouponService;
@@ -180,7 +181,7 @@ public class CouponController {
 	/*  유저 쿠폰  */
 
 	//유저 쿠폰 생성
-	@PostMapping("/restaurants/{restaurantId}/events/{eventId}/creators/{creatorId}")
+	@PostMapping("/coupons/creators/{creatorId}")
 	@ResponseStatus(value = HttpStatus.CREATED)
 	public void createUserCoupon(@Validated @PathVariable Long creatorId,
 		@AuthenticationPrincipal UserDetailsImpl userDetails) {
@@ -192,7 +193,7 @@ public class CouponController {
 
 	//유저 쿠폰 조회
 	@GetMapping("/customer/coupons")
-	public void getUserCoupon(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-		userCouponService.getUserCoupons(userDetails.getUser());
+	public List<GetUserCouponResponse> getUserCoupon(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+		return userCouponService.getUserCoupons(userDetails.getUser());
 	}
 }

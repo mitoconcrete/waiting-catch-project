@@ -49,7 +49,10 @@ public class RestaurantServiceImpl implements RestaurantService, InternalRestaur
 	@Transactional(readOnly = true)
 	public RestaurantDetailedInfoResponse getRestaurantDetailedInfo(RestaurantDetailedInfoServiceRequest request) {
 		Restaurant restaurant = _getById(request.getRestaurantId());
-		return new RestaurantDetailedInfoResponse(restaurant);
+		RestaurantInfo restaurantInfo = restaurantInfoRepository.findByRestaurantId(restaurant.getId()).orElseThrow(
+			() -> new IllegalArgumentException("레스토랑이 존재하지 않습니다.")
+		);
+		return new RestaurantDetailedInfoResponse(restaurant, restaurantInfo);
 	}
 
 	@Override

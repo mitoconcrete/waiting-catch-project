@@ -72,7 +72,7 @@ public class UserController {
 	@DeleteMapping("/customer/withdraw")
 	public void withdrawCustomer(@AuthenticationPrincipal UserDetails userDetails) {
 		DeleteUserRequest servicePayload = new DeleteUserRequest(userDetails.getUsername());
-		userService.deleteUser(servicePayload);
+		userService.deleteCustomer(servicePayload);
 	}
 
 	@PostMapping("/customer/signup")
@@ -90,7 +90,7 @@ public class UserController {
 	@DeleteMapping("/seller/withdraw")
 	public void withdrawSeller(@AuthenticationPrincipal UserDetails userDetails) {
 		DeleteUserRequest servicePayload = new DeleteUserRequest(userDetails.getUsername());
-		userService.deleteUser(servicePayload);
+		userService.deleteSeller(servicePayload);
 		// restaturant 도 삭제
 		// 관련 데이터 모두 삭제
 	}

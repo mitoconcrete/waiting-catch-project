@@ -23,12 +23,13 @@ public class RestaurantInfoRepositoryCustomImpl implements RestaurantInfoReposit
 	@Override
 	public List<SearchRestaurantJpaResponse> findRestaurantsBySearchKeywordsContaining(String keyword) {
 		return jpaQueryFactory
-			.select(new QSearchRestaurantJpaResponse(restaurant.name, restaurant.images, restaurantInfo.rate,
-				restaurant.searchKeywords, restaurant.position, restaurantInfo.currentWaitingNumber,
-				restaurantInfo.isLineupActive))
+			.select(
+				new QSearchRestaurantJpaResponse(restaurant.id, restaurant.name, restaurant.images, restaurantInfo.rate,
+					restaurant.searchKeywords, restaurant.position, restaurantInfo.currentWaitingNumber,
+					restaurantInfo.isLineupActive))
 			.from(restaurantInfo)
 			.join(restaurantInfo.restaurant, restaurant)
-			.where(restaurant.searchKeywords.contains(keyword)
+			.where(restaurant.searchKeywords.contains(keyword).or(restaurant.name.contains(keyword))
 				.and(restaurant.isDeleted.isFalse()))
 			.fetch();
 	}
@@ -42,7 +43,8 @@ public class RestaurantInfoRepositoryCustomImpl implements RestaurantInfoReposit
 		NumberExpression<Double> radiansLot = radians(restaurant.position.longitude);
 
 		return jpaQueryFactory
-			.select(new QRestaurantsWithinRadiusJpaResponse(restaurant.name, restaurant.images, restaurantInfo.rate,
+			.select(new QRestaurantsWithinRadiusJpaResponse(restaurant.id, restaurant.name, restaurant.images,
+				restaurantInfo.rate,
 				restaurant.searchKeywords, restaurant.position, restaurantInfo.currentWaitingNumber,
 				restaurantInfo.isLineupActive))
 			.from(restaurantInfo)
@@ -55,6 +57,5 @@ public class RestaurantInfoRepositoryCustomImpl implements RestaurantInfoReposit
 				.lt(asNumber(distance))
 				.and(restaurant.isDeleted.isFalse()))
 			.fetch();
-
 	}
 }

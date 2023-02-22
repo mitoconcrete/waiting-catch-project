@@ -25,9 +25,11 @@ public interface UserService {
 
 	void updateUser(UpdateUserServiceRequest payload);
 
-	void deleteUser(DeleteUserRequest payload);
-
 	void findUserAndSendEmail(FindPasswordRequest payload);
 
 	LoginServiceResponse createAccessTokenByEmail(String email);
+
+	void deleteCustomer(DeleteUserRequest payload);
+
+	void deleteSeller(DeleteUserRequest payload);
 }

@@ -39,6 +39,6 @@ public class LineupHistoryRepositoryCustomImpl implements LineupHistoryRepositor
 	}
 
 	private BooleanExpression statusEq(ArrivalStatusEnum statusCond) {
-		return statusCond != null ? lineup.status.eq(statusCond) : null;
+		return statusCond != null ? lineupHistory.status.eq(statusCond) : null;
 	}
 }

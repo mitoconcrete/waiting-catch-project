@@ -23,7 +23,6 @@ import team.waitingcatch.app.restaurant.service.restaurant.MapApiService;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @RequiredArgsConstructor
 public class RestaurantDummyDataApiController {
-
 	private final MapApiService mapApiService;
 
 	@Value("${kakao.key}")
@@ -49,5 +48,4 @@ public class RestaurantDummyDataApiController {
 		mapApiService.getXYMapFromJson(jsonString);
 		return jsonString;
 	}
-
 }

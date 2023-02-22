@@ -42,12 +42,11 @@ public class UserCouponServiceImpl implements UserCouponService, InternalUserCou
 	@Override
 	public List<GetUserCouponResponse> getUserCoupons(User user) {
 		List<UserCoupon> userCoupons = userCouponRepository.findByUserAndIsUsedFalse(user);
+		System.out.println(userCoupons.size());
 		List<GetUserCouponResponse> getUserCouponResponses = new ArrayList<>();
 
 		for (UserCoupon userCoupon : userCoupons) {
-			CouponCreator couponCreator = couponCreatorRepository.findById(userCoupon.getId())
-				.orElseThrow(() -> new IllegalArgumentException("해당 쿠폰생성자를 찾을수 없습니다."));
-			UserCouponResponse userCouponResponse = new UserCouponResponse(userCoupon, couponCreator);
+			UserCouponResponse userCouponResponse = new UserCouponResponse(userCoupon);
 
 			GetUserCouponResponse getUserCouponResponse = new GetUserCouponResponse(userCouponResponse);
 			getUserCouponResponses.add(getUserCouponResponse);

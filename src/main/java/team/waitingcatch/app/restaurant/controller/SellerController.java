@@ -210,7 +210,7 @@ public class SellerController {
 	@DeleteMapping("/seller/delete")
 	public void withdrawSeller(@AuthenticationPrincipal UserDetails userDetails) {
 		DeleteUserRequest servicePayload = new DeleteUserRequest(userDetails.getUsername());
-		userService.deleteUser(servicePayload);
+		// userService.deleteUser(servicePayload);
 	}
 
 	@GetMapping("/seller/infos")

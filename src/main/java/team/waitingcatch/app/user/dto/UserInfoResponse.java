@@ -27,10 +27,10 @@ public class UserInfoResponse {
 		this.email = user.getEmail();
 		this.name = user.getName();
 		this.role = user.getRole();
+		this.phoneNumber = user.getPhoneNumber();
 		this.isBanned = user.isBanned();
 		this.isDeleted = user.isDeleted();
 		this.createdDate = user.getCreatedDate();
 		this.modifiedDate = user.getModifiedDate();
-		this.phoneNumber = user.getPhoneNumber();
 	}
 }
