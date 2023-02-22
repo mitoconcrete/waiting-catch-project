@@ -1,4 +1,4 @@
-package team.waitingcatch.app.common.util;
+package team.waitingcatch.app.common.util.image;
 
 import java.io.IOException;
 import java.util.ArrayList;

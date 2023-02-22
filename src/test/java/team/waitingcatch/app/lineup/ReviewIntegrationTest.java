@@ -1,7 +1,6 @@
 package team.waitingcatch.app.lineup;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -58,7 +57,8 @@ class ReviewIntegrationTest {
 		Long sellerId = userRepository.findByUsernameAndIsDeletedFalse("sellerId1").get().getId();
 		Restaurant restaurant = restaurantRepository.findByUserId(sellerId).get();
 
-		Review review = Review.craeteReview(new CreateReviewEntityRequest(customer, restaurant, 0, " ", new ArrayList<>()));
+		Review review = Review.craeteReview(
+			new CreateReviewEntityRequest(customer, restaurant, 0, " ", new ArrayList<>()));
 		reviewRepository.save(review);
 	}
 }

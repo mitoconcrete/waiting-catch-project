@@ -18,10 +18,10 @@ import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.restaurant.dto.restaurant.DummyApiRequest;
 import team.waitingcatch.app.restaurant.service.restaurant.MapApiService;
 
-@RequestMapping("/api")
 @RestController
-@RequiredArgsConstructor
+@RequestMapping("/api")
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@RequiredArgsConstructor
 public class RestaurantDummyDataAPiController {
 
 	private final MapApiService mapApiService;

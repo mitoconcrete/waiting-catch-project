@@ -56,7 +56,7 @@ public class LineupServiceImpl implements LineupService, InternalLineupService {
 	@Override
 	public void startWaiting(StartWaitingServiceRequest serviceRequest) {
 		Long restaurantId = serviceRequest.getRestaurantId();
-		Restaurant restaurant = internalRestaurantService._getRestaurant(restaurantId);
+		Restaurant restaurant = internalRestaurantService._getById(restaurantId);
 		// if (isLineupActive()) RestaurantInfo merge 후 추가
 		// if (isBlackList())
 		// if (!in2000Meter()) Restaurant merge 후 추가

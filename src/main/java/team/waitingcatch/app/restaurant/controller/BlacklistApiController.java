@@ -27,12 +27,12 @@ public class BlacklistApiController {
 		@AuthenticationPrincipal UserDetailsImpl userDetails) {
 
 		var serviceRequest = new DeleteBlacklistByRestaurantServiceRequest(blacklistId, userDetails.getId());
-		blacklistService.deleteBlackList(serviceRequest);
+		blacklistService.deleteBlacklistByRestaurant(serviceRequest);
 	}
 
 	@GetMapping("/admin/restaurants/{restaurantId}/blacklists")
 	public GenericResponse<GetBlacklistResponse> getBlacklistsByRestaurant(@PathVariable Long restaurantId) {
 		var serviceRequest = new GetBlacklistByRestaurantIdServiceRequest(restaurantId);
-		return new GenericResponse<>(blacklistService.getBlacklistByRestaurantIdRequest(serviceRequest));
+		return new GenericResponse<>(blacklistService.getBlackListByRestaurantId(serviceRequest));
 	}
 }

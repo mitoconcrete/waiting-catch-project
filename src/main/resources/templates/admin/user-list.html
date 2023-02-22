@@ -39,7 +39,7 @@
         <a href="/admin/templates/customers" style="color: #8B60C7">유저 목록</a>
         <a href="/admin/templates/restaurants">레스토랑 목록</a>
         <a href="/admin/templates/event">이벤트</a>
-        <a href="/admin/templates/blacklist" >블랙리스트</a>
+        <a href="/admin/templates/blacklist">블랙리스트</a>
         <a href="/admin/templates/review">리뷰 검열</a>
         <a href="/admin/templates/category">카테고리</a>
     </ul>
@@ -68,7 +68,7 @@
 
             <div th:each="customer, iStat : ${customers}">
                 <div class="num" scope="row" th:text="${customer.id}">1</div>
-                <div class="writer" th:text="${customer.username}" ></div>
+                <div class="writer" th:text="${customer.username}"></div>
                 <div div class="writer" th:text="${customer.name}"></div>
                 <div div class="writer" th:text="${customer.nickname}"></div>
                 <div div class="writer" th:text="${customer.phoneNumber}"></div>
@@ -76,8 +76,14 @@
                 <div div class="writer" th:text="${customer.role}"></div>
                 <div div class="writer" th:text="${customer.banned}"></div>
                 <div div class="writer" th:text="${customer.deleted}"></div>
-                <div class="count" th:if="${customer.role == customer.role.USER}"><a href="" th:href="@{/admin/templates/customers/{customerId}(customerId=${customer.id})}" class="btn btn-secondary">내용</a></div>
-                <div class="count" th:if="${customer.role == customer.role.SELLER}"><a href="" th:href="@{/admin/templates/sellers/{sellersId}(sellersId=${customer.id})}" class="btn btn-secondary">내용</a></div>
+                <div class="count" th:if="${customer.role == customer.role.USER}"><a href=""
+                                                                                     th:href="@{/admin/templates/customers/{customerId}(customerId=${customer.id})}"
+                                                                                     class="btn btn-secondary">내용</a>
+                </div>
+                <div class="count" th:if="${customer.role == customer.role.SELLER}"><a href=""
+                                                                                       th:href="@{/admin/templates/sellers/{sellersId}(sellersId=${customer.id})}"
+                                                                                       class="btn btn-secondary">내용</a>
+                </div>
             </div>
 
 

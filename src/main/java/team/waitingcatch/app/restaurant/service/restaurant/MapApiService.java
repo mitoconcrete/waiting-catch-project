@@ -1,7 +1,6 @@
 package team.waitingcatch.app.restaurant.service.restaurant;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -31,10 +30,10 @@ public class MapApiService {
 	public void getXYMapFromJson(String jsonString) {
 		User user = userRepository.findByUsernameAndIsDeletedFalse("seller15").orElseThrow();
 		ObjectMapper mapper = new ObjectMapper();
-		HashMap<String, String> XYMap = new HashMap<>();
 
 		try {
-			TypeReference<Map<String, Object>> typeRef = new TypeReference<>() {};
+			TypeReference<Map<String, Object>> typeRef = new TypeReference<>() {
+			};
 			Map<String, Object> jsonMap = mapper.readValue(jsonString, typeRef);
 
 			@SuppressWarnings("unchecked")

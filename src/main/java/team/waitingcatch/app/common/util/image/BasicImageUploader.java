@@ -1,4 +1,4 @@
-package team.waitingcatch.app.common.util;
+package team.waitingcatch.app.common.util.image;
 
 import java.io.File;
 import java.io.IOException;

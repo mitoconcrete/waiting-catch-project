@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.common.util.DistanceCalculator;
-import team.waitingcatch.app.common.util.ImageUploader;
+import team.waitingcatch.app.common.util.image.ImageUploader;
 import team.waitingcatch.app.restaurant.dto.requestseller.ApproveSignUpSellerManagementEntityPassToRestaurantEntityRequest;
 import team.waitingcatch.app.restaurant.dto.restaurant.DeleteRestaurantByAdminServiceRequest;
 import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantBasicInfoResponse;
@@ -41,14 +41,14 @@ public class RestaurantServiceImpl implements RestaurantService, InternalRestaur
 	@Override
 	@Transactional(readOnly = true)
 	public RestaurantBasicInfoResponse getRestaurantBasicInfo(RestaurantBasicInfoServiceRequest request) {
-		Restaurant restaurant = _getRestaurant(request.getRestaurantId());
+		Restaurant restaurant = _getById(request.getRestaurantId());
 		return new RestaurantBasicInfoResponse(restaurant);
 	}
 
 	@Override
 	@Transactional(readOnly = true)
 	public RestaurantDetailedInfoResponse getRestaurantDetailedInfo(RestaurantDetailedInfoServiceRequest request) {
-		Restaurant restaurant = _getRestaurant(request.getRestaurantId());
+		Restaurant restaurant = _getById(request.getRestaurantId());
 		return new RestaurantDetailedInfoResponse(restaurant);
 	}
 
@@ -87,7 +87,7 @@ public class RestaurantServiceImpl implements RestaurantService, InternalRestaur
 
 	@Override
 	public void deleteRestaurantByAdmin(DeleteRestaurantByAdminServiceRequest deleteRestaurantByAdminServiceRequest) {
-		Restaurant restaurant = _getRestaurant(deleteRestaurantByAdminServiceRequest.getRestaurantId());
+		Restaurant restaurant = _getById(deleteRestaurantByAdminServiceRequest.getRestaurantId());
 		//String transferToString[] = restaurant.getImages().split(",");
 		// for (int i = 0; i < transferToString.length; i++) {
 		// 	s3Uploader.deleteS3(transferToString[i]);
@@ -122,7 +122,7 @@ public class RestaurantServiceImpl implements RestaurantService, InternalRestaur
 	}
 
 	@Override
-	public Restaurant _getRestaurant(Long restaurantId) {
+	public Restaurant _getById(Long restaurantId) {
 		return restaurantRepository.findById(restaurantId)
 			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 레스토랑입니다."));
 	}
