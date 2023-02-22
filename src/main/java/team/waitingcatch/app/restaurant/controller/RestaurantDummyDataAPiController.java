@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,22 +22,24 @@ import team.waitingcatch.app.restaurant.service.restaurant.ApiService;
 @RestController
 @RequiredArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class APiController {
+public class RestaurantDummyDataAPiController {
 
 	private final ApiService apiService;
 
+	@Value("${kakao.key}")
+	private String kakao;
+
 	@GetMapping("/kakao")
 	public String kakao(@RequestBody DummyApiRequest dummyApiRequest) throws IOException {
-		String jsonString = null;
+		String jsonString;
 		URL url = new URL("https://dapi.kakao.com/v2/local/search/category.json?y=" + dummyApiRequest.getY() + "&x="
 			+ dummyApiRequest.getX() + "&category_group_code=FD6&radius=20000&page=" + dummyApiRequest.getPage());
 		HttpURLConnection urlConnection = (HttpURLConnection)url.openConnection();
 		urlConnection.setRequestMethod("GET");
 		urlConnection.setRequestProperty("Content-type", "application/json");
-		urlConnection.setRequestProperty("Authorization", "KakaoAK b9553500b31bab0502f89410268c6bca");
-		int responseCode = urlConnection.getResponseCode();
+		urlConnection.setRequestProperty("Authorization", "KakaoAK " + kakao);
 		BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "UTF-8"));
-		String line = "";
+		String line;
 		StringBuilder result = new StringBuilder();
 		while ((line = br.readLine()) != null) {
 			result.append(line);

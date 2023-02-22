@@ -55,13 +55,13 @@ public class SecurityConfig {
 			cors.setAllowedOrigins(List.of("http://localhost:3000"));
 			cors.setAllowedMethods(List.of("*"));
 			cors.setAllowedHeaders(List.of("*"));
-			cors.addExposedHeader("Authorization");
 			cors.setAllowCredentials(true);
+			cors.addExposedHeader("Authorization");
 			return cors;
 		});
 
-		http.authorizeRequests().anyRequest().permitAll();
-
+		http.authorizeRequests()
+			.anyRequest().permitAll();
 		// Custom 로그인 페이지 사용하지 않음.
 		http.formLogin().disable();
 

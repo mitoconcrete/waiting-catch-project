@@ -17,6 +17,8 @@ import team.waitingcatch.app.common.Address;
 import team.waitingcatch.app.common.Position;
 import team.waitingcatch.app.restaurant.dto.restaurant.SaveDummyRestaurantRequest;
 import team.waitingcatch.app.restaurant.entity.Restaurant;
+import team.waitingcatch.app.restaurant.entity.RestaurantInfo;
+import team.waitingcatch.app.restaurant.repository.RestaurantInfoRepository;
 import team.waitingcatch.app.restaurant.repository.RestaurantRepository;
 import team.waitingcatch.app.user.entitiy.User;
 import team.waitingcatch.app.user.repository.UserRepository;
@@ -25,11 +27,11 @@ import team.waitingcatch.app.user.repository.UserRepository;
 @RequiredArgsConstructor
 public class ApiService {
 	private final RestaurantRepository restaurantRepository;
-
+	private final RestaurantInfoRepository restaurantInfoRepository;
 	private final UserRepository userRepository;
 
 	public HashMap<String, String> getXYMapfromJson(String jsonString) {
-		User user = userRepository.findByUsernameAndIsDeletedFalse("seller1311").orElseThrow();
+		User user = userRepository.findByUsernameAndIsDeletedFalse("seller15").orElseThrow();
 		ObjectMapper mapper = new ObjectMapper();
 		HashMap<String, String> XYMap = new HashMap<>();
 
@@ -64,10 +66,13 @@ public class ApiService {
 
 				Position position = new Position(latitude, longitude);
 				Address address = new Address(province, reCity, street);
+
 				SaveDummyRestaurantRequest saveDummyRestaurantRequest = new SaveDummyRestaurantRequest(placeName,
 					address, position, phone, replaceCategory, user);
 				Restaurant restaurant = new Restaurant(saveDummyRestaurantRequest);
 				restaurantRepository.save(restaurant);
+				RestaurantInfo restaurantInfo = new RestaurantInfo(restaurant);
+				restaurantInfoRepository.save(restaurantInfo);
 			}
 
 		} catch (JsonParseException e) {

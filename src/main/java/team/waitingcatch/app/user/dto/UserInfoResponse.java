@@ -13,6 +13,7 @@ public class UserInfoResponse {
 	private final String email;
 	private final String nickname;
 	private final String name;
+	private final String phoneNumber;
 	private final UserRoleEnum role;
 	private final boolean isBanned;
 
@@ -33,5 +34,6 @@ public class UserInfoResponse {
 		this.isDeleted = user.isDeleted();
 		this.createdDate = user.getCreatedDate();
 		this.modifiedDate = user.getModifiedDate();
+		this.phoneNumber = user.getPhoneNumber();
 	}
 }

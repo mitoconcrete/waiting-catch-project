@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+            crossorigin="anonymous"></script>
+    <link type="text/css" th:href="@{/css/admin-style.css}" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
+
+    <script type="text/javascript" th:src="@{/js/admin/basic.js}"></script>
+    <script type="text/javascript" th:src="@{/js/admin/event.js}"></script>
+    <title>WAITING CATCH 관리자</title>
+</head>
+<body>
+<header>
+    <a href="/admin/templates/main">
+        <div>WAITING CATCH</div>
+    </a>
+    <nav>
+        <ul>
+            <a href="/">관리자 님</a>
+            <a href="#" onclick="sendTokenDelete();">Logout</a>
+        </ul>
+    </nav>
+</header>
+<nav class="menus">
+    <ul>
+        <a href="/admin/templates/seller-management">판매자요청</a>
+        <a href="/admin/templates/customers">유저 목록</a>
+        <a href="/admin/templates/restaurants">레스토랑 목록</a>
+        <a href="/admin/templates/event" style="color: #8B60C7">이벤트</a>
+        <a href="/admin/templates/blacklist">블랙리스트</a>
+        <a href="/admin/templates/review">리뷰 검열</a>
+        <a href="/admin/templates/category">카테고리</a>
+    </ul>
+</nav>
+<div class="body">
+    <h1 style="color: #8B60C7">이벤트</h1>
+    <div class="createEvent">
+        <div>
+            <label>Event Name</label>
+            <input type="text" id="eventName" placeholder="Event Name">
+        </div>
+        <div>
+            <label>시작일자</label>
+            <input type="datetime-local" id="eventStartDate">
+        </div>
+        <div>
+            <label>종료일자</label>
+            <input type="datetime-local" id="eventEndDate">
+        </div>
+        <button type="button" class="btn long-btn" onclick="createEvents()">생성</button>
+    </div>
+    <div class="updateEvent">
+
+    </div>
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th scope="col">No</th>
+            <th scope="col">이름</th>
+            <th scope="col">시작일자</th>
+            <th scope="col">종료일자</th>
+            <th scope="col"></th>
+        </tr>
+        </thead>
+        <tbody id="EventTable">
+
+        </tbody>
+    </table>
+    <br>
+    <h1 style="color: #8B60C7">쿠폰</h1>
+    <div class="coupon">
+
+    </div>
+    <div class="updateCoupon">
+
+    </div>
+    <div class="couponCreator">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th scope="col">No</th>
+                <th scope="col">이름</th>
+                <th scope="col">할인율(액)</th>
+                <th scope="col">할인 종류</th>
+                <th scope="col">수량</th>
+                <th scope="col">만료일</th>
+                <th scope="col"></th>
+            </tr>
+            </thead>
+            <tbody id="couponCreatorTable">
+
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>

@@ -8,12 +8,18 @@ import team.waitingcatch.app.restaurant.entity.BlackListRequest;
 @Getter
 public class GetRequestBlackListResponse {
 	@NotNull
-	private final Long userId;
+	private final Long blacklistRequestId;
+	@NotNull
+	private final String customerName;
+	@NotNull
+	private final String sellerName;
 	@NotNull
 	private final String description;
 
 	public GetRequestBlackListResponse(BlackListRequest blackListRequest) {
-		this.userId = blackListRequest.getUser().getId();
+		this.blacklistRequestId = blackListRequest.getId();
+		this.customerName = blackListRequest.getUser().getUsername();
+		this.sellerName = blackListRequest.getRestaurant().getUser().getUsername();
 		this.description = blackListRequest.getDescription();
 	}
 }
