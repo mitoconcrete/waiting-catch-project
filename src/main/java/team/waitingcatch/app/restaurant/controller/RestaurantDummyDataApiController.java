@@ -22,7 +22,7 @@ import team.waitingcatch.app.restaurant.service.restaurant.MapApiService;
 @RequestMapping("/api")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @RequiredArgsConstructor
-public class RestaurantDummyDataAPiController {
+public class RestaurantDummyDataApiController {
 
 	private final MapApiService mapApiService;
 
