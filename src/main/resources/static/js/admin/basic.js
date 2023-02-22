@@ -2,6 +2,8 @@
 //     return window.localStorage.getItem('Authorization');
 // }
 
+let host = "http://" + window.location.host;
+
 function getToken() {
     let cName = 'Authorization' + '=';
     let cookieData = document.cookie;
@@ -20,4 +22,20 @@ function getToken() {
     }
 
     return auth;
+}
+
+function logout() {
+    let auth = getToken();
+
+    $.ajax({
+        type: 'POST',
+        url: `api/admin/signout`,
+        headers: {
+            'content-type': 'application/json',
+            'Authorization': auth
+        },
+        success: function (response) {
+            window.location.href = host + "/admin/templates/login"
+        }
+    })
 }

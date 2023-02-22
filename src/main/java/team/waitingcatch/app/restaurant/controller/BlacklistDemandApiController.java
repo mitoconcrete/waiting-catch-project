@@ -56,4 +56,9 @@ public class BlacklistDemandApiController {
 		var serviceRequest = new ApproveBlacklistDemandServiceRequest(blacklistDemandId);
 		blacklistDemandService.approveBlacklistDemand(serviceRequest);
 	}
+
+	@PutMapping("/admin/restaurants/blacklist-demand/{blacklistDemandId}")
+	public void rejectBlacklistDemand(@PathVariable Long blacklistDemandId) {
+		blacklistDemandService.rejectBlacklistDemand(blacklistDemandId);
+	}
 }
