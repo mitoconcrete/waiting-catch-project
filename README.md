@@ -1,26 +1,13 @@
-# :ferris_wheel: FESTA! :ferris_wheel:
 
-사용자가 설정한 지역의 이벤트와 행사를 추천해주는 서비스 입니다.    
-백엔드 로직에 집중하기 위해서 화면은 프로토타입으로 설계하였으며 
-REST API 서버로 대용량 트래픽을 고려한 애플리케이션으로 개발하였습니다. 
-보다 더 자세한 사항은 [WIKI](https://github.com/f-lab-edu/event-recommender-festa/wiki) 에서 확인이 가능합니다.
-
+<h1 align="center">
+ ⏲️ WAITING CATCH! ⏲️
+</h1>
+"사용자가 설정한 지역의 레스토랑을 불러와 줄서기를 대신해주고, 그것과 관련된 서비스를 편리하게를 대신 해주는 웹사이트 입니다." 백엔드 로직에 집중하기 위해서 화면은 최대한 간결하게 만들고 설계하였으며 REST API 서버로 대용량 트래픽을 고려한 애플리케이션으로 개발하였습니다. 
+<br>
 <br>
 
-##  :rocket: 프로젝트 사용기술 
-- [Spring Boot](https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle)
-- [Java 8](https://docs.oracle.com/javase/8/docs/api/)
-- [MySQL](https://dev.mysql.com/doc/refman/8.0/en/)
-- [Mybatis](https://mybatis.org/mybatis-3/)
-- [Maven](http://maven.apache.org/guides/index.html)
-- [Redis](https://redis.io/documentation)
-- [Naver cloud platform](https://docs.ncloud.com/ko/)
-- [Google cloud platform](https://cloud.google.com/docs/?_ga=2.222206936.-1398242313.1619252670)
-- [AWS S3](https://docs.aws.amazon.com/index.html?nc2=h_ql_doc_do_v)
-- [Firebase](https://firebase.google.com/docs)
-- [Docker](https://www.docker.com/)
-- [nGrinder](http://naver.github.io/ngrinder/)
-- intellij IDEA
+##  :rocket: 프로젝트 사용기술 <br>
+<img src="https://img.shields.io/badge/Springboot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white"><img src="https://img.shields.io/badge/Redis-DC382D?style=for-the-badge&logo=redis&logoColor=white"><img src="https://img.shields.io/badge/Java-007396?style=for-the-badge&logo=java&logoColor=white"><img src="https://img.shields.io/badge/Mysql-4479A1?style=for-the-badge&logo=mysql&logoColor=white"><img src="https://img.shields.io/badge/Gradle-02303A?style=for-the-badge&logo=gradle&logoColor=white"><img src="https://img.shields.io/badge/NaverAPI-03C75A?style=for-the-badge&logo=naver&logoColor=white"><img src="https://img.shields.io/badge/GoogleAPI-4285F4?style=for-the-badge&logo=google&logoColor=white"><img src="https://img.shields.io/badge/AWS EC2-FF9900?style=for-the-badge&logo=amazon-ec2&logoColor=white"><img src="https://img.shields.io/badge/AWS S3-569A31?style=for-the-badge&logo=amazon-s3&logoColor=white"><img src="https://img.shields.io/badge/nGrinder-F79A10?style=for-the-badge&logo=ngrinder&logoColor=white"><img src="https://img.shields.io/badge/IntelliJ-000000?style=for-the-badge&logo=intellij-idea&logoColor=white"><img src="https://img.shields.io/badge/Github-181717?style=for-the-badge&logo=github&logoColor=white">
 
 <br>
 <br>
