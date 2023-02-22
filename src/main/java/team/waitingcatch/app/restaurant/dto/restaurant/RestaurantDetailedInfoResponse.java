@@ -8,9 +8,7 @@ import team.waitingcatch.app.restaurant.entity.RestaurantInfo;
 public class RestaurantDetailedInfoResponse {
 	private final Long id;
 	private final String name;
-	private final String province;
-	private final String city;
-	private final String street;
+	private final String address;
 	private final String phoneNumber;
 	private final String description;
 	private final String openTime;
@@ -22,9 +20,7 @@ public class RestaurantDetailedInfoResponse {
 		this.id = restaurant.getId();
 		this.category = restaurant.getSearchKeywords().split(" ");
 		this.name = restaurant.getName();
-		this.province = restaurant.getProvince();
-		this.city = restaurant.getCity();
-		this.street = restaurant.getStreet();
+		this.address = restaurant.getProvince() + " " + restaurant.getCity() + " " + restaurant.getStreet();
 		this.phoneNumber = restaurant.getPhoneNumber();
 		this.description = restaurant.getDescription();
 		this.openTime = restaurantInfo.getOpenTime();
