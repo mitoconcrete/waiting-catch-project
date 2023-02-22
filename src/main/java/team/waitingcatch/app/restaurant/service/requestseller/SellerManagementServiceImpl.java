@@ -41,7 +41,7 @@ public class SellerManagementServiceImpl implements SellerManagementService, Int
 	private final UserService userService;
 	private final JavaMailSender emailSender;
 	private final UserRepository userRepository;
-
+	private final RestaurantRepository restaurantRepository;
 	private final RestaurantInfoRepository restaurantInfoRepository;
 	@Value("${spring.mail.username}")
 	private String smtpSenderEmail;
