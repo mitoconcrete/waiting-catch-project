@@ -7,11 +7,11 @@ import team.waitingcatch.app.event.enums.CouponTypeEnum;
 
 @Getter
 public class GetUserCouponResponse {
-	private Long id;
-	private String name;
-	private int discountPrice;
-	private CouponTypeEnum discountType;
-	private LocalDateTime expireDate;
+	private final Long id;
+	private final String name;
+	private final int discountPrice;
+	private final CouponTypeEnum discountType;
+	private final LocalDateTime expireDate;
 
 	public GetUserCouponResponse(UserCouponResponse userCouponResponse) {
 		this.id = userCouponResponse.getUserCoupon().getId();

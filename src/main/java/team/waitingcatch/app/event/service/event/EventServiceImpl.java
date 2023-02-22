@@ -90,8 +90,7 @@ public class EventServiceImpl implements EventService, InternalEventService {
 	public List<GetEventsResponse> getGlobalEvents() {
 		//이벤트중 restaurant이 null인것만 조회
 		List<Event> events = eventRepository.findByRestaurantIsNullAndIsDeletedFalse();
-		List<GetEventsResponse> GetEventsResponse = new ArrayList<>();
-		return _GetEventsResponse(events, GetEventsResponse);
+		return _getEventsResponse(events);
 
 	}
 
@@ -103,8 +102,7 @@ public class EventServiceImpl implements EventService, InternalEventService {
 		Restaurant restaurant = _getRestaurantById(restaurantId);
 		//찾은 객체로 이벤트 검색
 		List<Event> events = eventRepository.findByRestaurantAndIsDeletedFalse(restaurant);
-		List<GetEventsResponse> GetEventsResponse = new ArrayList<>();
-		return _GetEventsResponse(events, GetEventsResponse);
+		return _getEventsResponse(events);
 
 	}
 
@@ -126,7 +124,8 @@ public class EventServiceImpl implements EventService, InternalEventService {
 
 	//이벤트 목록 + 쿠폰생성자를 DTO형태로 리턴
 	@Override
-	public List<GetEventsResponse> _GetEventsResponse(List<Event> events, List<GetEventsResponse> GetEventsResponse) {
+	public List<GetEventsResponse> _getEventsResponse(List<Event> events) {
+		List<GetEventsResponse> getEventsResponse = new ArrayList<>();
 		for (Event event : events) {
 			List<CouponCreator> couponCreators = couponCreatorRepository.findByEventAndIsDeletedFalse(event);
 			List<GetCouponCreatorResponse> getCouponCreatorResponses = new ArrayList<>();
@@ -134,9 +133,14 @@ public class EventServiceImpl implements EventService, InternalEventService {
 				GetCouponCreatorResponse getCouponCreatorResponse = new GetCouponCreatorResponse(couponCreator);
 				getCouponCreatorResponses.add(getCouponCreatorResponse);
 			}
-			GetEventsResponse.add(new GetEventsResponse(event, getCouponCreatorResponses));
+			getEventsResponse.add(new GetEventsResponse(event, getCouponCreatorResponses));
 		}
-		return GetEventsResponse;
+		return getEventsResponse;
+	}
+
+	@Override
+	public void _bulkSoftDeleteByRestaurantId(Long restaurantId) {
+		eventRepository.softDeleteByRestaurantId(restaurantId);
 	}
 
 }

@@ -14,11 +14,9 @@ import team.waitingcatch.app.restaurant.dto.requestseller.ApproveSignUpSellerSer
 import team.waitingcatch.app.restaurant.dto.requestseller.DemandSignUpSellerServiceRequest;
 import team.waitingcatch.app.restaurant.dto.requestseller.GetDemandSignUpSellerResponse;
 import team.waitingcatch.app.restaurant.dto.requestseller.RejectSignUpSellerServiceRequest;
-import team.waitingcatch.app.restaurant.entity.Restaurant;
 import team.waitingcatch.app.restaurant.entity.SellerManagement;
-import team.waitingcatch.app.restaurant.repository.RestaurantInfoRepository;
-import team.waitingcatch.app.restaurant.repository.RestaurantRepository;
 import team.waitingcatch.app.restaurant.repository.SellerManagementRepository;
+import team.waitingcatch.app.restaurant.service.restaurant.InternalRestaurantService;
 import team.waitingcatch.app.user.dto.CreateUserServiceRequest;
 import team.waitingcatch.app.user.entitiy.User;
 import team.waitingcatch.app.user.enums.UserRoleEnum;
@@ -32,8 +30,7 @@ import team.waitingcatch.app.user.service.UserService;
 public class SellerManagementServiceImpl implements SellerManagementService, InternalSellerManagementService {
 	private final SellerManagementRepository sellerManagementRepository;
 	private final InternalUserService internalUserService;
-	private final RestaurantRepository restaurantRepository;
-	private final RestaurantInfoRepository restaurantInfoRepository;
+	private final InternalRestaurantService restaurantService;
 	private final UserService userService;
 
 	private final UserRepository userRepository;
@@ -82,8 +79,8 @@ public class SellerManagementServiceImpl implements SellerManagementService, Int
 		ApproveSignUpSellerManagementEntityPassToRestaurantEntityRequest
 			approveSignUpSellerManagementEntityPassToRestaurantEntityRequest
 			= new ApproveSignUpSellerManagementEntityPassToRestaurantEntityRequest(sellerManagement, seller);
-		Restaurant restaurant = new Restaurant(approveSignUpSellerManagementEntityPassToRestaurantEntityRequest);
-		restaurantRepository.save(restaurant);
+		restaurantService.createRestaurant(approveSignUpSellerManagementEntityPassToRestaurantEntityRequest);
+
 		return new ApproveSignUpSellerResponse(sellerManagement.getUsername(), uuidPassword);
 	}
 

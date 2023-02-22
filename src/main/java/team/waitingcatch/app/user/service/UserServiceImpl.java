@@ -12,11 +12,17 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.common.util.JwtUtil;
+import team.waitingcatch.app.event.service.event.InternalEventService;
+import team.waitingcatch.app.lineup.service.InternalLineupHistoryService;
+import team.waitingcatch.app.lineup.service.InternalLineupService;
+import team.waitingcatch.app.lineup.service.InternalReviewService;
 import team.waitingcatch.app.redis.dto.CreateRefreshTokenServiceRequest;
 import team.waitingcatch.app.redis.dto.KillTokenRequest;
 import team.waitingcatch.app.redis.service.AliveTokenService;
 import team.waitingcatch.app.redis.service.KilledAccessTokenService;
 import team.waitingcatch.app.redis.service.RemoveTokenRequest;
+import team.waitingcatch.app.restaurant.entity.Restaurant;
+import team.waitingcatch.app.restaurant.service.restaurant.InternalRestaurantService;
 import team.waitingcatch.app.user.dto.CreateUserServiceRequest;
 import team.waitingcatch.app.user.dto.DeleteUserRequest;
 import team.waitingcatch.app.user.dto.FindPasswordRequest;
@@ -38,6 +44,12 @@ public class UserServiceImpl implements UserService, InternalUserService {
 	private final UserRepository userRepository;
 	private final AliveTokenService refreshTokenService;
 	private final KilledAccessTokenService accessTokenService;
+	private final InternalRestaurantService internalRestaurantService;
+	private final InternalLineupService internalLineupService;
+	private final InternalLineupHistoryService internalLineupHistoryService;
+	private final InternalEventService internalEventService;
+	private final InternalReviewService internalReviewService;
+
 	@Value("${spring.mail.username}")
 	private String smtpSenderEmail;
 
@@ -49,19 +61,7 @@ public class UserServiceImpl implements UserService, InternalUserService {
 			throw new IllegalArgumentException("패스워드가 일치하지 않습니다.");
 		}
 
-		// access token 과 refresh token을 생성합니다.
-		String accessToken = jwtUtil.createAccessToken(user.getUsername(), user.getRole());
-		String refreshToken = jwtUtil.createRefreshToken(user.getUsername(), user.getRole());
-
-		/*
-		refreshToken을 redis에 저장합니다. 이 때, accessToken:RefreshToken의 형태로 저장하되, 'Bearer ' 을 제외한 토큰을 저장합니다.
-		1. refreshToken을 accessToken의 value에 맵핑하는 이유는 시큐리티 검증 시,
-		   만료된 accessToken 내에서 claim을 가져올 수 없기 때문입니다.
-		2. accessToken 토큰을 key로 두는 이유는 redis내의 값에 좀더 빠르게 접근하기 위함입니다.
-		*/
-		CreateRefreshTokenServiceRequest servicePayload = new CreateRefreshTokenServiceRequest(accessToken.substring(7),
-			refreshToken.substring(7));
-		refreshTokenService.createToken(servicePayload);
+		String accessToken = _createAccessTokensByUser(user);
 
 		return new LoginServiceResponse(accessToken);
 	}
@@ -134,6 +134,7 @@ public class UserServiceImpl implements UserService, InternalUserService {
 	public void deleteUser(DeleteUserRequest payload) {
 		User user = _getUserByUsername(payload.getUsername());
 		userRepository.deleteById(user.getId());
+		_deleteSellerAndRelatedInformation(user.getId());
 	}
 
 	@Override
@@ -159,6 +160,32 @@ public class UserServiceImpl implements UserService, InternalUserService {
 	}
 
 	@Override
+	public LoginServiceResponse createAccessTokenByEmail(String email) {
+		User user = _getUserByEmail(email);
+
+		String accessToken = _createAccessTokensByUser(user);
+
+		return new LoginServiceResponse(accessToken);
+	}
+
+	@Override
+	public void _deleteSellerAndRelatedInformation(Long userId) {
+		User seller = _getUserByUserId(userId);
+		userRepository.deleteById(seller.getId());
+		Restaurant restaurant = internalRestaurantService._deleteRestaurantBySellerId(seller.getId());
+		internalLineupHistoryService._bulkSoftDeleteByRestaurantId(restaurant.getId());
+		internalLineupService._bulkSoftDeleteByRestaurantId(restaurant.getId());
+		internalEventService._bulkSoftDeleteByRestaurantId(restaurant.getId());
+		internalReviewService._bulkSoftDeleteByRestaurantId(restaurant.getId());
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public String _getUsernameById(Long id) {
+		return userRepository.findUsernameById(id);
+	}
+
+	@Override
 	@Transactional(readOnly = true)
 	public User _getUserByUsername(String username) {
 		return userRepository.findByUsernameAndIsDeletedFalse(username).orElseThrow(
@@ -173,5 +200,27 @@ public class UserServiceImpl implements UserService, InternalUserService {
 			() -> new IllegalArgumentException("유저가 존재하지 않습니다.")
 		);
 	}
-}
 
+	@Override
+	@Transactional(readOnly = true)
+	public User _getUserByUserId(Long id) {
+		return userRepository.findByUserId(id).orElseThrow(() -> new IllegalArgumentException("유저가 존재하지 않습니다."));
+	}
+
+	private String _createAccessTokensByUser(User user) {
+		// access token 과 refresh token을 생성합니다.
+		String accessToken = jwtUtil.createAccessToken(user.getUsername(), user.getRole());
+		String refreshToken = jwtUtil.createRefreshToken(user.getUsername(), user.getRole());
+
+		/*
+		refreshToken을 redis에 저장합니다. 이 때, accessToken:RefreshToken의 형태로 저장하되, 'Bearer ' 을 제외한 토큰을 저장합니다.
+		1. refreshToken을 accessToken의 value에 맵핑하는 이유는 시큐리티 검증 시,
+		   만료된 accessToken 내에서 claim을 가져올 수 없기 때문입니다.
+		2. accessToken 토큰을 key로 두는 이유는 redis내의 값에 좀더 빠르게 접근하기 위함입니다.
+		*/
+		CreateRefreshTokenServiceRequest servicePayload = new CreateRefreshTokenServiceRequest(accessToken.substring(7),
+			refreshToken.substring(7));
+		refreshTokenService.createToken(servicePayload);
+		return accessToken;
+	}
+}

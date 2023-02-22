@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -35,6 +36,7 @@ import team.waitingcatch.app.event.service.event.EventService;
 import team.waitingcatch.app.event.service.usercoupon.UserCouponService;
 import team.waitingcatch.app.user.entitiy.UserDetailsImpl;
 
+@RequestMapping("/api")
 @RequiredArgsConstructor
 @RestController
 public class CouponController {
@@ -176,8 +178,8 @@ public class CouponController {
 	}
 
 	//유저 쿠폰 조회
-	@PostMapping("/customer/coupons")
-	public void GetUserCoupon(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-		userCouponService.getUserCoupon(userDetails.getUser());
+	@GetMapping("/customer/coupons")
+	public void getUserCoupon(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+		userCouponService.getUserCoupons(userDetails.getUser());
 	}
 }

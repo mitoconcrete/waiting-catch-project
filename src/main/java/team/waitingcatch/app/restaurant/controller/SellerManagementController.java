@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,7 @@ import team.waitingcatch.app.restaurant.dto.requestseller.GetDemandSignUpSellerR
 import team.waitingcatch.app.restaurant.dto.requestseller.RejectSignUpSellerServiceRequest;
 import team.waitingcatch.app.restaurant.service.requestseller.SellerManagementService;
 
+@RequestMapping("/api")
 @RestController
 @RequiredArgsConstructor
 public class SellerManagementController {

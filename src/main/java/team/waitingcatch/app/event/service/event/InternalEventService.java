@@ -13,5 +13,7 @@ public interface InternalEventService {
 	Restaurant _getRestaurantById(Long id);
 
 	//이벤트목록+이벤트생성자목록을 가저온다.
-	List<GetEventsResponse> _GetEventsResponse(List<Event> events, List<GetEventsResponse> GetEventsResponse);
+	List<GetEventsResponse> _getEventsResponse(List<Event> events);
+
+	void _bulkSoftDeleteByRestaurantId(Long restaurantId);
 }
