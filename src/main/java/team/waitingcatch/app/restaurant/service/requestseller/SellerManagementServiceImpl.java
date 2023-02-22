@@ -90,7 +90,6 @@ public class SellerManagementServiceImpl implements SellerManagementService, Int
 		ApproveSignUpSellerManagementEntityPassToRestaurantEntityRequest
 			approveSignUpSellerManagementEntityPassToRestaurantEntityRequest
 			= new ApproveSignUpSellerManagementEntityPassToRestaurantEntityRequest(sellerManagement, seller);
-		restaurantService.createRestaurant(approveSignUpSellerManagementEntityPassToRestaurantEntityRequest);
 
 		Restaurant restaurant = new Restaurant(approveSignUpSellerManagementEntityPassToRestaurantEntityRequest);
 		restaurantRepository.save(restaurant);
@@ -107,7 +106,6 @@ public class SellerManagementServiceImpl implements SellerManagementService, Int
 			"ID: " + sellerManagement.getUsername() + "," + uuidPassword + "입니다."
 			+ "\n로그인 후에 비밀번호를 변경을 해주세요.");
 		emailSender.send(message);
-
 		return new ApproveSignUpSellerResponse(sellerManagement.getUsername(), uuidPassword);
 	}
 

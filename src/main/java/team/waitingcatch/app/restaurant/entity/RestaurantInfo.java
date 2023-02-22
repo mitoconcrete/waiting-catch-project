@@ -28,10 +28,10 @@ public class RestaurantInfo extends TimeStamped {
 	@JoinColumn(name = "restaurant_id", nullable = false, unique = true)
 	private Restaurant restaurant;
 
-	@Column(nullable = false)
+	@Column
 	private String openTime;
 
-	@Column(nullable = false)
+	@Column
 	private String closeTime;
 
 	@Column(nullable = false)
@@ -64,9 +64,9 @@ public class RestaurantInfo extends TimeStamped {
 	// 줄서기 취소, 완료시 해당 레스토랑의 현재 대기인원 수를 차감한다.
 	public void subtractLineupCount() {
 		this.currentWaitingNumber -= 1;
-  }
+	}
 
-	public RestaurantInfo(Restaurant restaurant, String openTime, String closeTime) {
+	public RestaurantInfo(Restaurant restaurant) {
 		this.restaurant = restaurant;
 		this.openTime = openTime;
 		this.closeTime = closeTime;
@@ -76,10 +76,6 @@ public class RestaurantInfo extends TimeStamped {
 	public void updateRestaurantInfo(UpdateRestaurantEntityRequest updateRestaurantEntityRequest) {
 		this.openTime = updateRestaurantEntityRequest.getOpenTime();
 		this.closeTime = updateRestaurantEntityRequest.getCloseTime();
-	}
-
-	public RestaurantInfo(Restaurant restaurant) {
-		this.restaurant = restaurant;
 	}
 
 	public void openLineup() {
