@@ -28,10 +28,8 @@ API에 대한 상세하게 설명해두었으며 기술적인 문제에 부딪�
 
  - click! :arrow_forward: [Usecase](https://github.com/f-lab-edu/event-recommender-festa/wiki/Usecase)
  - click! :arrow_forward: [WIKI Home](https://github.com/mitoconcrete/waiting-catch-project/wiki)
- - click! :arrow_forward: [API 상세스펙](https://github.com/f-lab-edu/event-recommender-festa/wiki#%EC%83%81%EC%84%B8-api-%EC%8A%A4%ED%8E%99-%EB%B0%94%EB%A1%9C%EA%B0%80%EA%B8%B0)
- - click! :arrow_forward: [PR규칙](https://github.com/f-lab-edu/event-recommender-festa/wiki#pr-%EA%B7%9C%EC%B9%99)
+
  
-<br>
 <br>
 
 ## 👥 팀원 구성
@@ -89,6 +87,62 @@ API에 대한 상세하게 설명해두었으며 기술적인 문제에 부딪�
 오전(10시 - 13시)은 PR에 대해 팀원전원이 리뷰합니다. <br>
 리뷰는 우선순위를 정하여, 다른 작업에 영향을 줄 수 있는 것 부터 차례대로 진행합니다. <br>리뷰는 아침회의에서 결정된 우선순위대로 진행하며, 리뷰 이후에 Merge를 한번에 진행합니다.
 
+### :diamond_shape_with_a_dot_inside: Commit message Prefix
+<details>
+<summary>Commit message Prefix</summary>
+<div markdown="1">       
+
+## Commit Message
+
+- `[feat]` : 새로운 기능 추가
+- `[fix]` : 버그 수정
+- `[docs]` : 문서 수정
+- `[build]` : 빌드 관련 파일 수정
+- `[style]` : 코드 포맷팅, 코드 자체의 변경이 없는 경우
+- `[refactor]` : 코드 리팩토링
+- `[test]` : 테스트 코드 추가
+- `[merge]`  : 병합
+- `[design]` : CSS 등 사용자 UI 디자인 변경
+- `[comment]` : 필요한 주석 추가 및 변경
+- `[rename]` : 파일, 변수, 메서드, 폴더명을 수정하는 경우
+- `[remove]` : 사용하지 않는 파일 혹은 폴더를 삭제하는 경우
+
+</div>
+</details>
+
+### :diamond_shape_with_a_dot_inside: 코드 컨벤션
+
+<details>
+<summary>코드 컨벤션 내용</summary>
+<div markdown="1">    
+ <h2>코드컨벤션</h2>
+- 카멜케이스를 사용합니다.<br>
+- 패키지명은 소문자를 사용합니다.<br>
+- 주석은 한줄로 정리 가능하다면 `//` 를 사용하고, 엔터를 통해 줄이 넘어가야 하는 경우, `/**/` 를 사용합니다.<br>
+- Service 사용 시, 인터페이스를 주입받는 식으로 사용한다.<br>
+- Service 인자로 받는 것은 Dto 여야하고, 때려죽어도 바뀔일이 없는 값은 컨트롤러 Dto를 그대로 가져와서 사용한다.<br>
+- ~~dto는 매개변수의 숫자와 관계없이 생성하여 전달합니다.~~ dto 는 매개변수 2개 이상일 경우에만 생성하여 사용한다.<br>
+- 단, InternalService는 dto를 사용하지 않는다.<br>
+**- 메소드 명은 `동사 + 명사` 의 조합으로 사용합니다.** <br>
+- DTO 네이밍은 메소드 네이밍 + 레이어네임(Service, Controller) + Response/Request 로 한다.(DTO 뺀다)
+`~~ControllerRequest, ~~ServiceResponse, ~~ServiceRequest`<br>
+
+- 본인이 생각했을 때 때려죽어도 바뀔일이 없는 것은 레이어네임을 제외한다.
+`~~Request, ~~Response`<br>
+- 서비스 레이어 내부에서 사용할 엔티티를 return하는 메소드를 서비스 내에 _로 정의하여 사용한다.<br>
+ㄴ _getUser, _getReservation → Entity를 반환<br>
+ㄴ getUser, getReservation →Dto를 반환 getUserB<br>
+- 하나의 매개변수가 선언되어 있는 경우 : get, create, update, delete + by + 매개변수 명<br>
+- 2개이상 복수의 매개변수가 선언되어 있는 경우 :  get, create, update, delete + 전달되는 매개변수를 한 단어로 축약하여 사용<br>
+- 복수 변수명 : ~s(o), ~List(x)<br>
+
+-슬랙 연결 방법 /github subscribe mitoconcrete/waiting-catch-project<br>
+ <br>
+
+</div>
+</details>
+
+
 ### :diamond_shape_with_a_dot_inside: nGrinder 성능테스트
 
 :white_check_mark: 네이버에서 개발한 오픈소스 플랫폼인 **nGrinder**를 이용해 성능테스트를 진행 중입니다.
@@ -98,17 +152,15 @@ API에 대한 상세하게 설명해두었으며 기술적인 문제에 부딪�
 
 ##  :rocket: 화면 구성도
 
-![image](https://user-images.githubusercontent.com/58355531/109332890-15c1f580-78a2-11eb-9596-eadf94a1ac10.png)
+## 고객 페이지
+![Capture](https://user-images.githubusercontent.com/83831110/220533919-bda97501-0330-4db4-a49e-16511947230c.png)
 
-<br>
+## 판매자 페이지<br>
+![판매자](https://user-images.githubusercontent.com/83831110/220533662-5c232a94-2fc2-4dc3-9587-2d2c88c4694e.JPG)
 
-___
+## 관리자 페이지<br>
+![관리자](https://user-images.githubusercontent.com/83831110/220535096-f96b90c8-b67e-441e-b53a-c779b6d5c343.JPG)
 
-
-![image](https://user-images.githubusercontent.com/58355531/109332798-f6c36380-78a1-11eb-9283-92796a76ade2.png)
-
-<br>
-<br>
 
 ##  :rocket: DB ERD 구조
 
@@ -119,3 +171,7 @@ ___
 <br>
 
 [![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Ff-lab-edu%2Fevent-recommender-festa&count_bg=%2379C83D&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=hits&edge_flat=false)](https://hits.seeyoufarm.com)
+
+##  :rocket: API 명세서
+
+[API 명세서](https://docs.google.com/spreadsheets/d/1Hhjp6eKlJxv6ZLsFz1xe50t-xMe478o5_Je7RIvn1YA/edit#gid=1180646390)
