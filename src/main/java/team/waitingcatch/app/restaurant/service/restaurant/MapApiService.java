@@ -66,7 +66,7 @@ public class MapApiService {
 					address, position, phone, replaceCategory, user);
 				Restaurant restaurant = new Restaurant(saveDummyRestaurantRequest);
 				restaurantRepository.save(restaurant);
-				RestaurantInfo restaurantInfo = new RestaurantInfo(restaurant, "08:00", "22:00");
+				RestaurantInfo restaurantInfo = new RestaurantInfo(restaurant);
 				restaurantInfoRepository.save(restaurantInfo);
 			}
 		} catch (IOException e) {
