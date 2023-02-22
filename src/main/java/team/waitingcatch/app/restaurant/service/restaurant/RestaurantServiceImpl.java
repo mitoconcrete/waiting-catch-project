@@ -48,7 +48,9 @@ public class RestaurantServiceImpl implements RestaurantService, InternalRestaur
 	@Transactional(readOnly = true)
 	public RestaurantDetailedInfoResponse getRestaurantDetailedInfo(RestaurantDetailedInfoServiceRequest request) {
 		Restaurant restaurant = _getRestaurant(request.getRestaurantId());
-		return new RestaurantDetailedInfoResponse(restaurant);
+		RestaurantInfo restaurantInfo = restaurantInfoRepository.findById(restaurant.getId())
+			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 레스토랑입니다."));
+		return new RestaurantDetailedInfoResponse(restaurant, restaurantInfo);
 	}
 
 	@Override
@@ -149,4 +151,5 @@ public class RestaurantServiceImpl implements RestaurantService, InternalRestaur
 		restaurant.deleteRestaurant();
 		return restaurant;
 	}
+
 }
