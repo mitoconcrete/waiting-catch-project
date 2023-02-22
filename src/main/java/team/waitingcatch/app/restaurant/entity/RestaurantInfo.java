@@ -2,6 +2,7 @@ package team.waitingcatch.app.restaurant.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -23,8 +24,8 @@ public class RestaurantInfo extends TimeStamped {
 	@Column(name = "restaurant_info_id")
 	private Long id;
 
-	@OneToOne
-	@JoinColumn(name = "restaurant_id", nullable = false)
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "restaurant_id", nullable = false, unique = true)
 	private Restaurant restaurant;
 
 	@Column
@@ -77,6 +78,10 @@ public class RestaurantInfo extends TimeStamped {
 		this.closeTime = updateRestaurantEntityRequest.getCloseTime();
 	}
 
+	public RestaurantInfo(Restaurant restaurant) {
+		this.restaurant = restaurant;
+	}
+  
 	public void openLineup() {
 		isLineupActive = true;
 	}

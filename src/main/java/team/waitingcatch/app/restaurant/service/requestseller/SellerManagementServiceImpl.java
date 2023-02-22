@@ -23,6 +23,7 @@ import team.waitingcatch.app.restaurant.entity.SellerManagement;
 import team.waitingcatch.app.restaurant.repository.RestaurantInfoRepository;
 import team.waitingcatch.app.restaurant.repository.RestaurantRepository;
 import team.waitingcatch.app.restaurant.repository.SellerManagementRepository;
+import team.waitingcatch.app.restaurant.service.restaurant.InternalRestaurantService;
 import team.waitingcatch.app.user.dto.CreateUserServiceRequest;
 import team.waitingcatch.app.user.entitiy.User;
 import team.waitingcatch.app.user.enums.UserRoleEnum;
@@ -36,7 +37,7 @@ import team.waitingcatch.app.user.service.UserService;
 public class SellerManagementServiceImpl implements SellerManagementService, InternalSellerManagementService {
 	private final SellerManagementRepository sellerManagementRepository;
 	private final InternalUserService internalUserService;
-	private final RestaurantRepository restaurantRepository;
+	private final InternalRestaurantService restaurantService;
 	private final UserService userService;
 	private final JavaMailSender emailSender;
 	private final UserRepository userRepository;
@@ -104,7 +105,6 @@ public class SellerManagementServiceImpl implements SellerManagementService, Int
 			"ID: " + sellerManagement.getUsername() + "," + uuidPassword + "입니다."
 			+ "\n로그인 후에 비밀번호를 변경을 해주세요.");
 		emailSender.send(message);
-
 		return new ApproveSignUpSellerResponse(sellerManagement.getUsername(), uuidPassword);
 	}
 
