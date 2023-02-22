@@ -26,7 +26,7 @@
 화면설계에 대한 **kakao oven** 프로토타입 디자인과 Usecase를 보실 수 있습니다.
 API에 대한 상세하게 설명해두었으며 기술적인 문제에 부딪혀 해결한 이야기에 대한 개인 테크블로그의 주소도 포함되어있습니다.
 
- - click! :arrow_forward: [Usecase](https://github.com/f-lab-edu/event-recommender-festa/wiki/Usecase)
+ - click! :arrow_forward: [Usecase](https://github.com/mitoconcrete/waiting-catch-project/wiki/Use-Case)
  - click! :arrow_forward: [WIKI Home](https://github.com/mitoconcrete/waiting-catch-project/wiki)
 
  
