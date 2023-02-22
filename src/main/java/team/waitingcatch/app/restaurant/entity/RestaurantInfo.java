@@ -24,14 +24,12 @@ public class RestaurantInfo extends TimeStamped {
 	@Column(name = "restaurant_info_id")
 	private Long id;
 
-	@OneToOne
-	@JoinColumn(name = "restaurant_id", nullable = false)
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "restaurant_id", nullable = false, unique = true)
 	private Restaurant restaurant;
 
-	@Column(nullable = false)
 	private String openTime;
 
-	@Column(nullable = false)
 	private String closeTime;
 
 	@Column(nullable = false)
@@ -71,6 +69,10 @@ public class RestaurantInfo extends TimeStamped {
 		this.closeTime = updateRestaurantEntityRequest.getCloseTime();
 	}
 
+	public RestaurantInfo(Restaurant restaurant) {
+		this.restaurant = restaurant;
+	}
+  
 	public void openLineup() {
 		isLineupActive = true;
 	}
