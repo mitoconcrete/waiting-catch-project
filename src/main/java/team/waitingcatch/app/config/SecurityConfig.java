@@ -26,7 +26,7 @@ import team.waitingcatch.app.security.service.JwtAuthFilter;
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
-public class SecurityConfig implements WebMvcConfigurer {
+public class SecurityConfig {
 	private final JwtUtil jwtUtil;
 	private final UserDetailsService userDetailsService;
 	private final AliveTokenService aliveTokenService;

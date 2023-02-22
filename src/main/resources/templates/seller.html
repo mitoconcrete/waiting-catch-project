@@ -18,6 +18,9 @@
 <a href="seller-infos.html" th:href="@{/seller/infos}" th:method="get">
     <button type="button">판매자 정보 수정</button>
 </a>
+<a th:href="@{/seller/updaterestaurant}" th:method="get" enctype="multipart/form-data">
+    <button type="button">레스토랑 정보 수정</button>
+</a>
 
 <button type="button" onclick="getLineup()">줄서기 관리</button>
 

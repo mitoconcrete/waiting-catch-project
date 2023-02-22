@@ -117,7 +117,7 @@ public class EventServiceImpl implements EventService, InternalEventService {
 	@Override
 	@Transactional(readOnly = true)
 	public Restaurant _getRestaurantById(Long id) {
-		Restaurant restaurant = restaurantRepository.findByUserId(id)
+		Restaurant restaurant = restaurantRepository.findById(id)
 			.orElseThrow(() -> new IllegalArgumentException("레스토랑을 찾을수 없습니다."));
 		return restaurant;
 	}

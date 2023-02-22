@@ -1,5 +1,6 @@
 package team.waitingcatch.app.restaurant.controller;
 
+import java.io.IOException;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -11,13 +12,14 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,6 +28,18 @@ import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.common.Address;
 import team.waitingcatch.app.common.Position;
 import team.waitingcatch.app.common.util.JwtUtil;
+import team.waitingcatch.app.event.dto.couponcreator.CreateCouponCreatorControllerRequest;
+import team.waitingcatch.app.event.dto.couponcreator.CreateSellerCouponCreatorServiceRequest;
+import team.waitingcatch.app.event.dto.couponcreator.UpdateCouponCreatorControllerRequest;
+import team.waitingcatch.app.event.dto.couponcreator.UpdateSellerCouponCreatorServiceRequest;
+import team.waitingcatch.app.event.dto.event.CreateEventControllerRequest;
+import team.waitingcatch.app.event.dto.event.CreateEventServiceRequest;
+import team.waitingcatch.app.event.dto.event.DeleteEventServiceRequest;
+import team.waitingcatch.app.event.dto.event.GetEventsResponse;
+import team.waitingcatch.app.event.dto.event.UpdateEventControllerRequest;
+import team.waitingcatch.app.event.dto.event.UpdateSellerEventServiceRequest;
+import team.waitingcatch.app.event.service.couponcreator.CouponCreatorService;
+import team.waitingcatch.app.event.service.event.EventService;
 import team.waitingcatch.app.restaurant.dto.menu.CreateMenuControllerRequest;
 import team.waitingcatch.app.restaurant.dto.menu.CreateMenuServiceRequest;
 import team.waitingcatch.app.restaurant.dto.menu.MenuResponse;
@@ -33,8 +47,11 @@ import team.waitingcatch.app.restaurant.dto.menu.UpdateMenuControllerRequest;
 import team.waitingcatch.app.restaurant.dto.menu.UpdateMenuServiceRequest;
 import team.waitingcatch.app.restaurant.dto.requestseller.DemandSignUpSellerControllerRequest;
 import team.waitingcatch.app.restaurant.dto.requestseller.DemandSignUpSellerServiceRequest;
+import team.waitingcatch.app.restaurant.dto.restaurant.UpdateRestaurantControllerRequest;
+import team.waitingcatch.app.restaurant.dto.restaurant.UpdateRestaurantServiceRequest;
 import team.waitingcatch.app.restaurant.service.menu.MenuService;
 import team.waitingcatch.app.restaurant.service.requestseller.SellerManagementService;
+import team.waitingcatch.app.restaurant.service.restaurant.RestaurantService;
 import team.waitingcatch.app.user.dto.DeleteUserRequest;
 import team.waitingcatch.app.user.dto.LoginRequest;
 import team.waitingcatch.app.user.dto.LoginServiceResponse;
@@ -51,7 +68,9 @@ public class SellerController {
 	private final JwtUtil jwtUtil;
 	private final UserService userService;
 	private final MenuService menuService;
-
+	private final EventService eventService;
+	private final CouponCreatorService couponCreatorService;
+	private final RestaurantService restaurantService;
 	/*     로그인 프론트     */
 
 	@GetMapping("hello")
@@ -118,15 +137,26 @@ public class SellerController {
 	@PostMapping("/menu/new")
 	@ResponseStatus(value = HttpStatus.CREATED)
 	public String createMenu(
-		//@RequestPart("images") MultipartFile multipartFile,
+		@RequestPart("image") MultipartFile multipartFile,
 		@Valid CreateMenuControllerRequest request) {
-		//restaurantId -> 쓸지말지 모르겠음. 임시로 값 입력 , multipartFile -> 사용법모르겠음. 임시로 값입력
+		//MultipartFile multipartFile = null;
 		Long restaurantId = Long.parseLong("1");
-		MultipartFile multipartFile = null;
+		System.out.println(multipartFile + " dd " + request + " dd ");
 		CreateMenuServiceRequest serviceRequest = new CreateMenuServiceRequest(restaurantId, multipartFile, request);
 		menuService.createMenu(serviceRequest);
 		return "redirect:/menu";
 	}
+
+	// // seller
+	// @PostMapping("/seller/restaurants/{restaurantId}/menus")
+	// @ResponseStatus(value = HttpStatus.CREATED)
+	// public void createMenu(@PathVariable Long restaurantId,
+	// 	@RequestPart("images") MultipartFile multipartFile,
+	// 	@RequestPart("requestDto") @Valid CreateMenuControllerRequest request) {
+	//
+	// 	CreateMenuServiceRequest serviceRequest = new CreateMenuServiceRequest(restaurantId, multipartFile, request);
+	// 	menuService.createMenu(serviceRequest);
+	// }
 
 	@GetMapping("/menu/update/{menuId}")
 	public String updateMenu(Model model, @PathVariable Long menuId) {
@@ -184,40 +214,135 @@ public class SellerController {
 	}
 
 	@GetMapping("/seller/infos")
-	public String updateSellerInfoSub(@AuthenticationPrincipal UserDetails userDetails) {
-		System.out.println(userDetails + "111111111111");
+	public String updateSellerInfoSub() {
 		return "seller-infos";
 	}
 
-	@PostMapping("/seller/infos")
-	public String updateSellerInfo(@AuthenticationPrincipal UserDetails userDetails,
-		@Valid UpdateUserControllerRequest controllerRequest) {
-		System.out.println(userDetails + "22222222222222");
+	@PutMapping("/seller/infos")
+	public String updateSellerInfo(@Valid UpdateUserControllerRequest controllerRequest) {
+		String username = "song1";
 		UpdateUserServiceRequest servicePayload = new UpdateUserServiceRequest(controllerRequest.getName(),
-			controllerRequest.getEmail(), userDetails.getUsername(), controllerRequest.getNickName(),
+			controllerRequest.getEmail(), username, controllerRequest.getNickName(),
 			controllerRequest.getPhoneNumber());
 		userService.updateUser(servicePayload);
 		return "redirect:/seller";
 	}
 
-	// //판매자가 자신의 레스토랑 정보를 수정한다.
-	// @PutMapping("/restaurant/info")
-	// public void updateRestaurant(
-	// 	@RequestPart("updateRestaurantRequest") UpdateRestaurantControllerRequest updateRestaurantControllerRequest,
-	// 	@RequestPart("images") List<MultipartFile> multipartFile,
-	// 	@AuthenticationPrincipal UserDetails userDetails) throws IOException {
-	// 	UpdateRestaurantServiceRequest updateRestaurantServiceRequest =
-	// 		new UpdateRestaurantServiceRequest(updateRestaurantControllerRequest, multipartFile,
-	// 			userDetails.getUsername());
-	//
-	// 	restaurantService.updateRestaurant(updateRestaurantServiceRequest);
-	// }
+	@GetMapping("/seller/updaterestaurant")
+	public String updateRestaurantSub() {
+		return "seller-restaurantupdate";
+	}
 
-	@PostMapping("/getToken")
-	public String Token(@RequestParam("jwtToken") String jwtToken) {
-		String token = jwtToken;
-		// jwtToken을 원하는 변수에 저장합니다.
-		return token;
+	@PutMapping("/seller/updaterestaurant")
+	public String updateRestaurant(
+		UpdateRestaurantControllerRequest updateRestaurantControllerRequest) throws IOException {
+		Long userId = Long.parseLong("10");
+		List<MultipartFile> multipartFile = null;
+		UpdateRestaurantServiceRequest updateRestaurantServiceRequest =
+			new UpdateRestaurantServiceRequest(updateRestaurantControllerRequest, multipartFile,
+				userId);
+
+		restaurantService.updateRestaurant(updateRestaurantServiceRequest);
+
+		return "redirect:/seller";
+	}
+
+
+
+
+
+	/*     이벤트     */
+
+	@GetMapping("/event")
+	public String event(Model model) {
+		Long restaurantId = Long.parseLong("1");
+		List<GetEventsResponse> events = eventService.getRestaurantEvents(restaurantId);
+		model.addAttribute("events", events);
+		return "event";
+	}
+
+	@GetMapping("/event/new")
+	public String createEvent() {
+		return "event-create";
+	}
+
+	@PostMapping("/event/new")
+	@ResponseStatus(value = HttpStatus.CREATED)
+	public String createEvent(
+		@Validated CreateEventControllerRequest createEventControllerRequest) {
+		Long restaurantId = Long.parseLong("1");
+		CreateEventServiceRequest createEventServiceRequest = new CreateEventServiceRequest(
+			createEventControllerRequest, restaurantId);
+		eventService.createSellerEvent(createEventServiceRequest);
+		return "redirect:/event";
+	}
+
+	@GetMapping("/event/couponcreator/{eventId}")
+	public String createCouponCreator(Model model, @PathVariable Long eventId) {
+		model.addAttribute("eventId", eventId);
+		return "event-createcreator";
+	}
+
+	@PostMapping("/event/couponcreator/{eventId}")
+	@ResponseStatus(value = HttpStatus.CREATED)
+	public String createCouponCreator(@PathVariable Long eventId,
+		@Validated CreateCouponCreatorControllerRequest createCouponCreatorControllerRequest) {
+		Long userId = Long.parseLong("1");
+
+		CreateSellerCouponCreatorServiceRequest createSellerCouponCreatorServiceRequest = new CreateSellerCouponCreatorServiceRequest(
+			createCouponCreatorControllerRequest, eventId, userId);
+
+		couponCreatorService.createSellerCouponCreator(createSellerCouponCreatorServiceRequest);
+		return "redirect:/event";
+	}
+
+	@GetMapping("/event/update/{eventId}")
+	public String updateEvent(Model model, @PathVariable Long eventId) {
+		model.addAttribute("eventId", eventId);
+		return "event-update";
+	}
+
+	@PutMapping("/event/update/{eventId}")
+	public String updateEvent(UpdateEventControllerRequest updateEventControllerRequest,
+		@PathVariable Long eventId) {
+		System.out.println("아이디 " + eventId + "값" + updateEventControllerRequest.getName());
+		Long userId = Long.parseLong("1");
+		UpdateSellerEventServiceRequest updateSellerEventServiceRequest = new UpdateSellerEventServiceRequest(
+			updateEventControllerRequest, eventId, userId);
+		eventService.updateSellerEvent(updateSellerEventServiceRequest);
+		return "redirect:/event";
+	}
+
+	@GetMapping("/event/updateCouponCreator/{eventId}/{creatorId}")
+	public String updateCouponCreator(Model model, @PathVariable Long eventId, @PathVariable Long creatorId) {
+		model.addAttribute("eventId", eventId);
+		model.addAttribute("creatorId", creatorId);
+		return "event-updatecreator";
+	}
+
+	@PutMapping("/event/updateCouponCreator/{eventId}/{creatorId}")
+	public String updateCouponCreator(
+		UpdateCouponCreatorControllerRequest updateCouponCreatorControllerRequest,
+		@PathVariable Long eventId, @PathVariable Long creatorId) {
+		Long userId = Long.parseLong("1");
+		UpdateSellerCouponCreatorServiceRequest updateSellerCouponCreatorServiceRequest = new UpdateSellerCouponCreatorServiceRequest(
+			updateCouponCreatorControllerRequest, eventId, creatorId, userId);
+		couponCreatorService.updateSellerCouponCreator(updateSellerCouponCreatorServiceRequest);
+		return "redirect:/event";
+	}
+
+	@GetMapping("/event/delete/{eventId}")
+	public String deleteEventSub(@PathVariable Long eventId) {
+		deleteEvent(eventId);
+		return "redirect:/event";
+	}
+
+	@DeleteMapping("/event/delete/{eventId}")
+	public void deleteEvent(@PathVariable Long eventId) {
+		Long userId = Long.parseLong("1");
+		DeleteEventServiceRequest deleteEventServiceRequest = new DeleteEventServiceRequest(eventId,
+			userId);
+		eventService.deleteSellerEvent(deleteEventServiceRequest);
 	}
 
 }
