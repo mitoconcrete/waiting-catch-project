@@ -16,6 +16,7 @@ import team.waitingcatch.app.restaurant.dto.requestseller.GetDemandSignUpSellerR
 import team.waitingcatch.app.restaurant.dto.requestseller.RejectSignUpSellerServiceRequest;
 import team.waitingcatch.app.restaurant.entity.Restaurant;
 import team.waitingcatch.app.restaurant.entity.SellerManagement;
+import team.waitingcatch.app.restaurant.repository.RestaurantInfoRepository;
 import team.waitingcatch.app.restaurant.repository.RestaurantRepository;
 import team.waitingcatch.app.restaurant.repository.SellerManagementRepository;
 import team.waitingcatch.app.user.dto.CreateUserServiceRequest;
@@ -32,6 +33,7 @@ public class SellerManagementServiceImpl implements SellerManagementService, Int
 	private final SellerManagementRepository sellerManagementRepository;
 	private final InternalUserService internalUserService;
 	private final RestaurantRepository restaurantRepository;
+	private final RestaurantInfoRepository restaurantInfoRepository;
 	private final UserService userService;
 
 	private final UserRepository userRepository;

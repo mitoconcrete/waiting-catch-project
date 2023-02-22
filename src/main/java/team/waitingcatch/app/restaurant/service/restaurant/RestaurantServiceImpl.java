@@ -59,8 +59,8 @@ public class RestaurantServiceImpl implements RestaurantService, InternalRestaur
 
 	@Override
 	public void updateRestaurant(UpdateRestaurantServiceRequest updateRestaurantServiceRequest) throws IOException {
-		Restaurant restaurant = restaurantRepository.findByUser_Username(
-				updateRestaurantServiceRequest.getSellerName())
+		//다른거 불러오고있어서 바꿉니다
+		Restaurant restaurant = restaurantRepository.findByUserId(updateRestaurantServiceRequest.getSellerId())
 			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 레스토랑 입니다."));
 		RestaurantInfo restaurantInfo = restaurantInfoRepository.findById(restaurant.getId())
 			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 레스토랑 정보입니다."));

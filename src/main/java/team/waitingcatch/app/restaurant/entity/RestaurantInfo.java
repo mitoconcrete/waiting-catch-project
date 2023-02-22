@@ -40,4 +40,12 @@ public class RestaurantInfo extends TimeStamped {
 		this.openTime = updateRestaurantEntityRequest.getOpenTime();
 		this.closeTime = updateRestaurantEntityRequest.getCloseTime();
 	}
+
+	public RestaurantInfo(Restaurant restaurant) {
+		this.restaurantId = restaurant.getId();
+		this.openTime = "0시";
+		this.closeTime = "0시";
+		this.isLineupActiveStatus = false;
+		this.accumulateCount = 0;
+	}
 }

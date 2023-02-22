@@ -16,7 +16,7 @@ public class UpdateRestaurantEntityRequest {
 	@NotNull
 	private final String description;
 	@NotNull
-	private final String sellerName;
+	private final Long sellerId;
 	@NotNull
 	private final String openTime;
 	@NotNull
@@ -28,7 +28,7 @@ public class UpdateRestaurantEntityRequest {
 		this.phoneNumber = updateRestaurantServiceRequest.getPhoneNumber();
 		this.capacity = updateRestaurantServiceRequest.getCapacity();
 		this.description = updateRestaurantServiceRequest.getDescription();
-		this.sellerName = updateRestaurantServiceRequest.getSellerName();
+		this.sellerId = updateRestaurantServiceRequest.getSellerId();
 		this.openTime = updateRestaurantServiceRequest.getOpenTime();
 		this.closeTime = updateRestaurantServiceRequest.getCloseTime();
 	}

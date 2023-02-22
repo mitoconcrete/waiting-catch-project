@@ -55,8 +55,7 @@
                     let host = window.location.host;
                     let url = host + '/hello';
 
-                    document.cookie =
-                        'Authorization' + '=' + xhr.getResponseHeader('Authorization') + ';path=/';
+
                     window.location.href = 'http://' + url;
                     localStorage.setItem('accessToken', xhr.getResponseHeader('Authorization'))
                 } else {
