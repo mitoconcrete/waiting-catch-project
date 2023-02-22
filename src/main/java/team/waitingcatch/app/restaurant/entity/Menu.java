@@ -36,11 +36,15 @@ public class Menu extends TimeStamped {
 
 	private String images;
 
+	@Column(nullable = false)
+	private boolean isDeleted;
+
 	public Menu(Restaurant restaurant, String name, int price, String images) {
 		this.restaurant = restaurant;
 		this.name = name;
 		this.price = price;
 		this.images = images;
+		this.isDeleted = false;
 	}
 
 	public static Menu create(CreateMenuEntityRequest request) {

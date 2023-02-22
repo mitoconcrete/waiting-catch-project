@@ -11,12 +11,18 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.common.util.S3Uploader;
 import team.waitingcatch.app.restaurant.dto.requestseller.ApproveSignUpSellerManagementEntityPassToRestaurantEntityRequest;
+import team.waitingcatch.app.common.util.DistanceCalculator;
+import team.waitingcatch.app.common.util.ImageUploader;
 import team.waitingcatch.app.restaurant.dto.restaurant.DeleteRestaurantByAdminServiceRequest;
 import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantBasicInfoResponse;
 import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantBasicInfoServiceRequest;
 import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantDetailedInfoResponse;
 import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantDetailedInfoServiceRequest;
 import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantResponse;
+import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantsWithinRadiusResponse;
+import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantsWithinRadiusServiceRequest;
+import team.waitingcatch.app.restaurant.dto.restaurant.SearchRestaurantServiceRequest;
+import team.waitingcatch.app.restaurant.dto.restaurant.SearchRestaurantsResponse;
 import team.waitingcatch.app.restaurant.dto.restaurant.UpdateRestaurantEntityRequest;
 import team.waitingcatch.app.restaurant.dto.restaurant.UpdateRestaurantServiceRequest;
 import team.waitingcatch.app.restaurant.entity.Restaurant;
@@ -29,8 +35,9 @@ import team.waitingcatch.app.restaurant.repository.RestaurantRepository;
 @Transactional
 public class RestaurantServiceImpl implements RestaurantService, InternalRestaurantService {
 	private final RestaurantRepository restaurantRepository;
+	private final DistanceCalculator distanceCalculator;
 	private final RestaurantInfoRepository restaurantInfoRepository;
-	private final S3Uploader s3Uploader;
+	private final ImageUploader imageUploader;
 
 	@Override
 	@Transactional(readOnly = true)
@@ -44,6 +51,33 @@ public class RestaurantServiceImpl implements RestaurantService, InternalRestaur
 	public RestaurantDetailedInfoResponse getRestaurantDetailedInfo(RestaurantDetailedInfoServiceRequest request) {
 		Restaurant restaurant = _getRestaurant(request.getRestaurantId());
 		return new RestaurantDetailedInfoResponse(restaurant);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public List<SearchRestaurantsResponse> searchRestaurantsByKeyword(SearchRestaurantServiceRequest request) {
+		String keyword = request.getKeyword();
+		double latitude = request.getLatitude();
+		double longitude = request.getLongitude();
+
+		return restaurantInfoRepository.findRestaurantsBySearchKeywordsContaining(keyword).stream()
+			.map(response -> new SearchRestaurantsResponse(
+				response, distanceCalculator.distanceInKilometerByHaversine(
+				latitude, longitude, response.getLatitude(), response.getLongitude())))
+			.collect(Collectors.toList());
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public List<RestaurantsWithinRadiusResponse> getRestaurantsWithinRadius(
+		RestaurantsWithinRadiusServiceRequest request) {
+		return restaurantInfoRepository.findRestaurantsByDistance(request.getLatitude(), request.getLongitude(),
+				request.getDistance())
+			.stream()
+			.map(response -> new RestaurantsWithinRadiusResponse(
+				response, distanceCalculator.distanceInKilometerByHaversine(
+				request.getLatitude(), request.getLongitude(), response.getLatitude(), response.getLongitude())))
+			.collect(Collectors.toList());
 	}
 
 	@Override
@@ -70,7 +104,7 @@ public class RestaurantServiceImpl implements RestaurantService, InternalRestaur
 
 		String imageName = "";
 
-		List<String> imageUrls = s3Uploader.uploadList(updateRestaurantServiceRequest.getFiles(), "restaurant");
+		List<String> imageUrls = imageUploader.uploadList(updateRestaurantServiceRequest.getFiles(), "restaurant");
 		for (String imageUrl : imageUrls) {
 			if (Objects.equals(imageUrl, "기본값")) {
 				imageName += "기본값" + ",";
@@ -103,5 +137,25 @@ public class RestaurantServiceImpl implements RestaurantService, InternalRestaur
 		restaurantRepository.save(restaurant);
 		RestaurantInfo restaurantInfo = new RestaurantInfo(restaurant);
 		restaurantInfoRepository.save(restaurantInfo);
+	}
+
+	public void _openLineup(Long restaurantId) {
+		RestaurantInfo restaurantInfo = restaurantInfoRepository.findById(restaurantId)
+			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 레스토랑입니다."));
+		restaurantInfo.openLineup();
+	}
+
+	@Override
+	public void _closeLineup(Long restaurantId) {
+		RestaurantInfo restaurantInfo = restaurantInfoRepository.findById(restaurantId)
+			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 레스토랑입니다."));
+		restaurantInfo.closeLineup();
+	}
+
+	@Override
+	public Restaurant _deleteRestaurantBySellerId(Long sellerId) {
+		Restaurant restaurant = _getRestaurantByUserId(sellerId);
+		restaurant.deleteRestaurant();
+		return restaurant;
 	}
 }

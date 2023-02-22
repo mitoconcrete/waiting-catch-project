@@ -28,6 +28,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-mail'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+    implementation 'io.springfox:springfox-boot-starter:3.0.0'
 
     runtimeOnly 'com.mysql:mysql-connector-j'
 
@@ -53,9 +54,11 @@ dependencies {
         exclude group: "org.slf4j", module: "slf4j-simple"
     }
 
-    //테스트에서 lombok 사용
+    // 테스트에서 lombok 사용
     testCompileOnly 'org.projectlombok:lombok'
     testAnnotationProcessor 'org.projectlombok:lombok'
+
+    testRuntimeOnly 'com.h2database:h2'
 }
 
 tasks.named('test') {
@@ -63,8 +66,7 @@ tasks.named('test') {
 }
 
 clean {
-    delete file('src/main/generated')
-    delete file('src/test/generated_tests')
+    delete('out', 'src/main/generated', 'src/test/generated_tests')
 }
 
 /* for Continuous Deployment
@@ -72,4 +74,3 @@ jar {
 	enabled = false
 }
  */
-
