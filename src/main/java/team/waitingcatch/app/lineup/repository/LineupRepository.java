@@ -25,6 +25,9 @@ public interface LineupRepository extends JpaRepository<Lineup, Long>, LineupRep
 	Optional<Lineup> findByUserIdAndRestaurantIdAndStatus(@Param("userId") Long userId,
 		@Param("restaurantId") Long restaurantId, @Param("status") ArrivalStatusEnum statusEnum);
 
+	@Query("select l from Lineup l where l.restaurant.id = :restaurantId")
+	List<Lineup> findByRestaurantId(@Param("restaurantId") Long id);
+
 	@Query("select max(l.waitingNumber) from Lineup l where l.restaurant.id = :restaurantId")
 	Integer findLastWaitingNumberByRestaurantId(@Param("restaurantId") Long id);
 

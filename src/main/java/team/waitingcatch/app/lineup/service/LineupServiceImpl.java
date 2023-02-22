@@ -4,6 +4,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -62,8 +63,8 @@ public class LineupServiceImpl implements LineupService, InternalLineupService {
 	@Override
 	public void startWaiting(StartWaitingServiceRequest serviceRequest) {
 		Long restaurantId = serviceRequest.getRestaurantId();
-		RestaurantInfo restaurantInfo = internalRestaurantService._getByIdWithInfo(restaurantId);
-		Restaurant restaurant = restaurantInfo.getRestaurant();
+		RestaurantInfo restaurantInfo = internalRestaurantService._getRestaurantInfoByRestaurantId(restaurantId);
+		Restaurant restaurant = internalRestaurantService._getRestaurantById(restaurantId);
 		if (!restaurantInfo.isLineupActive()) {
 			throw new IllegalArgumentException("줄서기가 마감되었습니다.");
 		}
@@ -85,10 +86,18 @@ public class LineupServiceImpl implements LineupService, InternalLineupService {
 			throw new IllegalArgumentException("2km 이내의 레스토랑에만 줄서기가 가능합니다");
 		}
 
-		Integer lastWaitingNumber = lineupRepository.findLastWaitingNumberByRestaurantId(restaurantId);
-		int waitingNumber = getWaitingNumber(lastWaitingNumber);
+		List<Lineup> lineupList = lineupRepository.findByRestaurantId(restaurantId);
+		int waitingNumber = 1;
+		if (lineupList.size() > 1) {
+			waitingNumber = generateWaitingNumber(lineupList.stream()
+				.max(Comparator.comparing(Lineup::getWaitingNumber))
+				.get()
+				.getWaitingNumber());
+		}
+
 		StartLineupEntityRequest entityRequest = new StartLineupEntityRequest(serviceRequest, restaurant,
 			waitingNumber);
+
 		Lineup lineup = Lineup.createLineup(entityRequest);
 		lineupRepository.save(lineup);
 		restaurantInfo.addLineupCount();
@@ -106,7 +115,7 @@ public class LineupServiceImpl implements LineupService, InternalLineupService {
 		Long restaurantId = lineupRepository.findRestaurantIdById(lineupId)
 			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 줄서기입니다."));
 
-		RestaurantInfo restaurantInfo = internalRestaurantService._getByIdWithInfo(restaurantId);
+		RestaurantInfo restaurantInfo = internalRestaurantService._getRestaurantInfoByRestaurantId(restaurantId);
 		restaurantInfo.subtractLineupCount();
 	}
 
@@ -169,7 +178,7 @@ public class LineupServiceImpl implements LineupService, InternalLineupService {
 		}
 	}
 
-	private int getWaitingNumber(Integer lastWaitingNumber) {
+	private int generateWaitingNumber(Integer lastWaitingNumber) {
 		return lastWaitingNumber != null ? lastWaitingNumber + 1 : 1;
 	}
 

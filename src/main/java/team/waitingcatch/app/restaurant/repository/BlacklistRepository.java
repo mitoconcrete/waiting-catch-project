@@ -11,10 +11,6 @@ import team.waitingcatch.app.restaurant.entity.Blacklist;
 import team.waitingcatch.app.restaurant.entity.Restaurant;
 
 public interface BlacklistRepository extends JpaRepository<Blacklist, Long> {
-	@Query("select b from Blacklist b where b.restaurant.id =: restaurantId and b.user.id = :userId")
-	Optional<Blacklist> findByRestaurantIdAndUserId(@Param("restaurantId") Long restaurantId,
-		@Param("userId") Long userId);
-
 	@Query(value = "select b from Blacklist b join fetch b.user where b.restaurant.id = :res1")
 	List<Blacklist> findAllByRestaurant(@Param("res1") Restaurant restaurant);
 

@@ -33,7 +33,7 @@ public class ReviewServiceImpl implements ReviewService, InternalReviewService {
 
 	@Override
 	public void createReview(CreateReviewServiceRequest serviceRequest) throws IOException {
-		Restaurant restaurant = internalRestaurantService._getById(serviceRequest.getRestaurantId());
+		Restaurant restaurant = internalRestaurantService._getRestaurantById(serviceRequest.getRestaurantId());
 		List<String> imagePaths = imageUploader.uploadList(serviceRequest.getImages(), "review");
 		CreateReviewEntityRequest entityRequest = new CreateReviewEntityRequest(serviceRequest.getUser(), restaurant,
 			serviceRequest.getRate(), serviceRequest.getContent(), imagePaths);
