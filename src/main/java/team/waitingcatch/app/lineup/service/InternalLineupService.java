@@ -6,4 +6,6 @@ public interface InternalLineupService {
 	Lineup _getById(Long id);
 
 	Lineup _getByIdWithUser(Long id);
+
+	void _bulkSoftDeleteByRestaurantId(Long restaurantId);
 }

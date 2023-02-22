@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -36,6 +37,7 @@ import team.waitingcatch.app.event.service.event.EventService;
 import team.waitingcatch.app.event.service.usercoupon.UserCouponService;
 import team.waitingcatch.app.user.entitiy.UserDetailsImpl;
 
+@RequestMapping("/api")
 @RequiredArgsConstructor
 @RestController
 public class CouponController {
@@ -107,13 +109,13 @@ public class CouponController {
 	}
 
 	/*  유저  */
-	//광역 이벤트 목록 출력
+	//광역 이벤트 목록 출력 + 해당 이벤트의 쿠폰생성자 출력
 	@GetMapping("/events")
 	public List<GetEventsResponse> getEvents() {
 		return eventService.getGlobalEvents();
 	}
 
-	//레스토랑 이벤트 목록 출력
+	//레스토랑 이벤트 목록 출력 + 해당 이벤트의 쿠폰생성자 출력
 	@GetMapping("/restaurants/{restaurantId}/events")
 	public List<GetEventsResponse> getRestaurantEvents(@PathVariable Long restaurantId) {
 		return eventService.getRestaurantEvents(restaurantId);
@@ -186,5 +188,11 @@ public class CouponController {
 			userDetails.getUsername());
 
 		userCouponService.createUserCoupon(createUserCouponserviceRequest);
+	}
+
+	//유저 쿠폰 조회
+	@GetMapping("/customer/coupons")
+	public void getUserCoupon(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+		userCouponService.getUserCoupons(userDetails.getUser());
 	}
 }

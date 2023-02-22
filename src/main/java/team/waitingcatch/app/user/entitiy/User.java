@@ -20,7 +20,7 @@ import team.waitingcatch.app.user.enums.UserRoleEnum;
 
 @Entity
 @Getter
-@SQLDelete(sql = "UPDATE user SET is_deleted = true WHERE id = ?")
+@SQLDelete(sql = "UPDATE user SET is_deleted = true WHERE user_id = ?")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User extends TimeStamped {
 	@Id

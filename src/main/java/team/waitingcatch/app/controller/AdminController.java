@@ -7,12 +7,14 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import lombok.RequiredArgsConstructor;
+import team.waitingcatch.app.event.service.event.EventService;
 import team.waitingcatch.app.restaurant.service.requestblacklist.BlackListRequestService;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/admin")
 public class AdminController {
+	private final EventService eventService;
 	private final BlackListRequestService blackListRequestService;
 
 	@GetMapping("/login-page")
@@ -41,15 +43,16 @@ public class AdminController {
 	}
 
 	@GetMapping("/event")
-	public ModelAndView eventPage() {
+	public ModelAndView eventPage(Model model) {
+		model.addAttribute("event", eventService.getGlobalEvents());
 		return new ModelAndView("/admin/event");
 	}
 
-	@GetMapping("/blacklist")
-	public ModelAndView blacklistPage(Model model) {
-		model.addAttribute("blacklist", blackListRequestService.getRequestBlackLists());
-		return new ModelAndView("/admin/blacklist");
-	}
+	// @GetMapping("/blacklist")
+	// public ModelAndView blacklistPage(Model model) {
+	// 	model.addAttribute("blacklist", blackListRequestService.getRequestBlackLists());
+	// 	return new ModelAndView("/admin/blacklist");
+	// }
 
 	@GetMapping("/review")
 	public ModelAndView censorReview() {
