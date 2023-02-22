@@ -15,9 +15,8 @@ public class GetEventsResponse {
 	private LocalDateTime eventEndDate;
 	private List<GetCouponCreatorResponse> couponCreators;
 
-	public GetEventsResponse(Event event) {
-		this.id = event.getId();
 	public GetEventsResponse(Event event, List<GetCouponCreatorResponse> getCouponCreatorResponse) {
+		this.id = event.getId();
 		this.name = event.getName();
 		this.eventStartDate = event.getEventStartDate();
 		this.eventEndDate = event.getEventEndDate();
