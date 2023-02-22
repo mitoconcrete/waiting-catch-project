@@ -71,4 +71,12 @@ public class BlackListRequest extends TimeStamped {
 		this.status = AcceptedStatusEnum.APPROVAL;
 	}
 
+	public void checkBlacklistRequest() {
+		if (this.status == AcceptedStatusEnum.WAIT) {
+			throw new IllegalArgumentException("이미 해당유저의 블랙리스트 요청을 하셨습니다.");
+		}
+		if (this.status == AcceptedStatusEnum.APPROVAL) {
+			throw new IllegalArgumentException("이미 해당유저의 블랙리스트 승인을 하였습니다.");
+		}
+	}
 }

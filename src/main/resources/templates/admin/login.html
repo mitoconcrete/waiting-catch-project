@@ -25,6 +25,7 @@
     <input class="id-input" id="username" type="text" placeholder="아이디" aria-label="username" autofocus>
     <input class="password-input" id="password" type="password" placeholder="비밀번호" aria-label="password">
     <button type="button" class="btn login-btn" onclick="login()">Login</button>
+    <button type="button" class="btn login-btn" onclick="location.href='register'">회원가입</button>
 </div>
 
 <script>
@@ -40,18 +41,19 @@
             return;
         }
 
+
         $.ajax({
             type: "POST",
-            url: `/admin/signin`,
+            url: `/api/admin/signin`,
             contentType: "application/json",
             data: JSON.stringify({username: username, password: password}),
             success: function (response, status, xhr) {
                 if (status === 'success') {
                     let host = window.location.host;
-                    let url = host + '/admin/main';
-
-                    document.cookie =
-                        'Authorization' + '=' + xhr.getResponseHeader('Authorization') + ';path=/';
+                    let url = host + '/admin/templates/main';
+                    let todayDate = new Date();
+                    todayDate.setDate(todayDate.getDate() + 30); // 현재 시각 + 일 단위로 쿠키 만료 날짜
+                    document.cookie = 'Authorization' + "=" + xhr.getResponseHeader('Authorization') + "; path=/; expires=" + todayDate.toString() + ";";
                     window.location.href = 'http://' + url;
                 } else {
                     alert('로그인에 실패하셨습니다. 다시 로그인해 주세요.')

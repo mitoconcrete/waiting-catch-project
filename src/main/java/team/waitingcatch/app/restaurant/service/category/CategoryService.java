@@ -19,4 +19,7 @@ public interface CategoryService {
 	void updateCategory(UpdateCategoryServiceRequest serviceRequest);
 
 	void deleteCategory(DeleteCategoryServiceRequest request);
+
+	List<CategoryResponse> getAllCategories();
+
 }
