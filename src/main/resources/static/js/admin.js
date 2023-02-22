@@ -1,3 +1,5 @@
+let host = "http://" + window.location.host;
+
 function sendTokenDelete() {
     fetch("/admin/signout", {
         method: 'get',
@@ -7,4 +9,5 @@ function sendTokenDelete() {
         }
     })
     localStorage.removeItem('Authorization');
+    window.location.href = host + "/admin/templates/login";
 }
