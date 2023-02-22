@@ -4,7 +4,5 @@ import team.waitingcatch.app.restaurant.entity.Restaurant;
 import team.waitingcatch.app.user.entitiy.User;
 
 public interface InternalBlacklistService {
-	void _createBlackList(
-		Restaurant restaurant, User user);
-
+	void _createBlackList(Restaurant restaurant, User user);
 }

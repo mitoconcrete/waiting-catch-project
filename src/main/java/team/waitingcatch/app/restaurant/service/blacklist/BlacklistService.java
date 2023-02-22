@@ -9,8 +9,7 @@ import team.waitingcatch.app.restaurant.dto.blacklist.GetBlacklistResponse;
 public interface BlacklistService {
 	void deleteBlacklistByRestaurant(DeleteBlacklistByRestaurantServiceRequest serviceRequest);
 
-	List<GetBlacklistResponse> getBlackListByRestaurantId(
-		GetBlacklistByRestaurantIdServiceRequest serviceRequest);
+	List<GetBlacklistResponse> getBlackListByRestaurantId(GetBlacklistByRestaurantIdServiceRequest serviceRequest);
 
 	List<GetBlacklistResponse> getBlacklist();
 }
