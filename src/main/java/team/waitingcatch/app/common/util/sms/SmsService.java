@@ -75,7 +75,10 @@ public class SmsService {
 			SmsResponse.class);
 	}
 
-	private String makeSignature(Long time) throws UnsupportedEncodingException, NoSuchAlgorithmException, InvalidKeyException {
+	private String makeSignature(Long time) throws
+		UnsupportedEncodingException,
+		NoSuchAlgorithmException,
+		InvalidKeyException {
 		String space = " ";
 		String newLine = "\n";
 		String method = "POST";

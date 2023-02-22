@@ -64,6 +64,7 @@ public class SellerManagementController {
 	public ApproveSignUpSellerResponse approveSignUpSeller(@PathVariable Long sellerManagementId) {
 		ApproveSignUpSellerServiceRequest approveSignUpSellerServiceRequest = new ApproveSignUpSellerServiceRequest(
 			sellerManagementId);
+
 		return sellerManagementService.approveSignUpSeller(approveSignUpSellerServiceRequest);
 	}
 

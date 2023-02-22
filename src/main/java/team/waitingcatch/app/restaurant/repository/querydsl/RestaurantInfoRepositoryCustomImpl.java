@@ -57,6 +57,5 @@ public class RestaurantInfoRepositoryCustomImpl implements RestaurantInfoReposit
 				.lt(asNumber(distance))
 				.and(restaurant.isDeleted.isFalse()))
 			.fetch();
-
 	}
 }

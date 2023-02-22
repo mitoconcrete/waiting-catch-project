@@ -1,5 +1,6 @@
 package team.waitingcatch.app.restaurant.dto.requestseller;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -7,8 +8,10 @@ import javax.validation.constraints.Size;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
+@Setter
 @NoArgsConstructor
 public class DemandSignUpSellerControllerRequest {
 	@NotNull
@@ -19,34 +22,41 @@ public class DemandSignUpSellerControllerRequest {
 	@NotNull
 	@Size(min = 2, max = 5, message = "이름은 최소 2글자에서 5글자 사이어야합니다.")
 	private String name;
+
 	@NotNull
-	@Pattern(regexp = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+.[A-Za-z]{2,6}$",
-		message = "이메일 형식을 맞춰주세요.")
+	@Pattern(regexp = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+.[A-Za-z]{2,6}$", message = "이메일 형식을 맞춰주세요.")
 	private String email;
+
 	@NotNull
-	@Pattern(regexp = "^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$",
-		message = "올바른 전화번호 형식을 입력하세요.")
+	@Pattern(regexp = "^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$", message = "올바른 전화번호 형식을 입력하세요.")
 	private String phoneNumber;
-	@NotEmpty(message = "레스토랑 이름은 필수 입력값입니다.")
+
+	@NotNull(message = "레스토랑 이름은 필수 입력값입니다.")
 	@Pattern(regexp = "[가-힣a-zA-Z1-9]{1,12}", message = "레스토랑 이름은 한글,영어,숫자 포함해서 12자리 이내로 입력해주세요.")
 	private String restaurantName;
-	@NotEmpty(message = "카테고리는 필수 입력값입니다.")
+
+	@NotBlank(message = "카테고리는 필수 입력값입니다.")
 	private String categories;
-	@NotEmpty(message = "레스토랑 설명은 필수 입력값입니다.")
+
+	@NotBlank(message = "레스토랑 설명은 필수 입력값입니다.")
 	private String description;
-	@NotNull
+
 	private double latitude;
-	@NotNull
+
 	private double longitude;
-	@NotNull
+
+	@NotBlank
 	private String province;
-	@NotNull
+
+	@NotBlank
 	private String city;
-	@NotNull
+
+	@NotBlank
 	private String street;
+
 	@NotEmpty(message = "사업자번호는 필수 입력값입니다.")
 	private String businessLicenseNo;
-	@NotNull
-	private String searchKeyWords;
 
+	@NotBlank
+	private String searchKeyWords;
 }
