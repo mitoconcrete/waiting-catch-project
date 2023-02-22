@@ -63,4 +63,13 @@ public class CategoryServiceImpl implements CategoryService, InternalCategorySer
 			() -> new IllegalArgumentException("존재하지 않는 카테고리입니다.")
 		);
 	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public List<CategoryResponse> getAllCategories() {
+		return categoryRepository.findAll().stream()
+			.map(CategoryResponse::new)
+			.collect(Collectors.toList());
+	}
+
 }
