@@ -10,6 +10,8 @@ public interface InternalEventService {
 
 	Event _getEventById(Long id);
 
+	Restaurant _getRestaurantByUserId(Long id);
+
 	Restaurant _getRestaurantById(Long id);
 
 	//이벤트목록+이벤트생성자목록을 가저온다.

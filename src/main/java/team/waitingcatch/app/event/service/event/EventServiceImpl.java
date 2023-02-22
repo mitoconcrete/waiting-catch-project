@@ -43,8 +43,7 @@ public class EventServiceImpl implements EventService, InternalEventService {
 	@Override
 	public void createSellerEvent(CreateEventServiceRequest createEventServiceRequest) {
 
-		Restaurant restaurant = restaurantRepository.findById(createEventServiceRequest.getRestaurantId())
-			.orElseThrow(() -> new IllegalArgumentException("잘못된 레스토랑 Id 입니다."));
+		Restaurant restaurant = _getRestaurantById(createEventServiceRequest.getRestaurantId());
 		CreateEventRequest createEventRequest = new CreateEventRequest(createEventServiceRequest, restaurant);
 		Event event = new Event(createEventRequest);
 		eventRepository.save(event);
@@ -60,7 +59,7 @@ public class EventServiceImpl implements EventService, InternalEventService {
 	//레스토랑 이벤트를 수정한다.
 	@Override
 	public void updateSellerEvent(UpdateSellerEventServiceRequest updateSellerEventServiceRequest) {
-		Restaurant restaurant = _getRestaurantById(updateSellerEventServiceRequest.getUserId());
+		Restaurant restaurant = _getRestaurantByUserId(updateSellerEventServiceRequest.getUserId());
 		Event event = eventRepository.findByIdAndRestaurantAndIsDeletedFalse(
 				updateSellerEventServiceRequest.getEventId(), restaurant)
 			.orElseThrow(() -> new IllegalArgumentException("매장에 해당 이벤트가 존재하지 않습니다."));
@@ -77,7 +76,7 @@ public class EventServiceImpl implements EventService, InternalEventService {
 	//레스토랑 이벤트를 삭제한다.
 	@Override
 	public void deleteSellerEvent(DeleteEventServiceRequest deleteEventServiceRequest) {
-		Restaurant restaurant = _getRestaurantById(deleteEventServiceRequest.getUserId());
+		Restaurant restaurant = _getRestaurantByUserId(deleteEventServiceRequest.getUserId());
 		Event event = eventRepository.findByIdAndRestaurantAndIsDeletedFalse(
 				deleteEventServiceRequest.getEventId(), restaurant)
 			.orElseThrow(() -> new IllegalArgumentException("매장에 해당 이벤트가 존재하지 않습니다."));
@@ -115,11 +114,16 @@ public class EventServiceImpl implements EventService, InternalEventService {
 	}
 
 	@Override
+	public Restaurant _getRestaurantByUserId(Long id) {
+		return restaurantRepository.findByUserId(id)
+			.orElseThrow(() -> new IllegalArgumentException("레스토랑을 찾을수 없습니다."));
+	}
+
+	@Override
 	@Transactional(readOnly = true)
 	public Restaurant _getRestaurantById(Long id) {
-		Restaurant restaurant = restaurantRepository.findByUserId(id)
+		return restaurantRepository.findById(id)
 			.orElseThrow(() -> new IllegalArgumentException("레스토랑을 찾을수 없습니다."));
-		return restaurant;
 	}
 
 	//이벤트 목록 + 쿠폰생성자를 DTO형태로 리턴
