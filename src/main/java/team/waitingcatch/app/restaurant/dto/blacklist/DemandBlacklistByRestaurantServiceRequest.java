@@ -8,7 +8,7 @@ public class DemandBlacklistByRestaurantServiceRequest {
 	private final Long userId;
 	private final String description;
 
-	public DemandBlacklistByRestaurantServiceRequest(Long sellerId, Long userId, String description) {
+	public DemandBlacklistByRestaurantServiceRequest(Long sellerId, Long userId,String description) {
 		this.sellerId = sellerId;
 		this.userId = userId;
 		this.description = description;

@@ -14,6 +14,7 @@ import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 
 import lombok.RequiredArgsConstructor;
+import team.waitingcatch.app.common.util.image.ImageUploader;
 
 // @Service
 @RequiredArgsConstructor

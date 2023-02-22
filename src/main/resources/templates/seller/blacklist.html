@@ -6,18 +6,18 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
 </head>
 <body>
-<div id="blacklistList"></div>
+<div id="blacklistDemandList"></div>
 </body>
 <script>
     $(document).ready(function () {
         $.ajax({
-            url: '/seller/lineup',
-            method: 'GET',
+            url: '/blacklist-demands',
+            type: 'GET',
             headers: {
                 'Authorization': localStorage.getItem('accessToken')
             }
         }).done(function (result) {
-            $('#lineupList').replaceWith(result);
+            $('#blacklistDemandList').replaceWith(result);
         })
     });
 </script>
