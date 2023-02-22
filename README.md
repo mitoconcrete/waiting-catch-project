@@ -174,4 +174,6 @@ API에 대한 상세하게 설명해두었으며 기술적인 문제에 부딪�
 
 ##  :rocket: API 명세서
 
-[API 명세서](https://docs.google.com/spreadsheets/d/1Hhjp6eKlJxv6ZLsFz1xe50t-xMe478o5_Je7RIvn1YA/edit#gid=1180646390)
+[고객 API 명세서](https://docs.google.com/spreadsheets/d/1Hhjp6eKlJxv6ZLsFz1xe50t-xMe478o5_Je7RIvn1YA/edit#gid=0) : 고객에 관한 API<br>
+[판매자 API 명세서](https://docs.google.com/spreadsheets/d/1Hhjp6eKlJxv6ZLsFz1xe50t-xMe478o5_Je7RIvn1YA/edit#gid=787721886) : 판매자에 관한 API<br>
+[관리자 API 명세서](https://docs.google.com/spreadsheets/d/1Hhjp6eKlJxv6ZLsFz1xe50t-xMe478o5_Je7RIvn1YA/edit#gid=1180646390) : 관리자에 관한 API<br>
