@@ -167,7 +167,7 @@ public class CouponController {
 	/*  유저 쿠폰  */
 
 	//유저 쿠폰 생성
-	@PostMapping("/restaurants/{restaurantId}/events/{eventId}/creators/{creatorId}")
+	@PostMapping("/coupons/creators/{creatorId}")
 	@ResponseStatus(value = HttpStatus.CREATED)
 	public void createUserCoupon(@Validated @PathVariable Long creatorId,
 		@AuthenticationPrincipal UserDetailsImpl userDetails) {
