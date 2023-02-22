@@ -1,5 +1,6 @@
 let targetId;
-let host = 'http://' + window.location.host;
+
+// let host = 'http://' + window.location.host;
 
 function getBlacklistRequest(responseDto) {
     return `<tr>
@@ -36,7 +37,7 @@ function approveBlacklistRequest(blacklistRequestId) {
     if (auth !== '') {
         $.ajax({
             type: 'POST',
-            url: `/api/admin/restaurants/blacklist-request/` + blacklistRequestId,
+            url: `/api/admin/restaurants/blacklist-demands/` + blacklistRequestId,
             data: {},
             success: function (response, status) {
                 alert("승인 완료")
@@ -44,6 +45,7 @@ function approveBlacklistRequest(blacklistRequestId) {
             },
             error(error, response) {
                 console.error(error);
+                // window.location.href = host + "/admin/templates/login"
                 window.location.reload();
             }
         });
@@ -56,7 +58,7 @@ function rejectBlacklistRequest(blacklistRequestId) {
     if (auth !== '') {
         $.ajax({
             type: 'PUT',
-            url: `/api/admin/restaurants/blacklist-request/` + blacklistRequestId,
+            url: `/api/admin/restaurants/blacklist-demand/` + blacklistRequestId,
             data: {},
             success: function (response, status) {
                 if (status === 'success') {
@@ -78,37 +80,39 @@ $(document).ready(function () {
     if (auth !== '') {
         $.ajax({
             type: 'GET',
-            url: `/api/admin/restaurants/blacklist-request`,
+            url: `/api/admin/restaurants/blacklist-demands`,
             beforeSend: function (xhr) {
                 xhr.setRequestHeader("Authorization", auth);
             },
             success: function (response, status) {
-                console.log(response)
+                let responseData = response.data;
+                console.log(responseData)
                 if (status === 'success') {
-                    for (let i = 0; i < response.length; i++) {
-                        let responseDto = response[i];
+                    for (let i = 0; i < responseData.length; i++) {
+                        let responseDto = responseData[i];
                         let tempHtml = getBlacklistRequest(responseDto);
-                        $('#blacklistRequest').append(tempHtml);
+                        $('#blacklistDemand').append(tempHtml);
                     }
                 }
             },
             error(error, response) {
                 console.error(error);
-                window.location.href = host + "/admin/login-page";
+                // window.location.href = host + "/admin/templates/login";
             }
         });
 
         $.ajax({
             type: 'GET',
-            url: `/api/admin/blacklist`,
+            url: `/api/admin/blacklists`,
             beforeSend: function (xhr) {
                 xhr.setRequestHeader("Authorization", auth);
             },
             success: function (response, status) {
-                console.log(response)
+                let responseData = response.data;
+                console.log(responseData)
                 if (status === 'success') {
-                    for (let i = 0; i < response.length; i++) {
-                        let responseDto = response[i];
+                    for (let i = 0; i < responseData.length; i++) {
+                        let responseDto = responseData[i];
                         let tempHtml = getBlacklist(responseDto);
                         $('#blacklist').append(tempHtml);
                     }
@@ -116,7 +120,7 @@ $(document).ready(function () {
             },
             error(error, response) {
                 console.error(error);
-                window.location.href = host + "/admin/login-page";
+                // window.location.href = host + "/admin/templates/login";
             }
         })
     }
