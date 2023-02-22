@@ -70,7 +70,7 @@ public class RestaurantController {
 	@PutMapping("/restaurant/info")
 	public void updateRestaurant(
 		@RequestPart("updateRestaurantRequest") UpdateRestaurantControllerRequest updateRestaurantControllerRequest,
-		@RequestPart("images") List<MultipartFile> multipartFile,
+		@RequestPart(value = "images", required = false) List<MultipartFile> multipartFile,
 		@AuthenticationPrincipal UserDetailsImpl userDetails) throws IOException {
 		UpdateRestaurantServiceRequest updateRestaurantServiceRequest =
 			new UpdateRestaurantServiceRequest(updateRestaurantControllerRequest, multipartFile,

@@ -2,10 +2,12 @@ package team.waitingcatch.app.restaurant.dto.restaurant;
 
 import lombok.Getter;
 import team.waitingcatch.app.restaurant.entity.Restaurant;
+import team.waitingcatch.app.user.entitiy.User;
 
 @Getter
 public class RestaurantResponse {
-	private final String username;
+	private final Long id;
+	private final String name;
 	private final String email;
 	private final String phoneNumber;
 	private final String restaurantName;
@@ -15,10 +17,19 @@ public class RestaurantResponse {
 	private final String city;
 	private final String street;
 	private final String searchKeywords;
-	private Long category;
+	private final String category;
+
+	private final String images;
+	private final String description;
+	private final int capacity;
+	private final String businessNo;
+
+	private final User user;
+	private final boolean isDeleted;
 
 	public RestaurantResponse(Restaurant restaurant) {
-		this.username = restaurant.getUser().getUsername();
+		this.id = restaurant.getId();
+		this.name = restaurant.getUser().getUsername();
 		this.email = restaurant.getUser().getEmail();
 		this.phoneNumber = restaurant.getPhoneNumber();
 		this.restaurantName = restaurant.getName();
@@ -28,5 +39,12 @@ public class RestaurantResponse {
 		this.city = restaurant.getCity();
 		this.street = restaurant.getStreet();
 		this.searchKeywords = restaurant.getSearchKeywords();
+		this.category = restaurant.getCategory();
+		this.images = restaurant.getImages();
+		this.description = restaurant.getDescription();
+		this.capacity = restaurant.getCapacity();
+		this.businessNo = restaurant.getBusinessLicenseNo();
+		this.user = restaurant.getUser();
+		this.isDeleted = restaurant.isDeleted();
 	}
 }
