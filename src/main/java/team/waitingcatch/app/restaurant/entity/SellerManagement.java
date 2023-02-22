@@ -22,35 +22,45 @@ import team.waitingcatch.app.restaurant.enums.AcceptedStatusEnum;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class SellerManagement extends TimeStamped {
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "seller_management_id")
 	private Long id;
+
 	@Column(nullable = false)
 	private String username;
+
 	@Column(nullable = false)
 	private String name;
+
 	@Column(nullable = false)
 	private String email;
+
 	@Column(name = "phone_number", nullable = false)
 	private String phoneNumber;
+
 	@Column(name = "restaurant_name", nullable = false)
 	private String restaurantName;
+
 	@Embedded
 	private Address address;
+
 	@Embedded
 	private Position position;
+
 	@Column(nullable = false)
 	private String description;
 
 	@Column(nullable = false)
 	@Enumerated(value = EnumType.STRING)
 	private AcceptedStatusEnum status;
+
 	@Column(nullable = false)
 	private String categories;
+
 	@Column(name = "search_keywords", nullable = false)
 	private String searchKeyWords;
+
 	@Column(name = "business_license_no", nullable = false)
 	private String businessLicenseNo;
 
@@ -70,21 +80,21 @@ public class SellerManagement extends TimeStamped {
 	}
 
 	public void approveUpdateStatus() {
-		this.status = AcceptedStatusEnum.APPROVAL;
+		this.status = AcceptedStatusEnum.APPROVE;
 	}
 
 	public void rejectUpdateStatus() {
-		this.status = AcceptedStatusEnum.REJECTION;
+		this.status = AcceptedStatusEnum.REJECT;
 	}
 
 	public void checkReject() {
-		if (this.status == AcceptedStatusEnum.REJECTION) {
+		if (this.status == AcceptedStatusEnum.REJECT) {
 			throw new IllegalArgumentException("This request already reject please request seller again");
 		}
 	}
 
 	public void checkApprove() {
-		if (this.status == AcceptedStatusEnum.APPROVAL) {
+		if (this.status == AcceptedStatusEnum.APPROVE) {
 			throw new IllegalArgumentException("This request already Approve please request seller again");
 		}
 	}

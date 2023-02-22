@@ -26,6 +26,7 @@ import team.waitingcatch.app.event.dto.event.CreateEventControllerRequest;
 import team.waitingcatch.app.event.dto.event.CreateEventServiceRequest;
 import team.waitingcatch.app.event.dto.event.DeleteEventControllerRequest;
 import team.waitingcatch.app.event.dto.event.DeleteEventServiceRequest;
+import team.waitingcatch.app.event.dto.event.GetCouponCreatorResponse;
 import team.waitingcatch.app.event.dto.event.GetEventsResponse;
 import team.waitingcatch.app.event.dto.event.UpdateEventControllerRequest;
 import team.waitingcatch.app.event.dto.event.UpdateEventServiceRequest;
@@ -53,6 +54,12 @@ public class CouponController {
 	@ResponseStatus(value = HttpStatus.CREATED)
 	public void createAdminEvent(@Validated @RequestBody CreateEventControllerRequest createEventControllerRequest) {
 		eventService.createAdminEvent(createEventControllerRequest);
+	}
+
+	// 광역 이벤트 목록을 조회한다.
+	@GetMapping("/admin/events")
+	public List<GetEventsResponse> getAdminEvents() {
+		return eventService.getGlobalEvents();
 	}
 
 	//광역 이벤트를 수정한다.
@@ -140,6 +147,12 @@ public class CouponController {
 			createCouponCreatorControllerRequest, eventId, userDetails.getId());
 
 		couponCreatorService.createSellerCouponCreator(createSellerCouponCreatorServiceRequest);
+	}
+
+	// 광역 이벤트 쿠폰 생성자 조회
+	@GetMapping("/admin/events/{eventId}/creator")
+	public List<GetCouponCreatorResponse> getAdminCouponCreator(@PathVariable Long eventId) {
+		return couponCreatorService.getAdminCouponCreator(eventId);
 	}
 
 	//광역 이벤트 쿠폰 생성자 수정

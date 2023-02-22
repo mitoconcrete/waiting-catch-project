@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.common.util.JwtUtil;
@@ -48,11 +49,12 @@ public class SecurityConfig {
 		// CSRF 설정
 		http.csrf().disable();
 
-		// 프론트엔드 접속 시, CORS 를 허용합니다.
+		//프론트엔드 접속 시, CORS 를 허용합니다.
 		http.cors().configurationSource(request -> {
+
 			var cors = new CorsConfiguration();
 			// CORS 를 허용할 주소를 아래에 리스트 형태로 넣어주세요.
-			cors.setAllowedOrigins(List.of("http://localhost:3000"));
+			cors.setAllowedOrigins(List.of("*"));
 			cors.setAllowedMethods(List.of("*"));
 			cors.setAllowedHeaders(List.of("*"));
 			cors.setAllowCredentials(true);
@@ -78,5 +80,4 @@ public class SecurityConfig {
 
 		return http.build();
 	}
-
 }

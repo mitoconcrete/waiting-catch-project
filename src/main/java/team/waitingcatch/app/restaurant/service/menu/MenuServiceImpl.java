@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
-import team.waitingcatch.app.common.util.ImageUploader;
+import team.waitingcatch.app.common.util.image.ImageUploader;
 import team.waitingcatch.app.restaurant.dto.menu.CreateMenuEntityRequest;
 import team.waitingcatch.app.restaurant.dto.menu.CreateMenuServiceRequest;
 import team.waitingcatch.app.restaurant.dto.menu.CustomerMenuResponse;
@@ -38,7 +38,7 @@ public class MenuServiceImpl implements MenuService, InternalMenuService {
 
 	@Override
 	public void createMenu(CreateMenuServiceRequest serviceRequest) {
-		Restaurant restaurant = restaurantService._getRestaurant(serviceRequest.getRestaurantId());
+		Restaurant restaurant = restaurantService._getById(serviceRequest.getRestaurantId());
 		String name = serviceRequest.getName();
 		int price = serviceRequest.getPrice();
 		String imageUrl = "기본 메뉴 이미지 URL";

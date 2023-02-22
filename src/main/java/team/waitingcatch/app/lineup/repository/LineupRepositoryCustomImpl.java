@@ -49,17 +49,20 @@ public class LineupRepositoryCustomImpl implements LineupRepositoryCustom {
 	public List<TodayLineupResponse> findTodayLineupsBySellerId(Long sellerId) {
 		return queryFactory
 			.select(new QTodayLineupResponse(
+				lineup.id,
 				lineup.waitingNumber,
+				user.name,
 				lineup.numOfMembers,
 				lineup.status,
 				lineup.callCount,
 				lineup.createdDate,
 				lineup.arrivedAt))
 			.from(lineup)
+			.join(lineup.user, user)
 			.where(lineup.restaurant.id.eq(
 				select(restaurant.id)
 					.from(restaurant)
-					.where(user.id.eq(sellerId))
+					.where(restaurant.user.id.eq(sellerId))
 			))
 			.orderBy(lineup.waitingNumber.asc())
 			.fetch();
