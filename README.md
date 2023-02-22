@@ -29,6 +29,7 @@
  - click! :arrow_forward: [WIKI Home](https://github.com/mitoconcrete/waiting-catch-project/wiki)
  - click! :arrow_forward: [박정훈-기술블로그](https://velog.io/@dudaksdk3214)
 - click! :arrow_forward: [김태훈-기술블로그](https://mitoconcrete.github.io)
+- click! :arrow_forward: [한정규-기술블로그](https://jk891113.tistory.com/)
  
 <br>
 
