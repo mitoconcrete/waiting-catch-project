@@ -1,12 +1,5 @@
 package team.waitingcatch.app.restaurant.repository.querydsl;
 
-import static com.querydsl.core.types.dsl.Expressions.asNumber;
-import static com.querydsl.core.types.dsl.MathExpressions.acos;
-import static com.querydsl.core.types.dsl.MathExpressions.cos;
-import static com.querydsl.core.types.dsl.MathExpressions.radians;
-import static com.querydsl.core.types.dsl.MathExpressions.sin;
-import static team.waitingcatch.app.restaurant.entity.QRestaurant.restaurant;
-import static team.waitingcatch.app.restaurant.entity.QRestaurantInfo.restaurantInfo;
 import static com.querydsl.core.types.dsl.Expressions.*;
 import static com.querydsl.core.types.dsl.MathExpressions.*;
 import static team.waitingcatch.app.restaurant.entity.QRestaurant.*;
@@ -30,9 +23,10 @@ public class RestaurantInfoRepositoryCustomImpl implements RestaurantInfoReposit
 	@Override
 	public List<SearchRestaurantJpaResponse> findRestaurantsBySearchKeywordsContaining(String keyword) {
 		return jpaQueryFactory
-			.select(new QSearchRestaurantJpaResponse(restaurant.name, restaurant.images, restaurantInfo.rate,
-				restaurant.searchKeywords, restaurant.position, restaurantInfo.currentWaitingNumber,
-				restaurantInfo.isLineupActive))
+			.select(
+				new QSearchRestaurantJpaResponse(restaurant.id, restaurant.name, restaurant.images, restaurantInfo.rate,
+					restaurant.searchKeywords, restaurant.position, restaurantInfo.currentWaitingNumber,
+					restaurantInfo.isLineupActive))
 			.from(restaurantInfo)
 			.join(restaurantInfo.restaurant, restaurant)
 			.where(restaurant.searchKeywords.contains(keyword)
@@ -49,7 +43,8 @@ public class RestaurantInfoRepositoryCustomImpl implements RestaurantInfoReposit
 		NumberExpression<Double> radiansLot = radians(restaurant.position.longitude);
 
 		return jpaQueryFactory
-			.select(new QRestaurantsWithinRadiusJpaResponse(restaurant.name, restaurant.images, restaurantInfo.rate,
+			.select(new QRestaurantsWithinRadiusJpaResponse(restaurant.id, restaurant.name, restaurant.images,
+				restaurantInfo.rate,
 				restaurant.searchKeywords, restaurant.position, restaurantInfo.currentWaitingNumber,
 				restaurantInfo.isLineupActive))
 			.from(restaurantInfo)
