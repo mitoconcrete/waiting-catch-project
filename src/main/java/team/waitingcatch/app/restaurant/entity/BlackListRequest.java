@@ -53,6 +53,10 @@ public class BlackListRequest extends TimeStamped {
 		this.status = AcceptedStatusEnum.CANCEL;
 	}
 
+	public void updateRejectionStatus() {
+		this.status = AcceptedStatusEnum.REJECTION;
+	}
+
 	public void checkWaitingStatus() {
 		if (this.status == AcceptedStatusEnum.APPROVAL) {
 			throw new IllegalArgumentException("Already approve the black list request");

@@ -13,12 +13,12 @@
     <link type="text/css" th:href="@{/css/admin-style.css}" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
 
-    <script type="text/javascript" th:src="@{/js/admin.js}"></script>
+    <script type="text/javascript" th:src="@{/js/admin/basic.js}"></script>
     <title>WAITING CATCH 관리자</title>
 </head>
 <body>
 <header>
-    <a href="/admin/templates/main">
+    <a href="/admin/main">
         <div>WAITING CATCH</div>
     </a>
     <nav>
@@ -30,15 +30,17 @@
 </header>
 <nav class="menus">
     <ul>
-        <a href="/admin/templates/seller-management">판매자요청</a>
-        <a href="/admin/templates/customers">유저 목록</a>
-        <a href="/admin/templates/restaurants">레스토랑 목록</a>
-        <a href="/admin/templates/event">이벤트</a>
-        <a href="/admin/templates/blacklist">블랙리스트</a>
-        <a href="/admin/templates/review">리뷰 검열</a>
-        <a href="/admin/templates/category">카테고리</a>
+        <a href="/admin/seller-management">판매자요청</a>
+        <a href="/admin/user-list">유저 목록</a>
+        <a href="/admin/restaurant-list">레스토랑 목록</a>
+        <a href="/admin/event">이벤트</a>
+        <a href="/admin/blacklist">블랙리스트</a>
+        <a href="/admin/review">리뷰 검열</a>
+        <a href="/admin/category">카테고리</a>
     </ul>
 </nav>
-DashBoard
+<div class="body">
+    <h1 style="color: #8B60C7">DashBoard</h1>
+</div>
 </body>
 </html>

@@ -13,34 +13,65 @@
     <link type="text/css" th:href="@{/css/admin-style.css}" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
 
-    <script type="text/javascript" th:src="@{/js/admin.js}"></script>
+    <script type="text/javascript" th:src="@{/js/admin/basic.js}"></script>
+    <script type="text/javascript" th:src="@{/js/admin/blacklist.js}"></script>
     <title>WAITING CATCH 관리자</title>
 </head>
 <body>
 <header>
-    <a href="/admin/templates/main">
+    <a href="/admin/main">
         <div>WAITING CATCH</div>
     </a>
     <nav>
         <ul>
             <a href="/">관리자 님</a>
-            <a href="#" onclick="sendTokenDelete();">Logout</a>
+            <a href="/">Logout</a>
         </ul>
     </nav>
 </header>
 <nav class="menus">
     <ul>
-        <a href="/admin/templates/seller-management">판매자요청</a>
-        <a href="/admin/templates/customers">유저 목록</a>
-        <a href="/admin/templates/restaurants">레스토랑 목록</a>
-        <a href="/admin/templates/event">이벤트</a>
-        <a href="/admin/templates/blacklist" style="color: #8B60C7">블랙리스트</a>
-        <a href="/admin/templates/review">리뷰 검열</a>
-        <a href="/admin/templates/category">카테고리</a>
+        <a href="/admin/seller-management">판매자요청</a>
+        <a href="/admin/user-list">유저 목록</a>
+        <a href="/admin/restaurant-list">레스토랑 목록</a>
+        <a href="/admin/event">이벤트</a>
+        <a href="/admin/blacklist" style="color: #8B60C7">블랙리스트</a>
+        <a href="/admin/review">리뷰 검열</a>
+        <a href="/admin/category">카테고리</a>
     </ul>
 </nav>
-블랙리스트 페이지
+<div class="body">
+    <h1 style="color: #8B60C7">블랙리스트 요청</h1>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th scope="col">No</th>
+            <th scope="col">신청인</th>
+            <th scope="col">피신청인</th>
+            <th scope="col">내용</th>
+            <th scope="col"></th>
+        </tr>
+        </thead>
+        <tbody id="blacklistRequest">
 
+        </tbody>
+    </table>
+    <br>
+    <h1 style="color: #8B60C7">블랙리스트</h1>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th scope="col">No</th>
+            <th scope="col">레스토랑</th>
+            <th scope="col">블랙리스트</th>
+            <th scope="col"></th>
+        </tr>
+        </thead>
+        <tbody id="blacklist">
+
+        </tbody>
+    </table>
+</div>
 
 </body>
 </html>

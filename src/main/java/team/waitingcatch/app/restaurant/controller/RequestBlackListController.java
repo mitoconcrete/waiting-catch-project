@@ -57,11 +57,16 @@ public class RequestBlackListController {
 	}
 
 	//블랙리스트요청 수락
-	@PostMapping("/admin/restaurants/blacklist-request/{blacklistrequestId}")
-	public void approveBlackListRequest(@PathVariable Long blacklistrequestId) {
+	@PostMapping("/admin/restaurants/blacklist-request/{blacklistRequestId}")
+	public void approveBlackListRequest(@PathVariable Long blacklistRequestId) {
 		ApproveBlackListServiceRequest approveBlackListServiceRequest = new ApproveBlackListServiceRequest(
-			blacklistrequestId);
+			blacklistRequestId);
 		blackListRequestService.approveBlackListRequest(approveBlackListServiceRequest);
+	}
+
+	@PutMapping("/admin/restaurants/blacklist-request/{blacklistRequestId}")
+	public void rejectBlacklistRequest(@PathVariable Long blacklistRequestId) {
+		blackListRequestService.rejectBlacklistRequest(blacklistRequestId);
 	}
 
 }

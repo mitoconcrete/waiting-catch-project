@@ -1,5 +1,8 @@
 package team.waitingcatch.app.event.service.couponcreator;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -10,6 +13,7 @@ import team.waitingcatch.app.event.dto.couponcreator.CreateSellerCouponCreatorRe
 import team.waitingcatch.app.event.dto.couponcreator.CreateSellerCouponCreatorServiceRequest;
 import team.waitingcatch.app.event.dto.couponcreator.UpdateAdminCouponCreatorServiceRequest;
 import team.waitingcatch.app.event.dto.couponcreator.UpdateSellerCouponCreatorServiceRequest;
+import team.waitingcatch.app.event.dto.event.GetCouponCreatorResponse;
 import team.waitingcatch.app.event.entity.CouponCreator;
 import team.waitingcatch.app.event.entity.Event;
 import team.waitingcatch.app.event.repository.CouponCreatorRepository;
@@ -35,6 +39,14 @@ public class CouponCreatorServiceImpl implements CouponCreatorService, InternalC
 			createAdminCouponCreatorServiceRequest, events);
 		CouponCreator couponCreator = new CouponCreator(createAdminCouponCreatorRequest);
 		couponCreatorRepository.save(couponCreator);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public List<GetCouponCreatorResponse> getAdminCouponCreator(Long eventId) {
+		return couponCreatorRepository.findAllByEventId(eventId).stream()
+			.map(GetCouponCreatorResponse::new)
+			.collect(Collectors.toList());
 	}
 
 	//레스토랑 이벤트 쿠폰생성자를 생성한다

@@ -68,4 +68,12 @@ public class BlackListServiceImpl implements BlackListService, InternalBlackList
 			restaurant);
 		return blackList.stream().map(GetBlackListResponse::new).collect(Collectors.toList());
 	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public List<GetBlackListResponse> getBlacklist() {
+		return blackListRepository.findAllByIsDeletedFalse().stream()
+			.map(GetBlackListResponse::new)
+			.collect(Collectors.toList());
+	}
 }

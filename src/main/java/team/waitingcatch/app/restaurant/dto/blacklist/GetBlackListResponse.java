@@ -1,23 +1,24 @@
 package team.waitingcatch.app.restaurant.dto.blacklist;
 
+import javax.validation.constraints.NotNull;
+
 import lombok.Getter;
 import team.waitingcatch.app.restaurant.entity.BlackList;
 
 @Getter
 public class GetBlackListResponse {
-	private final Long Id;
-	private final Long userId;
-
-	private final String userName;
-	private final String name;
-
-	private final boolean isDeleted;
+	private final Long blacklistId;
+	@NotNull
+	private final Long customerId;
+	private final Long restaurantId;
+	private final String customerName;
+	private final String restaurantName;
 
 	public GetBlackListResponse(BlackList blackList) {
-		this.Id = blackList.getId();
-		this.userId = blackList.getUser().getId();
-		this.userName = blackList.getUser().getUsername();
-		this.name = blackList.getUser().getName();
-		this.isDeleted = blackList.isDeleted();
+		this.blacklistId = blackList.getId();
+		this.customerId = blackList.getUser().getId();
+		this.restaurantId = blackList.getRestaurant().getId();
+		this.customerName = blackList.getUser().getUsername();
+		this.restaurantName = blackList.getRestaurant().getName();
 	}
 }
