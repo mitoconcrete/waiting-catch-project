@@ -1,7 +1,7 @@
-let host = "http://" + window.location.host;
+// let host = "http://" + window.location.host;
 
 function sendTokenDelete() {
-    fetch("/admin/signout", {
+    fetch("/api/admin/signout", {
         method: 'get',
         headers: {
             'content-type': 'application/json',

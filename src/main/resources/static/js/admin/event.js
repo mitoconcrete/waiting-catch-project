@@ -1,27 +1,27 @@
-let host = 'http://' + window.location.host;
+// let host = 'http://' + window.location.host;
 
 function getEvents(responseDto) {
     return `<tr>
-                <th scope="row">${responseDto.id}</th>
+                <th scope="row">${responseDto.eventId}</th>
                 <td>${responseDto.name}</td>
                 <td id="startDate">${responseDto.eventStartDate}</td>
                 <td id="endDate">${responseDto.eventEndDate}</td>
                 <td class="blacklist-request-btn">
                     <div class="eventBtn">
-                        <input onclick="openUpdateEvent('${responseDto.id}', '${responseDto.name}', 
+                        <input onclick="openUpdateEvent('${responseDto.eventId}', '${responseDto.name}', 
                         '${responseDto.eventStartDate}', '${responseDto.eventEndDate}')" type="button" class="btn" value="수정">
-                        <input onclick="deleteEvents(${responseDto.id})" type="button" class="btn" value="삭제">
+                        <input onclick="deleteEvents(${responseDto.eventId})" type="button" class="btn" value="삭제">
                     </div>
                 </td>
-                <td><input onclick="openCouponBox(${responseDto.id})" type="button" class="btn" value="쿠폰"></td>
+                <td><input onclick="openCouponBox(${responseDto.eventId})" type="button" class="btn" value="쿠폰"></td>
             </tr>`
 }
 
-function openUpdateEvent(id, name, eventStartDate, eventEndDate) {
+function openUpdateEvent(eventId, name, eventStartDate, eventEndDate) {
     $('.updateEvent').empty();
     $('.createEvent').hide();
 
-    let tempHtml = getUpdateEventBox(id, name, eventStartDate, eventEndDate);
+    let tempHtml = getUpdateEventBox(eventId, name, eventStartDate, eventEndDate);
     $('.updateEvent').append(tempHtml);
     $('.updateEvent').show();
 }
@@ -31,7 +31,7 @@ function closeUpdateEvent() {
     $('.createEvent').show();
 }
 
-function getUpdateEventBox(id, name, eventStartDate, eventEndDate) {
+function getUpdateEventBox(eventId, name, eventStartDate, eventEndDate) {
     return `<div>
               <label>Event Name</label>
               <input type="text" id="updateEventName" placeholder="Event Name" value="${name}">
@@ -45,17 +45,17 @@ function getUpdateEventBox(id, name, eventStartDate, eventEndDate) {
               <input type="datetime-local" id="updateEventEndDate" value="${eventEndDate}">
             </div>
             <div class="long-btn-group">
-            <button type="button" class="btn long-btn" onclick="updateEvents(${id})">수정</button>
+            <button type="button" class="btn long-btn" onclick="updateEvents(${eventId})">수정</button>
             <button type="button" class="btn long-btn" onclick="closeUpdateEvent()">닫기</button>
             </div>`
 }
 
-function openCouponBox(id) {
+function openCouponBox(eventId) {
     $('.coupon').empty();
     $('#couponCreatorTable').empty()
-    let tempHtml = getCouponBox(id);
+    let tempHtml = getCouponBox(eventId);
     $('.coupon').append(tempHtml);
-    getCouponCreators(id);
+    getCouponCreators(eventId);
     $('.coupon').show();
     $('.couponCreator').show();
 }
@@ -66,7 +66,7 @@ function closeCouponBox() {
     ;
 }
 
-function getCouponBox(id) {
+function getCouponBox(eventId) {
     return `<div>
               <label>Coupon Name</label>
               <input type="text" id="couponName" placeholder="Coupon Name">
@@ -89,7 +89,7 @@ function getCouponBox(id) {
               <input type="datetime-local" id="expireDate" placeholder="만료일">
             </div>
             <div class="long-btn-group">
-            <button type="button" class="btn long-btn" onclick="createCouponCreator(${id})">생성</button>
+            <button type="button" class="btn long-btn" onclick="createCouponCreator(${eventId})">생성</button>
             <button type="button" class="btn long-btn" onclick="closeCouponBox()">닫기</button>
             </div>`
 }
@@ -275,7 +275,7 @@ $(document).ready(function () {
             },
             error(error, response) {
                 console.error(error);
-                // window.location.href = host + "/admin/login-page";
+                window.location.href = host + "/admin/templates/login";
             }
         });
     }
@@ -307,20 +307,19 @@ function createEvents() {
             },
             error(error, response) {
                 console.error(error);
-                // window.location.href = host + "/admin/login-page";
             }
         })
     }
 }
 
-function updateEvents(id) {
+function updateEvents(eventId) {
     const auth = getToken();
 
     let name = $('#updateEventName').val();
     let eventStartDate = $('#updateEventStartDate').val();
     let eventEndDate = $('#updateEventEndDate').val();
 
-    console.log(id);
+    console.log(eventId);
     console.log(name);
     console.log(eventStartDate);
     console.log(eventEndDate);
@@ -328,7 +327,7 @@ function updateEvents(id) {
     if (auth !== '') {
         $.ajax({
             type: 'PUT',
-            url: `/api/admin/events/` + id,
+            url: `/api/admin/events/` + eventId,
             contentType: "application/json",
             data: JSON.stringify({
                 name: name,

@@ -35,4 +35,9 @@ public class BlacklistApiController {
 		var serviceRequest = new GetBlacklistByRestaurantIdServiceRequest(restaurantId);
 		return new GenericResponse<>(blacklistService.getBlackListByRestaurantId(serviceRequest));
 	}
+
+	@GetMapping("/admin/blacklists")
+	public GenericResponse<GetBlacklistResponse> getBlacklist() {
+		return new GenericResponse<>(blacklistService.getBlacklist());
+	}
 }
