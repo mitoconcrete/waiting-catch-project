@@ -13,7 +13,8 @@
     <link type="text/css" th:href="@{/css/admin-style.css}" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
 
-    <!--    <script type="text/javascript" th:src="@{/js/admin.js}"></script>-->
+    <script type="text/javascript" th:src="@{/js/admin/basic.js}"></script>
+    <script type="text/javascript" th:src="@{/js/admin/blacklist.js}"></script>
     <title>WAITING CATCH 관리자</title>
 </head>
 <body>
@@ -51,86 +52,26 @@
             <th scope="col"></th>
         </tr>
         </thead>
-        <tbody>
-        <tr th:each="blacklist, iStat: ${blacklist}">
-            <th scope="row" th:text="${blacklist.blacklistRequestId}"></th>
-            <td th:text="${blacklist.sellerName}"></td>
-            <td th:text="${blacklist.customerName}"></td>
-            <td th:text="${blacklist.description}"></td>
-            <td class="blacklist-request-btn">
-                <form th:action="@{'/admin/restaurants/blacklist-request/' + ${blacklist.blacklistRequestId}}" method="post">
-                    <input type="hidden" name="_method" value="post"/>
-                        <input type="submit" class="btn" value="수락">
-                </form>
-<!--                <form th:action="" method="post">-->
-<!--                    <input type="hidden" name="_method" value="post"/>-->
-<!--                    <input type="submit" class="btn" value="거절">-->
-<!--                </form>-->
+        <tbody id="blacklistRequest">
 
-<!--                <button type="button" class="btn" style="padding: 0 5px 0 5px">거절</button>-->
-            </td>
-        </tr>
         </tbody>
     </table>
     <br>
     <h1 style="color: #8B60C7">블랙리스트</h1>
-<!--    <table class="table table-striped">-->
-<!--        <thead>-->
-<!--        <tr>-->
-<!--            <th scope="col">No</th>-->
-<!--            <th scope="col">신청인</th>-->
-<!--            <th scope="col">피신청인</th>-->
-<!--            <th scope="col">내용</th>-->
-<!--            <th scope="col"></th>-->
-<!--        </tr>-->
-<!--        </thead>-->
-<!--        <tbody>-->
-<!--        <tr th:each="blacklist, iStat: ${blacklist}">-->
-<!--            <th scope="row" th:text="${blacklist.blacklistRequestId}"></th>-->
-<!--            <td th:text="${blacklist.sellerName}"></td>-->
-<!--            <td th:text="${blacklist.customerName}"></td>-->
-<!--            <td th:text="${blacklist.description}"></td>-->
-<!--            <td class="blacklist-request-btn">-->
-<!--                <form th:action="@{'/admin/restaurants/blacklist-request/' + ${blacklist.blacklistRequestId}}" method="post">-->
-<!--                    <input type="hidden" name="_method" value="post"/>-->
-<!--                    <input type="submit" class="btn" value="수락">-->
-<!--                </form>-->
-<!--                <form th:action="" method="post">-->
-<!--                    <input type="hidden" name="_method" value="post"/>-->
-<!--                    <input type="submit" class="btn" value="거절">-->
-<!--                </form>-->
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th scope="col">No</th>
+            <th scope="col">레스토랑</th>
+            <th scope="col">블랙리스트</th>
+            <th scope="col"></th>
+        </tr>
+        </thead>
+        <tbody id="blacklist">
 
-<!--                &lt;!&ndash;                <button type="button" class="btn" style="padding: 0 5px 0 5px">거절</button>&ndash;&gt;-->
-<!--            </td>-->
-<!--        </tr>-->
-<!--        </tbody>-->
-<!--    </table>-->
-<!--    <div class="list-group">-->
-<!--        <a href="#" class="list-group-item list-group-item-action" th:each="blacklist, iStat: ${blacklist}">-->
-<!--            <div class="d-flex w-100 justify-content-between">-->
-<!--                <small class="mb-1">-->
-<!--                    No. <span th:text="${blacklist.blacklistRequestId}"></span>-->
-<!--                </small>-->
-<!--                <div class="blacklist-request-btn">-->
-<!--                    <form>-->
-<!--                        <button type="button" class="btn">수락</button>-->
-<!--                    </form>-->
-<!--                    <form>-->
-<!--                        <button type="button" class="btn">거절</button>-->
-<!--                    </form>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--            <ul>-->
-<!--                신청인 : <span th:text="${blacklist.sellerName}"></span>-->
-<!--            </ul>-->
-<!--            <ul>-->
-<!--                피신청인 : <span th:text="${blacklist.customerName}"></span>-->
-<!--            </ul>-->
-<!--            <ul class="mb-1">-->
-<!--                내용 : <span th:text="${blacklist.description}"></span>-->
-<!--            </ul>-->
-<!--        </a>-->
-    </div>
+        </tbody>
+    </table>
 </div>
+
 </body>
 </html>
