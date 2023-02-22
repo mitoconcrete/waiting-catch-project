@@ -13,8 +13,10 @@
 <br>
 
 ##  :rocket: 전체 프로젝트의 구조
+<br>
 
-![image](https://user-images.githubusercontent.com/58355531/109328559-e8bf1400-789c-11eb-8a47-5db63e8d2c3d.png)
+![Project Structure](https://user-images.githubusercontent.com/83831110/220520960-4fe34da8-7729-405b-82de-e5594dbfc467.png)
+
 
 <br>
 <br>
