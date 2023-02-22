@@ -1,5 +1,7 @@
 package team.waitingcatch.app.restaurant.controller;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -17,6 +19,7 @@ import team.waitingcatch.app.restaurant.dto.blacklist.ApproveBlacklistDemandServ
 import team.waitingcatch.app.restaurant.dto.blacklist.BlacklistDemandControllerRequest;
 import team.waitingcatch.app.restaurant.dto.blacklist.CancelBlacklistDemandServiceRequest;
 import team.waitingcatch.app.restaurant.dto.blacklist.CreateBlacklistDemandServiceRequest;
+import team.waitingcatch.app.restaurant.dto.blacklist.GetBlackListDemandByRestaurantServiceRequest;
 import team.waitingcatch.app.restaurant.dto.blacklist.GetBlacklistDemandResponse;
 import team.waitingcatch.app.restaurant.service.requestblacklist.BlacklistDemandService;
 import team.waitingcatch.app.user.entitiy.UserDetailsImpl;
@@ -57,8 +60,17 @@ public class BlacklistDemandApiController {
 		blacklistDemandService.approveBlacklistDemand(serviceRequest);
 	}
 
+<<<<<<< Updated upstream
 	@PutMapping("/admin/restaurants/blacklist-demand/{blacklistDemandId}")
 	public void rejectBlacklistDemand(@PathVariable Long blacklistDemandId) {
 		blacklistDemandService.rejectBlacklistDemand(blacklistDemandId);
+=======
+	@GetMapping("/seller/restaurant/blacklist-demands")
+	public List<GetBlacklistDemandResponse> getBlackListDemandByRestaurant(
+		@AuthenticationPrincipal UserDetailsImpl userDetails) {
+		GetBlackListDemandByRestaurantServiceRequest getBlackListDemandByRestaurantControllerRequest = new
+			GetBlackListDemandByRestaurantServiceRequest(userDetails.getId());
+		return blacklistDemandService.getBlackListDemandsByRestaurant(getBlackListDemandByRestaurantControllerRequest);
+>>>>>>> Stashed changes
 	}
 }

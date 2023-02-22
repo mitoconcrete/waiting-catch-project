@@ -25,4 +25,6 @@ public interface BlacklistDemandRepository extends JpaRepository<BlacklistDemand
 
 	@Query(value = "select bd from BlacklistDemand bd where bd.status = :status")
 	List<BlacklistDemand> findAllByStatus(@Param("status") AcceptedStatusEnum status);
+
+	List<BlacklistDemand> findAllByRestaurant_Id(Long restaurantId);
 }

@@ -6,4 +6,5 @@ import team.waitingcatch.app.restaurant.entity.SellerManagement;
 
 public interface SellerManagementRepository extends JpaRepository<SellerManagement, Long> {
 
+	SellerManagement findTopByUsernameAndEmailOrderByCreatedDateDesc(String requestSellerName, String email);
 }
