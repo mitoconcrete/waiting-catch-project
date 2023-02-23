@@ -76,7 +76,6 @@ public class SmsService {
 	}
 
 	private String makeSignature(Long time) throws
-		UnsupportedEncodingException,
 		NoSuchAlgorithmException,
 		InvalidKeyException {
 		String space = " ";
