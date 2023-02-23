@@ -42,8 +42,9 @@ public class LineupServiceImpl implements LineupService, InternalLineupService {
 	private final LineupRepository lineupRepository;
 
 	private final InternalRestaurantService internalRestaurantService;
-	private final InternalBlacklistService internalBlacklistService;
 	private final InternalLineupHistoryService internalLineupHistoryService;
+	private final InternalWaitingNumberService internalWaitingNumberService;
+	private final InternalBlacklistService internalBlacklistService;
 
 	private final DistanceCalculator distanceCalculator;
 	private final SmsService smsService;
@@ -65,10 +66,11 @@ public class LineupServiceImpl implements LineupService, InternalLineupService {
 		Long restaurantId = serviceRequest.getRestaurantId();
 		RestaurantInfo restaurantInfo = internalRestaurantService._getRestaurantInfoByRestaurantId(restaurantId);
 		Restaurant restaurant = internalRestaurantService._getRestaurantById(restaurantId);
-		if (!restaurantInfo.isLineupActive()) {
-			throw new IllegalArgumentException("줄서기가 마감되었습니다.");
-		}
 
+		// if (!restaurantInfo.isLineupActive()) {
+		// 	throw new IllegalArgumentException("줄서기가 마감되었습니다.");
+		// }
+		//
 		boolean isBlacklist = internalBlacklistService._existsByRestaurantIdAndUserId(restaurantId,
 			serviceRequest.getUser().getId());
 
@@ -86,14 +88,18 @@ public class LineupServiceImpl implements LineupService, InternalLineupService {
 			throw new IllegalArgumentException("2km 이내의 레스토랑에만 줄서기가 가능합니다");
 		}
 
-		List<Lineup> lineupList = lineupRepository.findByRestaurantId(restaurantId);
-		int waitingNumber = 1;
-		if (lineupList.size() > 1) {
-			waitingNumber = generateWaitingNumber(lineupList.stream()
-				.max(Comparator.comparing(Lineup::getWaitingNumber))
-				.get()
-				.getWaitingNumber());
-		}
+		// List<Lineup> lineupList = lineupRepository.findByRestaurantId(restaurantId);
+		// int waitingNumber = 1;
+		// if (lineupList.size() > 1) {
+		// 	waitingNumber = generateWaitingNumber(lineupList.stream()
+		// 		.max(Comparator.comparing(Lineup::getWaitingNumber))
+		// 		.get()
+		// 		.getWaitingNumber());
+		// }
+		//
+		// Integer lastWaitingNumber = lineupRepository.findLastWaitingNumberByRestaurantId(restaurantId);
+		// int waitingNumber = generateWaitingNumber(lastWaitingNumber);
+		int waitingNumber = internalWaitingNumberService.getNextWaitingNumber(restaurantId);
 
 		StartLineupEntityRequest entityRequest = new StartLineupEntityRequest(serviceRequest, restaurant,
 			waitingNumber);
