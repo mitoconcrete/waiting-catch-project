@@ -171,7 +171,7 @@
 
 ## DB ERD<br>
 
-![DB ERD](https://user-images.githubusercontent.com/117354616/220737761-ce53a4e5-ee77-414d-a026-8e9040be429c.png)
+![DB ERD](https://user-images.githubusercontent.com/117354616/220816951-9e672f4a-4727-4449-88cb-fb5577000f07.png)
 
 <br>
 <br>
