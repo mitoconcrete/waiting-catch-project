@@ -1,40 +1,62 @@
 <!DOCTYPE html>
-<html>
-<meta charset="UTF-8">
-<title>Register</title>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+            crossorigin="anonymous"></script>
+    <link type="text/css" th:href="@{/css/admin-style.css}" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
+    <script type="text/javascript" th:src="@{/js/admin/basic.js}"></script>
+    <title>Register</title>
 </head>
 <body>
-<h1>Register Page</h1>
-<form action="/signup" method="post">
-    <label for="username">Username</label>
-    <input type="text" id="username" name="username"><br>
-    <label for="name">name</label>
-    <input type="text" id="name" name="name"><br>
-    <label for="email">Email</label>
-    <input type="email" id="email" name="email"><br>
-    <label for="phoneNumber">phoneNumber</label>
-    <input type="text" id="phoneNumber" name="phoneNumber"><br>
-    <label for="restaurantName">restaurantName</label>
-    <input type="text" id="restaurantName" name="restaurantName"><br>
-    <label for="categories">categories</label>
-    <input type="text" id="categories" name="categories"><br>
-    <label for="description">description</label>
-    <input type="text" id="description" name="description"><br>
-    <label for="businessLicenseNo">businessLicenseNo</label>
-    <input type="text" id="businessLicenseNo" name="businessLicenseNo"><br>
-    <label for="latitude">latitude</label>
-    <input type="text" id="latitude" name="latitude"><br>
-    <label for="longitude">longitude</label>
-    <input type="text" id="longitude" name="longitude"><br>
-    <label for="province">province</label>
-    <input type="text" id="province" name="province"><br>
-    <label for="city">city</label>
-    <input type="text" id="city" name="city"><br>
-    <label for="street">street</label>
-    <input type="text" id="street" name="street"><br>
-    <label for="searchKeyWords">searchKeyWords</label>
-    <input type="text" id="searchKeyWords" name="searchKeyWords"><br>
-    <button type="submit">등록</button>
-</form>
+<div class="body">
+    <header class="register" style="background-color: white">
+        <h1>Register Page</h1>
+    </header>
+    <!--<h1>Register Page</h1>-->
+    <form action="/signup" method="post" class="register-wrap">
+        <!--        <label for="username">Username</label>-->
+        <input type="text" id="username" name="username" class="register-input" placeholder="Username">
+        <!--        <label for="name">name</label>-->
+        <input type="text" id="name" name="name" class="register-input" placeholder="name">
+        <!--        <label for="email">Email</label>-->
+        <input type="email" id="email" name="email" class="register-input" placeholder="Email">
+        <!--        <label for="phoneNumber">phoneNumber</label>-->
+        <input type="text" id="phoneNumber" name="phoneNumber" class="register-input" placeholder="phoneNumber">
+        <!--        <label for="restaurantName">restaurantName</label>-->
+        <input type="text" id="restaurantName" name="restaurantName" class="register-input"
+               placeholder="restaurantName">
+        <!--        <label for="categories">categories</label>-->
+        <input type="text" id="categories" name="categories" class="register-input" placeholder="categories">
+        <!--        <label for="description">description</label>-->
+        <input type="text" id="description" name="description" class="register-input" placeholder="description">
+        <!--        <label for="businessLicenseNo">businessLicenseNo</label>-->
+        <input type="text" id="businessLicenseNo" name="businessLicenseNo" class="register-input"
+               placeholder="businessLicenseNo">
+        <!--        <label for="latitude">latitude</label>-->
+        <input type="text" id="latitude" name="latitude" class="register-input" placeholder="latitude">
+        <!--        <label for="longitude">longitude</label>-->
+        <input type="text" id="longitude" name="longitude" class="register-input" placeholder="longitude">
+        <!--        <label for="province">province</label>-->
+        <input type="text" id="province" name="province" class="register-input" placeholder="province">
+        <!--        <label for="city">city</label>-->
+        <input type="text" id="city" name="city" class="register-input" placeholder="city">
+        <!--        <label for="street">street</label>-->
+        <input type="text" id="street" name="street" class="register-input" placeholder="street">
+        <!--        <label for="searchKeyWords">searchKeyWords</label>-->
+        <input type="text" id="searchKeyWords" name="searchKeyWords" class="register-input"
+               placeholder="searchKeyWords">
+        <button type="submit" class="login-btn">등록</button>
+    </form>
+</div>
 </body>
 </html>

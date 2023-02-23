@@ -147,7 +147,7 @@ header > a > div {
     background-color: #8B60C7;
 
     padding: 0 5px 0 5px;
-    margin: 0 5px 0 5px;
+    margin: 5px 5px 5px 5px;
 }
 
 .createEvent {
@@ -264,4 +264,55 @@ header > a > div {
     flex-direction: row;
     align-items: center;
     justify-content: center;
+}
+
+.menu {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.sellerEvent {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.register-wrap {
+    max-width: 500px;
+    min-width: 400px;
+    width: 25%;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    border: 1px solid dimgray;
+    border-radius: 10px;
+
+    margin: 3px auto 3px auto;
+    padding: 5px 5px 5px 5px;
+}
+
+.register-input {
+    max-width: 450px;
+    width: 90%;
+
+    margin: 5px auto 5px auto;
+    padding: 5px 5px 5px 5px;
+}
+
+.register {
+    margin: 100px auto 10px auto;
+    padding: 10px 10px 10px 10px;
+}
+
+.lineup-main {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
 }
