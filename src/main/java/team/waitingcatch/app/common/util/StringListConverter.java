@@ -1,5 +1,6 @@
 package team.waitingcatch.app.common.util;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -19,6 +20,9 @@ public class StringListConverter implements AttributeConverter<List<String>, Str
 
 	@Override
 	public List<String> convertToEntityAttribute(String dbData) {
+		if (dbData == null) {
+			return new ArrayList<>();
+		}
 		return Arrays.stream(dbData.split(",")).collect(Collectors.toList());
 	}
 }
