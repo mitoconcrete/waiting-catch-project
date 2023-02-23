@@ -6,11 +6,13 @@ import javax.validation.Valid;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.restaurant.dto.blacklist.ApproveBlacklistDemandServiceRequest;
@@ -38,6 +40,7 @@ public class BlacklistDemandController {
 	}
 
 	@DeleteMapping("/blacklist-demands/{blacklistDemandId}")
+	@ResponseBody
 	public void cancelBlacklistDemand(
 		@PathVariable Long blacklistDemandId,
 		@AuthenticationPrincipal UserDetailsImpl userDetails) {
@@ -58,10 +61,18 @@ public class BlacklistDemandController {
 	}
 
 	@GetMapping("/seller/restaurant/blacklist-demands")
-	public List<GetBlacklistDemandResponse> getBlackListDemandByRestaurant(
+	public String getBlackListDemandByRestaurant(
+		Model model,
 		@AuthenticationPrincipal UserDetailsImpl userDetails) {
-		GetBlackListDemandByRestaurantServiceRequest getBlackListDemandByRestaurantControllerRequest = new
-			GetBlackListDemandByRestaurantServiceRequest(userDetails.getId());
-		return blacklistDemandService.getBlackListDemandsByRestaurant(getBlackListDemandByRestaurantControllerRequest);
+
+		var serviceRequest = new GetBlackListDemandByRestaurantServiceRequest(userDetails.getId());
+		model.addAttribute("blacklistDemandList",
+			blacklistDemandService.getBlackListDemandsByRestaurant(serviceRequest));
+		return "seller/blacklist-demand-list";
+	}
+
+	@GetMapping("/seller/restaurant/blacklist-demand-page")
+	public String getBlacklistDemandPage() {
+		return "seller/blacklist-demand";
 	}
 }

@@ -8,7 +8,7 @@ import team.waitingcatch.app.restaurant.enums.AcceptedStatusEnum;
 
 @Getter
 public class GetBlacklistDemandResponse {
-	private final Long blacklistRequestId;
+	private final Long id;
 	private final String customerName;
 	private final String sellerName;
 	private final String description;
@@ -19,7 +19,7 @@ public class GetBlacklistDemandResponse {
 	private final LocalDateTime modifiedDate;
 
 	public GetBlacklistDemandResponse(BlacklistDemand blackListDemand) {
-		this.blacklistRequestId = blackListDemand.getId();
+		this.id = blackListDemand.getId();
 		this.customerName = blackListDemand.getUser().getUsername();
 		this.sellerName = blackListDemand.getRestaurant().getUser().getUsername();
 		this.description = blackListDemand.getDescription();

@@ -22,19 +22,17 @@
     <button type="button">레스토랑 정보 수정</button>
 </a>
 
-<button type="button" onclick="getLineup()">줄서기 관리</button>
+<button type="button" onclick="getLineupList()">줄서기 관리</button>
 
 <button type="button" onclick="openLineup()">줄서기 오픈</button>
 
 <button type="button" onclick="closeLineup()">줄서기 마감</button>
 
-<button type="button" onclick="demandBlackListRequest()">블랙리스트 요청</button>
-
-<button type="button" onclick="cancelBlackListRequest()">블랙리스트 취소</button>
+<button type="button" onclick="createBlacklistDemandList()">블랙리스트 요청 목록</button>
 
 </body>
 <script>
-    function getLineup() {
+    function getLineupList() {
         window.location.href = '/seller/lineup-page';
     }
 
@@ -46,6 +44,7 @@
                 'Authorization': localStorage.getItem('accessToken')
             },
             success: function () {
+                alert("줄서기 오픈 완료");
                 window.location.reload();
             },
             error: function (response) {
@@ -62,6 +61,7 @@
                 'Authorization': localStorage.getItem('accessToken')
             },
             success: function () {
+                alert("줄서기 마감 완료");
                 window.location.reload();
             },
             error: function (response) {
@@ -70,12 +70,8 @@
         })
     }
 
-    function demandBlackListRequest() {
-
-    }
-
-    function cancelBlackListRequest() {
-
+    function createBlacklistDemandList() {
+        window.location.href = '/seller/restaurant/blacklist-demand-page';
     }
 
     function sendTokenLogout() {

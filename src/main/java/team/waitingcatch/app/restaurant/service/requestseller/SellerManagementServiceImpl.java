@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
+import team.waitingcatch.app.lineup.entity.WaitingNumber;
+import team.waitingcatch.app.lineup.repository.WaitingNumberRepository;
 import team.waitingcatch.app.restaurant.dto.requestseller.ApproveSignUpSellerManagementEntityPassToRestaurantEntityRequest;
 import team.waitingcatch.app.restaurant.dto.requestseller.ApproveSignUpSellerResponse;
 import team.waitingcatch.app.restaurant.dto.requestseller.ApproveSignUpSellerServiceRequest;
@@ -37,13 +39,15 @@ import team.waitingcatch.app.user.service.UserService;
 @Transactional
 public class SellerManagementServiceImpl implements SellerManagementService, InternalSellerManagementService {
 	private final SellerManagementRepository sellerManagementRepository;
-	private final InternalUserService internalUserService;
-	private final InternalRestaurantService restaurantService;
-	private final UserService userService;
-	private final JavaMailSender emailSender;
 	private final UserRepository userRepository;
 	private final RestaurantRepository restaurantRepository;
 	private final RestaurantInfoRepository restaurantInfoRepository;
+	private final WaitingNumberRepository waitingNumberRepository;
+
+	private final InternalUserService internalUserService;
+	private final UserService userService;
+	private final JavaMailSender emailSender;
+
 	@Value("${spring.mail.username}")
 	private String smtpSenderEmail;
 
@@ -97,6 +101,9 @@ public class SellerManagementServiceImpl implements SellerManagementService, Int
 
 		RestaurantInfo restaurantInfo = new RestaurantInfo(restaurant);
 		restaurantInfoRepository.save(restaurantInfo);
+
+		WaitingNumber waitingNumber = WaitingNumber.createWaitingNumber(restaurant);
+		waitingNumberRepository.save(waitingNumber);
 
 		// 저장된 번호를 유저에게 메일로 전달한다.
 		SimpleMailMessage message = new SimpleMailMessage();
