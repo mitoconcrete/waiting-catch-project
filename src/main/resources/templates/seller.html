@@ -4,71 +4,101 @@
     <meta charset="UTF-8">
     <title>판매자 관리</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+            crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
+    <link type="text/css" th:href="@{/css/admin-style.css}" rel="stylesheet">
 </head>
 <body>
-<h1>판매자 관리</h1>
-<a href="hello.html" th:href="@{/hello}" th:method="get">
-    <button onclick="sendTokenLogout()" type="button">로그아웃</button>
-</a>
+<header>
+    <a href="/seller/lineup-page">
+        <div>WAITING CATCH</div>
+    </a>
+    <nav>
+        <ul>
+            <a href="/">판매자 님</a>
+            <a href="hello.html" th:href="@{/hello}" th:method="get">
+                <button onclick="sendTokenLogout()" type="button" class="btn">Logout</button>
+            </a>
+        </ul>
+    </nav>
+</header>
+<nav class="menus">
+    <ul>
+        <a href="/seller/lineup-page">줄서기 현황</a>
+        <a href="/seller" style="color: #8B60C7">매장 관리</a>
+        <a href="/menu">메뉴</a>
+        <a href="/event">이벤트</a>
+    </ul>
+</nav>
+<div class="body">
+    <h1 style="color: #8B60C7">매장 관리</h1>
+    <!--    <a href="hello.html" th:href="@{/hello}" th:method="get">-->
+    <!--        <button onclick="sendTokenLogout()" type="button">로그아웃</button>-->
+    <!--    </a>-->
 
-<a href="hello.html" th:href="@{/hello}" th:method="get">
-    <button onclick="sendTokenDelete()" type="button">회원탈퇴</button>
-</a>
+    <a href="hello.html" th:href="@{/hello}" th:method="get">
+        <button onclick="sendTokenDelete()" type="button" class="btn">회원탈퇴</button>
+    </a>
 
-<a href="seller-infos.html" th:href="@{/seller/infos}" th:method="get">
-    <button type="button">판매자 정보 수정</button>
-</a>
-<a th:href="@{/seller/updaterestaurant}" th:method="get" enctype="multipart/form-data">
-    <button type="button">레스토랑 정보 수정</button>
-</a>
+    <a href="seller-infos.html" th:href="@{/seller/infos}" th:method="get">
+        <button type="button" class="btn">판매자 정보 수정</button>
+    </a>
+    <a th:href="@{/seller/updaterestaurant}" th:method="get" enctype="multipart/form-data">
+        <button type="button" class="btn">레스토랑 정보 수정</button>
+    </a>
 
-<button type="button" onclick="getLineupList()">줄서기 관리</button>
+    <!--    <button type="button" onclick="getLineupList()" class="btn">줄서기 관리</button>-->
 
-<button type="button" onclick="openLineup()">줄서기 오픈</button>
+    <!--        <button type="button" onclick="openLineup()" class="btn">줄서기 오픈</button>-->
 
-<button type="button" onclick="closeLineup()">줄서기 마감</button>
+    <!--        <button type="button" onclick="closeLineup()" class="btn">줄서기 마감</button>-->
 
-<button type="button" onclick="createBlacklistDemandList()">블랙리스트 요청 목록</button>
+    <button type="button" onclick="createBlacklistDemandList()" class="btn">블랙리스트 요청 목록</button>
 
+</div>
 </body>
 <script>
-    function getLineupList() {
-        window.location.href = '/seller/lineup-page';
-    }
-
-    function openLineup() {
-        $.ajax({
-            url: '/seller/open-lineup',
-            type: 'PUT',
-            headers: {
-                'Authorization': localStorage.getItem('accessToken')
-            },
-            success: function () {
-                alert("줄서기 오픈 완료");
-                window.location.reload();
-            },
-            error: function (response) {
-                console.log(response);
-            }
-        })
-    }
-
-    function closeLineup() {
-        $.ajax({
-            url: '/seller/close-lineup',
-            type: 'PUT',
-            headers: {
-                'Authorization': localStorage.getItem('accessToken')
-            },
-            success: function () {
-                alert("줄서기 마감 완료");
-                window.location.reload();
-            },
-            error: function (response) {
-                console.log(response);
-            }
-        })
-    }
+    // function getLineupList() {
+    //     window.location.href = '/seller/lineup-page';
+    // }
+    //
+    // function openLineup() {
+    //     $.ajax({
+    //         url: '/seller/open-lineup',
+    //         type: 'PUT',
+    //         headers: {
+    //             'Authorization': localStorage.getItem('accessToken')
+    //         },
+    //         success: function () {
+    //             alert("줄서기 오픈 완료");
+    //             window.location.reload();
+    //         },
+    //         error: function (response) {
+    //             console.log(response);
+    //         }
+    //     })
+    // }
+    //
+    // function closeLineup() {
+    //     $.ajax({
+    //         url: '/seller/close-lineup',
+    //         type: 'PUT',
+    //         headers: {
+    //             'Authorization': localStorage.getItem('accessToken')
+    //         },
+    //         success: function () {
+    //             alert("줄서기 마감 완료");
+    //             window.location.reload();
+    //         },
+    //         error: function (response) {
+    //             console.log(response);
+    //         }
+    //     })
+    // }
 
     function createBlacklistDemandList() {
         window.location.href = '/seller/restaurant/blacklist-demand-page';
