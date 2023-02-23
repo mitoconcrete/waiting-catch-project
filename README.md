@@ -21,7 +21,7 @@
  <img src="https://img.shields.io/badge/KAKAO API-FFCD00?style=for-the-badge&logo=kakao&logoColor=white">
  <img src="https://img.shields.io/badge/AWS EC2-FF9900?style=for-the-badge&logo=amazon-ec2&logoColor=white">
  <img src="https://img.shields.io/badge/AWS S3-569A31?style=for-the-badge&logo=amazon-s3&logoColor=white">
- <img src="https://img.shields.io/badge/nGrinder-F79A10?style=for-the-badge&logo=ngrinder&logoColor=white">
+ <img src="https://img.shields.io/badge/nGrinder-F79A10?style=for-the-badge&logo=naver&logoColor=white">
  <img src="https://img.shields.io/badge/IntelliJ-000000?style=for-the-badge&logo=intellij-idea&logoColor=white">
  <img src="https://img.shields.io/badge/Github-181717?style=for-the-badge&logo=github&logoColor=white">
  <img src="https://img.shields.io/badge/postman-FF6C37?style=for-the-badge&logo=postman&logoColor=white">
