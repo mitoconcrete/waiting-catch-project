@@ -2,16 +2,17 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>블랙리스트 요청</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
 </head>
 <body>
+<button type="button" onclick="createBlacklistDemand()">블랙리스트 요청</button>
 <div id="blacklistDemandList"></div>
 </body>
 <script>
     $(document).ready(function () {
         $.ajax({
-            url: '/blacklist-demands',
+            url: '/seller/restaurant/blacklist-demands',
             type: 'GET',
             headers: {
                 'Authorization': localStorage.getItem('accessToken')
@@ -20,5 +21,9 @@
             $('#blacklistDemandList').replaceWith(result);
         })
     });
+
+    function createBlacklistDemand() {
+        window.location.href=
+    }
 </script>
 </html>

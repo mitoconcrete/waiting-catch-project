@@ -34,21 +34,22 @@ import team.waitingcatch.app.restaurant.repository.RestaurantRepository;
 @Transactional
 public class RestaurantServiceImpl implements RestaurantService, InternalRestaurantService {
 	private final RestaurantRepository restaurantRepository;
-	private final DistanceCalculator distanceCalculator;
 	private final RestaurantInfoRepository restaurantInfoRepository;
+
 	private final ImageUploader imageUploader;
+	private final DistanceCalculator distanceCalculator;
 
 	@Override
 	@Transactional(readOnly = true)
 	public RestaurantBasicInfoResponse getRestaurantBasicInfo(RestaurantBasicInfoServiceRequest request) {
-		Restaurant restaurant = _getById(request.getRestaurantId());
+		Restaurant restaurant = _getRestaurantById(request.getRestaurantId());
 		return new RestaurantBasicInfoResponse(restaurant);
 	}
 
 	@Override
 	@Transactional(readOnly = true)
 	public RestaurantDetailedInfoResponse getRestaurantDetailedInfo(RestaurantDetailedInfoServiceRequest request) {
-		Restaurant restaurant = _getById(request.getRestaurantId());
+		Restaurant restaurant = _getRestaurantById(request.getRestaurantId());
 		RestaurantInfo restaurantInfo = restaurantInfoRepository.findByRestaurantId(restaurant.getId()).orElseThrow(
 			() -> new IllegalArgumentException("레스토랑이 존재하지 않습니다.")
 		);
@@ -90,7 +91,7 @@ public class RestaurantServiceImpl implements RestaurantService, InternalRestaur
 
 	@Override
 	public void deleteRestaurantByAdmin(DeleteRestaurantByAdminServiceRequest deleteRestaurantByAdminServiceRequest) {
-		Restaurant restaurant = _getById(deleteRestaurantByAdminServiceRequest.getRestaurantId());
+		Restaurant restaurant = _getRestaurantById(deleteRestaurantByAdminServiceRequest.getRestaurantId());
 		//String transferToString[] = restaurant.getImages().split(",");
 		// for (int i = 0; i < transferToString.length; i++) {
 		// 	s3Uploader.deleteS3(transferToString[i]);
@@ -125,9 +126,15 @@ public class RestaurantServiceImpl implements RestaurantService, InternalRestaur
 	}
 
 	@Override
-	public Restaurant _getById(Long restaurantId) {
+	public Restaurant _getRestaurantById(Long restaurantId) {
 		return restaurantRepository.findById(restaurantId)
 			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 레스토랑입니다."));
+	}
+
+	@Override
+	public RestaurantInfo _getRestaurantInfoByRestaurantId(Long id) {
+		return restaurantInfoRepository.findByRestaurantId(id)
+			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 레스토랑 정보입니다."));
 	}
 
 	@Override
