@@ -67,10 +67,10 @@ public class LineupServiceImpl implements LineupService, InternalLineupService {
 		RestaurantInfo restaurantInfo = internalRestaurantService._getRestaurantInfoByRestaurantId(restaurantId);
 		Restaurant restaurant = internalRestaurantService._getRestaurantById(restaurantId);
 
-		// if (!restaurantInfo.isLineupActive()) {
-		// 	throw new IllegalArgumentException("줄서기가 마감되었습니다.");
-		// }
-		//
+		if (!restaurantInfo.isLineupActive()) {
+			throw new IllegalArgumentException("줄서기가 마감되었습니다.");
+		}
+
 		boolean isBlacklist = internalBlacklistService._existsByRestaurantIdAndUserId(restaurantId,
 			serviceRequest.getUser().getId());
 
