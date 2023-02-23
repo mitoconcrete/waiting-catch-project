@@ -251,3 +251,17 @@ header > a > div {
     padding: 0 5px 0 5px;
     margin: 0 5px 0 5px;
 }
+
+.sellerManagementBtn {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.restaurantBtn {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
