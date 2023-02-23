@@ -69,6 +69,7 @@ public class Lineup extends TimeStamped {
 			throw new IllegalArgumentException("이미 취소된 줄서기입니다.");
 		}
 		if (this.status == ArrivalStatusEnum.ARRIVE) {
+			this.arrivedAt = LocalDateTime.now();
 			throw new IllegalArgumentException("이미 완료된 줄서기입니다.");
 		}
 
