@@ -28,7 +28,7 @@ import team.waitingcatch.app.user.entitiy.User;
 public class Lineup extends TimeStamped {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "lineup_history_id")
+	@Column(name = "lineup_id")
 	private Long id;
 
 	@ManyToOne(fetch = FetchType.LAZY)
