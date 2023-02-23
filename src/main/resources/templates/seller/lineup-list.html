@@ -47,6 +47,7 @@
                 'Authorization': localStorage.getItem('accessToken')
             },
             success: function () {
+                alert("고객 호출 완료");
                 window.location.reload();
             },
             error: function (response) {
@@ -67,6 +68,7 @@
                 'Authorization': localStorage.getItem('accessToken')
             },
             success: function () {
+                alert("고객 도착 처리 완료");
                 window.location.reload();
             },
             error: function (response) {
@@ -87,6 +89,7 @@
                 'Authorization': localStorage.getItem('accessToken')
             },
             success: function () {
+                alert("줄서기 취소 처리 완료");
                 window.location.reload();
             },
             error: function (response) {

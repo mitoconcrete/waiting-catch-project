@@ -39,52 +39,104 @@
         <a href="/admin/templates/customers" style="color: #8B60C7">유저 목록</a>
         <a href="/admin/templates/restaurants">레스토랑 목록</a>
         <a href="/admin/templates/event">이벤트</a>
-        <a href="/admin/templates/blacklist" >블랙리스트</a>
+        <a href="/admin/templates/blacklist">블랙리스트</a>
         <a href="/admin/templates/review">리뷰 검열</a>
         <a href="/admin/templates/category">카테고리</a>
     </ul>
 </nav>
 
-<div class="board_wrap">
-    <div class="board_title">
-        <strong>유저 목록</strong>
-        <p>유저 목록을 보여드리겠습니다.</p>
-    </div>
+<div class="body">
 
-    <div class="board_list_wrap">
-        <div class="board_list">
-            <div class="top">
-                <div class="num">번호</div>
-                <div class="writer">아이디</div>
-                <div class="writer">이름</div>
-                <div class="writer">닉네임</div>
-                <div class="writer">전화번호</div>
-                <div class="writer">이메일</div>
-                <div class="writer">권한</div>
-                <div class="writer">금지상태</div>
-                <div class="writer">삭제상태</div>
-                <div class="writer">상세보기</div>
-            </div>
+    <!--    <div class="board_wrap">-->
+    <!--        <div class="board_title">-->
+    <!--            <strong>유저 목록</strong>-->
+    <!--            <p>유저 목록을 보여드리겠습니다.</p>-->
+    <!--        </div>-->
 
+    <!--        <div class="board_list_wrap">-->
+    <!--            <div class="board_list">-->
+    <!--                <div class="top">-->
+    <!--                    <div class="num">번호</div>-->
+    <!--                    <div class="writer">아이디</div>-->
+    <!--                    <div class="writer">이름</div>-->
+    <!--                    <div class="writer">닉네임</div>-->
+    <!--                    <div class="writer">전화번호</div>-->
+    <!--                    <div class="writer">이메일</div>-->
+    <!--                    <div class="writer">권한</div>-->
+    <!--                    <div class="writer">금지상태</div>-->
+    <!--                    <div class="writer">삭제상태</div>-->
+    <!--                    <div class="writer">상세보기</div>-->
+    <!--                </div>-->
+
+    <!--                <div th:each="customer, iStat : ${customers}">-->
+    <!--                    <div class="num" th:text="${customer.id}">1</div>-->
+    <!--                    <div class="writer" th:text="${customer.username}"></div>-->
+    <!--                    <div div class="writer" th:text="${customer.name}"></div>-->
+    <!--                    <div div class="writer" th:text="${customer.nickname}"></div>-->
+    <!--                    <div div class="writer" th:text="${customer.phoneNumber}"></div>-->
+    <!--                    <div div class="writer" th:text="${customer.email}"></div>-->
+    <!--                    <div div class="writer" th:text="${customer.role}"></div>-->
+    <!--                    <div div class="writer" th:text="${customer.banned}"></div>-->
+    <!--                    <div div class="writer" th:text="${customer.deleted}"></div>-->
+    <!--                    <div class="count" th:if="${customer.role == customer.role.USER}"><a href=""-->
+    <!--                                                                                         th:href="@{/admin/templates/customers/{customerId}(customerId=${customer.id})}"-->
+    <!--                                                                                         class="btn btn-secondary">내용</a>-->
+    <!--                    </div>-->
+    <!--                    <div class="count" th:if="${customer.role == customer.role.SELLER}"><a href=""-->
+    <!--                                                                                           th:href="@{/admin/templates/sellers/{sellersId}(sellersId=${customer.id})}"-->
+    <!--                                                                                           class="btn btn-secondary">내용</a>-->
+    <!--                    </div>-->
+    <!--                </div>-->
+
+
+    <!--            </div>-->
+    <!--        </div>-->
+    <!--    </div>-->
+
+    <h1 style="color: #8B60C7">유저 목록</h1>
+    <div class="customerList">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th scope="col">번호</th>
+                <th scope="col">아이디</th>
+                <th scope="col">이름</th>
+                <th scope="col">닉네임</th>
+                <th scope="col">전화번호</th>
+                <th scope="col">이메일</th>
+                <th scope="col">권한</th>
+                <th scope="col">금지상태</th>
+                <th scope="col">삭제상태</th>
+                <th scope="col">상세보기</th>
+            </tr>
+            </thead>
+            <tbody id="customerListTable">
             <div th:each="customer, iStat : ${customers}">
-                <div class="num" scope="row" th:text="${customer.id}">1</div>
-                <div class="writer" th:text="${customer.username}" ></div>
-                <div div class="writer" th:text="${customer.name}"></div>
-                <div div class="writer" th:text="${customer.nickname}"></div>
-                <div div class="writer" th:text="${customer.phoneNumber}"></div>
-                <div div class="writer" th:text="${customer.email}"></div>
-                <div div class="writer" th:text="${customer.role}"></div>
-                <div div class="writer" th:text="${customer.banned}"></div>
-                <div div class="writer" th:text="${customer.deleted}"></div>
-                <div class="count" th:if="${customer.role == customer.role.USER}"><a href="" th:href="@{/admin/templates/customers/{customerId}(customerId=${customer.id})}" class="btn btn-secondary">내용</a></div>
-                <div class="count" th:if="${customer.role == customer.role.SELLER}"><a href="" th:href="@{/admin/templates/sellers/{sellersId}(sellersId=${customer.id})}" class="btn btn-secondary">내용</a></div>
+                <tr>
+                    <th scope="row" th:text="${customer.id}">1</th>
+                    <td th:text="${customer.username}"></td>
+                    <td th:text="${customer.name}"></td>
+                    <td th:text="${customer.nickname}"></td>
+                    <td th:text="${customer.phoneNumber}"></td>
+                    <td th:text="${customer.email}"></td>
+                    <td th:text="${customer.role}"></td>
+                    <td th:text="${customer.banned}"></td>
+                    <td th:text="${customer.deleted}"></td>
+                    <td>
+                        <div class="count" th:if="${customer.role == customer.role.USER}"><a href=""
+                                                                                             th:href="@{/admin/templates/customers/{customerId}(customerId=${customer.id})}"
+                                                                                             class="btn">내용</a>
+                        </div>
+                        <div class="count" th:if="${customer.role == customer.role.SELLER}"><a href=""
+                                                                                               th:href="@{/admin/templates/sellers/{sellersId}(sellersId=${customer.id})}"
+                                                                                               class="btn">내용</a>
+                        </div>
+                    </td>
+                </tr>
             </div>
-
-
-        </div>
+            </tbody>
+        </table>
     </div>
 </div>
-</div>
-
 </body>
 </html>

@@ -55,8 +55,8 @@ public class BlacklistDemandServiceImpl implements BlacklistDemandService, Inter
 	//판매자가 요청한 한명의 고객의 블랙리스트 요청을 판매자가 취소한다.
 	@Override
 	public void cancelBlacklistDemand(CancelBlacklistDemandServiceRequest serviceRequest) {
-		BlacklistDemand blacklistDemand = blacklistDemandRepository.findByIdAndRestaurantUserId(
-				serviceRequest.getBlacklistDemandId(), serviceRequest.getSellerId())
+		// serviceRequest.getSellerId() 레스토랑 방문 여부 검증 로직 추가
+		BlacklistDemand blacklistDemand = blacklistDemandRepository.findById(serviceRequest.getBlacklistDemandId())
 			.orElseThrow(() -> new IllegalArgumentException("Not found black list request"));
 		blacklistDemand.checkWaitingStatus();
 		blacklistDemand.updateCancelStatus();

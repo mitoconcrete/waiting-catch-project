@@ -38,7 +38,7 @@ public class MenuServiceImpl implements MenuService, InternalMenuService {
 
 	@Override
 	public void createMenu(CreateMenuServiceRequest serviceRequest) {
-		Restaurant restaurant = restaurantService._getById(serviceRequest.getRestaurantId());
+		Restaurant restaurant = restaurantService._getRestaurantById(serviceRequest.getRestaurantId());
 		String name = serviceRequest.getName();
 		int price = serviceRequest.getPrice();
 		String imageUrl = "기본 메뉴 이미지 URL";

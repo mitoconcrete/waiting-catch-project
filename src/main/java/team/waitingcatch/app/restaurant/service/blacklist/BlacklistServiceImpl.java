@@ -55,7 +55,7 @@ public class BlacklistServiceImpl implements BlacklistService, InternalBlacklist
 	public List<GetBlacklistResponse> getBlackListByRestaurantId(
 		GetBlacklistByRestaurantIdServiceRequest serviceRequest) {
 
-		Restaurant restaurant = internalRestaurantService._getById(serviceRequest.getRestaurantId());
+		Restaurant restaurant = internalRestaurantService._getRestaurantById(serviceRequest.getRestaurantId());
 		List<Blacklist> blackList = blacklistRepository.findAllByRestaurant(restaurant);
 		return blackList.stream().map(GetBlacklistResponse::new).collect(Collectors.toList());
 	}
@@ -77,6 +77,11 @@ public class BlacklistServiceImpl implements BlacklistService, InternalBlacklist
 		System.out.println(restaurant.getId());
 		List<Blacklist> blackList = blacklistRepository.findAllByRestaurant_Id(restaurant.getId());
 		return blackList.stream().map(GetBlacklistResponse::new).collect(Collectors.toList());
+	}
+
+	@Override
+	public boolean _existsByRestaurantIdAndUserId(Long restaurantId, Long userId) {
+		return blacklistRepository.findByUserIdAndRestaurantUserIdAndIsDeletedFalse(restaurantId, userId).isPresent();
 	}
 
 	@Override

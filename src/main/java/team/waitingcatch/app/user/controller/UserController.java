@@ -32,6 +32,8 @@ import team.waitingcatch.app.user.dto.GetCustomerByIdAndRoleServiceRequest;
 import team.waitingcatch.app.user.dto.LoginRequest;
 import team.waitingcatch.app.user.dto.LoginServiceResponse;
 import team.waitingcatch.app.user.dto.LogoutRequest;
+import team.waitingcatch.app.user.dto.UpdatePasswordControllerRequest;
+import team.waitingcatch.app.user.dto.UpdatePasswordServiceRequest;
 import team.waitingcatch.app.user.dto.UpdateUserControllerRequest;
 import team.waitingcatch.app.user.dto.UpdateUserServiceRequest;
 import team.waitingcatch.app.user.dto.UserInfoResponse;
@@ -85,6 +87,14 @@ public class UserController {
 	@PostMapping("/customer/find-password")
 	public void findCustomerPassword(@RequestBody @Valid FindPasswordRequest findPasswordRequest) {
 		userService.findUserAndSendEmail(findPasswordRequest);
+	}
+
+	@PutMapping("/customer/password")
+	public void updatePassword(@AuthenticationPrincipal UserDetails userDetails,
+		@RequestBody @Valid UpdatePasswordControllerRequest controllerPayload) {
+		UpdatePasswordServiceRequest servicePayload = new UpdatePasswordServiceRequest(userDetails.getUsername(),
+			controllerPayload.getPassword());
+		userService.updatePassword(servicePayload);
 	}
 
 	// seller

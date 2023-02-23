@@ -30,6 +30,7 @@ import team.waitingcatch.app.user.dto.GetCustomerByIdAndRoleServiceRequest;
 import team.waitingcatch.app.user.dto.LoginRequest;
 import team.waitingcatch.app.user.dto.LoginServiceResponse;
 import team.waitingcatch.app.user.dto.LogoutRequest;
+import team.waitingcatch.app.user.dto.UpdatePasswordServiceRequest;
 import team.waitingcatch.app.user.dto.UpdateUserServiceRequest;
 import team.waitingcatch.app.user.dto.UserInfoResponse;
 import team.waitingcatch.app.user.entitiy.User;
@@ -172,6 +173,12 @@ public class UserServiceImpl implements UserService, InternalUserService {
 		User user = _getUserByUsername(payload.getUsername());
 		userRepository.deleteById(user.getId());
 		_deleteSellerAndRelatedInformation(user.getId());
+	}
+
+	@Override
+	public void updatePassword(UpdatePasswordServiceRequest payload) {
+		User user = _getUserByUsername(payload.getUsername());
+		user.updatePassword(payload.getPassword());
 	}
 
 	@Override

@@ -9,6 +9,7 @@ import team.waitingcatch.app.user.dto.GetCustomerByIdAndRoleServiceRequest;
 import team.waitingcatch.app.user.dto.LoginRequest;
 import team.waitingcatch.app.user.dto.LoginServiceResponse;
 import team.waitingcatch.app.user.dto.LogoutRequest;
+import team.waitingcatch.app.user.dto.UpdatePasswordServiceRequest;
 import team.waitingcatch.app.user.dto.UpdateUserServiceRequest;
 import team.waitingcatch.app.user.dto.UserInfoResponse;
 
@@ -32,4 +33,6 @@ public interface UserService {
 	void deleteCustomer(DeleteUserRequest payload);
 
 	void deleteSeller(DeleteUserRequest payload);
+
+	void updatePassword(UpdatePasswordServiceRequest payload);
 }
