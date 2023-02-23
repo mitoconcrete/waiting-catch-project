@@ -4,6 +4,7 @@ import lombok.Getter;
 
 @Getter
 public class SearchRestaurantsResponse {
+	private final Long id;
 	private final String name;
 	private final String imageUrl;
 	private final float rate;
@@ -13,6 +14,7 @@ public class SearchRestaurantsResponse {
 	private final boolean isLineupActive;
 
 	public SearchRestaurantsResponse(SearchRestaurantJpaResponse jpaResponse, double distance) {
+		this.id = jpaResponse.getId();
 		this.name = jpaResponse.getName();
 		this.imageUrl = jpaResponse.getImages();
 		this.rate = jpaResponse.getRate();
