@@ -9,7 +9,8 @@ import org.springframework.data.repository.query.Param;
 import team.waitingcatch.app.restaurant.entity.Restaurant;
 
 public interface RestaurantRepository extends JpaRepository<Restaurant, Long> {
-	Optional<Restaurant> findByUserId(Long userId);
+	@Query("select r from Restaurant r where r.user.id = :userId")
+	Optional<Restaurant> findByUserId(@Param("userId") Long userId);
 
 	Optional<Restaurant> findByUser_Username(String sellerName);
 
