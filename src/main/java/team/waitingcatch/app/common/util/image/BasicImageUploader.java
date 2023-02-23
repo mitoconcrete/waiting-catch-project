@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -17,7 +18,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class BasicImageUploader implements ImageUploader {
 
-	// @Value("${profile.image.dir}")
+	@Value("${profile.image.dir}")
 	private String imageDir;
 
 	@Override
