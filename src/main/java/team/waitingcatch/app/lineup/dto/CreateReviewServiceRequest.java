@@ -28,6 +28,8 @@ public class CreateReviewServiceRequest {
 		this.restaurantId = restaurantId;
 		this.rate = rate;
 		this.content = content;
-		this.images.addAll(images);
+		if (images != null) {
+			this.images.addAll(images);
+		}
 	}
 }
