@@ -18,7 +18,6 @@ public interface LineupRepository extends JpaRepository<Lineup, Long>, LineupRep
 	@Query("select l from Lineup l join fetch l.user where l.id = :lineupId")
 	Optional<Lineup> findByIdWithUser(@Param("lineupId") Long id);
 
-	@Modifying(clearAutomatically = true, flushAutomatically = true)
 	@Query("select l.restaurant.id from Lineup l where l.id = :lineupId")
 	Optional<Long> findRestaurantIdById(@Param("lineupId") Long id);
 
