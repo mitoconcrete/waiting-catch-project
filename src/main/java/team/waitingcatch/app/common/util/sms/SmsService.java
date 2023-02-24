@@ -30,16 +30,16 @@ import team.waitingcatch.app.common.util.sms.dto.SmsResponse;
 
 @Service
 public class SmsService {
-	@Value("${naver-cloud-sms.accessKey}")
+	@Value("${naver.cloud.sms.access.key}")
 	private String accessKey;
 
-	@Value("${naver-cloud-sms.secretKey}")
+	@Value("${naver.cloud.sms.secret.key}")
 	private String secretKey;
 
-	@Value("${naver-cloud-sms.serviceId}")
+	@Value("${naver.cloud.sms.service.id}")
 	private String serviceId;
 
-	@Value("${naver-cloud-sms.senderPhone}")
+	@Value("${naver.cloud.sms.sender.phone}")
 	private String senderPhone;
 
 	public SmsResponse sendSms(MessageRequest messageRequest) throws
