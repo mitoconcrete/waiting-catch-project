@@ -171,8 +171,8 @@ public class LineupServiceImpl implements LineupService, InternalLineupService {
 
 	private void callCustomer(Long lineupId) {
 		CallCustomerInfoResponse customerInfo = lineupRepository.findCallCustomerInfoById(lineupId);
-		String content = "[호출]%n레스토랑: " + customerInfo.getRestaurantName() + "%n대기번호: " +
-			customerInfo.getWaitingNumber();
+		String content = "[호출]" + System.lineSeparator() + "레스토랑: " + customerInfo.getRestaurantName()
+			+ System.lineSeparator() + "대기번호: " + customerInfo.getWaitingNumber();
 		MessageRequest messageRequest = new MessageRequest(customerInfo.getPhoneNumber(), "Waiting Catch",
 			content);
 

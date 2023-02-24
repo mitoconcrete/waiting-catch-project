@@ -81,7 +81,7 @@ public class BlacklistServiceImpl implements BlacklistService, InternalBlacklist
 
 	@Override
 	public boolean _existsByRestaurantIdAndUserId(Long restaurantId, Long userId) {
-		return blacklistRepository.findByUserIdAndRestaurantUserIdAndIsDeletedFalse(restaurantId, userId).isPresent();
+		return blacklistRepository.findByRestaurantIdAndUserIdAndIsDeletedFalse(restaurantId, userId).isPresent();
 	}
 
 	@Override
