@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.dto.service.UpdateTokenRequest;
+import team.waitingcatch.app.exception.TokenNotFoundException;
 import team.waitingcatch.app.redis.dto.CreateRefreshTokenServiceRequest;
 import team.waitingcatch.app.redis.dto.GetRefreshTokenRequest;
 import team.waitingcatch.app.redis.dto.GetRefreshTokenResponse;
@@ -25,7 +26,7 @@ public class AliveTokenServiceImpl implements AliveTokenService, InternalAliveTo
 	@Override
 	public GetRefreshTokenResponse getRefreshToken(GetRefreshTokenRequest payload) {
 		AliveToken aliveToken = aliveTokenRepository.findById(payload.getAccessToken()).orElseThrow(
-			() -> new IllegalArgumentException("토큰이 존재하지 않습니다.")
+			() -> new TokenNotFoundException("토큰이 존재하지 않습니다.")
 		);
 		return new GetRefreshTokenResponse(aliveToken.getRefreshToken());
 	}
@@ -48,7 +49,7 @@ public class AliveTokenServiceImpl implements AliveTokenService, InternalAliveTo
 	@Override
 	public AliveToken _getAliveTokenByAccessToken(String AccessToken) {
 		return aliveTokenRepository.findById(AccessToken).orElseThrow(
-			() -> new IllegalArgumentException("토큰이 존재하지 않습니다.")
+			() -> new TokenNotFoundException("토큰이 존재하지 않습니다.")
 		);
 	}
 }
