@@ -232,7 +232,7 @@ public class UserServiceImpl implements UserService, InternalUserService {
 		2. accessToken 토큰을 key로 두는 이유는 redis내의 값에 좀더 빠르게 접근하기 위함입니다.
 		*/
 		CreateRefreshTokenServiceRequest servicePayload = new CreateRefreshTokenServiceRequest(accessToken.substring(7),
-			refreshToken.substring(7));
+			refreshToken.substring(7), JwtUtil.REFRESH_TOKEN_TIME);
 		refreshTokenService.createToken(servicePayload);
 		return accessToken;
 	}

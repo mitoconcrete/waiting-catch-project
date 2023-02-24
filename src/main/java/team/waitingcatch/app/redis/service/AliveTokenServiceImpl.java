@@ -17,7 +17,8 @@ public class AliveTokenServiceImpl implements AliveTokenService, InternalAliveTo
 
 	@Override
 	public void createToken(CreateRefreshTokenServiceRequest payload) {
-		AliveToken newAliveToken = new AliveToken(payload.getAccessToken(), payload.getRefreshToken());
+		AliveToken newAliveToken = new AliveToken(payload.getAccessToken(), payload.getRefreshToken(),
+			payload.getTimeToLive());
 		aliveTokenRepository.save(newAliveToken);
 	}
 
@@ -33,7 +34,7 @@ public class AliveTokenServiceImpl implements AliveTokenService, InternalAliveTo
 	public void updateToken(UpdateTokenRequest payload) {
 		RemoveTokenRequest removeServicePayload = new RemoveTokenRequest(payload.getOldAccessToken());
 		CreateRefreshTokenServiceRequest createServicePayload = new CreateRefreshTokenServiceRequest(
-			payload.getUpdateAccessToken(), payload.getRefreshToken());
+			payload.getUpdateAccessToken(), payload.getRefreshToken(), payload.getTimeToLive());
 		removeToken(removeServicePayload);
 		createToken(createServicePayload);
 	}
