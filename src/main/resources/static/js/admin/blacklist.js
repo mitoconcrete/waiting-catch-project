@@ -4,14 +4,14 @@ let targetId;
 
 function getBlacklistRequest(responseDto) {
     return `<tr>
-                <th scope="row">${responseDto.blacklistRequestId}</th>
+                <th scope="row">${responseDto.id}</th>
                 <td>${responseDto.sellerName}</td>
                 <td>${responseDto.customerName}</td>
                 <td>${responseDto.description}</td>
                 <td class="blacklist-request-btn">
                     <div class="eventBtn">
-                        <input onclick="approveBlacklistRequest(${responseDto.blacklistRequestId})" type="button" class="btn" value="승인">
-                        <input onclick="rejectBlacklistRequest(${responseDto.blacklistRequestId})" type="submit" class="btn" value="거절">
+                        <input onclick="approveBlacklistRequest(${responseDto.id})" type="button" class="btn" value="승인">
+                        <input onclick="rejectBlacklistRequest(${responseDto.id})" type="submit" class="btn" value="거절">
                     </div>
                 </td>
             </tr>`

@@ -73,11 +73,11 @@ public class SellerController {
 	private final RestaurantService restaurantService;
 	/*     로그인 프론트     */
 
-	@GetMapping("hello")
-	public String hello(Model model) {
-		model.addAttribute("message", "Hello, World!");
-		return "hello";
-	}
+	// @GetMapping("hello")
+	// public String hello(Model model) {
+	// 	model.addAttribute("message", "Hello, World!");
+	// 	return "hello";
+	// }
 
 	@GetMapping("/login")
 	public String login() {
@@ -122,7 +122,7 @@ public class SellerController {
 
 	@GetMapping("/menu")
 	public String menu(Model model) {
-		Long restaurantId = Long.parseLong("1");
+		Long restaurantId = Long.parseLong("4");
 		List<MenuResponse> menus = menuService.getMyRestaurantMenus(restaurantId);
 		model.addAttribute("menus", menus);
 		return "menu";
@@ -140,7 +140,7 @@ public class SellerController {
 		@RequestPart("image") MultipartFile multipartFile,
 		@Valid CreateMenuControllerRequest request) {
 		//MultipartFile multipartFile = null;
-		Long restaurantId = Long.parseLong("1");
+		Long restaurantId = Long.parseLong("4");
 		System.out.println(multipartFile + " dd " + request + " dd ");
 		CreateMenuServiceRequest serviceRequest = new CreateMenuServiceRequest(restaurantId, multipartFile, request);
 		menuService.createMenu(serviceRequest);
@@ -236,7 +236,7 @@ public class SellerController {
 	@PutMapping("/seller/updaterestaurant")
 	public String updateRestaurant(
 		UpdateRestaurantControllerRequest updateRestaurantControllerRequest) throws IOException {
-		Long userId = Long.parseLong("10");
+		Long userId = Long.parseLong("1");
 		List<MultipartFile> multipartFile = null;
 		UpdateRestaurantServiceRequest updateRestaurantServiceRequest =
 			new UpdateRestaurantServiceRequest(updateRestaurantControllerRequest, multipartFile,
@@ -255,7 +255,7 @@ public class SellerController {
 
 	@GetMapping("/event")
 	public String event(Model model) {
-		Long restaurantId = Long.parseLong("1");
+		Long restaurantId = Long.parseLong("4");
 		List<GetEventsResponse> events = eventService.getRestaurantEvents(restaurantId);
 		model.addAttribute("events", events);
 		return "event";
@@ -270,7 +270,7 @@ public class SellerController {
 	@ResponseStatus(value = HttpStatus.CREATED)
 	public String createEvent(
 		@Validated CreateEventControllerRequest createEventControllerRequest) {
-		Long restaurantId = Long.parseLong("1");
+		Long restaurantId = Long.parseLong("4");
 		CreateEventServiceRequest createEventServiceRequest = new CreateEventServiceRequest(
 			createEventControllerRequest, restaurantId);
 		eventService.createSellerEvent(createEventServiceRequest);
