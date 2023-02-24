@@ -88,17 +88,6 @@ public class LineupServiceImpl implements LineupService, InternalLineupService {
 			throw new IllegalArgumentException("2km 이내의 레스토랑에만 줄서기가 가능합니다");
 		}
 
-		// List<Lineup> lineupList = lineupRepository.findByRestaurantId(restaurantId);
-		// int waitingNumber = 1;
-		// if (lineupList.size() > 1) {
-		// 	waitingNumber = generateWaitingNumber(lineupList.stream()
-		// 		.max(Comparator.comparing(Lineup::getWaitingNumber))
-		// 		.get()
-		// 		.getWaitingNumber());
-		// }
-		//
-		// Integer lastWaitingNumber = lineupRepository.findLastWaitingNumberByRestaurantId(restaurantId);
-		// int waitingNumber = generateWaitingNumber(lastWaitingNumber);
 		int waitingNumber = internalWaitingNumberService.getNextWaitingNumber(restaurantId);
 
 		StartLineupEntityRequest entityRequest = new StartLineupEntityRequest(serviceRequest, restaurant,
@@ -160,18 +149,22 @@ public class LineupServiceImpl implements LineupService, InternalLineupService {
 
 		ArrivalStatusEnum updatedStatus = restaurantInCustomer.updateStatus(serviceRequest.getStatus());
 		if (updatedStatus == ArrivalStatusEnum.CALL) {
-			callCustomer(restaurantInCustomer.getId());
+			sendSmsToCustomer(restaurantInCustomer.getId(), "호출");
+		} else if (updatedStatus == ArrivalStatusEnum.CANCEL) {
+			sendSmsToCustomer(restaurantInCustomer.getId(), "취소");
 		} else if (updatedStatus == ArrivalStatusEnum.ARRIVE) {
 			lineupRepository.findAllByUserId(restaurantInCustomer.getUserId())
 				.stream()
 				.filter(lineup -> lineup.getStatus() == (ArrivalStatusEnum.WAIT))
 				.forEach(lineup -> lineup.updateStatus(ArrivalStatusEnum.CANCEL));
+		} else {
+			throw new IllegalArgumentException("실행 x");
 		}
 	}
 
-	private void callCustomer(Long lineupId) {
+	private void sendSmsToCustomer(Long lineupId, String message) {
 		CallCustomerInfoResponse customerInfo = lineupRepository.findCallCustomerInfoById(lineupId);
-		String content = "[호출]" + System.lineSeparator() + "레스토랑: " + customerInfo.getRestaurantName()
+		String content = "[" + message + "]" + System.lineSeparator() + "레스토랑: " + customerInfo.getRestaurantName()
 			+ System.lineSeparator() + "대기번호: " + customerInfo.getWaitingNumber();
 		MessageRequest messageRequest = new MessageRequest(customerInfo.getPhoneNumber(), "Waiting Catch",
 			content);
@@ -182,10 +175,6 @@ public class LineupServiceImpl implements LineupService, InternalLineupService {
 				 NoSuchAlgorithmException | InvalidKeyException e) {
 			throw new IllegalArgumentException(e);
 		}
-	}
-
-	private int generateWaitingNumber(Integer lastWaitingNumber) {
-		return lastWaitingNumber != null ? lastWaitingNumber + 1 : 1;
 	}
 
 	@Transactional(readOnly = true)

@@ -18,6 +18,7 @@ public interface LineupRepository extends JpaRepository<Lineup, Long>, LineupRep
 	@Query("select l from Lineup l join fetch l.user where l.id = :lineupId")
 	Optional<Lineup> findByIdWithUser(@Param("lineupId") Long id);
 
+	@Modifying(clearAutomatically = true, flushAutomatically = true)
 	@Query("select l.restaurant.id from Lineup l where l.id = :lineupId")
 	Optional<Long> findRestaurantIdById(@Param("lineupId") Long id);
 
@@ -27,9 +28,6 @@ public interface LineupRepository extends JpaRepository<Lineup, Long>, LineupRep
 
 	@Query("select l from Lineup l where l.restaurant.id = :restaurantId")
 	List<Lineup> findByRestaurantId(@Param("restaurantId") Long id);
-
-	@Query("select max(l.waitingNumber) from Lineup l where l.restaurant.id = :restaurantId")
-	Integer findLastWaitingNumberByRestaurantId(@Param("restaurantId") Long id);
 
 	@Modifying(clearAutomatically = true, flushAutomatically = true)
 	@Query(value = "update Lineup l set l.isDeleted = true where l.restaurant.id = :restaurantId")
