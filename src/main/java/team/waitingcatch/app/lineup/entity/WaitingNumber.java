@@ -35,7 +35,8 @@ public class WaitingNumber {
 	private int nextNumber;
 
 	@Version
-	private Long version;
+	@Column(nullable = false)
+	private long version;
 
 	public void updateNextNumber() {
 		nextNumber++;
