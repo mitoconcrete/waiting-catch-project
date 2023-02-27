@@ -196,4 +196,10 @@ public class CouponController {
 	public List<GetUserCouponResponse> getUserCoupon(@AuthenticationPrincipal UserDetailsImpl userDetails) {
 		return userCouponService.getUserCoupons(userDetails.getUser());
 	}
+
+	//유저 쿠폰 사용
+	@PutMapping("/customer/coupons/{couponId}")
+	public void useCoupon(@PathVariable Long couponId) {
+		userCouponService.useCoupon(couponId);
+	}
 }

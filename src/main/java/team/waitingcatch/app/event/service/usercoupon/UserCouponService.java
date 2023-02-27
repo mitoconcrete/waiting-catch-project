@@ -4,7 +4,6 @@ import java.util.List;
 
 import team.waitingcatch.app.event.dto.usercoupon.CreateUserCouponServiceRequest;
 import team.waitingcatch.app.event.dto.usercoupon.GetUserCouponResponse;
-import team.waitingcatch.app.event.entity.UserCoupon;
 import team.waitingcatch.app.user.entitiy.User;
 
 public interface UserCouponService {
@@ -12,6 +11,6 @@ public interface UserCouponService {
 
 	List<GetUserCouponResponse> getUserCoupons(User user);
 
-	void useCoupon(UserCoupon userCoupon);
+	void useCoupon(Long couponId);
 
 }
