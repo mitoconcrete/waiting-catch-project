@@ -303,11 +303,9 @@ public class SellerController {
 
 	@PutMapping("/event/update/{eventId}")
 	public String updateEvent(UpdateEventControllerRequest updateEventControllerRequest,
-		@PathVariable Long eventId) {
-		System.out.println("아이디 " + eventId + "값" + updateEventControllerRequest.getName());
-		Long userId = Long.parseLong("1");
+		@PathVariable Long eventId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
 		UpdateSellerEventServiceRequest updateSellerEventServiceRequest = new UpdateSellerEventServiceRequest(
-			updateEventControllerRequest, eventId, userId);
+			updateEventControllerRequest, eventId, userDetails.getId());
 		eventService.updateSellerEvent(updateSellerEventServiceRequest);
 		return "redirect:/event";
 	}
