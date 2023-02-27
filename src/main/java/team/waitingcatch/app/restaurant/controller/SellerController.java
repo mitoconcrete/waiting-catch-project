@@ -220,10 +220,10 @@ public class SellerController {
 	}
 
 	@PutMapping("/seller/infos")
-	public String updateSellerInfo(@Valid UpdateUserControllerRequest controllerRequest) {
-		String username = "song1";
+	public String updateSellerInfo(@Valid UpdateUserControllerRequest controllerRequest,
+		@AuthenticationPrincipal UserDetailsImpl userDetails) {
 		UpdateUserServiceRequest servicePayload = new UpdateUserServiceRequest(controllerRequest.getName(),
-			controllerRequest.getEmail(), username, controllerRequest.getNickName(),
+			controllerRequest.getEmail(), userDetails.getUsername(), controllerRequest.getNickName(),
 			controllerRequest.getPhoneNumber());
 		userService.updateUser(servicePayload);
 		return "redirect:/seller";
