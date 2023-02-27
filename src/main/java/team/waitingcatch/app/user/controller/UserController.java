@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
+import team.waitingcatch.app.common.dto.GenericResponse;
 import team.waitingcatch.app.common.util.JwtUtil;
 import team.waitingcatch.app.user.dto.CreateUserControllerRequest;
 import team.waitingcatch.app.user.dto.CreateUserServiceRequest;
@@ -116,8 +117,8 @@ public class UserController {
 
 	// admin
 	@GetMapping("/admin/customers")
-	public List<UserInfoResponse> getCustomers() {
-		return userService.getCustomers();
+	public GenericResponse<UserInfoResponse> getCustomers() {
+		return new GenericResponse<>(userService.getCustomers());
 	}
 
 	@GetMapping("/admin/customers/{customerId}")
