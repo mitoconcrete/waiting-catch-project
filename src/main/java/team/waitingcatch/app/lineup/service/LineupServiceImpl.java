@@ -4,11 +4,13 @@ import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.springframework.dao.OptimisticLockingFailureException;
+import org.springframework.retry.annotation.Recover;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -61,6 +63,7 @@ public class LineupServiceImpl implements LineupService, InternalLineupService {
 		internalRestaurantService._closeLineup(restaurantId);
 	}
 
+	@Retryable(OptimisticLockingFailureException.class)
 	@Override
 	public void startWaiting(StartWaitingServiceRequest serviceRequest) {
 		Long restaurantId = serviceRequest.getRestaurantId();
@@ -88,7 +91,7 @@ public class LineupServiceImpl implements LineupService, InternalLineupService {
 			throw new IllegalArgumentException("2km 이내의 레스토랑에만 줄서기가 가능합니다");
 		}
 
-		int waitingNumber = internalWaitingNumberService.getNextWaitingNumber(restaurantId);
+		int waitingNumber = internalWaitingNumberService.getWaitingNumber(restaurantId);
 
 		StartLineupEntityRequest entityRequest = new StartLineupEntityRequest(serviceRequest, restaurant,
 			waitingNumber);
@@ -96,6 +99,11 @@ public class LineupServiceImpl implements LineupService, InternalLineupService {
 		Lineup lineup = Lineup.createLineup(entityRequest);
 		lineupRepository.save(lineup);
 		restaurantInfo.addLineupCount();
+	}
+
+	@Recover
+	private void recover() {
+		throw new IllegalArgumentException("이용자가 많아 요청을 처리할 수 없습니다. 잠시 후 다시 시도해 주세요.");
 	}
 
 	@Override
