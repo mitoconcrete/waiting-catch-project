@@ -99,4 +99,13 @@ public class CouponCreator extends TimeStamped {
 	public void deleteCouponCreator() {
 		this.isDeleted = true;
 	}
+
+	public boolean createCoupon() {
+		if (this.quantity > 0) {
+			this.quantity = this.quantity - 1;
+			return true;
+		}
+		return false;
+
+	}
 }
