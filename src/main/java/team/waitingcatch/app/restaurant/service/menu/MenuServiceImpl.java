@@ -12,6 +12,7 @@ import team.waitingcatch.app.common.util.image.ImageUploader;
 import team.waitingcatch.app.restaurant.dto.menu.CreateMenuEntityRequest;
 import team.waitingcatch.app.restaurant.dto.menu.CreateMenuServiceRequest;
 import team.waitingcatch.app.restaurant.dto.menu.CustomerMenuResponse;
+import team.waitingcatch.app.restaurant.dto.menu.DeleteMenuServiceRequest;
 import team.waitingcatch.app.restaurant.dto.menu.MenuResponse;
 import team.waitingcatch.app.restaurant.dto.menu.UpdateMenuEntityRequest;
 import team.waitingcatch.app.restaurant.dto.menu.UpdateMenuServiceRequest;
@@ -92,8 +93,9 @@ public class MenuServiceImpl implements MenuService, InternalMenuService {
 	}
 
 	@Override
-	public void deleteMenu(Long menuId) {
-		Menu menu = _getMenuById(menuId);
+	public void deleteMenu(DeleteMenuServiceRequest request) {
+		restaurantService._getRestaurantByUserId(request.getId());
+		Menu menu = _getMenuById(request.getMenuId());
 		imageUploader.delete(menu.getImages());
 		menuRepository.delete(menu);
 	}

@@ -5,6 +5,7 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,10 +21,12 @@ import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.restaurant.dto.menu.CreateMenuControllerRequest;
 import team.waitingcatch.app.restaurant.dto.menu.CreateMenuServiceRequest;
 import team.waitingcatch.app.restaurant.dto.menu.CustomerMenuResponse;
+import team.waitingcatch.app.restaurant.dto.menu.DeleteMenuServiceRequest;
 import team.waitingcatch.app.restaurant.dto.menu.MenuResponse;
 import team.waitingcatch.app.restaurant.dto.menu.UpdateMenuControllerRequest;
 import team.waitingcatch.app.restaurant.dto.menu.UpdateMenuServiceRequest;
 import team.waitingcatch.app.restaurant.service.menu.MenuService;
+import team.waitingcatch.app.user.entitiy.UserDetailsImpl;
 
 @RequestMapping("/api")
 @RestController
@@ -56,14 +59,17 @@ public class MenuController {
 	@PutMapping("/seller/restaurants/{restaurantId}/menus/{menuId}")
 	public void updateMenu(@PathVariable Long menuId,
 		@RequestPart("images") MultipartFile multipartFile,
-		@RequestPart("requestDto") @Valid UpdateMenuControllerRequest request) {
+		@RequestPart("requestDto") @Valid UpdateMenuControllerRequest request,
+		@AuthenticationPrincipal UserDetailsImpl userDetails) {
 
-		UpdateMenuServiceRequest serviceRequest = new UpdateMenuServiceRequest(menuId, request, multipartFile);
+		UpdateMenuServiceRequest serviceRequest = new UpdateMenuServiceRequest(menuId, request, multipartFile,
+			userDetails.getId());
 		menuService.updateMenu(serviceRequest);
 	}
 
 	@DeleteMapping("/seller/restaurants/{restaurantId}/menus/{menuId}")
-	public void deleteMenu(@PathVariable Long menuId) {
-		menuService.deleteMenu(menuId);
+	public void deleteMenu(@PathVariable Long menuId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+		DeleteMenuServiceRequest deleteMenuServiceRequest = new DeleteMenuServiceRequest(userDetails.getId(), menuId);
+		menuService.deleteMenu(deleteMenuServiceRequest);
 	}
 }

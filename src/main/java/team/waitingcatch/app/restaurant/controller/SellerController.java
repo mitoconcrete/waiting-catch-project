@@ -42,6 +42,7 @@ import team.waitingcatch.app.event.service.couponcreator.CouponCreatorService;
 import team.waitingcatch.app.event.service.event.EventService;
 import team.waitingcatch.app.restaurant.dto.menu.CreateMenuControllerRequest;
 import team.waitingcatch.app.restaurant.dto.menu.CreateMenuServiceRequest;
+import team.waitingcatch.app.restaurant.dto.menu.DeleteMenuServiceRequest;
 import team.waitingcatch.app.restaurant.dto.menu.MenuResponse;
 import team.waitingcatch.app.restaurant.dto.menu.UpdateMenuControllerRequest;
 import team.waitingcatch.app.restaurant.dto.menu.UpdateMenuServiceRequest;
@@ -176,14 +177,15 @@ public class SellerController {
 	}
 
 	@GetMapping("/menu/delete/{menuId}")
-	public String deleteMenuSub(@PathVariable Long menuId) {
-		deleteMenu(menuId);
+	public String deleteMenuSub(@PathVariable Long menuId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+		deleteMenu(menuId, userDetails);
 		return "redirect:/menu";
 	}
 
 	@DeleteMapping("/menu/delete/{menuId}")
-	public void deleteMenu(@PathVariable Long menuId) {
-		menuService.deleteMenu(menuId);
+	public void deleteMenu(@PathVariable Long menuId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+		DeleteMenuServiceRequest deleteMenuServiceRequest = new DeleteMenuServiceRequest(userDetails.getId(), menuId);
+		menuService.deleteMenu(deleteMenuServiceRequest);
 	}
 
 	/*     판매자 정보 프론트   */
