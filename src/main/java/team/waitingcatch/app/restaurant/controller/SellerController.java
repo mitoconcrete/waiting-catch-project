@@ -329,16 +329,15 @@ public class SellerController {
 	}
 
 	@GetMapping("/event/delete/{eventId}")
-	public String deleteEventSub(@PathVariable Long eventId) {
-		deleteEvent(eventId);
+	public String deleteEventSub(@PathVariable Long eventId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+		deleteEvent(eventId, userDetails);
 		return "redirect:/event";
 	}
 
 	@DeleteMapping("/event/delete/{eventId}")
-	public void deleteEvent(@PathVariable Long eventId) {
-		Long userId = Long.parseLong("1");
+	public void deleteEvent(@PathVariable Long eventId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
 		DeleteEventServiceRequest deleteEventServiceRequest = new DeleteEventServiceRequest(eventId,
-			userId);
+			userDetails.getId());
 		eventService.deleteSellerEvent(deleteEventServiceRequest);
 	}
 
