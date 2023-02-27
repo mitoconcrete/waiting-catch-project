@@ -28,6 +28,9 @@ public class JwtUtil {
 	public static final String AUTHORIZATION_HEADER = "Authorization";
 	public static final String AUTHORIZATION_KEY = "auth";
 	public static final String BEARER_PREFIX = "Bearer ";
+
+	public static final long ACCESS_TOKEN_TIME = 1000 * 60 * 30L;
+	public static final long REFRESH_TOKEN_TIME = 1000 * 60 * 60 * 24 * 14L;
 	private final SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
 	@Value("${jwt.secret.key}")
 	private String secretKey;
@@ -40,12 +43,10 @@ public class JwtUtil {
 	}
 
 	public String createAccessToken(String username, UserRoleEnum role) {
-		long ACCESS_TOKEN_TIME = 1000 * 60 * 30L;
 		return createToken(username, role, ACCESS_TOKEN_TIME);
 	}
 
 	public String createRefreshToken(String username, UserRoleEnum role) {
-		long REFRESH_TOKEN_TIME = 1000 * 60 * 60 * 24 * 14L;
 		return createToken(username, role, REFRESH_TOKEN_TIME);
 	}
 
@@ -88,7 +89,7 @@ public class JwtUtil {
 	}
 
 	// 토큰에서 사용자 정보 가져오기
-	public Claims getUserInfoFromToken(String token) {
+	public Claims getTokenClaims(String token) {
 		return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
 	}
 }
