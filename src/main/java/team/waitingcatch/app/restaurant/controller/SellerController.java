@@ -73,14 +73,9 @@ public class SellerController {
 	private final RestaurantService restaurantService;
 	/*     로그인 프론트     */
 
-	// @GetMapping("hello")
-	// public String hello(Model model) {
-	// 	model.addAttribute("message", "Hello, World!");
-	// 	return "hello";
-	// }
-
 	@GetMapping("/login")
 	public String login() {
+
 		return "login";
 	}
 
@@ -228,7 +223,6 @@ public class SellerController {
 		UpdateRestaurantServiceRequest updateRestaurantServiceRequest =
 			new UpdateRestaurantServiceRequest(updateRestaurantControllerRequest, multipartFile,
 				userDetails.getId());
-
 		restaurantService.updateRestaurant(updateRestaurantServiceRequest);
 
 		return "redirect:/seller";

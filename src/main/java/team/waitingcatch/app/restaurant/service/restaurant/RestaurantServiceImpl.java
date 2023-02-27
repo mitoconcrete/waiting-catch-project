@@ -104,10 +104,8 @@ public class RestaurantServiceImpl implements RestaurantService, InternalRestaur
 	//업데이트시 -> 현재 있는것은 1.새로 2. 새로 3. 새로 4.새로
 	@Override
 	public void updateRestaurant(UpdateRestaurantServiceRequest updateRestaurantServiceRequest) throws IOException {
-		Restaurant restaurant = restaurantRepository.findByUserId(updateRestaurantServiceRequest.getSellerId())
-			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 레스토랑 입니다."));
-		RestaurantInfo restaurantInfo = restaurantInfoRepository.findById(restaurant.getId())
-			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 레스토랑 정보입니다."));
+		Restaurant restaurant = _getRestaurantByUserId(updateRestaurantServiceRequest.getSellerId());
+		RestaurantInfo restaurantInfo = _getRestaurantInfoByRestaurantId(restaurant.getId());
 		String imageName = "";
 
 		List<String> imageUrls = imageUploader.uploadList(updateRestaurantServiceRequest.getFiles(), "restaurant");

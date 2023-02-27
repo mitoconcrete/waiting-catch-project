@@ -99,7 +99,7 @@ public class EventServiceImpl implements EventService, InternalEventService {
 	public List<GetEventsResponse> getRestaurantEvents(Long id) {
 
 		//레스토랑 아이디로 레스토랑 객체를 찾아야함
-		Restaurant restaurant = restaurantService._getRestaurantById(id);
+		Restaurant restaurant = restaurantService._getRestaurantByUserId(id);
 		//찾은 객체로 이벤트 검색
 		List<Event> events = eventRepository.findByRestaurantAndIsDeletedFalse(restaurant);
 		return _getEventsResponse(events);
