@@ -102,7 +102,7 @@ public class LineupServiceImpl implements LineupService, InternalLineupService {
 	}
 
 	@Recover
-	private void recover() {
+	private void recover(OptimisticLockingFailureException e) {
 		throw new IllegalArgumentException("이용자가 많아 요청을 처리할 수 없습니다. 잠시 후 다시 시도해 주세요.");
 	}
 
