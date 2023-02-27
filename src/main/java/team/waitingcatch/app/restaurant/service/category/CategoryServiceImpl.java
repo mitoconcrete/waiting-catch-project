@@ -8,10 +8,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.restaurant.dto.category.CategoryResponse;
-import team.waitingcatch.app.restaurant.dto.category.ChildCategoryResponse;
 import team.waitingcatch.app.restaurant.dto.category.CreateCategoryRequest;
 import team.waitingcatch.app.restaurant.dto.category.DeleteCategoryServiceRequest;
-import team.waitingcatch.app.restaurant.dto.category.GetChildCategoryServiceRequest;
 import team.waitingcatch.app.restaurant.dto.category.UpdateCategoryServiceRequest;
 import team.waitingcatch.app.restaurant.entity.Category;
 import team.waitingcatch.app.restaurant.repository.CategoryRepository;
@@ -37,12 +35,19 @@ public class CategoryServiceImpl implements CategoryService, InternalCategorySer
 	}
 
 	@Override
-	@Transactional(readOnly = true)
-	public ChildCategoryResponse getChildCategories(GetChildCategoryServiceRequest request) {
-		List<Category> categories = categoryRepository.findAll();
-
-		return new ChildCategoryResponse(categories, request.getParentId());
+	public List<CategoryResponse> getChildCategories(Long parentId) {
+		return categoryRepository.findAllByParentId(parentId).stream()
+			.map(CategoryResponse::new)
+			.collect(Collectors.toList());
 	}
+
+	// @Override
+	// @Transactional(readOnly = true)
+	// public ChildCategoryResponse getChildCategories(GetChildCategoryServiceRequest request) {
+	// 	List<Category> categories = categoryRepository.findAll();
+	//
+	// 	return new ChildCategoryResponse(categories, request.getParentId());
+	// }
 
 	@Override
 	public void updateCategory(UpdateCategoryServiceRequest serviceRequest) {
