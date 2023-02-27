@@ -42,8 +42,8 @@ public class EventServiceImpl implements EventService, InternalEventService {
 	//레스토랑 이벤트를 생성한다.
 	@Override
 	public void createSellerEvent(CreateEventServiceRequest createEventServiceRequest) {
-
-		Restaurant restaurant = restaurantService._getRestaurantById(createEventServiceRequest.getId());
+		
+		Restaurant restaurant = restaurantService._getRestaurantByUserId(createEventServiceRequest.getId());
 		CreateEventRequest createEventRequest = new CreateEventRequest(createEventServiceRequest, restaurant);
 		Event event = new Event(createEventRequest);
 		eventRepository.save(event);
