@@ -6,14 +6,14 @@ import lombok.Getter;
 
 @Getter
 public class CreateMenuServiceRequest {
-	private final Long restaurantId;
+	private final Long id;
 	private final String name;
 	private final int price;
 	private final MultipartFile multipartFile;
 
-	public CreateMenuServiceRequest(Long restaurantId, MultipartFile multipartFile,
+	public CreateMenuServiceRequest(Long id, MultipartFile multipartFile,
 		CreateMenuControllerRequest request) {
-		this.restaurantId = restaurantId;
+		this.id = id;
 		this.name = request.getName();
 		this.price = request.getPrice();
 		this.multipartFile = multipartFile;

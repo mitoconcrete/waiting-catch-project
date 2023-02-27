@@ -141,12 +141,8 @@ public class SellerController {
 		@RequestPart("image") MultipartFile multipartFile,
 		@Valid CreateMenuControllerRequest request,
 		@AuthenticationPrincipal UserDetailsImpl userDetails) {
-		System.out.println(userDetails.getUsername() + " 디테일입니");
-		System.out.println(userDetails.getId() + " 디테일입니eee");
-		//MultipartFile multipartFile = null;
-		Long restaurantId = Long.parseLong("4");
-		System.out.println(multipartFile + " dd " + request + " dd ");
-		CreateMenuServiceRequest serviceRequest = new CreateMenuServiceRequest(restaurantId, multipartFile, request);
+		CreateMenuServiceRequest serviceRequest = new CreateMenuServiceRequest(userDetails.getId(), multipartFile,
+			request);
 		menuService.createMenu(serviceRequest);
 		return "redirect:/menu";
 	}

@@ -40,7 +40,7 @@ public class MenuServiceImpl implements MenuService, InternalMenuService {
 
 	@Override
 	public void createMenu(CreateMenuServiceRequest serviceRequest) {
-		Restaurant restaurant = restaurantService._getRestaurantById(serviceRequest.getRestaurantId());
+		Restaurant restaurant = restaurantService._getRestaurantByUserId(serviceRequest.getId());
 		String name = serviceRequest.getName();
 		int price = serviceRequest.getPrice();
 		String imageUrl = "기본 메뉴 이미지 URL";
@@ -62,9 +62,7 @@ public class MenuServiceImpl implements MenuService, InternalMenuService {
 	@Override
 	@Transactional(readOnly = true)
 	public List<MenuResponse> getMyRestaurantMenus(Long id) {
-		Restaurant restaurant = restaurantRepository.findByUserId(id).orElseThrow(
-			() -> new IllegalArgumentException("레스토랑을 가진 사용자가 아닙니다.")
-		);
+		Restaurant restaurant = restaurantService._getRestaurantByUserId(id);
 		return _getMenusByRestaurantId(restaurant.getId()).stream()
 			.map(MenuResponse::new)
 			.collect(Collectors.toList());
