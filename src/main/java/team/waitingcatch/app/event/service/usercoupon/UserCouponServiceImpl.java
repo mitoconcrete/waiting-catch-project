@@ -47,11 +47,16 @@ public class UserCouponServiceImpl implements UserCouponService, InternalUserCou
 
 		for (UserCoupon userCoupon : userCoupons) {
 			UserCouponResponse userCouponResponse = new UserCouponResponse(userCoupon);
-
-			GetUserCouponResponse getUserCouponResponse = new GetUserCouponResponse(userCouponResponse);
+			String restaurantName = userCoupon.getCouponCreator().getEvent().getRestaurant().getName();
+			GetUserCouponResponse getUserCouponResponse = new GetUserCouponResponse(userCouponResponse, restaurantName);
 			getUserCouponResponses.add(getUserCouponResponse);
 		}
 		return getUserCouponResponses;
+	}
+
+	@Override
+	public void useCoupon(UserCoupon userCoupon) {
+
 	}
 
 }
