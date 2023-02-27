@@ -10,6 +10,7 @@ import javax.persistence.Index;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Version;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -31,7 +32,14 @@ public class WaitingNumber {
 	private Restaurant restaurant;
 
 	@Column(nullable = false)
-	private int waitingNumber;
+	private int nextNumber;
+
+	@Version
+	private Long version;
+
+	public void updateNextNumber() {
+		nextNumber++;
+	}
 
 	public static WaitingNumber createWaitingNumber(Restaurant restaurant) {
 		return new WaitingNumber(restaurant);
@@ -39,6 +47,6 @@ public class WaitingNumber {
 
 	private WaitingNumber(Restaurant restaurant) {
 		this.restaurant = restaurant;
-		this.waitingNumber = 1;
+		this.nextNumber = 1;
 	}
 }
