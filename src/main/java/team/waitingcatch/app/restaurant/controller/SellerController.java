@@ -285,11 +285,11 @@ public class SellerController {
 	@PostMapping("/event/couponcreator/{eventId}")
 	@ResponseStatus(value = HttpStatus.CREATED)
 	public String createCouponCreator(@PathVariable Long eventId,
-		@Validated CreateCouponCreatorControllerRequest createCouponCreatorControllerRequest) {
-		Long userId = Long.parseLong("1");
+		@Validated CreateCouponCreatorControllerRequest createCouponCreatorControllerRequest,
+		@AuthenticationPrincipal UserDetailsImpl userDetails) {
 
 		CreateSellerCouponCreatorServiceRequest createSellerCouponCreatorServiceRequest = new CreateSellerCouponCreatorServiceRequest(
-			createCouponCreatorControllerRequest, eventId, userId);
+			createCouponCreatorControllerRequest, eventId, userDetails.getId());
 
 		couponCreatorService.createSellerCouponCreator(createSellerCouponCreatorServiceRequest);
 		return "redirect:/event";
