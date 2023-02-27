@@ -17,8 +17,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.restaurant.dto.category.CategoryResponse;
+import team.waitingcatch.app.restaurant.dto.category.ChildCategoryResponse;
 import team.waitingcatch.app.restaurant.dto.category.CreateCategoryRequest;
 import team.waitingcatch.app.restaurant.dto.category.DeleteCategoryServiceRequest;
+import team.waitingcatch.app.restaurant.dto.category.GetChildCategoryServiceRequest;
 import team.waitingcatch.app.restaurant.dto.category.UpdateCategoryControllerRequest;
 import team.waitingcatch.app.restaurant.dto.category.UpdateCategoryServiceRequest;
 import team.waitingcatch.app.restaurant.service.category.CategoryService;
@@ -40,16 +42,16 @@ public class CategoryController {
 		return categoryService.getParentCategories();
 	}
 
-	@GetMapping("/admin/categories/{categoryId}")
-	public List<CategoryResponse> getChildCategories(@PathVariable Long categoryId) {
-		return categoryService.getChildCategories(categoryId);
+	@GetMapping("/categories/{categoryId}")
+	public List<CategoryResponse> getChildCategoriesForSellerManagement(@PathVariable Long categoryId) {
+		return categoryService.getChildCategoriesForSellerManagement(categoryId);
 	}
 
-	// @GetMapping("/admin/categories/{categoryId}")
-	// public ChildCategoryResponse getChildCategories(@PathVariable Long categoryId) {
-	// 	GetChildCategoryServiceRequest request = new GetChildCategoryServiceRequest(categoryId);
-	// 	return categoryService.getChildCategories(request);
-	// }
+	@GetMapping("/admin/categories/{categoryId}")
+	public ChildCategoryResponse getChildCategories(@PathVariable Long categoryId) {
+		GetChildCategoryServiceRequest request = new GetChildCategoryServiceRequest(categoryId);
+		return categoryService.getChildCategories(request);
+	}
 
 	@PutMapping("/admin/categories/{categoryId}")
 	public void updateCategory(@PathVariable Long categoryId,

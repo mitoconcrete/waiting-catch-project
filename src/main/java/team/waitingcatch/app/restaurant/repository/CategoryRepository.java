@@ -8,4 +8,6 @@ import team.waitingcatch.app.restaurant.entity.Category;
 
 public interface CategoryRepository extends JpaRepository<Category, Long> {
 	List<Category> findAllByParentId(Long parentId);
+
+	List<Category> findAllByIdIn(List<Long> categoryId);
 }

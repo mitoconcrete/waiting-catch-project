@@ -116,7 +116,7 @@
 
             $.ajax({
                 type: 'GET',
-                url: `/api/admin/categories/` + parentId,
+                url: `/api/categories/` + parentId,
                 success: function (response, status) {
                     console.log(response)
                     if (status === 'success') {
@@ -147,7 +147,7 @@
 
             $.ajax({
                 type: 'GET',
-                url: `/api/admin/categories/` + parentId,
+                url: `/api/categories/` + parentId,
                 success: function (response, status) {
                     console.log(response)
                     if (status === 'success') {
