@@ -320,10 +320,10 @@ public class SellerController {
 	@PutMapping("/event/updateCouponCreator/{eventId}/{creatorId}")
 	public String updateCouponCreator(
 		UpdateCouponCreatorControllerRequest updateCouponCreatorControllerRequest,
-		@PathVariable Long eventId, @PathVariable Long creatorId) {
-		Long userId = Long.parseLong("1");
+		@PathVariable Long eventId, @PathVariable Long creatorId,
+		@AuthenticationPrincipal UserDetailsImpl userDetails) {
 		UpdateSellerCouponCreatorServiceRequest updateSellerCouponCreatorServiceRequest = new UpdateSellerCouponCreatorServiceRequest(
-			updateCouponCreatorControllerRequest, eventId, creatorId, userId);
+			updateCouponCreatorControllerRequest, eventId, creatorId, userDetails.getId());
 		couponCreatorService.updateSellerCouponCreator(updateSellerCouponCreatorServiceRequest);
 		return "redirect:/event";
 	}
