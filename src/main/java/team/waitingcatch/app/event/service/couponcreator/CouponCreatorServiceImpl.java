@@ -55,7 +55,7 @@ public class CouponCreatorServiceImpl implements CouponCreatorService, InternalC
 	@Override
 	public void createSellerCouponCreator(
 		CreateSellerCouponCreatorServiceRequest createSellerCouponCreatorServiceRequest) {
-		Restaurant restaurant = restaurantService._getRestaurantById(
+		Restaurant restaurant = restaurantService._getRestaurantByUserId(
 			createSellerCouponCreatorServiceRequest.getUserId());
 
 		Event event = eventRepository.findByIdAndRestaurantAndIsDeletedFalse(
@@ -82,7 +82,7 @@ public class CouponCreatorServiceImpl implements CouponCreatorService, InternalC
 	@Override
 	public void updateSellerCouponCreator(
 		UpdateSellerCouponCreatorServiceRequest updateSellerCouponCreatorServiceRequest) {
-		Restaurant restaurant = restaurantService._getRestaurantById(
+		Restaurant restaurant = restaurantService._getRestaurantByUserId(
 			updateSellerCouponCreatorServiceRequest.getUserId());
 
 		eventRepository.findByIdAndRestaurantAndIsDeletedFalse(

@@ -1,11 +1,9 @@
 package team.waitingcatch.app.event.dto.couponcreator;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 import javax.validation.constraints.Future;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 import org.springframework.format.annotation.DateTimeFormat;
@@ -34,7 +32,7 @@ public class CreateCouponCreatorControllerRequest {
 
 	@NotNull
 	@Future
-	@DateTimeFormat(pattern ="yyyy-MM-dd HH:mm:ss")
+	@DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
 	//@Pattern(regexp = "^\\d{4}-\\d{2}-\\d{2} [0-9]{2}:[0-9]{2}$", message = "YYYY-MM-DD HH:MM 형식으로 입력해주세요")
 	private LocalDateTime expireDate;
 }

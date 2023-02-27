@@ -1,11 +1,12 @@
 package team.waitingcatch.app.event.dto.couponcreator;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 import javax.validation.constraints.Future;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -31,8 +32,8 @@ public class UpdateSellerCouponCreatorServiceRequest {
 
 	@NotNull
 	@Future
-	//@Pattern(regexp = "^\\d{4}-\\d{2}-\\d{2} [0-9]{2}:[0-9]{2}$", message = "YYYY-MM-DD HH:MM 형식으로 입력해주세요")
-	private String expireDate;
+	@DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
+	private LocalDateTime expireDate;
 
 	private final Long eventId;
 
@@ -47,17 +48,9 @@ public class UpdateSellerCouponCreatorServiceRequest {
 		this.discountPrice = updateCouponCreatorControllerRequest.getDiscountPrice();
 		this.discountType = updateCouponCreatorControllerRequest.getDiscountType();
 		this.quantity = updateCouponCreatorControllerRequest.getQuantity();
-		this.expireDate = updateCouponCreatorControllerRequest.getExpireDateString();
+		this.expireDate = updateCouponCreatorControllerRequest.getExpireDate();
 		this.eventId = eventId;
 		this.creatorId = creatorId;
 		this.userId = userId;
-	}
-
-	public LocalDateTime getExpireDate() {
-		return LocalDateTime.parse(expireDate, DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm"));
-	}
-
-	public void setExpireDate(String expireDate) {
-		this.expireDate = expireDate;
 	}
 }
