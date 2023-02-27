@@ -268,10 +268,10 @@ public class SellerController {
 	@PostMapping("/event/new")
 	@ResponseStatus(value = HttpStatus.CREATED)
 	public String createEvent(
-		@Validated CreateEventControllerRequest createEventControllerRequest) {
-		Long restaurantId = Long.parseLong("4");
+		@Validated CreateEventControllerRequest createEventControllerRequest,
+		@AuthenticationPrincipal UserDetailsImpl userDetails) {
 		CreateEventServiceRequest createEventServiceRequest = new CreateEventServiceRequest(
-			createEventControllerRequest, restaurantId);
+			createEventControllerRequest, userDetails.getId());
 		eventService.createSellerEvent(createEventServiceRequest);
 		return "redirect:/event";
 	}

@@ -28,12 +28,12 @@ public class CreateEventServiceRequest {
 	//@Pattern(regexp = "^\\d{4}-\\d{2}-\\d{2} [0-9]{2}:[0-9]{2}$", message = "YYYY-MM-DD HH:MM 형식으로 입력해주세요")
 	private LocalDateTime eventEndDate;
 
-	private Long restaurantId;
+	private Long id;
 
 	public CreateEventServiceRequest(CreateEventControllerRequest createEventControllerRequest, Long restaurantId) {
 		this.name = createEventControllerRequest.getName();
 		this.eventStartDate = createEventControllerRequest.getEventStartDate();
 		this.eventEndDate = createEventControllerRequest.getEventEndDate();
-		this.restaurantId = restaurantId;
+		this.id = id;
 	}
 }
