@@ -1,6 +1,5 @@
 package team.waitingcatch.app.lineup.repository;
 
-import static team.waitingcatch.app.lineup.entity.QLineup.*;
 import static team.waitingcatch.app.lineup.entity.QLineupHistory.*;
 import static team.waitingcatch.app.restaurant.entity.QRestaurant.*;
 
