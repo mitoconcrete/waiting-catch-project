@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
@@ -110,7 +109,7 @@ public class SellerController {
 		DemandSignUpSellerServiceRequest demandSignupSellerServiceRequest = new DemandSignUpSellerServiceRequest(
 			demandSignUpControllerRequest, address, position);
 		sellerManagementService.demandSignUpSeller(demandSignupSellerServiceRequest);
-		return "/hello";
+		return "/login";
 	}
 
 	/*     메뉴 프론트     */
@@ -180,17 +179,17 @@ public class SellerController {
 		String token = jwtUtil.resolveToken(request);
 		LogoutRequest servicePayload = new LogoutRequest(token);
 		userService.logout(servicePayload);
-		return "redirect:/hello";
+		return "redirect:/login";
 	}
 
 	@GetMapping("/seller/delete")
-	public String withdrawSellerSub(@AuthenticationPrincipal UserDetails userDetails) {
+	public String withdrawSellerSub(@AuthenticationPrincipal UserDetailsImpl userDetails) {
 		withdrawSeller(userDetails);
-		return "redirect:/hello";
+		return "redirect:/login";
 	}
 
 	@DeleteMapping("/seller/delete")
-	public void withdrawSeller(@AuthenticationPrincipal UserDetails userDetails) {
+	public void withdrawSeller(@AuthenticationPrincipal UserDetailsImpl userDetails) {
 		DeleteUserRequest servicePayload = new DeleteUserRequest(userDetails.getUsername());
 		userService.deleteSeller(servicePayload);
 	}
