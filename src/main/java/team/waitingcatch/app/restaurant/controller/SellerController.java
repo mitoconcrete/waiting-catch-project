@@ -197,7 +197,6 @@ public class SellerController {
 	@GetMapping("/seller/logout")
 	public String logoutSub(HttpServletRequest request) {
 		String token = jwtUtil.resolveToken(request);
-		System.out.println("토큰배달" + token);
 		LogoutRequest servicePayload = new LogoutRequest(token);
 		userService.logout(servicePayload);
 		return "redirect:/hello";
@@ -205,7 +204,6 @@ public class SellerController {
 
 	@GetMapping("/seller/delete")
 	public String withdrawSellerSub(@AuthenticationPrincipal UserDetails userDetails) {
-		System.out.println(userDetails + "디테일");
 		withdrawSeller(userDetails);
 		return "redirect:/hello";
 	}
@@ -213,7 +211,7 @@ public class SellerController {
 	@DeleteMapping("/seller/delete")
 	public void withdrawSeller(@AuthenticationPrincipal UserDetails userDetails) {
 		DeleteUserRequest servicePayload = new DeleteUserRequest(userDetails.getUsername());
-		// userService.deleteUser(servicePayload);
+		userService.deleteSeller(servicePayload);
 	}
 
 	@GetMapping("/seller/infos")
