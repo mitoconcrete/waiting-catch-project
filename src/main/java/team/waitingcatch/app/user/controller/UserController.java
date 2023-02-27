@@ -1,12 +1,11 @@
 package team.waitingcatch.app.user.controller;
 
-import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.validation.constraints.Pattern;
 
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -23,13 +22,13 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
-import team.waitingcatch.app.common.dto.GenericResponse;
 import team.waitingcatch.app.common.util.JwtUtil;
 import team.waitingcatch.app.user.dto.CreateUserControllerRequest;
 import team.waitingcatch.app.user.dto.CreateUserServiceRequest;
 import team.waitingcatch.app.user.dto.DeleteUserRequest;
 import team.waitingcatch.app.user.dto.FindPasswordRequest;
 import team.waitingcatch.app.user.dto.GetCustomerByIdAndRoleServiceRequest;
+import team.waitingcatch.app.user.dto.GetCustomerPageableRequest;
 import team.waitingcatch.app.user.dto.LoginRequest;
 import team.waitingcatch.app.user.dto.LoginServiceResponse;
 import team.waitingcatch.app.user.dto.LogoutRequest;
@@ -117,8 +116,8 @@ public class UserController {
 
 	// admin
 	@GetMapping("/admin/customers")
-	public GenericResponse<UserInfoResponse> getCustomers() {
-		return new GenericResponse<>(userService.getCustomers());
+	public Page<UserInfoResponse> getCustomers(GetCustomerPageableRequest pageableRequest) {
+		return userService.getCustomers(pageableRequest);
 	}
 
 	@GetMapping("/admin/customers/{customerId}")
