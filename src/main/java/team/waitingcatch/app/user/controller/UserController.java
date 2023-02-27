@@ -54,7 +54,6 @@ public class UserController {
 	@PostMapping({"/customer/signin", "/seller/signin", "/admin/signin"})
 	public void login(@RequestBody @Valid LoginRequest loginRequest, HttpServletResponse response) {
 		LoginServiceResponse loginServiceResponse = userService.login(loginRequest);
-		System.out.println(loginServiceResponse.getAccessToken());
 		// 엑세스 토큰을 서비스로 부터 반환 받아 헤더에 넣어준다.
 		response.setHeader(JwtUtil.AUTHORIZATION_HEADER, loginServiceResponse.getAccessToken());
 	}
