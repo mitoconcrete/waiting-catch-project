@@ -18,6 +18,7 @@ import team.waitingcatch.app.restaurant.dto.menu.UpdateMenuServiceRequest;
 import team.waitingcatch.app.restaurant.entity.Menu;
 import team.waitingcatch.app.restaurant.entity.Restaurant;
 import team.waitingcatch.app.restaurant.repository.MenuRepository;
+import team.waitingcatch.app.restaurant.repository.RestaurantRepository;
 import team.waitingcatch.app.restaurant.service.restaurant.InternalRestaurantService;
 
 @Service
@@ -27,6 +28,7 @@ public class MenuServiceImpl implements MenuService, InternalMenuService {
 	private final MenuRepository menuRepository;
 	private final InternalRestaurantService restaurantService;
 	private final ImageUploader imageUploader;
+	private final RestaurantRepository restaurantRepository;
 
 	@Override
 	@Transactional(readOnly = true)
@@ -59,8 +61,11 @@ public class MenuServiceImpl implements MenuService, InternalMenuService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public List<MenuResponse> getMyRestaurantMenus(Long restaurantId) {
-		return _getMenusByRestaurantId(restaurantId).stream()
+	public List<MenuResponse> getMyRestaurantMenus(Long id) {
+		Restaurant restaurant = restaurantRepository.findByUserId(id).orElseThrow(
+			() -> new IllegalArgumentException("레스토랑을 가진 사용자가 아닙니다.")
+		);
+		return _getMenusByRestaurantId(restaurant.getId()).stream()
 			.map(MenuResponse::new)
 			.collect(Collectors.toList());
 	}

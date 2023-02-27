@@ -58,6 +58,7 @@ import team.waitingcatch.app.user.dto.LoginServiceResponse;
 import team.waitingcatch.app.user.dto.LogoutRequest;
 import team.waitingcatch.app.user.dto.UpdateUserControllerRequest;
 import team.waitingcatch.app.user.dto.UpdateUserServiceRequest;
+import team.waitingcatch.app.user.entitiy.UserDetailsImpl;
 import team.waitingcatch.app.user.service.UserService;
 
 @Controller
@@ -121,9 +122,9 @@ public class SellerController {
 	/*     메뉴 프론트     */
 
 	@GetMapping("/menu")
-	public String menu(Model model) {
-		Long restaurantId = Long.parseLong("4");
-		List<MenuResponse> menus = menuService.getMyRestaurantMenus(restaurantId);
+	public String menu(Model model,
+		@AuthenticationPrincipal UserDetailsImpl userDetails) {
+		List<MenuResponse> menus = menuService.getMyRestaurantMenus(userDetails.getId());
 		model.addAttribute("menus", menus);
 		return "menu";
 	}
@@ -138,7 +139,10 @@ public class SellerController {
 	@ResponseStatus(value = HttpStatus.CREATED)
 	public String createMenu(
 		@RequestPart("image") MultipartFile multipartFile,
-		@Valid CreateMenuControllerRequest request) {
+		@Valid CreateMenuControllerRequest request,
+		@AuthenticationPrincipal UserDetailsImpl userDetails) {
+		System.out.println(userDetails.getUsername() + " 디테일입니");
+		System.out.println(userDetails.getId() + " 디테일입니eee");
 		//MultipartFile multipartFile = null;
 		Long restaurantId = Long.parseLong("4");
 		System.out.println(multipartFile + " dd " + request + " dd ");
