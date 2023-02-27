@@ -12,7 +12,6 @@ import team.waitingcatch.app.event.dto.usercoupon.GetUserCouponResponse;
 import team.waitingcatch.app.event.dto.usercoupon.UserCouponResponse;
 import team.waitingcatch.app.event.entity.CouponCreator;
 import team.waitingcatch.app.event.entity.UserCoupon;
-import team.waitingcatch.app.event.repository.CouponCreatorRepository;
 import team.waitingcatch.app.event.repository.UserCouponRepository;
 import team.waitingcatch.app.event.service.couponcreator.InternalCouponCreatorService;
 import team.waitingcatch.app.user.entitiy.User;
@@ -26,7 +25,6 @@ public class UserCouponServiceImpl implements UserCouponService, InternalUserCou
 	private final InternalCouponCreatorService internalCouponCreatorService;
 	private final InternalUserService internalUserService;
 	private final UserCouponRepository userCouponRepository;
-	private final CouponCreatorRepository couponCreatorRepository;
 
 	//유저 쿠폰을 생성한다
 	@Override

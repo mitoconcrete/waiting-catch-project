@@ -21,7 +21,6 @@ import team.waitingcatch.app.event.entity.Event;
 import team.waitingcatch.app.event.repository.CouponCreatorRepository;
 import team.waitingcatch.app.event.repository.EventRepository;
 import team.waitingcatch.app.restaurant.entity.Restaurant;
-import team.waitingcatch.app.restaurant.repository.RestaurantRepository;
 import team.waitingcatch.app.restaurant.service.restaurant.InternalRestaurantService;
 
 @Service
@@ -30,7 +29,6 @@ import team.waitingcatch.app.restaurant.service.restaurant.InternalRestaurantSer
 public class EventServiceImpl implements EventService, InternalEventService {
 
 	private final EventRepository eventRepository;
-	private final RestaurantRepository restaurantRepository;
 	private final CouponCreatorRepository couponCreatorRepository;
 	private final InternalRestaurantService restaurantService;
 
@@ -44,7 +42,7 @@ public class EventServiceImpl implements EventService, InternalEventService {
 	//레스토랑 이벤트를 생성한다.
 	@Override
 	public void createSellerEvent(CreateEventServiceRequest createEventServiceRequest) {
-		
+
 		Restaurant restaurant = restaurantService._getRestaurantById(createEventServiceRequest.getId());
 		CreateEventRequest createEventRequest = new CreateEventRequest(createEventServiceRequest, restaurant);
 		Event event = new Event(createEventRequest);
@@ -61,7 +59,7 @@ public class EventServiceImpl implements EventService, InternalEventService {
 	//레스토랑 이벤트를 수정한다.
 	@Override
 	public void updateSellerEvent(UpdateSellerEventServiceRequest updateSellerEventServiceRequest) {
-		Restaurant restaurant = _getRestaurantByUserId(updateSellerEventServiceRequest.getUserId());
+		Restaurant restaurant = restaurantService._getRestaurantByUserId(updateSellerEventServiceRequest.getUserId());
 		Event event = eventRepository.findByIdAndRestaurantAndIsDeletedFalse(
 				updateSellerEventServiceRequest.getEventId(), restaurant)
 			.orElseThrow(() -> new IllegalArgumentException("매장에 해당 이벤트가 존재하지 않습니다."));
@@ -78,7 +76,7 @@ public class EventServiceImpl implements EventService, InternalEventService {
 	//레스토랑 이벤트를 삭제한다.
 	@Override
 	public void deleteSellerEvent(DeleteEventServiceRequest deleteEventServiceRequest) {
-		Restaurant restaurant = _getRestaurantByUserId(deleteEventServiceRequest.getUserId());
+		Restaurant restaurant = restaurantService._getRestaurantByUserId(deleteEventServiceRequest.getUserId());
 		Event event = eventRepository.findByIdAndRestaurantAndIsDeletedFalse(
 				deleteEventServiceRequest.getEventId(), restaurant)
 			.orElseThrow(() -> new IllegalArgumentException("매장에 해당 이벤트가 존재하지 않습니다."));
@@ -114,19 +112,6 @@ public class EventServiceImpl implements EventService, InternalEventService {
 		Event event = eventRepository.findByIdAndIsDeletedFalse(id)
 			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 이벤트 입니다."));
 		return event;
-	}
-
-	@Override
-	public Restaurant _getRestaurantByUserId(Long id) {
-		return restaurantRepository.findByUserId(id)
-			.orElseThrow(() -> new IllegalArgumentException("레스토랑을 찾을수 없습니다."));
-	}
-
-	@Override
-	@Transactional(readOnly = true)
-	public Restaurant _getRestaurantById(Long id) {
-		return restaurantRepository.findById(id)
-			.orElseThrow(() -> new IllegalArgumentException("레스토랑을 찾을수 없습니다."));
 	}
 
 	//이벤트 목록 + 쿠폰생성자를 DTO형태로 리턴

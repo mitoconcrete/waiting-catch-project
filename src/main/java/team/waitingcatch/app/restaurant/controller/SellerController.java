@@ -7,7 +7,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -21,7 +20,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.multipart.MultipartFile;
 
 import lombok.RequiredArgsConstructor;
@@ -137,7 +135,6 @@ public class SellerController {
 
 	//@PostMapping("/seller/restaurants/{restaurantId}/menus")
 	@PostMapping("/menu/new")
-	@ResponseStatus(value = HttpStatus.CREATED)
 	public String createMenu(
 		@RequestPart("image") MultipartFile multipartFile,
 		@Valid CreateMenuControllerRequest request,
@@ -147,17 +144,6 @@ public class SellerController {
 		menuService.createMenu(serviceRequest);
 		return "redirect:/menu";
 	}
-
-	// // seller
-	// @PostMapping("/seller/restaurants/{restaurantId}/menus")
-	// @ResponseStatus(value = HttpStatus.CREATED)
-	// public void createMenu(@PathVariable Long restaurantId,
-	// 	@RequestPart("images") MultipartFile multipartFile,
-	// 	@RequestPart("requestDto") @Valid CreateMenuControllerRequest request) {
-	//
-	// 	CreateMenuServiceRequest serviceRequest = new CreateMenuServiceRequest(restaurantId, multipartFile, request);
-	// 	menuService.createMenu(serviceRequest);
-	// }
 
 	@GetMapping("/menu/update/{menuId}")
 	public String updateMenu(Model model, @PathVariable Long menuId) {
@@ -266,7 +252,6 @@ public class SellerController {
 	}
 
 	@PostMapping("/event/new")
-	@ResponseStatus(value = HttpStatus.CREATED)
 	public String createEvent(
 		@Validated CreateEventControllerRequest createEventControllerRequest,
 		@AuthenticationPrincipal UserDetailsImpl userDetails) {
@@ -283,7 +268,6 @@ public class SellerController {
 	}
 
 	@PostMapping("/event/couponcreator/{eventId}")
-	@ResponseStatus(value = HttpStatus.CREATED)
 	public String createCouponCreator(@PathVariable Long eventId,
 		@Validated CreateCouponCreatorControllerRequest createCouponCreatorControllerRequest,
 		@AuthenticationPrincipal UserDetailsImpl userDetails) {
