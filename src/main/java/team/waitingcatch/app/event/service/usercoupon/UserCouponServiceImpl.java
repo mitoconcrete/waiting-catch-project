@@ -60,7 +60,7 @@ public class UserCouponServiceImpl implements UserCouponService, InternalUserCou
 
 	@Override
 	public void useCoupon(Long couponId) {
-		UserCoupon userCoupon = userCouponRepository.findByUserCouponIdAndIsUsedFalse(couponId).orElseThrow(
+		UserCoupon userCoupon = userCouponRepository.findByIdAndIsUsedFalse(couponId).orElseThrow(
 			() -> new IllegalArgumentException("존재하지 않는 쿠폰입니다.")
 		);
 		userCoupon.useCoupon();
