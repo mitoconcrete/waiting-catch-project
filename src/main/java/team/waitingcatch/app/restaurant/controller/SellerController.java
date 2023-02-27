@@ -166,10 +166,11 @@ public class SellerController {
 
 	@PutMapping("/menu/update/{menuId}")
 	public String updateMenu(@PathVariable Long menuId,
-		//@RequestPart("images") MultipartFile multipartFile,
-		@Valid UpdateMenuControllerRequest request) {
-		MultipartFile multipartFile = null;
-		UpdateMenuServiceRequest serviceRequest = new UpdateMenuServiceRequest(menuId, request, multipartFile);
+		@RequestPart("image") MultipartFile multipartFile,
+		@Valid UpdateMenuControllerRequest request, @AuthenticationPrincipal UserDetailsImpl userDetails
+	) {
+		UpdateMenuServiceRequest serviceRequest = new UpdateMenuServiceRequest(menuId, request, multipartFile,
+			userDetails.getId());
 		menuService.updateMenu(serviceRequest);
 		return "redirect:/menu";
 	}

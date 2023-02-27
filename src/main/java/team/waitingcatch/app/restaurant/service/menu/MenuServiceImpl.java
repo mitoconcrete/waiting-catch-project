@@ -70,6 +70,7 @@ public class MenuServiceImpl implements MenuService, InternalMenuService {
 
 	@Override
 	public void updateMenu(UpdateMenuServiceRequest serviceRequest) {
+		restaurantService._getRestaurantByUserId(serviceRequest.getId());
 		Menu menu = _getMenuById(serviceRequest.getMenuId());
 		String name = serviceRequest.getName();
 		int price = serviceRequest.getPrice();
