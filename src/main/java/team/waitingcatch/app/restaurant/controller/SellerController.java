@@ -236,19 +236,18 @@ public class SellerController {
 
 	@PutMapping("/seller/updaterestaurant")
 	public String updateRestaurant(
-		UpdateRestaurantControllerRequest updateRestaurantControllerRequest) throws IOException {
-		Long userId = Long.parseLong("1");
-		List<MultipartFile> multipartFile = null;
+		UpdateRestaurantControllerRequest updateRestaurantControllerRequest,
+		@RequestPart("image") List<MultipartFile> multipartFile,
+		@AuthenticationPrincipal UserDetailsImpl userDetails) throws IOException {
 		UpdateRestaurantServiceRequest updateRestaurantServiceRequest =
 			new UpdateRestaurantServiceRequest(updateRestaurantControllerRequest, multipartFile,
-				userId);
+				userDetails.getId());
 
 		restaurantService.updateRestaurant(updateRestaurantServiceRequest);
 
 		return "redirect:/seller";
 	}
-
-
+	
 
 
 
