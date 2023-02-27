@@ -247,16 +247,15 @@ public class SellerController {
 
 		return "redirect:/seller";
 	}
-	
+
 
 
 
 	/*     이벤트     */
 
 	@GetMapping("/event")
-	public String event(Model model) {
-		Long restaurantId = Long.parseLong("4");
-		List<GetEventsResponse> events = eventService.getRestaurantEvents(restaurantId);
+	public String event(Model model, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+		List<GetEventsResponse> events = eventService.getRestaurantEvents(userDetails.getId());
 		model.addAttribute("events", events);
 		return "event";
 	}

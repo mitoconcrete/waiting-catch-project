@@ -22,6 +22,7 @@ import team.waitingcatch.app.event.repository.CouponCreatorRepository;
 import team.waitingcatch.app.event.repository.EventRepository;
 import team.waitingcatch.app.restaurant.entity.Restaurant;
 import team.waitingcatch.app.restaurant.repository.RestaurantRepository;
+import team.waitingcatch.app.restaurant.service.restaurant.InternalRestaurantService;
 
 @Service
 @RequiredArgsConstructor
@@ -31,6 +32,7 @@ public class EventServiceImpl implements EventService, InternalEventService {
 	private final EventRepository eventRepository;
 	private final RestaurantRepository restaurantRepository;
 	private final CouponCreatorRepository couponCreatorRepository;
+	private final InternalRestaurantService restaurantService;
 
 	//광역 이벤트를 생성한다.
 	@Override
@@ -96,9 +98,10 @@ public class EventServiceImpl implements EventService, InternalEventService {
 	//레스토랑 이벤트를 조회한다.
 	@Override
 	@Transactional(readOnly = true)
-	public List<GetEventsResponse> getRestaurantEvents(Long restaurantId) {
+	public List<GetEventsResponse> getRestaurantEvents(Long id) {
+
 		//레스토랑 아이디로 레스토랑 객체를 찾아야함
-		Restaurant restaurant = _getRestaurantById(restaurantId);
+		Restaurant restaurant = restaurantService._getRestaurantById(id);
 		//찾은 객체로 이벤트 검색
 		List<Event> events = eventRepository.findByRestaurantAndIsDeletedFalse(restaurant);
 		return _getEventsResponse(events);
