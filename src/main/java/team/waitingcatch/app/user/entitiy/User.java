@@ -29,22 +29,22 @@ public class User extends TimeStamped {
 	private Long id;
 
 	// 아이디는 고유해야하므로, unique 값으로 둡니다.
-	@Column(nullable = false, unique = true)
+	@Column(nullable = false, length = 15, unique = true)
 	private String username;
 
-	@Column(nullable = false)
+	@Column(nullable = false, length = 15)
 	private String password;
 
-	@Column(nullable = false, unique = true)
+	@Column(nullable = false, length = 255, unique = true)
 	private String email;
 
-	@Column(unique = true)
+	@Column(unique = true, length = 10)
 	private String nickname;
 
-	@Column(nullable = false)
+	@Column(nullable = false, length = 5)
 	private String name;
 
-	@Column(nullable = false, unique = true)
+	@Column(nullable = false, length = 13, unique = true)
 	private String phoneNumber;
 
 	@Column(nullable = false)
