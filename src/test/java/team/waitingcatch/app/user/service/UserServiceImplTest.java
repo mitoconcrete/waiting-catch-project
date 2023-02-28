@@ -46,6 +46,7 @@ import team.waitingcatch.app.user.dto.DeleteUserRequest;
 import team.waitingcatch.app.user.dto.GetCustomerByIdAndRoleServiceRequest;
 import team.waitingcatch.app.user.dto.LoginRequest;
 import team.waitingcatch.app.user.dto.LogoutRequest;
+import team.waitingcatch.app.user.dto.UpdatePasswordServiceRequest;
 import team.waitingcatch.app.user.dto.UpdateUserServiceRequest;
 import team.waitingcatch.app.user.entitiy.User;
 import team.waitingcatch.app.user.enums.UserRoleEnum;
@@ -366,4 +367,32 @@ class UserServiceImplTest {
 		assertTrue(eventRepository.findById(event.getId()).get().isDeleted());
 	}
 
+	@Test
+	@DisplayName("패스워드 업데이트 후 재 로그인")
+	void updatePassword() {
+		// given
+		var username = "xogns656";
+		var beforePW = "Test1234!";
+		var afterPW = "Test123!!";
+		var servicePayload = new UpdatePasswordServiceRequest("xogns656", afterPW);
+		var wrongPayload = new UpdatePasswordServiceRequest("xogns98", afterPW);
+
+		// when
+		userService.updatePassword(servicePayload);
+
+		// then
+		var request = mock(LoginRequest.class);
+		when(request.getUsername()).thenReturn(username);
+		when(request.getPassword()).thenReturn(afterPW);
+
+		var response = userService.login(request);
+		var claims = jwtUtil.getTokenClaims(response.getAccessToken().substring(7));
+
+		assertEquals(claims.getSubject(), username);
+		assertTrue(aliveTokenRepository.existsById(response.getAccessToken().substring(7)));
+		when(request.getPassword()).thenReturn(beforePW);
+		assertThrows(IllegalArgumentException.class, () -> userService.login(request));
+
+		assertThrows(IllegalArgumentException.class, () -> userService.updatePassword(wrongPayload));
+	}
 }
