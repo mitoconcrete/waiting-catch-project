@@ -73,8 +73,8 @@ public class Restaurant extends TimeStamped {
 	@JoinColumn(name = "user_id", nullable = false)
 	private User user;
 
-	@Column(nullable = false)
-	private String category;
+	// @Column(nullable = false)
+	// private String category;
 
 	public Restaurant(ApproveSignUpSellerManagementEntityPassToRestaurantEntityRequest entityRequest) {
 		this.name = entityRequest.getRestaurantName();
@@ -90,7 +90,7 @@ public class Restaurant extends TimeStamped {
 		this.businessLicenseNo = entityRequest.getBusinessLicenseNo();
 		this.capacity = 0;
 		this.user = entityRequest.getUser();
-		this.category = entityRequest.getCategories();
+		// this.category = entityRequest.getCategories();
 	}
 
 	//dummy data
@@ -103,7 +103,7 @@ public class Restaurant extends TimeStamped {
 		this.searchKeywords = request.getCategory();
 		this.phoneNumber = request.getPhoneNumber();
 		this.position = request.getPosition();
-		this.category = request.getCategory();
+		// this.category = request.getCategory();
 		this.user = request.getUser();
 	}
 

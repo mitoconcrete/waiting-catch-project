@@ -20,7 +20,7 @@ public class RestaurantResponse {
 	private final String address;
 	private final String detailAddress;
 	private final String searchKeywords;
-	private final String category;
+	// private final String category;
 
 	private final String images;
 	private final String description;
@@ -45,7 +45,7 @@ public class RestaurantResponse {
 		this.address = restaurant.getAddress();
 		this.detailAddress = restaurant.getDetailAddress();
 		this.searchKeywords = restaurant.getSearchKeywords();
-		this.category = restaurant.getCategory();
+		// this.category = restaurant.getCategory();
 		this.images = restaurant.getImages();
 		this.description = restaurant.getDescription();
 		this.capacity = restaurant.getCapacity();
