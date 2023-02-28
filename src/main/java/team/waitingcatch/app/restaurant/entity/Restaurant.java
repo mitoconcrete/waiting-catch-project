@@ -15,7 +15,6 @@ import javax.persistence.OneToOne;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import team.waitingcatch.app.common.Address;
 import team.waitingcatch.app.common.Position;
 import team.waitingcatch.app.common.entity.TimeStamped;
 import team.waitingcatch.app.restaurant.dto.requestseller.ApproveSignUpSellerManagementEntityPassToRestaurantEntityRequest;
@@ -40,8 +39,17 @@ public class Restaurant extends TimeStamped {
 	@Embedded
 	private Position position;
 
-	@Embedded
-	private Address address;
+	@Column(nullable = false)
+	private String zipCode;
+
+	@Column(nullable = false)
+	private String address;
+
+	@Column(nullable = false)
+	private String detailAddress;
+
+	// @Embedded
+	// private Address address;
 
 	@Column(nullable = false)
 	private String phoneNumber;
@@ -55,7 +63,7 @@ public class Restaurant extends TimeStamped {
 	@Column(nullable = false)
 	private String description;
 
-	@Column(nullable = false)
+	// @Column(nullable = false)
 	private int capacity;
 
 	@Column(nullable = false)
@@ -71,7 +79,10 @@ public class Restaurant extends TimeStamped {
 	public Restaurant(ApproveSignUpSellerManagementEntityPassToRestaurantEntityRequest entityRequest) {
 		this.name = entityRequest.getRestaurantName();
 		this.position = entityRequest.getPosition();
+		this.zipCode = entityRequest.getZipCode();
 		this.address = entityRequest.getAddress();
+		this.detailAddress = entityRequest.getDetailAddress();
+		// this.address = entityRequest.getAddress();
 		this.phoneNumber = entityRequest.getPhoneNumber();
 		this.isDeleted = false;
 		this.searchKeywords = entityRequest.getSearchKeyWords();
@@ -96,17 +107,17 @@ public class Restaurant extends TimeStamped {
 		this.user = request.getUser();
 	}
 
-	public String getProvince() {
-		return this.getAddress().getProvince();
-	}
-
-	public String getCity() {
-		return this.getAddress().getCity();
-	}
-
-	public String getStreet() {
-		return this.getAddress().getStreet();
-	}
+	// public String getProvince() {
+	// 	return this.getAddress().getProvince();
+	// }
+	//
+	// public String getCity() {
+	// 	return this.getAddress().getCity();
+	// }
+	//
+	// public String getStreet() {
+	// 	return this.getAddress().getStreet();
+	// }
 
 	public double getLatitude() {
 		return this.getPosition().getLatitude();

@@ -140,7 +140,7 @@
                     <td th:text="${requestSeller.categories}"></td>
                     <td th:text="${requestSeller.searchKeyWords}"></td>
                     <td th:text="${requestSeller.businessLicenseNo}"></td>
-                    <td th:text="${requestSeller.province} + ' ' + ${requestSeller.city} + ' ' + ${requestSeller.street}"></td>
+                    <td th:text="${requestSeller.address} + ' ' + ${requestSeller.detailAddress}"></td>
                     <td>
                         <div class="sellerManagementBtn">
                             <form th:action="@{'/api/admin/seller-managements/' + ${requestSeller.id}}"

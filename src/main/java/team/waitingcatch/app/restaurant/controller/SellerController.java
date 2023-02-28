@@ -25,8 +25,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.multipart.MultipartFile;
 
 import lombok.RequiredArgsConstructor;
-import team.waitingcatch.app.common.Address;
-import team.waitingcatch.app.common.Position;
 import team.waitingcatch.app.common.util.JwtUtil;
 import team.waitingcatch.app.event.dto.couponcreator.CreateCouponCreatorControllerRequest;
 import team.waitingcatch.app.event.dto.couponcreator.CreateSellerCouponCreatorServiceRequest;
@@ -102,18 +100,18 @@ public class SellerController {
 	public String demandSignUpSeller(
 		@Valid DemandSignUpSellerControllerRequest demandSignUpControllerRequest) {
 		System.out.println(demandSignUpControllerRequest.getPhoneNumber());
-		Address address = new Address(
-			demandSignUpControllerRequest.getProvince(),
-			demandSignUpControllerRequest.getCity(),
-			demandSignUpControllerRequest.getStreet()
-		);
-		Position position = new Position(
-			demandSignUpControllerRequest.getLatitude(),
-			demandSignUpControllerRequest.getLongitude()
-		);
+		// Address address = new Address(
+		// 	demandSignUpControllerRequest.getProvince(),
+		// 	demandSignUpControllerRequest.getCity(),
+		// 	demandSignUpControllerRequest.getStreet()
+		// );
+		// Position position = new Position(
+		// 	demandSignUpControllerRequest.getLatitude(),
+		// 	demandSignUpControllerRequest.getLongitude()
+		// );
 
 		DemandSignUpSellerServiceRequest demandSignupSellerServiceRequest = new DemandSignUpSellerServiceRequest(
-			demandSignUpControllerRequest, address, position);
+			demandSignUpControllerRequest);
 		sellerManagementService.demandSignUpSeller(demandSignupSellerServiceRequest);
 		return "/hello";
 	}

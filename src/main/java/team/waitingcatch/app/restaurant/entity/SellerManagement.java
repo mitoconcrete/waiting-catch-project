@@ -12,7 +12,6 @@ import javax.persistence.Id;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import team.waitingcatch.app.common.Address;
 import team.waitingcatch.app.common.Position;
 import team.waitingcatch.app.common.entity.TimeStamped;
 import team.waitingcatch.app.restaurant.dto.requestseller.DemandSignUpSellerServiceRequest;
@@ -42,8 +41,17 @@ public class SellerManagement extends TimeStamped {
 	@Column(name = "restaurant_name", nullable = false)
 	private String restaurantName;
 
-	@Embedded
-	private Address address;
+	@Column(nullable = false)
+	private String zipCode;
+
+	@Column(nullable = false)
+	private String address;
+
+	@Column(nullable = false)
+	private String detailAddress;
+
+	// @Embedded
+	// private Address address;
 
 	@Embedded
 	private Position position;
@@ -69,12 +77,15 @@ public class SellerManagement extends TimeStamped {
 		this.email = demandSignupSellerServiceRequest.getEmail();
 		this.phoneNumber = demandSignupSellerServiceRequest.getPhoneNumber();
 		this.restaurantName = demandSignupSellerServiceRequest.getRestaurantName();
+		this.zipCode = demandSignupSellerServiceRequest.getZipCode();
 		this.address = demandSignupSellerServiceRequest.getAddress();
-		this.position = demandSignupSellerServiceRequest.getPosition();
+		this.detailAddress = demandSignupSellerServiceRequest.getDetailAddress();
+		// this.address = demandSignupSellerServiceRequest.getAddress();
+		// this.position = demandSignupSellerServiceRequest.getPosition();
 		this.description = demandSignupSellerServiceRequest.getDescription();
 		this.status = AcceptedStatusEnum.WAIT;
 		this.categories = demandSignupSellerServiceRequest.getCategories();
-		this.searchKeyWords = demandSignupSellerServiceRequest.getSearchKeyWords();
+		// this.searchKeyWords = demandSignupSellerServiceRequest.getSearchKeyWords();
 		this.businessLicenseNo = demandSignupSellerServiceRequest.getBusinessLicenseNo();
 		this.name = demandSignupSellerServiceRequest.getName();
 	}

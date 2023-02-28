@@ -10,7 +10,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.RequiredArgsConstructor;
-import team.waitingcatch.app.common.Address;
 import team.waitingcatch.app.common.Position;
 import team.waitingcatch.app.restaurant.dto.restaurant.SaveDummyRestaurantRequest;
 import team.waitingcatch.app.restaurant.entity.Restaurant;
@@ -49,18 +48,18 @@ public class MapApiService {
 				double latitude = Double.parseDouble(adList.get("y"));
 				double longitude = Double.parseDouble(adList.get("x"));
 
-				String addressName = adList.get("road_address_name");
-				String province = addressName.substring(0, 2);
-				String city = addressName.substring(3, 7);
-				String street = addressName.substring(8);
-				String reCity = city.replace(" ", "");
+				String address = adList.get("road_address_name");
+				// String province = addressName.substring(0, 2);
+				// String city = addressName.substring(3, 7);
+				// String street = addressName.substring(8);
+				// String reCity = city.replace(" ", "");
 
 				String category = adList.get("category_name");
 				String subCategory = category.substring(6, 8);
 				String replaceCategory = subCategory.replace(" ", "");
 
 				Position position = new Position(latitude, longitude);
-				Address address = new Address(province, reCity, street);
+				// Address address = new Address(province, reCity, street);
 
 				SaveDummyRestaurantRequest saveDummyRestaurantRequest = new SaveDummyRestaurantRequest(placeName,
 					address, position, phone, replaceCategory, user);

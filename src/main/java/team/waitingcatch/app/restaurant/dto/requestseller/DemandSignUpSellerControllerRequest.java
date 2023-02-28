@@ -41,22 +41,31 @@ public class DemandSignUpSellerControllerRequest {
 	@NotBlank(message = "레스토랑 설명은 필수 입력값입니다.")
 	private String description;
 
-	private double latitude;
+	// private double latitude;
 
-	private double longitude;
+	// private double longitude;
 
-	@NotBlank
-	private String province;
-
-	@NotBlank
-	private String city;
-
-	@NotBlank
-	private String street;
+	// @NotBlank
+	// private String province;
+	//
+	// @NotBlank
+	// private String city;
+	//
+	// @NotBlank
+	// private String street;
 
 	@NotEmpty(message = "사업자번호는 필수 입력값입니다.")
 	private String businessLicenseNo;
 
-	@NotBlank
-	private String searchKeyWords;
+	@NotBlank(message = "주소는 필수 입력값입니다.")
+	private String zipCode;
+
+	@NotBlank(message = "주소는 필수 입력값입니다.")
+	private String address;
+
+	@NotBlank(message = "주소는 필수 입력값입니다.")
+	private String detailAddress;
+
+	// @NotBlank
+	// private String searchKeyWords;
 }
