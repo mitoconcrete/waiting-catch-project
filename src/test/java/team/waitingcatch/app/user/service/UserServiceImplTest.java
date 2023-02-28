@@ -19,6 +19,10 @@ import lombok.extern.slf4j.Slf4j;
 import team.waitingcatch.app.common.Address;
 import team.waitingcatch.app.common.Position;
 import team.waitingcatch.app.common.util.JwtUtil;
+import team.waitingcatch.app.event.dto.event.CreateEventControllerRequest;
+import team.waitingcatch.app.event.dto.event.CreateEventRequest;
+import team.waitingcatch.app.event.dto.event.CreateEventServiceRequest;
+import team.waitingcatch.app.event.entity.Event;
 import team.waitingcatch.app.event.repository.EventRepository;
 import team.waitingcatch.app.lineup.dto.CreateReviewEntityRequest;
 import team.waitingcatch.app.lineup.dto.StartWaitingServiceRequest;
@@ -336,6 +340,17 @@ class UserServiceImplTest {
 			new CreateReviewEntityRequest(customer, restaurant, 0, " ", new ArrayList<>()));
 		review = reviewRepository.save(review);
 
+		// 이벤트
+		var eventpayload = mock(CreateEventControllerRequest.class);
+		when(eventpayload.getEventStartDate()).thenReturn(LocalDateTime.now());
+		when(eventpayload.getEventEndDate()).thenReturn(LocalDateTime.now());
+		when(eventpayload.getName()).thenReturn("이벤트");
+
+		var eventpayload1 = new CreateEventServiceRequest(eventpayload, restaurant.getId());
+		var eventpayload2 = new CreateEventRequest(eventpayload1, restaurant);
+		var event = new Event(eventpayload2);
+		event = eventRepository.save(event);
+
 		var servicePayload = mock(DeleteUserRequest.class);
 		when(servicePayload.getUsername()).thenReturn(seller.getUsername());
 
@@ -348,6 +363,7 @@ class UserServiceImplTest {
 		assertTrue(lineupHistoryRepository.findById(history.getId()).get().isDeleted());
 		assertTrue(lineupRepository.findById(lineup.getId()).get().isDeleted());
 		assertTrue(reviewRepository.findById(review.getId()).get().isDeleted());
+		assertTrue(eventRepository.findById(event.getId()).get().isDeleted());
 	}
 
 }
