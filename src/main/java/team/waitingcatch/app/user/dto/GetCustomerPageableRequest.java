@@ -8,7 +8,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class GetCustomerPageableRequest {
 	private int size;
-	private boolean isAsc;
-	private String sortBy;
 	private int page;
 }

@@ -8,7 +8,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -85,9 +84,7 @@ public class UserServiceImpl implements UserService, InternalUserService {
 	@Override
 	@Transactional(readOnly = true)
 	public Page<UserInfoResponse> getCustomers(GetCustomerPageableRequest payload) {
-		Sort.Direction isAsc = payload.isAsc() ? Sort.Direction.ASC : Sort.Direction.DESC;
-		Sort sort = Sort.by(payload.getSortBy(), String.valueOf(isAsc));
-		Pageable pageable = PageRequest.of(payload.getPage(), payload.getSize(), sort);
+		Pageable pageable = PageRequest.of(payload.getPage(), payload.getSize());
 		Page<User> customers = userRepository.findAll(pageable);
 		return new PageImpl<>(customers.getContent().stream().map(UserInfoResponse::new).collect(Collectors.toList()),
 			customers.getPageable(),
