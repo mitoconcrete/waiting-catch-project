@@ -6,6 +6,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.Pattern;
 
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
@@ -76,7 +77,7 @@ public class LineupController {
 	}
 
 	@GetMapping("/customer/lineup-records")
-	public GenericResponse<LineupRecordWithTypeResponse> getLineupRecords(
+	public GenericResponse<Slice<LineupRecordWithTypeResponse>> getLineupRecords(
 		@RequestParam(required = false) @Pattern(regexp = "^(WAIT|CALL|CANCEL|ARRIVE)$") String status,
 		@AuthenticationPrincipal UserDetailsImpl userDetails) {
 
@@ -87,7 +88,7 @@ public class LineupController {
 	}
 
 	@GetMapping("/customer/lineup-history-records")
-	public GenericResponse<LineupRecordWithTypeResponse> getLineupRecords(
+	public GenericResponse<Slice<LineupRecordWithTypeResponse>> getLineupRecords(
 		@RequestParam(required = false) Long lastId,
 		@RequestParam(required = false) @Pattern(regexp = "^(WAIT|CALL|CANCEL|ARRIVE)$") String status,
 		@AuthenticationPrincipal UserDetailsImpl userDetails,
