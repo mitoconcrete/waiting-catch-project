@@ -45,7 +45,7 @@ public class Review extends TimeStamped {
 	@Convert(converter = StringListConverter.class)
 	private final List<String> imagePaths = new ArrayList<>();
 
-	@Column(nullable = false)
+	@Column(nullable = false, length = 500)
 	private String content;
 
 	@Column(nullable = false)
