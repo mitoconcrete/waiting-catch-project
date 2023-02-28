@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.multipart.MultipartFile;
 
 import lombok.RequiredArgsConstructor;
+import team.waitingcatch.app.common.Position;
 import team.waitingcatch.app.common.util.JwtUtil;
 import team.waitingcatch.app.event.dto.couponcreator.CreateCouponCreatorControllerRequest;
 import team.waitingcatch.app.event.dto.couponcreator.CreateSellerCouponCreatorServiceRequest;
@@ -49,6 +50,7 @@ import team.waitingcatch.app.restaurant.dto.restaurant.UpdateRestaurantControlle
 import team.waitingcatch.app.restaurant.dto.restaurant.UpdateRestaurantServiceRequest;
 import team.waitingcatch.app.restaurant.service.menu.MenuService;
 import team.waitingcatch.app.restaurant.service.requestseller.SellerManagementService;
+import team.waitingcatch.app.restaurant.service.restaurant.MapApiService;
 import team.waitingcatch.app.restaurant.service.restaurant.RestaurantService;
 import team.waitingcatch.app.user.dto.DeleteUserRequest;
 import team.waitingcatch.app.user.dto.LoginRequest;
@@ -69,6 +71,7 @@ public class SellerController {
 	private final EventService eventService;
 	private final CouponCreatorService couponCreatorService;
 	private final RestaurantService restaurantService;
+	private final MapApiService mapApiService;
 	/*     로그인 프론트     */
 
 	// @GetMapping("hello")
@@ -109,9 +112,10 @@ public class SellerController {
 		// 	demandSignUpControllerRequest.getLatitude(),
 		// 	demandSignUpControllerRequest.getLongitude()
 		// );
+		Position position = mapApiService.getPosition(demandSignUpControllerRequest.getQuery());
 
 		DemandSignUpSellerServiceRequest demandSignupSellerServiceRequest = new DemandSignUpSellerServiceRequest(
-			demandSignUpControllerRequest);
+			demandSignUpControllerRequest, position);
 		sellerManagementService.demandSignUpSeller(demandSignupSellerServiceRequest);
 		return "/hello";
 	}

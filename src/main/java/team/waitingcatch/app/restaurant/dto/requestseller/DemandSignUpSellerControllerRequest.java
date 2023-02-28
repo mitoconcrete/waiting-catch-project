@@ -66,6 +66,9 @@ public class DemandSignUpSellerControllerRequest {
 	@NotBlank(message = "주소는 필수 입력값입니다.")
 	private String detailAddress;
 
+	@NotNull(message = "주소는 필수 입력값입니다.")
+	private String query;
+
 	// @NotBlank
 	// private String searchKeyWords;
 }

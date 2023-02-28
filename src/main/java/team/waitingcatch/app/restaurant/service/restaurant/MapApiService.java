@@ -1,9 +1,16 @@
 package team.waitingcatch.app.restaurant.service.restaurant;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -25,6 +32,9 @@ public class MapApiService {
 	private final RestaurantRepository restaurantRepository;
 	private final RestaurantInfoRepository restaurantInfoRepository;
 	private final UserRepository userRepository;
+
+	@Value("${kakao.key}")
+	private String apiKey;
 
 	public void getXYMapFromJson(String jsonString) {
 		User user = userRepository.findByUsernameAndIsDeletedFalse("seller15").orElseThrow();
@@ -70,6 +80,53 @@ public class MapApiService {
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
+		}
+	}
+
+	public Position getPosition(String query) {
+		String apiUrl = "http://dapi.kakao.com/v2/local/search/address.json";
+		String jsonString = null;
+
+		ObjectMapper mapper = new ObjectMapper();
+
+		try {
+			query = URLEncoder.encode(query, "UTF-8");
+			String addr = apiUrl + "?query=" + query;
+
+			URL url = new URL(addr);
+			HttpURLConnection conn = (HttpURLConnection)url.openConnection();
+			conn.setRequestMethod("GET");
+			conn.setRequestProperty("Content-type", "application/json");
+			conn.setRequestProperty("Authorization", "KakaoAK " + apiKey);
+
+			BufferedReader rd = null;
+			rd = new BufferedReader(new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8));
+			StringBuilder docJson = new StringBuilder();
+
+			String line;
+
+			while ((line = rd.readLine()) != null) {
+				docJson.append(line);
+			}
+
+			jsonString = docJson.toString();
+			rd.close();
+
+			TypeReference<Map<String, Object>> typeRef = new TypeReference<>() {
+			};
+			Map<String, Object> jsonMap = mapper.readValue(jsonString, typeRef);
+
+			List<Map<String, String>> docList
+				= (List<Map<String, String>>)jsonMap.get("documents");
+			Map<String, String> adList = docList.get(0);
+
+			double latitude = Double.parseDouble(adList.get("y"));
+			double longitude = Double.parseDouble(adList.get("x"));
+
+			return new Position(latitude, longitude);
+
+		} catch (IOException e) {
+			throw new RuntimeException(e);
 		}
 	}
 }

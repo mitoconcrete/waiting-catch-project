@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import lombok.RequiredArgsConstructor;
+import team.waitingcatch.app.common.Position;
 import team.waitingcatch.app.restaurant.dto.requestseller.ApproveSignUpSellerResponse;
 import team.waitingcatch.app.restaurant.dto.requestseller.ApproveSignUpSellerServiceRequest;
 import team.waitingcatch.app.restaurant.dto.requestseller.DemandSignUpSellerControllerRequest;
@@ -22,6 +23,7 @@ import team.waitingcatch.app.restaurant.dto.requestseller.GetRequestSellerByRest
 import team.waitingcatch.app.restaurant.dto.requestseller.GetRequestSellerControllerRequest;
 import team.waitingcatch.app.restaurant.dto.requestseller.RejectSignUpSellerServiceRequest;
 import team.waitingcatch.app.restaurant.service.requestseller.SellerManagementService;
+import team.waitingcatch.app.restaurant.service.restaurant.MapApiService;
 
 @RequestMapping("/api")
 @RestController
@@ -29,6 +31,7 @@ import team.waitingcatch.app.restaurant.service.requestseller.SellerManagementSe
 public class SellerManagementController {
 
 	private final SellerManagementService sellerManagementService;
+	private final MapApiService mapApiService;
 
 	//판매자 권한 부분
 
@@ -46,8 +49,10 @@ public class SellerManagementController {
 		// 	demandSignUpControllerRequest.getLongitude()
 		// );
 
+		Position position = mapApiService.getPosition(demandSignUpControllerRequest.getQuery());
+
 		DemandSignUpSellerServiceRequest demandSignupSellerServiceRequest = new DemandSignUpSellerServiceRequest(
-			demandSignUpControllerRequest);
+			demandSignUpControllerRequest, position);
 		sellerManagementService.demandSignUpSeller(demandSignupSellerServiceRequest);
 	}
 
