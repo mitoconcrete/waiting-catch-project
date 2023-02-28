@@ -217,4 +217,24 @@ class UserServiceImplTest {
 			payload.getPhoneNumber());
 		assertThrows(IllegalArgumentException.class, () -> userService.updateUser(payload2));
 	}
+
+	@Test
+	@DisplayName("Oauth 로그인 서비스")
+	void createAccessTokenByEmail() {
+		// given
+		var allowedUsername = "xogns656";
+		var allowedEmail = "xogns98@gmail.com";
+		var disabledEmail = "1@email.com";
+
+		// when
+		var response = userService.createAccessTokenByEmail(allowedEmail);
+
+		// then
+		var claims = jwtUtil.getTokenClaims(response.getAccessToken().substring(7));
+
+		// then
+		assertEquals(claims.getSubject(), allowedUsername);
+		assertTrue(aliveTokenRepository.existsById(response.getAccessToken().substring(7)));
+		assertThrows(IllegalArgumentException.class, () -> userService.createAccessTokenByEmail(disabledEmail));
+	}
 }
