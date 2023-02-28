@@ -7,6 +7,7 @@ import javax.validation.Valid;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -61,7 +62,7 @@ public class ReviewController {
 	public GenericResponse<Slice<GetReviewResponse>> getReviewsByRestaurant(
 		@PathVariable long restaurantId,
 		@RequestParam(required = false) Long lastId,
-		Pageable pageable) {
+		@PageableDefault Pageable pageable) {
 
 		return new GenericResponse(reviewService.getReviewsByRestaurantId(lastId, restaurantId, pageable));
 	}
@@ -70,7 +71,7 @@ public class ReviewController {
 	public GenericResponse<Slice<GetReviewResponse>> getReviewsByUser(
 		@RequestParam(required = false) Long lastId,
 		@AuthenticationPrincipal UserDetailsImpl userDetails,
-		Pageable pageable) {
+		@PageableDefault Pageable pageable) {
 
 		return new GenericResponse(reviewService.getReviewsByUserId(lastId, userDetails.getId(), pageable));
 	}
