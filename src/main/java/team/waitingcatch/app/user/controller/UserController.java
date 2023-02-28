@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
+import team.waitingcatch.app.common.dto.GenericResponse;
 import team.waitingcatch.app.common.util.JwtUtil;
 import team.waitingcatch.app.user.dto.CreateUserControllerRequest;
 import team.waitingcatch.app.user.dto.CreateUserServiceRequest;
@@ -68,8 +69,8 @@ public class UserController {
 
 	// customer
 	@GetMapping("/customer/info")
-	public UserInfoResponse getCustomer(@AuthenticationPrincipal UserDetails userDetails) {
-		return new UserInfoResponse(((UserDetailsImpl)userDetails).getUser());
+	public GenericResponse<UserInfoResponse> getCustomer(@AuthenticationPrincipal UserDetails userDetails) {
+		return new GenericResponse<>(new UserInfoResponse(((UserDetailsImpl)userDetails).getUser()));
 	}
 
 	@DeleteMapping("/customer/withdraw")
@@ -117,30 +118,30 @@ public class UserController {
 
 	// admin
 	@GetMapping("/admin/customers")
-	public List<UserInfoResponse> getCustomers(Pageable pageable) {
-		return userService.getCustomers(pageable);
+	public GenericResponse<List<UserInfoResponse>> getCustomers(Pageable pageable) {
+		return new GenericResponse<>(userService.getCustomers(pageable));
 	}
 
 	@GetMapping("/admin/customers/{customerId}")
-	public UserInfoResponse getCustomer(@PathVariable Long customerId) {
+	public GenericResponse<UserInfoResponse> getCustomer(@PathVariable Long customerId) {
 		GetCustomerByIdAndRoleServiceRequest servicePayload =
 			new GetCustomerByIdAndRoleServiceRequest(
 				customerId,
 				UserRoleEnum.USER
 			);
 
-		return userService.getByUserIdAndRole(servicePayload);
+		return new GenericResponse<>(userService.getByUserIdAndRole(servicePayload));
 	}
 
 	@GetMapping("/admin/sellers/{sellerId}")
-	public UserInfoResponse getSeller(@PathVariable Long sellerId) {
+	public GenericResponse<UserInfoResponse> getSeller(@PathVariable Long sellerId) {
 		GetCustomerByIdAndRoleServiceRequest servicePayload =
 			new GetCustomerByIdAndRoleServiceRequest(
 				sellerId,
 				UserRoleEnum.SELLER
 			);
 
-		return userService.getByUserIdAndRole(servicePayload);
+		return new GenericResponse<>(userService.getByUserIdAndRole(servicePayload));
 	}
 
 	@PostMapping("/admin/signup")
