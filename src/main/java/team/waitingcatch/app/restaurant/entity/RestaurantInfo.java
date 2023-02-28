@@ -50,7 +50,7 @@ public class RestaurantInfo extends TimeStamped {
 	private int currentWaitingNumber = 0;
 
 	// 리뷰 작성시 해당 레스토랑의 평균 별점을 갱신한다.
-	public void setAverageRate(float rate) {
+	public void updateAverageRate(float rate) {
 		this.rate = rate;
 		this.totalReview += 1;
 	}

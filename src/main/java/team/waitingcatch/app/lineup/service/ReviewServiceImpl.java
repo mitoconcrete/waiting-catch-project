@@ -45,7 +45,7 @@ public class ReviewServiceImpl implements ReviewService, InternalReviewService {
 			serviceRequest.getRate(), serviceRequest.getContent(), imagePaths);
 
 		reviewRepository.save(Review.craeteReview(entityRequest));
-		restaurantInfo.setAverageRate(entityRequest.getRate());
+		restaurantInfo.updateAverageRate(entityRequest.getRate());
 
 		if (serviceRequest.getType() == StoredLineupTableNameEnum.LINEUP) {
 			Lineup lineup = internalLineupService._getById(serviceRequest.getLineupId());
