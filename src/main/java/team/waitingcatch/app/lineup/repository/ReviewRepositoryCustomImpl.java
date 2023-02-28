@@ -4,6 +4,11 @@ import static team.waitingcatch.app.lineup.entity.QReview.*;
 
 import java.util.List;
 
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
+
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import lombok.RequiredArgsConstructor;
@@ -18,6 +23,7 @@ public class ReviewRepositoryCustomImpl implements ReviewRepositoryCustom {
 	public List<GetReviewResponse> findAllByRestaurantId(Long restaurantId) {
 		return queryFactory
 			.select(new QGetReviewResponse(
+				review.id,
 				review.rate,
 				review.content,
 				review.imagePaths,
@@ -31,9 +37,10 @@ public class ReviewRepositoryCustomImpl implements ReviewRepositoryCustom {
 	}
 
 	@Override
-	public List<GetReviewResponse> findAllByUserId(Long userId) {
-		return queryFactory
+	public Slice<GetReviewResponse> findAllByUserId(Long id, long userId, Pageable pageable) {
+		List<GetReviewResponse> content = queryFactory
 			.select(new QGetReviewResponse(
+				review.id,
 				review.rate,
 				review.content,
 				review.imagePaths,
@@ -41,8 +48,21 @@ public class ReviewRepositoryCustomImpl implements ReviewRepositoryCustom {
 				review.modifiedDate
 			))
 			.from(review)
-			.where(review.user.id.eq(userId).and(review.isDeleted.isFalse()))
-			.orderBy(review.createdDate.desc())
+			.where(idLt(id), review.user.id.eq(userId).and(review.isDeleted.isFalse()))
+			.orderBy(review.id.desc())
+			.limit(pageable.getPageSize() + 1)
 			.fetch();
+
+		boolean hasNext = false;
+		if (content.size() > pageable.getPageSize()) {
+			content.remove(pageable.getPageSize());
+			hasNext = true;
+		}
+
+		return new SliceImpl<>(content, pageable, hasNext);
+	}
+
+	private BooleanExpression idLt(Long id) {
+		return id != null ? review.id.lt(id) : null;
 	}
 }

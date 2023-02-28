@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -60,7 +62,10 @@ public class ReviewController {
 	}
 
 	@GetMapping("/customer/reviews")
-	public GenericResponse<GetReviewResponse> getReviewsByUser(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-		return new GenericResponse(reviewService.getReviewsByUserId(userDetails.getId()));
+	public GenericResponse<GetReviewResponse> getReviewsByUser(
+		@RequestParam(required = false) Long lastId,
+		@AuthenticationPrincipal UserDetailsImpl userDetails,
+		Pageable pageable) {
+		return new GenericResponse(reviewService.getReviewsByUserId(lastId, userDetails.getId(), pageable));
 	}
 }

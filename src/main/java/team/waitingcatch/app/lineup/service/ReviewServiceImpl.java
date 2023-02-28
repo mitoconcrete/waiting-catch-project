@@ -3,6 +3,8 @@ package team.waitingcatch.app.lineup.service;
 import java.io.IOException;
 import java.util.List;
 
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -64,8 +66,8 @@ public class ReviewServiceImpl implements ReviewService, InternalReviewService {
 
 	@Transactional(readOnly = true)
 	@Override
-	public List<GetReviewResponse> getReviewsByUserId(Long userId) {
-		return reviewRepository.findAllByUserId(userId);
+	public Slice<GetReviewResponse> getReviewsByUserId(Long id, long userId, Pageable pageable) {
+		return reviewRepository.findAllByUserId(id, userId, pageable);
 	}
 
 	@Override
