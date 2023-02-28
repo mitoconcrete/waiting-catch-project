@@ -14,19 +14,24 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import team.waitingcatch.app.common.util.JwtUtil;
 import team.waitingcatch.app.redis.repository.AliveTokenRepository;
+import team.waitingcatch.app.redis.repository.KilledAccessTokenRepository;
 import team.waitingcatch.app.user.dto.LoginRequest;
+import team.waitingcatch.app.user.dto.LogoutRequest;
 import team.waitingcatch.app.user.entitiy.User;
 import team.waitingcatch.app.user.enums.UserRoleEnum;
 import team.waitingcatch.app.user.repository.UserRepository;
 
 @SpringBootTest
 @Transactional
-@Rollback(value = false)
+@Rollback(value = true)
 @Slf4j
 class UserServiceImplTest {
 	static {
 		System.setProperty("com.amazonaws.sdk.disableEc2Metadata", "true");
 	}
+
+	@Autowired
+	private KilledAccessTokenRepository killedAccessTokenRepository;
 
 	@Autowired
 	private AliveTokenRepository aliveTokenRepository;
@@ -62,4 +67,27 @@ class UserServiceImplTest {
 		assertEquals(claims.getSubject(), username);
 		assertTrue(aliveTokenRepository.existsById(response.getAccessToken().substring(7)));
 	}
+
+	@Test
+	@DisplayName("로그아웃")
+	void logout() {
+		// given
+		String username = "xogns656";
+		String password = "Test1234!";
+		var loginRequest = mock(LoginRequest.class);
+		when(loginRequest.getUsername()).thenReturn(username);
+		when(loginRequest.getPassword()).thenReturn(password);
+		var loginResponse = userService.login(loginRequest);
+
+		var logoutRequest = mock(LogoutRequest.class);
+		when(logoutRequest.getAccessToken()).thenReturn(loginResponse.getAccessToken().substring(7));
+
+		// when
+		userService.logout(logoutRequest);
+
+		// then
+		assertFalse(aliveTokenRepository.existsById(loginResponse.getAccessToken().substring(7)));
+		assertTrue(killedAccessTokenRepository.existsById(loginResponse.getAccessToken().substring(7)));
+	}
+
 }
