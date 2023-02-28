@@ -32,7 +32,7 @@ public class User extends TimeStamped {
 	@Column(nullable = false, length = 15, unique = true)
 	private String username;
 
-	@Column(nullable = false, length = 15)
+	@Column(nullable = false, length = 125)
 	private String password;
 
 	@Column(nullable = false, length = 255, unique = true)
