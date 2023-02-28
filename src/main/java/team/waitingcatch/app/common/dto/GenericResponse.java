@@ -8,5 +8,5 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public class GenericResponse<T> {
-	private final List<T> data;
+	private final T data;
 }
