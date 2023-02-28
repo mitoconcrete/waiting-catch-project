@@ -1,12 +1,10 @@
 package team.waitingcatch.app.user.service;
 
+import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -30,7 +28,6 @@ import team.waitingcatch.app.user.dto.CreateUserServiceRequest;
 import team.waitingcatch.app.user.dto.DeleteUserRequest;
 import team.waitingcatch.app.user.dto.FindPasswordRequest;
 import team.waitingcatch.app.user.dto.GetCustomerByIdAndRoleServiceRequest;
-import team.waitingcatch.app.user.dto.GetCustomerPageableRequest;
 import team.waitingcatch.app.user.dto.LoginRequest;
 import team.waitingcatch.app.user.dto.LoginServiceResponse;
 import team.waitingcatch.app.user.dto.LogoutRequest;
@@ -83,12 +80,8 @@ public class UserServiceImpl implements UserService, InternalUserService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public Page<UserInfoResponse> getCustomers(GetCustomerPageableRequest payload) {
-		Pageable pageable = PageRequest.of(payload.getPage(), payload.getSize());
-		Page<User> customers = userRepository.findAll(pageable);
-		return new PageImpl<>(customers.getContent().stream().map(UserInfoResponse::new).collect(Collectors.toList()),
-			customers.getPageable(),
-			customers.getTotalElements());
+	public List<UserInfoResponse> getCustomers(Pageable payload) {
+		return userRepository.findPageableAll(payload).stream().map(UserInfoResponse::new).collect(Collectors.toList());
 	}
 
 	@Override

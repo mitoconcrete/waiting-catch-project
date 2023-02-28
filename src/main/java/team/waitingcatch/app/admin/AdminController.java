@@ -2,6 +2,7 @@ package team.waitingcatch.app.admin;
 
 import javax.validation.Valid;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.ui.Model;
@@ -30,7 +31,6 @@ import team.waitingcatch.app.restaurant.service.restaurant.RestaurantService;
 import team.waitingcatch.app.user.dto.CreateUserControllerRequest;
 import team.waitingcatch.app.user.dto.CreateUserServiceRequest;
 import team.waitingcatch.app.user.dto.GetCustomerByIdAndRoleServiceRequest;
-import team.waitingcatch.app.user.dto.GetCustomerPageableRequest;
 import team.waitingcatch.app.user.entitiy.UserDetailsImpl;
 import team.waitingcatch.app.user.enums.UserRoleEnum;
 import team.waitingcatch.app.user.service.UserService;
@@ -92,8 +92,8 @@ public class AdminController {
 	//유저
 
 	@GetMapping("/customers")
-	public ModelAndView getCustomers(Model model, GetCustomerPageableRequest pageableRequest) {
-		model.addAttribute("customers", userService.getCustomers(pageableRequest));
+	public ModelAndView getCustomers(Model model, Pageable pageable) {
+		model.addAttribute("customers", userService.getCustomers(pageable));
 		return new ModelAndView("/admin/user-list");
 	}
 
