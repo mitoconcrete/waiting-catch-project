@@ -16,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import team.waitingcatch.app.common.util.JwtUtil;
 import team.waitingcatch.app.redis.repository.AliveTokenRepository;
 import team.waitingcatch.app.redis.repository.KilledAccessTokenRepository;
+import team.waitingcatch.app.user.dto.CreateUserServiceRequest;
 import team.waitingcatch.app.user.dto.GetCustomerByIdAndRoleServiceRequest;
 import team.waitingcatch.app.user.dto.LoginRequest;
 import team.waitingcatch.app.user.dto.LogoutRequest;
@@ -163,6 +164,35 @@ class UserServiceImplTest {
 
 		when(request.getUserId()).thenReturn(newSeller.getId() * 10000);
 		assertThrows(IllegalArgumentException.class, () -> userService.getByUserIdAndRole(request));
+	}
 
+	@Test
+	@DisplayName("유저 생성")
+	void creatUser() {
+		// given
+		var payload1 = new CreateUserServiceRequest(
+			UserRoleEnum.ADMIN,
+			"김태훈",
+			"1@email.com",
+			"xogns1",
+			"Test1234!",
+			"admin01",
+			"010-1001-1234"
+		);
+
+		var payload2 = new CreateUserServiceRequest(
+			UserRoleEnum.ADMIN,
+			"김태훈",
+			"2@email.com",
+			"xogns1",
+			"Test1234!",
+			"admin02",
+			"010-1002-1234"
+		);
+
+		// when & then
+		userService.createUser(payload1);
+		assertTrue(userRepository.existsByUsername(payload1.getUsername()));
+		assertThrows(IllegalArgumentException.class, () -> userService.createUser(payload2));
 	}
 }
