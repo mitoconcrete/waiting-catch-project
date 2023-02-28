@@ -22,7 +22,7 @@ public class ApproveSignUpSellerManagementEntityPassToRestaurantEntityRequest {
 	private final String searchKeyWords;
 
 	public ApproveSignUpSellerManagementEntityPassToRestaurantEntityRequest(SellerManagement sellerManagement,
-		User seller) {
+		User seller, String searchKeywords) {
 		this.user = seller;
 		this.restaurantName = sellerManagement.getRestaurantName();
 		this.email = sellerManagement.getEmail();
@@ -33,7 +33,7 @@ public class ApproveSignUpSellerManagementEntityPassToRestaurantEntityRequest {
 		this.address = sellerManagement.getAddress();
 		this.detailAddress = sellerManagement.getDetailAddress();
 		this.position = sellerManagement.getPosition();
-		this.searchKeyWords = sellerManagement.getSearchKeyWords();
+		this.searchKeyWords = searchKeywords;
 		this.businessLicenseNo = sellerManagement.getBusinessLicenseNo();
 	}
 }

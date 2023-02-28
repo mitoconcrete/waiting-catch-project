@@ -92,6 +92,11 @@ public class CategoryServiceImpl implements CategoryService, InternalCategorySer
 	}
 
 	@Override
+	public List<String> _getCategoryNames(List<Long> categoryIds) {
+		return categoryRepository.findNameByIdIn(categoryIds);
+	}
+
+	@Override
 	@Transactional(readOnly = true)
 	public List<CategoryResponse> getAllCategories() {
 		return categoryRepository.findAll().stream()
