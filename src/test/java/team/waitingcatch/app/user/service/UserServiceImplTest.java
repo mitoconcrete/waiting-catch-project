@@ -16,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import team.waitingcatch.app.common.util.JwtUtil;
 import team.waitingcatch.app.redis.repository.AliveTokenRepository;
 import team.waitingcatch.app.redis.repository.KilledAccessTokenRepository;
+import team.waitingcatch.app.user.dto.GetCustomerByIdAndRoleServiceRequest;
 import team.waitingcatch.app.user.dto.LoginRequest;
 import team.waitingcatch.app.user.dto.LogoutRequest;
 import team.waitingcatch.app.user.entitiy.User;
@@ -137,5 +138,31 @@ class UserServiceImplTest {
 		assertEquals(userService.getCustomers(pageable4).size(), 5);
 		assertEquals(userService.getCustomers(pageable5).size(), 0);
 		assertEquals(userService.getCustomers(pageable6).size(), 0);
+	}
+
+	@Test
+	@DisplayName("유저 롤과 아이디로 정보가져오기")
+	void getByUserIdAndRole() {
+		// given
+		User seller = new User(UserRoleEnum.SELLER, "김태훈", "1@seller.com", "seller01", "Test1234!", "seller01",
+			"010-1234-0001");
+		var newSeller = userRepository.save(seller);
+
+		var request = mock(GetCustomerByIdAndRoleServiceRequest.class);
+		when(request.getRole()).thenReturn(UserRoleEnum.SELLER);
+		when(request.getUserId()).thenReturn(newSeller.getId());
+
+		// when
+		var response = userService.getByUserIdAndRole(request);
+
+		when(request.getRole()).thenReturn(UserRoleEnum.USER);
+
+		assertEquals(response.getId(), newSeller.getId());
+		assertEquals(response.getUsername(), newSeller.getUsername());
+		assertThrows(IllegalArgumentException.class, () -> userService.getByUserIdAndRole(request));
+
+		when(request.getUserId()).thenReturn(newSeller.getId() * 10000);
+		assertThrows(IllegalArgumentException.class, () -> userService.getByUserIdAndRole(request));
+
 	}
 }
