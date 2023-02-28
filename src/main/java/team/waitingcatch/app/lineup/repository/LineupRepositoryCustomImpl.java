@@ -41,7 +41,7 @@ public class LineupRepositoryCustomImpl implements LineupRepositoryCustom {
 			.from(lineup)
 			.join(lineup.restaurant, restaurant)
 			.where(lineup.user.id.eq(userId), statusEq(statusCond))
-			.orderBy(lineup.arrivedAt.desc())
+			.orderBy(lineup.id.desc())
 			.fetch();
 	}
 

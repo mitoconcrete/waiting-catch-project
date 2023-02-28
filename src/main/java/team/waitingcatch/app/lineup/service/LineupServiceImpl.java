@@ -6,9 +6,11 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.springframework.dao.OptimisticLockingFailureException;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
 import org.springframework.retry.annotation.Recover;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
@@ -22,7 +24,9 @@ import team.waitingcatch.app.common.util.sms.SmsService;
 import team.waitingcatch.app.common.util.sms.dto.MessageRequest;
 import team.waitingcatch.app.lineup.dto.CallCustomerInfoResponse;
 import team.waitingcatch.app.lineup.dto.CancelWaitingRequest;
+import team.waitingcatch.app.lineup.dto.GetLineupHistoryRecordsServiceRequest;
 import team.waitingcatch.app.lineup.dto.GetLineupRecordsServiceRequest;
+import team.waitingcatch.app.lineup.dto.LineupRecordResponse;
 import team.waitingcatch.app.lineup.dto.LineupRecordWithTypeResponse;
 import team.waitingcatch.app.lineup.dto.StartLineupEntityRequest;
 import team.waitingcatch.app.lineup.dto.StartWaitingServiceRequest;
@@ -131,20 +135,28 @@ public class LineupServiceImpl implements LineupService, InternalLineupService {
 	@Transactional(readOnly = true)
 	@Override
 	public List<LineupRecordWithTypeResponse> getLineupRecords(GetLineupRecordsServiceRequest serviceRequest) {
-		List<LineupRecordWithTypeResponse> todayLineupList = lineupRepository.findRecordsByUserIdAndStatus(
-				serviceRequest.getUserId(), serviceRequest.getStatus())
+		return lineupRepository.findRecordsByUserIdAndStatus(serviceRequest.getUserId(), serviceRequest.getStatus())
 			.stream()
 			.map(lineupRecord -> LineupRecordWithTypeResponse.of(lineupRecord, StoredLineupTableNameEnum.LINEUP))
 			.collect(Collectors.toList());
+	}
 
-		List<LineupRecordWithTypeResponse> pastLineupList = internalLineupHistoryService._getRecordsByUserId(
-				serviceRequest.getUserId(), serviceRequest.getStatus())
-			.stream()
+	@Transactional(readOnly = true)
+	@Override
+	public Slice<LineupRecordWithTypeResponse> getLineupHistoryRecords(
+		GetLineupHistoryRecordsServiceRequest serviceRequest,
+		Pageable pageable) {
+
+		Slice<LineupRecordResponse> slice = internalLineupHistoryService._getRecordsByUserId(serviceRequest.getId(),
+			serviceRequest.getUserId(), serviceRequest.getStatus(), pageable);
+
+		List<LineupRecordWithTypeResponse> content = slice
+			.get()
 			.map(
 				lineupRecord -> LineupRecordWithTypeResponse.of(lineupRecord, StoredLineupTableNameEnum.LINEUP_HISTORY))
 			.collect(Collectors.toList());
 
-		return Stream.concat(todayLineupList.stream(), pastLineupList.stream()).collect(Collectors.toList());
+		return new SliceImpl<>(content, pageable, slice.hasNext());
 	}
 
 	@Override
@@ -191,6 +203,7 @@ public class LineupServiceImpl implements LineupService, InternalLineupService {
 		return lineupRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 줄서기입니다."));
 	}
 
+	@Transactional(readOnly = true)
 	@Override
 	public Lineup _getByIdWithUser(Long id) {
 		return lineupRepository.findByIdWithUser(id)

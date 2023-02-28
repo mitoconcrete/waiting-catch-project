@@ -5,6 +5,10 @@ import static team.waitingcatch.app.restaurant.entity.QRestaurant.*;
 
 import java.util.List;
 
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
+
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
@@ -18,8 +22,10 @@ public class LineupHistoryRepositoryCustomImpl implements LineupHistoryRepositor
 	private final JPAQueryFactory queryFactory;
 
 	@Override
-	public List<LineupRecordResponse> findLineupRecordsByUserIdAndStatus(Long userId, ArrivalStatusEnum statusCond) {
-		return queryFactory
+	public Slice<LineupRecordResponse> findLineupRecordsByUserIdAndStatus(Long id, long userId,
+		ArrivalStatusEnum statusCond, Pageable pageable) {
+
+		List<LineupRecordResponse> content = queryFactory
 			.select(new QLineupRecordResponse(
 				lineupHistory.id,
 				lineupHistory.restaurant.id,
@@ -32,9 +38,22 @@ public class LineupHistoryRepositoryCustomImpl implements LineupHistoryRepositor
 			))
 			.from(lineupHistory)
 			.join(lineupHistory.restaurant, restaurant)
-			.where(lineupHistory.user.id.eq(userId), statusEq(statusCond))
-			.orderBy(lineupHistory.arrivedAt.desc())
+			.where(idLt(id), lineupHistory.user.id.eq(userId), statusEq(statusCond))
+			.orderBy(lineupHistory.id.desc())
+			.limit(pageable.getPageSize() + 1)
 			.fetch();
+
+		boolean hasNext = false;
+		if (content.size() > pageable.getPageSize()) {
+			content.remove(pageable.getPageSize());
+			hasNext = true;
+		}
+
+		return new SliceImpl<>(content, pageable, hasNext);
+	}
+
+	private BooleanExpression idLt(Long id) {
+		return id != null ? lineupHistory.id.lt(id) : null;
 	}
 
 	private BooleanExpression statusEq(ArrivalStatusEnum statusCond) {
