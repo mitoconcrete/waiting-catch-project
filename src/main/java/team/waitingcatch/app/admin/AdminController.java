@@ -30,6 +30,7 @@ import team.waitingcatch.app.restaurant.service.restaurant.RestaurantService;
 import team.waitingcatch.app.user.dto.CreateUserControllerRequest;
 import team.waitingcatch.app.user.dto.CreateUserServiceRequest;
 import team.waitingcatch.app.user.dto.GetCustomerByIdAndRoleServiceRequest;
+import team.waitingcatch.app.user.dto.GetCustomerPageableRequest;
 import team.waitingcatch.app.user.entitiy.UserDetailsImpl;
 import team.waitingcatch.app.user.enums.UserRoleEnum;
 import team.waitingcatch.app.user.service.UserService;
@@ -91,8 +92,8 @@ public class AdminController {
 	//유저
 
 	@GetMapping("/customers")
-	public ModelAndView getCustomers(Model model) {
-		model.addAttribute("customers", userService.getCustomers());
+	public ModelAndView getCustomers(Model model, GetCustomerPageableRequest pageableRequest) {
+		model.addAttribute("customers", userService.getCustomers(pageableRequest));
 		return new ModelAndView("/admin/user-list");
 	}
 
