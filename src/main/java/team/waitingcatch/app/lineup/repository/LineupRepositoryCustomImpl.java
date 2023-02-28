@@ -40,7 +40,7 @@ public class LineupRepositoryCustomImpl implements LineupRepositoryCustom {
 			))
 			.from(lineup)
 			.join(lineup.restaurant, restaurant)
-			.where(lineup.user.id.eq(userId), statusEq(statusCond))
+			.where(lineup.user.id.eq(userId), statusEq(statusCond), lineup.isDeleted.isFalse())
 			.orderBy(lineup.id.desc())
 			.fetch();
 	}
@@ -78,7 +78,7 @@ public class LineupRepositoryCustomImpl implements LineupRepositoryCustom {
 			.from(lineup)
 			.join(lineup.user, user)
 			.join(lineup.restaurant, restaurant)
-			.where(lineup.id.eq(lineupId))
+			.where(lineup.id.eq(lineupId), lineup.isDeleted.isFalse())
 			.fetchOne();
 	}
 
@@ -93,7 +93,7 @@ public class LineupRepositoryCustomImpl implements LineupRepositoryCustom {
 			.from(lineup)
 			.join(lineup.user, user)
 			.join(lineup.restaurant, restaurant)
-			.where(lineup.isReviewed.isFalse())
+			.where(lineup.isReviewed.isFalse(), lineup.isDeleted.isFalse())
 			.fetch();
 	}
 

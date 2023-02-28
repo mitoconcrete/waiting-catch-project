@@ -31,7 +31,7 @@ public class ReviewRepositoryCustomImpl implements ReviewRepositoryCustom {
 				review.modifiedDate
 			))
 			.from(review)
-			.where(idLt(id), review.restaurant.id.eq(restaurantId).and(review.isDeleted.isFalse()))
+			.where(idLt(id), review.restaurant.id.eq(restaurantId), review.isDeleted.isFalse())
 			.orderBy(review.id.desc())
 			.limit(pageable.getPageSize() + 1)
 			.fetch();
@@ -53,7 +53,7 @@ public class ReviewRepositoryCustomImpl implements ReviewRepositoryCustom {
 				review.modifiedDate
 			))
 			.from(review)
-			.where(idLt(id), review.user.id.eq(userId).and(review.isDeleted.isFalse()))
+			.where(idLt(id), review.user.id.eq(userId), review.isDeleted.isFalse())
 			.orderBy(review.id.desc())
 			.limit(pageable.getPageSize() + 1)
 			.fetch();
