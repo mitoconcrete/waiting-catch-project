@@ -20,6 +20,7 @@ import team.waitingcatch.app.user.dto.CreateUserServiceRequest;
 import team.waitingcatch.app.user.dto.GetCustomerByIdAndRoleServiceRequest;
 import team.waitingcatch.app.user.dto.LoginRequest;
 import team.waitingcatch.app.user.dto.LogoutRequest;
+import team.waitingcatch.app.user.dto.UpdateUserServiceRequest;
 import team.waitingcatch.app.user.entitiy.User;
 import team.waitingcatch.app.user.enums.UserRoleEnum;
 import team.waitingcatch.app.user.repository.UserRepository;
@@ -194,5 +195,26 @@ class UserServiceImplTest {
 		userService.createUser(payload1);
 		assertTrue(userRepository.existsByUsername(payload1.getUsername()));
 		assertThrows(IllegalArgumentException.class, () -> userService.createUser(payload2));
+	}
+
+	@Test
+	@DisplayName("유저 수정")
+	void updateUser() {
+		// given
+		String username = "xogns656";
+		String password = "Test1234!";
+		var payload = new UpdateUserServiceRequest("김센세", "2@email.com", username, "changenick", "010-1111-1111");
+		var payload2 = new UpdateUserServiceRequest("김센세", "2@email.com", "1123123", "changenick", "010-1111-1111");
+		// when
+		userService.updateUser(payload);
+
+		// then
+		assertEquals(userRepository.findByUsernameAndIsDeletedFalse(username).get().getName(), payload.getName());
+		assertEquals(userRepository.findByUsernameAndIsDeletedFalse(username).get().getEmail(), payload.getEmail());
+		assertEquals(userRepository.findByUsernameAndIsDeletedFalse(username).get().getNickname(),
+			payload.getNickName());
+		assertEquals(userRepository.findByUsernameAndIsDeletedFalse(username).get().getPhoneNumber(),
+			payload.getPhoneNumber());
+		assertThrows(IllegalArgumentException.class, () -> userService.updateUser(payload2));
 	}
 }
