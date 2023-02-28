@@ -3,6 +3,9 @@ package team.waitingcatch.app.user.service;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,9 +16,27 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.extern.slf4j.Slf4j;
+import team.waitingcatch.app.common.Address;
+import team.waitingcatch.app.common.Position;
 import team.waitingcatch.app.common.util.JwtUtil;
+import team.waitingcatch.app.event.repository.EventRepository;
+import team.waitingcatch.app.lineup.dto.CreateReviewEntityRequest;
+import team.waitingcatch.app.lineup.dto.StartWaitingServiceRequest;
+import team.waitingcatch.app.lineup.entity.LineupHistory;
+import team.waitingcatch.app.lineup.entity.Review;
+import team.waitingcatch.app.lineup.entity.WaitingNumber;
+import team.waitingcatch.app.lineup.repository.LineupHistoryRepository;
+import team.waitingcatch.app.lineup.repository.LineupRepository;
+import team.waitingcatch.app.lineup.repository.ReviewRepository;
+import team.waitingcatch.app.lineup.repository.WaitingNumberRepository;
+import team.waitingcatch.app.lineup.service.LineupService;
 import team.waitingcatch.app.redis.repository.AliveTokenRepository;
 import team.waitingcatch.app.redis.repository.KilledAccessTokenRepository;
+import team.waitingcatch.app.restaurant.dto.restaurant.SaveDummyRestaurantRequest;
+import team.waitingcatch.app.restaurant.entity.Restaurant;
+import team.waitingcatch.app.restaurant.entity.RestaurantInfo;
+import team.waitingcatch.app.restaurant.repository.RestaurantInfoRepository;
+import team.waitingcatch.app.restaurant.repository.RestaurantRepository;
 import team.waitingcatch.app.user.dto.CreateUserServiceRequest;
 import team.waitingcatch.app.user.dto.DeleteUserRequest;
 import team.waitingcatch.app.user.dto.GetCustomerByIdAndRoleServiceRequest;
@@ -31,13 +52,32 @@ import team.waitingcatch.app.user.repository.UserRepository;
 @Rollback(value = true)
 @Slf4j
 class UserServiceImplTest {
+
 	static {
 		System.setProperty("com.amazonaws.sdk.disableEc2Metadata", "true");
 	}
 
 	@Autowired
-	private KilledAccessTokenRepository killedAccessTokenRepository;
+	private RestaurantInfoRepository restaurantInfoRepository;
 
+	@Autowired
+	private LineupHistoryRepository lineupHistoryRepository;
+	@Autowired
+	private RestaurantRepository restaurantRepository;
+	@Autowired
+	private LineupRepository lineupRepository;
+
+	@Autowired
+	private EventRepository eventRepository;
+
+	@Autowired
+	private ReviewRepository reviewRepository;
+	@Autowired
+	private LineupService lineupService;
+	@Autowired
+	private KilledAccessTokenRepository killedAccessTokenRepository;
+	@Autowired
+	private WaitingNumberRepository waitingNumberRepository;
 	@Autowired
 	private AliveTokenRepository aliveTokenRepository;
 	@Autowired
@@ -260,6 +300,54 @@ class UserServiceImplTest {
 
 		when(request.getUsername()).thenReturn(disablesUsername);
 		assertThrows(IllegalArgumentException.class, () -> userService.deleteCustomer(request));
+	}
+
+	@Test
+	@DisplayName("셀러 삭제")
+	void deleteSeller() {
+		// given
+		var customer = userRepository.findByUsernameAndIsDeletedFalse("xogns656").get();
+		var seller = userRepository.findByUsernameAndIsDeletedFalse("seller01").get();
+
+		// 레스토랑
+		var payload = new SaveDummyRestaurantRequest("이이", new Address("1", "2", "3"), new Position(0, 0), "1234", "1",
+			seller);
+		var restaurant = new Restaurant(payload);
+		var createdRestaurant = restaurantRepository.save(restaurant);
+		var info = new RestaurantInfo(createdRestaurant, "", "");
+		info.openLineup();
+		restaurantInfoRepository.save(info);
+
+		var waiting = WaitingNumber.createWaitingNumber(createdRestaurant);
+		waitingNumberRepository.save(waiting);
+
+		// 줄서기
+		lineupService.startWaiting(
+			new StartWaitingServiceRequest(customer, createdRestaurant.getId(), 0, 0, 0, LocalDateTime.now()));
+		var lineup = lineupRepository.findAllByUserId(customer.getId())
+			.get(0);
+
+		// 줄서기 히스토리
+		var history = new LineupHistory(lineup);
+		history = lineupHistoryRepository.save(history);
+
+		// 리뷰
+		var review = Review.craeteReview(
+			new CreateReviewEntityRequest(customer, restaurant, 0, " ", new ArrayList<>()));
+		review = reviewRepository.save(review);
+
+		var servicePayload = mock(DeleteUserRequest.class);
+		when(servicePayload.getUsername()).thenReturn(seller.getUsername());
+
+		// when
+		userService.deleteSeller(servicePayload);
+
+		// then
+		assertTrue(userRepository.findById(seller.getId()).get().isDeleted());
+		assertTrue(restaurantRepository.findByUserId(seller.getId()).get().isDeleted());
+		assertTrue(lineupHistoryRepository.findById(history.getId()).get().isDeleted());
+		assertTrue(lineupRepository.findById(lineup.getId()).get().isDeleted());
+		assertTrue(reviewRepository.findById(review.getId()).get().isDeleted());
 	}
 
 }
