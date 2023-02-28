@@ -79,7 +79,7 @@
 
             $.ajax({
                 type: 'GET',
-                url: `/api/admin/categories`,
+정                url: `/api/general/categories`,
                 success: function (response, status) {
                     console.log(response)
                     if (status === 'success') {
@@ -116,7 +116,7 @@
 
             $.ajax({
                 type: 'GET',
-                url: `/api/categories/` + parentId,
+                url: `/api/general/categories/` + parentId,
                 success: function (response, status) {
                     console.log(response)
                     if (status === 'success') {
@@ -147,7 +147,7 @@
 
             $.ajax({
                 type: 'GET',
-                url: `/api/categories/` + parentId,
+                url: `/api/general/categories/` + parentId,
                 success: function (response, status) {
                     console.log(response)
                     if (status === 'success') {
@@ -224,7 +224,7 @@
         <div class="input-group flex-nowrap">
             <span class="input-group-text">카테고리</span>
             <input type="text" id="categories" class="form-control" placeholder="Categories" aria-label="Categories"
-                   aria-describedby="addon-wrapping">
+                   aria-describedby="addon-wrapping" readonly>
             <input onclick="openSelectCategory()" type="button" value="카테고리 선택">
         </div>
         <div class="selectCategoryBox">

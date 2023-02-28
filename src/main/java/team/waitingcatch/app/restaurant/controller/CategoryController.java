@@ -37,12 +37,17 @@ public class CategoryController {
 		categoryService.createCategory(request);
 	}
 
+	@GetMapping("/general/categories")
+	public List<CategoryResponse> getParentCategoriesForSellerManagement() {
+		return categoryService.getParentCategories();
+	}
+
 	@GetMapping("/admin/categories")
 	public List<CategoryResponse> getParentCategories() {
 		return categoryService.getParentCategories();
 	}
 
-	@GetMapping("/categories/{categoryId}")
+	@GetMapping("/general/categories/{categoryId}")
 	public List<CategoryResponse> getChildCategoriesForSellerManagement(@PathVariable Long categoryId) {
 		return categoryService.getChildCategoriesForSellerManagement(categoryId);
 	}
