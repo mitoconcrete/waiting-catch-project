@@ -51,7 +51,7 @@ public class UserController {
 	private final UserService userService;
 
 	// global
-	@PostMapping({"/customer/signin", "/seller/signin", "/admin/signin"})
+	@PostMapping({"/general/customer/signin", "/general/seller/signin", "/general/admin/signin"})
 	public void login(@RequestBody @Valid LoginRequest loginRequest, HttpServletResponse response) {
 		LoginServiceResponse loginServiceResponse = userService.login(loginRequest);
 		// 엑세스 토큰을 서비스로 부터 반환 받아 헤더에 넣어준다.
@@ -77,13 +77,13 @@ public class UserController {
 		userService.deleteCustomer(servicePayload);
 	}
 
-	@PostMapping("/customer/signup")
+	@PostMapping("/general/customer/signup")
 	@ResponseStatus(HttpStatus.CREATED)
 	public void createCustomer(@RequestBody @Valid CreateUserControllerRequest controllerRequest) {
 		_createUserService(UserRoleEnum.USER, controllerRequest);
 	}
 
-	@PostMapping("/customer/find-password")
+	@PostMapping("/general/customer/find-password")
 	public void findCustomerPassword(@RequestBody @Valid FindPasswordRequest findPasswordRequest) {
 		userService.findUserAndSendEmail(findPasswordRequest);
 	}
@@ -148,7 +148,7 @@ public class UserController {
 		_createUserService(UserRoleEnum.ADMIN, controllerRequest);
 	}
 
-	@GetMapping("/google/callback")
+	@GetMapping("/general/google/callback")
 	@ResponseStatus(HttpStatus.CREATED)
 	public void createTokenByEmail(
 		@RequestParam @Pattern(regexp = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+.[A-Za-z]{2,6}$",
