@@ -5,8 +5,13 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.common.util.DistanceCalculator;
@@ -35,6 +40,7 @@ import team.waitingcatch.app.restaurant.repository.RestaurantRepository;
 public class RestaurantServiceImpl implements RestaurantService, InternalRestaurantService {
 	private final RestaurantRepository restaurantRepository;
 	private final RestaurantInfoRepository restaurantInfoRepository;
+	private final JPAQueryFactory queryFactory;
 
 	private final ImageUploader imageUploader;
 	private final DistanceCalculator distanceCalculator;
@@ -85,8 +91,13 @@ public class RestaurantServiceImpl implements RestaurantService, InternalRestaur
 
 	@Override
 	@Transactional(readOnly = true)
-	public List<RestaurantResponse> getRestaurants() {
-		return restaurantRepository.findAll().stream().map(RestaurantResponse::new).collect(Collectors.toList());
+	public Page<RestaurantResponse> getRestaurants(Pageable pageable) {
+		Page<Restaurant> restaurants = restaurantRepository.findAll(pageable);
+
+		return new PageImpl<>(
+			(restaurantRepository.findAll(pageable).getContent().stream().map(RestaurantResponse::new).collect(
+				Collectors.toList())), pageable,
+			restaurants.getTotalElements());
 	}
 
 	@Override

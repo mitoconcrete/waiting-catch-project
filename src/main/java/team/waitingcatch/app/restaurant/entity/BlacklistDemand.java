@@ -10,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.Size;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -40,6 +41,7 @@ public class BlacklistDemand extends TimeStamped {
 	private AcceptedStatusEnum status;
 
 	@Column(nullable = false)
+	@Size(max = 100)
 	private String description;
 
 	public BlacklistDemand(Restaurant restaurant, User user, String description) {
@@ -69,6 +71,7 @@ public class BlacklistDemand extends TimeStamped {
 
 	public void updateApprovalStatus() {
 		this.status = AcceptedStatusEnum.APPROVE;
+		System.out.println("status = " + status);
 	}
 
 	public void checkBlacklistRequest() {

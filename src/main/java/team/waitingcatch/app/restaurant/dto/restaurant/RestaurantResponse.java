@@ -2,7 +2,6 @@ package team.waitingcatch.app.restaurant.dto.restaurant;
 
 import lombok.Getter;
 import team.waitingcatch.app.restaurant.entity.Restaurant;
-import team.waitingcatch.app.user.entitiy.User;
 
 @Getter
 public class RestaurantResponse {
@@ -24,7 +23,6 @@ public class RestaurantResponse {
 	private final int capacity;
 	private final String businessNo;
 
-	private final User user;
 	private final boolean isDeleted;
 
 	public RestaurantResponse(Restaurant restaurant) {
@@ -44,7 +42,6 @@ public class RestaurantResponse {
 		this.description = restaurant.getDescription();
 		this.capacity = restaurant.getCapacity();
 		this.businessNo = restaurant.getBusinessLicenseNo();
-		this.user = restaurant.getUser();
 		this.isDeleted = restaurant.isDeleted();
 	}
 }

@@ -1,7 +1,13 @@
 package team.waitingcatch.app.admin;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.validation.Valid;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.ui.Model;
@@ -11,7 +17,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
@@ -24,6 +29,8 @@ import team.waitingcatch.app.restaurant.dto.category.GetChildCategoryServiceRequ
 import team.waitingcatch.app.restaurant.dto.category.UpdateCategoryControllerRequest;
 import team.waitingcatch.app.restaurant.dto.category.UpdateCategoryServiceRequest;
 import team.waitingcatch.app.restaurant.dto.restaurant.DeleteRestaurantByAdminServiceRequest;
+import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantResponse;
+import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantSearchKeyWords;
 import team.waitingcatch.app.restaurant.service.category.CategoryService;
 import team.waitingcatch.app.restaurant.service.requestseller.SellerManagementService;
 import team.waitingcatch.app.restaurant.service.restaurant.RestaurantService;
@@ -36,25 +43,24 @@ import team.waitingcatch.app.user.service.UserService;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/admin/templates")
 public class AdminController {
 	private final UserService userService;
 	private final RestaurantService restaurantService;
 	private final SellerManagementService sellerManagementService;
 	private final CategoryService categoryService;
 
-	@GetMapping("/login")
+	@GetMapping("/general/templates/admin/login")
 	public ModelAndView loginPage() {
 		return new ModelAndView("/admin/login");
 	}
 
-	@GetMapping("/register")
+	@GetMapping("/general/templates/admin/register")
 	public ModelAndView registerPage(Model model) {
 		model.addAttribute("CreateUserControllerRequest", new CreateUserControllerRequest());
 		return new ModelAndView("/admin/register");
 	}
 
-	@GetMapping("/main")
+	@GetMapping("/admin/templates/main")
 	public ModelAndView adminMainPage() {
 		return new ModelAndView("/admin/index");
 	}
@@ -83,26 +89,26 @@ public class AdminController {
 	}
 
 	//판매자요청
-	@GetMapping("/seller-management")
+	@GetMapping("/admin/templates/seller-management")
 	public ModelAndView sellerManagementPage(Model model, @AuthenticationPrincipal UserDetailsImpl userDetails) {
 		model.addAttribute("requestSeller", sellerManagementService.getDemandSignUpSellers());
 		return new ModelAndView("/admin/seller-management");
 	}
 	//유저
 
-	@GetMapping("/customers")
+	@GetMapping("/admin/templates/customers")
 	public ModelAndView getCustomers(Model model) {
 		model.addAttribute("customers", userService.getCustomers());
 		return new ModelAndView("/admin/user-list");
 	}
 
-	@GetMapping("/user-list")
+	@GetMapping("/admin/templates/user-list")
 	public ModelAndView userListPage(Model model) {
 		model.addAttribute("requestSeller", sellerManagementService.getDemandSignUpSellers());
 		return new ModelAndView("/admin/user-list");
 	}
 
-	@GetMapping("/customers/{customerId}")
+	@GetMapping("/admin/templates/customers/{customerId}")
 	public ModelAndView getCustomer(@PathVariable Long customerId, Model model) {
 
 		GetCustomerByIdAndRoleServiceRequest servicePayload =
@@ -115,13 +121,19 @@ public class AdminController {
 	}
 
 	//레스토랑, 셀러
-	@GetMapping("/restaurants")
-	public ModelAndView restaurantListPage(Model model) {
-		model.addAttribute("restaurants", restaurantService.getRestaurants());
+	@GetMapping("/admin/templates/restaurants")
+	public ModelAndView restaurantListPage(Model model, @PageableDefault(size = 10, page = 0) Pageable pageable,
+		String searchVal) {
+		Page<RestaurantResponse> restaurants = restaurantService.getRestaurants(pageable);
+		List<RestaurantSearchKeyWords> restaurantSearchKeyWords = new ArrayList<>();
+		restaurantSearchKeyWords.add(new RestaurantSearchKeyWords("restaurantName", "매장명"));
+		restaurantSearchKeyWords.add(new RestaurantSearchKeyWords("sellerName", "판매자명"));
+		model.addAttribute("restaurants", restaurants);
+		model.addAttribute("categories", restaurantSearchKeyWords);
 		return new ModelAndView("/admin/restaurant-list");
 	}
 
-	@GetMapping("/sellers/{sellerId}")
+	@GetMapping("/admin/templates/sellers/{sellerId}")
 	public ModelAndView getSeller(@PathVariable Long sellerId, Model model) {
 		GetCustomerByIdAndRoleServiceRequest servicePayload =
 			new GetCustomerByIdAndRoleServiceRequest(
@@ -139,23 +151,23 @@ public class AdminController {
 		restaurantService.deleteRestaurantByAdmin(deleteRestaurantByAdminServiceRequest);
 	}
 
-	@GetMapping("/event")
+	@GetMapping("/admin/templates/event")
 	public ModelAndView eventPage() {
 		return new ModelAndView("/admin/event");
 	}
 
-	@GetMapping("/blacklist")
+	@GetMapping("/admin/templates/blacklist")
 	public ModelAndView blacklistPage() {
 		return new ModelAndView("/admin/blacklist");
 	}
 
-	@GetMapping("/review")
+	@GetMapping("/admin/templates/review")
 	public ModelAndView censorReview() {
 		return new ModelAndView("/admin/review");
 	}
 
 	//카테고리
-	@GetMapping("/category")
+	@GetMapping("/admin/templates/category")
 	public ModelAndView categoryPage(Model model) {
 		model.addAttribute("categories", categoryService.getParentCategories());
 		model.addAttribute("CreateCategoryRequest", new CreateCategoryRequest());
@@ -191,7 +203,7 @@ public class AdminController {
 		categoryService.deleteCategory(request);
 	}
 
-	@GetMapping("/categories/{categoryId}")
+	@GetMapping("/admin/templates/categories/{categoryId}")
 	public ModelAndView getChildCategories(@PathVariable Long categoryId, Model model) {
 		GetChildCategoryServiceRequest request = new GetChildCategoryServiceRequest(categoryId);
 		model.addAttribute("abc", categoryService.getChildCategories(request).getChildCategories());

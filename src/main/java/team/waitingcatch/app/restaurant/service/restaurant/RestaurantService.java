@@ -3,6 +3,9 @@ package team.waitingcatch.app.restaurant.service.restaurant;
 import java.io.IOException;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import team.waitingcatch.app.restaurant.dto.requestseller.ApproveSignUpSellerManagementEntityPassToRestaurantEntityRequest;
 import team.waitingcatch.app.restaurant.dto.restaurant.DeleteRestaurantByAdminServiceRequest;
 import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantBasicInfoResponse;
@@ -26,7 +29,7 @@ public interface RestaurantService {
 	List<RestaurantsWithinRadiusResponse> getRestaurantsWithinRadius(
 		RestaurantsWithinRadiusServiceRequest request);
 
-	List<RestaurantResponse> getRestaurants();
+	Page<RestaurantResponse> getRestaurants(Pageable pageable);
 
 	void deleteRestaurantByAdmin(DeleteRestaurantByAdminServiceRequest deleteRestaurantByAdminServiceRequest);
 

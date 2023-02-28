@@ -21,7 +21,7 @@ import team.waitingcatch.app.user.entitiy.UserDetailsImpl;
 public class BlacklistController {
 	private final BlacklistService blacklistService;
 
-	@DeleteMapping("/blacklists/{blacklistId}")
+	@DeleteMapping("/seller/blacklists/{blacklistId}")
 	public void deleteBlacklist(
 		@PathVariable Long blacklistId,
 		@AuthenticationPrincipal UserDetailsImpl userDetails) {

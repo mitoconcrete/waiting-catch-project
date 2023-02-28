@@ -1,0 +1,28 @@
+.pagenav {
+    text-align: center;
+}
+
+.firstpage, .lastpage {
+
+    border: 3px solid #8B60C7;
+    padding: 10px;
+
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    letter-spacing: 3px;
+    font-size: 15px;
+}
+
+.restaurantPage {
+
+    border: 2px solid #8B60C7;
+    padding: 10px;
+}
+
+.restaurantPage1, .restaurantPage2 {
+    border: 2px solid #8B60C7;
+    padding: 10px;
+}
