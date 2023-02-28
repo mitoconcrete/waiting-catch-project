@@ -1,7 +1,6 @@
 package team.waitingcatch.app.lineup.service;
 
 import java.io.IOException;
-import java.util.List;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;

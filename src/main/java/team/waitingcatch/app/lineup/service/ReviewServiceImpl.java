@@ -19,6 +19,7 @@ import team.waitingcatch.app.lineup.entity.Review;
 import team.waitingcatch.app.lineup.enums.StoredLineupTableNameEnum;
 import team.waitingcatch.app.lineup.repository.ReviewRepository;
 import team.waitingcatch.app.restaurant.entity.Restaurant;
+import team.waitingcatch.app.restaurant.entity.RestaurantInfo;
 import team.waitingcatch.app.restaurant.service.restaurant.InternalRestaurantService;
 
 @Service
@@ -35,12 +36,16 @@ public class ReviewServiceImpl implements ReviewService, InternalReviewService {
 
 	@Override
 	public void createReview(CreateReviewServiceRequest serviceRequest) throws IOException {
-		Restaurant restaurant = internalRestaurantService._getRestaurantById(serviceRequest.getRestaurantId());
+		RestaurantInfo restaurantInfo = internalRestaurantService._getRestaurantInfoByRestaurantIdWithRestaurant(
+			serviceRequest.getRestaurantId());
+		Restaurant restaurant = restaurantInfo.getRestaurant();
+
 		List<String> imagePaths = imageUploader.uploadList(serviceRequest.getImages(), "review");
 		CreateReviewEntityRequest entityRequest = new CreateReviewEntityRequest(serviceRequest.getUser(), restaurant,
 			serviceRequest.getRate(), serviceRequest.getContent(), imagePaths);
 
 		reviewRepository.save(Review.craeteReview(entityRequest));
+		restaurantInfo.setAverageRate(entityRequest.getRate());
 
 		if (serviceRequest.getType() == StoredLineupTableNameEnum.LINEUP) {
 			Lineup lineup = internalLineupService._getById(serviceRequest.getLineupId());
