@@ -21,7 +21,7 @@ public class GetDemandSignUpSellerResponse {
 	private final String zipCode;
 	private final String address;
 	private final String detailAddress;
-	private final String searchKeyWords;
+	// private final String searchKeyWords;
 	private final String businessLicenseNo;
 	private final String name;
 	private final AcceptedStatusEnum status;
@@ -42,7 +42,7 @@ public class GetDemandSignUpSellerResponse {
 		this.zipCode = sellerManagement.getZipCode();
 		this.address = sellerManagement.getAddress();
 		this.detailAddress = sellerManagement.getDetailAddress();
-		this.searchKeyWords = sellerManagement.getSearchKeyWords();
+		// this.searchKeyWords = sellerManagement.getSearchKeyWords();
 		this.businessLicenseNo = sellerManagement.getBusinessLicenseNo();
 		this.name = sellerManagement.getName();
 		this.status = sellerManagement.getStatus();

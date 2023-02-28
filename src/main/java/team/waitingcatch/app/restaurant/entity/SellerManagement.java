@@ -66,8 +66,8 @@ public class SellerManagement extends TimeStamped {
 	@Column(nullable = false)
 	private String categories;
 
-	@Column(name = "search_keywords", nullable = false)
-	private String searchKeyWords;
+	// @Column(name = "search_keywords", nullable = false)
+	// private String searchKeyWords;
 
 	@Column(name = "business_license_no", nullable = false)
 	private String businessLicenseNo;
@@ -81,11 +81,11 @@ public class SellerManagement extends TimeStamped {
 		this.address = demandSignupSellerServiceRequest.getAddress();
 		this.detailAddress = demandSignupSellerServiceRequest.getDetailAddress();
 		// this.address = demandSignupSellerServiceRequest.getAddress();
-		// this.position = demandSignupSellerServiceRequest.getPosition();
+		this.position = demandSignupSellerServiceRequest.getPosition();
 		this.description = demandSignupSellerServiceRequest.getDescription();
 		this.status = AcceptedStatusEnum.WAIT;
 		this.categories = demandSignupSellerServiceRequest.getCategories();
-		// this.searchKeyWords = demandSignupSellerServiceRequest.getSearchKeyWords();
+		// this.searchKeyWords = "";
 		this.businessLicenseNo = demandSignupSellerServiceRequest.getBusinessLicenseNo();
 		this.name = demandSignupSellerServiceRequest.getName();
 	}
