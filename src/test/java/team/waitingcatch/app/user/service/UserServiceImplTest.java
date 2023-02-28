@@ -171,10 +171,9 @@ class UserServiceImplTest {
 		}
 
 		// create seller , admin
-		User seller = new User(UserRoleEnum.SELLER, "김태훈", "1@seller.com", "seller01", "Test1234!", "seller01",
-			"010-1234-0001");
-		User admin = new User(UserRoleEnum.ADMIN, "김태훈", "1@admin.com", "admin01", "Test1234!", "seller01",
+		User admin = new User(UserRoleEnum.ADMIN, "김태훈", "1@admin.com", "admin01", "Test1234!", "admin01",
 			"010-1234-0002");
+		userRepository.save(admin);
 		// when&then
 		Pageable pageable1 = Pageable.ofSize(3).withPage(0);
 		Pageable pageable2 = Pageable.ofSize(3).withPage(1);
@@ -184,11 +183,11 @@ class UserServiceImplTest {
 		Pageable pageable5 = Pageable.ofSize(5).withPage(1);
 		Pageable pageable6 = Pageable.ofSize(5).withPage(2);
 		assertEquals(userService.getCustomers(pageable1).size(), 3);
-		assertEquals(userService.getCustomers(pageable2).size(), 2);
-		assertEquals(userService.getCustomers(pageable3).size(), 0);
+		assertEquals(userService.getCustomers(pageable2).size(), 3);
+		assertEquals(userService.getCustomers(pageable3).size(), 1);
 
 		assertEquals(userService.getCustomers(pageable4).size(), 5);
-		assertEquals(userService.getCustomers(pageable5).size(), 0);
+		assertEquals(userService.getCustomers(pageable5).size(), 2);
 		assertEquals(userService.getCustomers(pageable6).size(), 0);
 	}
 
@@ -196,24 +195,22 @@ class UserServiceImplTest {
 	@DisplayName("유저 롤과 아이디로 정보가져오기")
 	void getByUserIdAndRole() {
 		// given
-		User seller = new User(UserRoleEnum.SELLER, "김태훈", "1@seller.com", "seller01", "Test1234!", "seller01",
-			"010-1234-0001");
-		var newSeller = userRepository.save(seller);
+		var seller = userRepository.findByUsernameAndIsDeletedFalse("seller01").get();
 
 		var request = mock(GetCustomerByIdAndRoleServiceRequest.class);
 		when(request.getRole()).thenReturn(UserRoleEnum.SELLER);
-		when(request.getUserId()).thenReturn(newSeller.getId());
+		when(request.getUserId()).thenReturn(seller.getId());
 
 		// when
 		var response = userService.getByUserIdAndRole(request);
 
 		when(request.getRole()).thenReturn(UserRoleEnum.USER);
 
-		assertEquals(response.getId(), newSeller.getId());
-		assertEquals(response.getUsername(), newSeller.getUsername());
+		assertEquals(response.getId(), seller.getId());
+		assertEquals(response.getUsername(), seller.getUsername());
 		assertThrows(IllegalArgumentException.class, () -> userService.getByUserIdAndRole(request));
 
-		when(request.getUserId()).thenReturn(newSeller.getId() * 10000);
+		when(request.getUserId()).thenReturn(seller.getId() * 10000);
 		assertThrows(IllegalArgumentException.class, () -> userService.getByUserIdAndRole(request));
 	}
 
