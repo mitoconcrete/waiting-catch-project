@@ -49,172 +49,175 @@
 </nav>
 
 
-<form th:action="@{/admin/templates/restaurants/}" th:method="get">
+<div class="body">
+    <!--    <div class="board_wrap">-->
+    <!--        <div class="board_title">-->
+    <!--                <h1 style="color: #8B60C7">레스토랑 목록</h1>-->
+    <!--            <p>레스토랑 목록을 보여드리겠습니다.</p>-->
+    <!--        </div>-->
 
-    <div class="form-group">
-        <input type="text" class="btn" name="searchKeyWords" value="검색어">
+    <!--        <div class="board_list_wrap">-->
+    <!--            <div class="board_list">-->
+    <!--                <div class="top">-->
+    <!--                    <div class="num">번호</div>-->
+    <!--                    <div class="writer">매장명</div>-->
+    <!--                    <div class="writer">이미지</div>-->
+    <!--                    <div class="writer">매장번호</div>-->
+    <!--                    <div class="writer">설명</div>-->
+    <!--                    <div class="writer">카테고리</div>-->
+    <!--                    <div class="writer">키워드</div>-->
+    <!--                    <div class="writer">사업자번호</div>-->
+    <!--                    <div class="writer">주소</div>-->
+    <!--                    <div class="writer">삭제여부</div>-->
+    <!--                    <div class="writer">사업자이름</div>-->
+
+    <!--                </div>-->
+
+    <!--                <div th:each="restaurant, iStat : ${restaurants}">-->
+    <!--                    <div class="num" scope="row" th:text="${restaurant.id}">1</div>-->
+    <!--                    <div div class="writer" th:text="${restaurant.name}"></div>-->
+    <!--                    <div div class="writer" th:text="${restaurant.images}"></div>-->
+    <!--                    <div div class="writer" th:text="${restaurant.phoneNumber}"></div>-->
+    <!--                    <div div class="writer" th:text="${restaurant.description}"></div>-->
+    <!--                    <div div class="writer" th:text="${restaurant.category}"></div>-->
+    <!--                    <div div class="writer" th:text="${restaurant.searchKeywords}"></div>-->
+    <!--                    <div div class="writer" th:text="${restaurant.businessNo}"></div>-->
+    <!--                    <div div class="writer"-->
+    <!--                         th:text="${restaurant.province}+${restaurant.city}+${restaurant.street}"></div>-->
+    <!--                    <div div class="writer" th:text="${restaurant.deleted}"></div>-->
+    <!--                    <div div class="writer" th:text="${restaurant.user.username}"></div>-->
+    <!--                    <form th:action="@{'/admin/templates/restaurants/' + ${restaurant.id}}" th:method="delete">-->
+    <!--                        <div class="form-group">-->
+    <!--                            <p>삭제</p>-->
+    <!--                            <button type="submit" class="btn btn-primary" value="거절">삭제</button>-->
+    <!--                        </div>-->
+    <!--                    </form>-->
+    <!--                </div>-->
+    <!--            </div>-->
+    <!--        </div>-->
+    <!--    </div>-->
+    <h1 style="color: #8B60C7">레스토랑 목록</h1>
+    <form th:action="@{/admin/templates/restaurants}" method="get">
+        <input type="text" name="searchVal" th:name="searchVal">
         <button type="submit">검색</button>
-    </div>
-    <div class="body">
-        <!--    <div class="board_wrap">-->
-        <!--        <div class="board_title">-->
-        <!--                <h1 style="color: #8B60C7">레스토랑 목록</h1>-->
-        <!--            <p>레스토랑 목록을 보여드리겠습니다.</p>-->
-        <!--        </div>-->
+    </form>
 
-        <!--        <div class="board_list_wrap">-->
-        <!--            <div class="board_list">-->
-        <!--                <div class="top">-->
-        <!--                    <div class="num">번호</div>-->
-        <!--                    <div class="writer">매장명</div>-->
-        <!--                    <div class="writer">이미지</div>-->
-        <!--                    <div class="writer">매장번호</div>-->
-        <!--                    <div class="writer">설명</div>-->
-        <!--                    <div class="writer">카테고리</div>-->
-        <!--                    <div class="writer">키워드</div>-->
-        <!--                    <div class="writer">사업자번호</div>-->
-        <!--                    <div class="writer">주소</div>-->
-        <!--                    <div class="writer">삭제여부</div>-->
-        <!--                    <div class="writer">사업자이름</div>-->
 
-        <!--                </div>-->
-
-        <!--                <div th:each="restaurant, iStat : ${restaurants}">-->
-        <!--                    <div class="num" scope="row" th:text="${restaurant.id}">1</div>-->
-        <!--                    <div div class="writer" th:text="${restaurant.name}"></div>-->
-        <!--                    <div div class="writer" th:text="${restaurant.images}"></div>-->
-        <!--                    <div div class="writer" th:text="${restaurant.phoneNumber}"></div>-->
-        <!--                    <div div class="writer" th:text="${restaurant.description}"></div>-->
-        <!--                    <div div class="writer" th:text="${restaurant.category}"></div>-->
-        <!--                    <div div class="writer" th:text="${restaurant.searchKeywords}"></div>-->
-        <!--                    <div div class="writer" th:text="${restaurant.businessNo}"></div>-->
-        <!--                    <div div class="writer"-->
-        <!--                         th:text="${restaurant.province}+${restaurant.city}+${restaurant.street}"></div>-->
-        <!--                    <div div class="writer" th:text="${restaurant.deleted}"></div>-->
-        <!--                    <div div class="writer" th:text="${restaurant.user.username}"></div>-->
-        <!--                    <form th:action="@{'/admin/templates/restaurants/' + ${restaurant.id}}" th:method="delete">-->
-        <!--                        <div class="form-group">-->
-        <!--                            <p>삭제</p>-->
-        <!--                            <button type="submit" class="btn btn-primary" value="거절">삭제</button>-->
-        <!--                        </div>-->
-        <!--                    </form>-->
-        <!--                </div>-->
-        <!--            </div>-->
-        <!--        </div>-->
-        <!--    </div>-->
-        <h1 style="color: #8B60C7">레스토랑 목록</h1>
-        <div class="restaurantList">
-            <table class="table table-striped">
-                <thead>
+    <div class="restaurantList">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th scope="col">번호</th>
+                <th scope="col">매장명</th>
+                <th scope="col">이미지</th>
+                <th scope="col">매장번호</th>
+                <th scope="col">설명</th>
+                <th scope="col">카테고리</th>
+                <th scope="col">키워드</th>
+                <th scope="col">사업자번호</th>
+                <th scope="col">주소</th>
+                <th scope="col">삭제여부</th>
+                <th scope="col">사업자이름</th>
+                <th scope="col"></th>
+            </tr>
+            </thead>
+            <tbody id="restaurantListTable">
+            <div th:each="restaurant, iStat : ${restaurants}">
                 <tr>
-                    <th scope="col">번호</th>
-                    <th scope="col">매장명</th>
-                    <th scope="col">이미지</th>
-                    <th scope="col">매장번호</th>
-                    <th scope="col">설명</th>
-                    <th scope="col">카테고리</th>
-                    <th scope="col">키워드</th>
-                    <th scope="col">사업자번호</th>
-                    <th scope="col">주소</th>
-                    <th scope="col">삭제여부</th>
-                    <th scope="col">사업자이름</th>
-                    <th scope="col"></th>
+                    <th scope="row" th:text="${restaurant.id}">1</th>
+                    <td th:text="${restaurant.restaurantName}"></td>
+                    <td th:text="${restaurant.images}"></td>
+                    <td th:text="${restaurant.phoneNumber}"></td>
+                    <td th:text="${restaurant.description}"></td>
+                    <td th:text="${restaurant.category}"></td>
+                    <td th:text="${restaurant.searchKeywords}"></td>
+                    <td th:text="${restaurant.businessNo}"></td>
+                    <td th:text="${restaurant.province} + ' ' + ${restaurant.city} + ' ' + ${restaurant.street}"></td>
+                    <td th:text="${restaurant.deleted}"></td>
+                    <td th:text="${restaurant.name}"></td>
+                    <td>
+                        <div class="restaurantBtn">
+                            <button type="button" class="btn" value="거절">리뷰</button>
+                            <form th:action="@{'/admin/templates/restaurants/' + ${restaurant.id}}"
+                                  th:method="delete">
+                                <div class="form-group">
+                                    <button type="submit" class="btn" value="거절">삭제</button>
+                                </div>
+                            </form>
+                        </div>
+                    </td>
                 </tr>
-                </thead>
-                <tbody id="restaurantListTable">
-                <div th:each="restaurant, iStat : ${restaurants}">
-                    <tr>
-                        <th scope="row" th:text="${restaurant.id}">1</th>
-                        <td th:text="${restaurant.restaurantName}"></td>
-                        <td th:text="${restaurant.images}"></td>
-                        <td th:text="${restaurant.phoneNumber}"></td>
-                        <td th:text="${restaurant.description}"></td>
-                        <td th:text="${restaurant.category}"></td>
-                        <td th:text="${restaurant.searchKeywords}"></td>
-                        <td th:text="${restaurant.businessNo}"></td>
-                        <td th:text="${restaurant.province} + ' ' + ${restaurant.city} + ' ' + ${restaurant.street}"></td>
-                        <td th:text="${restaurant.deleted}"></td>
-                        <td th:text="${restaurant.name}"></td>
-                        <td>
-                            <div class="restaurantBtn">
-                                <button type="button" class="btn" value="거절">리뷰</button>
-                                <form th:action="@{'/admin/templates/restaurants/' + ${restaurant.id}}"
-                                      th:method="delete">
-                                    <div class="form-group">
-                                        <button type="submit" class="btn" value="거절">삭제</button>
-                                    </div>
-                                </form>
-                            </div>
-                        </td>
-                    </tr>
-                </div>
-                </tbody>
-            </table>
-
-        </div>
-
+            </div>
+            </tbody>
+        </table>
 
     </div>
 
-    <!-- 페이징 -->
-    <nav class="pagenav">
-        <!--표에 사용될 변수값 초기화 -->
-        <ul class="pagination"
-            th:with="start=${T(java.lang.Math).floor(restaurants.number/10)*10 },
+
+</div>
+
+<!-- 페이징 -->
+
+<nav class="pagenav">
+    <!--표에 사용될 변수값 초기화 -->
+    <ul class="pagination"
+        th:with="start=${T(java.lang.Math).floor(restaurants.number/10)*10 },
                     last=(${start + 9 < restaurants.totalPages -1 ? start + 9 : restaurants.totalPages -1 })">
-            <th:block th:with="
-                firstAddr=@{/admin/templates/restaurants(page=0)
-                prevAddr=@{/admin/templates/restaurants(page=${restaurants.number -1})},
-                nextAddr=@{/admin/templates/restaurants(page=${restaurants.number + 1})},
-                lastAddr=@{/admin/templates/restaurants(page=${restaurants.totalPages -1})}">
-                <li>
-                    <a th:href="${firstAddr}" aria-label="First">
-                        <span class="firstpage" aria-hidden="true"><<</span>
-                    </a>
-                </li>
-                <!-- 이전 페이지로 가기 버튼 -->
-                <li th:class="${restaurants.first} ? 'disabled'">
-                    <a th:href="${restaurants.first} ? '#' :${prevAddr}"
-                       aria-label="Previous">
-                        <span class="restaurantPage1" aria-hidden="true">&lt;</span>
-                    </a>
-                </li>
-                <!--1,2,3,4,.. 등 페이지-->
-                <li th:each="page: ${#numbers.sequence(start, last)}"
-                    th:class="${page == restaurants.number + 1} ? 'active'">
-                    <a class="restaurantPage" th:text="${page}"
-                       th:href="@{/admin/templates/restaurants(page=${page})}"></a>
-                </li>
-                <!--다음 페이지로 -->
-                <li th:class="${restaurants.last} ? 'disabled'">
-                    <a th:href="${restaurants.last} ? '#' : ${nextAddr}"
-                       aria-label="Next">
-                        <span class="restaurantPage2" aria-hidden="true">&gt;</span>
-                    </a>
-                </li>
-                <!--맨 마지막 페이지로 이동 -->
-                <li>
-                    <a th:href="${lastAddr}" aria-label="Last">
-                        <span class="lastpage" aria-hidden="true">>></span>
-                    </a>
-                </li>
-            </th:block>
-        </ul>
-    </nav>
-    <!-- 페이징끝 -->
-    <!-- 검색기능 -->
+        <th:block th:with="
+                firstAddr=@{/admin/templates/restaurants(page=0, searchVal=${param.searchVal})},
+                prevAddr=@{/admin/templates/restaurants(page=${restaurants.number -1}, searchVal=${param.searchVal})},
+                nextAddr=@{/admin/templates/restaurants(page=${restaurants.number + 1}, searchVal=${param.searchVal})},
+                lastAddr=@{/admin/templates/restaurants(page=${restaurants.totalPages -1}, searchVal=${param.searchVal})}">
+            <li>
+                <a th:href="${firstAddr}" aria-label="First">
+                    <span class="firstpage" aria-hidden="true"><<</span>
+                </a>
+            </li>
+            <!-- 이전 페이지로 가기 버튼 -->
+            <li th:class="${restaurants.first} ? 'disabled'">
+                <a th:href="${restaurants.first} ? '#' :${prevAddr}"
+                   aria-label="Previous">
+                    <span class="restaurantPage1" aria-hidden="true">&lt;</span>
+                </a>
+            </li>
+            <!--1,2,3,4,.. 등 페이지-->
+            <li th:each="page: ${#numbers.sequence(start, last)}"
+                th:class="${page == restaurants.number + 1} ? 'active'">
+                <a class="restaurantPage" th:text="${page}"
+                   th:href="@{/admin/templates/restaurants(page=${page}, searchVal=${param.searchVal})}"></a>
+            </li>
+            <!--다음 페이지로 -->
+            <li th:class="${restaurants.last} ? 'disabled'">
+                <a th:href="${restaurants.last} ? '#' : ${nextAddr}"
+                   aria-label="Next">
+                    <span class="restaurantPage2" aria-hidden="true">&gt;</span>
+                </a>
+            </li>
+            <!--맨 마지막 페이지로 이동 -->
+            <li>
+                <a th:href="${lastAddr}" aria-label="Last">
+                    <span class="lastpage" aria-hidden="true">>></span>
+                </a>
+            </li>
+        </th:block>
+    </ul>
+</nav>
 
-    <div>
-        <div>검색</div>
-        <select th:field="*{categories}" class="form-select">
-            <option value="">검색 방식</option>
-            <option th:each="category : ${categories}" th:value="${category.codeName}"
-                    th:text="${category.displayName}">FAST
-            </option>
-        </select>
-    </div>
+<!-- 페이징끝 -->
 
-</form>
+
+<!-- 검색기능 -->
+
+<!--<div>-->
+<!--    <div>검색</div>-->
+<!--    <select th:field="*{categories}" class="form-select">-->
+<!--        <option value="">검색 방식</option>-->
+<!--        <option th:each="category : ${categories}" th:value="${category.codeName}"-->
+<!--                th:text="${category.displayName}">FAST-->
+<!--        </option>-->
+<!--    </select>-->
+<!--</div>-->
+
 
 </body>
 </html>

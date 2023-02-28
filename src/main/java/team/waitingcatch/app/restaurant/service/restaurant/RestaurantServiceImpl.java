@@ -93,10 +93,23 @@ public class RestaurantServiceImpl implements RestaurantService, InternalRestaur
 	@Transactional(readOnly = true)
 	public Page<RestaurantResponse> getRestaurants(Pageable pageable) {
 		Page<Restaurant> restaurants = restaurantRepository.findAll(pageable);
-
 		return new PageImpl<>(
 			(restaurantRepository.findAll(pageable).getContent().stream().map(RestaurantResponse::new).collect(
 				Collectors.toList())), pageable,
+			restaurants.getTotalElements());
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public Page<RestaurantResponse> getRestaurantsByRestaurantName(String searchVal, Pageable pageable) {
+		Page<Restaurant> restaurants = restaurantRepository.findByNameContaining(searchVal, pageable);
+		return new PageImpl<>(
+			(restaurantRepository.findByNameContaining(searchVal, pageable)
+				.getContent()
+				.stream()
+				.map(RestaurantResponse::new)
+				.collect(
+					Collectors.toList())), pageable,
 			restaurants.getTotalElements());
 	}
 

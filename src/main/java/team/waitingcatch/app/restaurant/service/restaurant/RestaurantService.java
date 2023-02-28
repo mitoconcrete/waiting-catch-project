@@ -36,4 +36,6 @@ public interface RestaurantService {
 	void updateRestaurant(UpdateRestaurantServiceRequest updateRestaurantServiceRequest) throws IOException;
 
 	void createRestaurant(ApproveSignUpSellerManagementEntityPassToRestaurantEntityRequest request);
+
+	Page<RestaurantResponse> getRestaurantsByRestaurantName(String searchVal, Pageable pageable);
 }

@@ -1,10 +1,12 @@
 package team.waitingcatch.app.restaurant.service.requestseller;
 
-import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -26,7 +28,6 @@ import team.waitingcatch.app.restaurant.entity.SellerManagement;
 import team.waitingcatch.app.restaurant.repository.RestaurantInfoRepository;
 import team.waitingcatch.app.restaurant.repository.RestaurantRepository;
 import team.waitingcatch.app.restaurant.repository.SellerManagementRepository;
-import team.waitingcatch.app.restaurant.service.restaurant.InternalRestaurantService;
 import team.waitingcatch.app.user.dto.CreateUserServiceRequest;
 import team.waitingcatch.app.user.entitiy.User;
 import team.waitingcatch.app.user.enums.UserRoleEnum;
@@ -66,9 +67,27 @@ public class SellerManagementServiceImpl implements SellerManagementService, Int
 
 	//판매자 요청 리스트 조회
 	@Transactional(readOnly = true)
-	public List<GetDemandSignUpSellerResponse> getDemandSignUpSellers() {
-		List<SellerManagement> sellerManagement = sellerManagementRepository.findAll();
-		return sellerManagement.stream().map(GetDemandSignUpSellerResponse::new).collect(Collectors.toList());
+	public Page<GetDemandSignUpSellerResponse> getDemandSignUpSellers(Pageable pageable) {
+		Page<SellerManagement> sellerManagement = sellerManagementRepository.findAll(pageable);
+		return new PageImpl<>(sellerManagementRepository.findAll(pageable)
+			.getContent()
+			.stream()
+			.map(GetDemandSignUpSellerResponse::new)
+			.collect(Collectors.toList()),
+			pageable, sellerManagement.getTotalElements());
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public Page<GetDemandSignUpSellerResponse> getDemandSignUpSellersById(String searchVal, Pageable pageable) {
+		Page<SellerManagement> sellerManagement = sellerManagementRepository.findByUsernameContaining(searchVal,
+			pageable);
+		return new PageImpl<>(sellerManagementRepository.findByUsernameContaining(searchVal, pageable)
+			.getContent()
+			.stream()
+			.map(GetDemandSignUpSellerResponse::new)
+			.collect(Collectors.toList()),
+			pageable, sellerManagement.getTotalElements());
 	}
 
 	public ApproveSignUpSellerResponse approveSignUpSeller(ApproveSignUpSellerServiceRequest

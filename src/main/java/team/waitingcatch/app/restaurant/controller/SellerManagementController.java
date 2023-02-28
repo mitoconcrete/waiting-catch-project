@@ -2,6 +2,7 @@ package team.waitingcatch.app.restaurant.controller;
 
 import javax.validation.Valid;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -65,8 +66,8 @@ public class SellerManagementController {
 
 	//판매자 요청 조회
 	@GetMapping("/admin/seller-management")
-	public ModelAndView sellerManagementPage(Model model) {
-		model.addAttribute("requestSeller", sellerManagementService.getDemandSignUpSellers());
+	public ModelAndView sellerManagementPage(Model model, Pageable pageable) {
+		model.addAttribute("requestSeller", sellerManagementService.getDemandSignUpSellers(pageable));
 
 		return new ModelAndView("/admin/seller-management");
 	}

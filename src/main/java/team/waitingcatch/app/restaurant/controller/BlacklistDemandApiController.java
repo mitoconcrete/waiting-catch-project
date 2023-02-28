@@ -40,7 +40,7 @@ public class BlacklistDemandApiController {
 		blacklistDemandService.submitBlacklistDemand(serviceRequest);
 	}
 
-	@PutMapping("/blacklist-demands/{blacklistDemandId}")
+	@PutMapping("/seller/blacklist-demands/{blacklistDemandId}")
 	public void cancelBlacklistDemand(
 		@PathVariable Long blacklistDemandId,
 		@AuthenticationPrincipal UserDetailsImpl userDetails) {
