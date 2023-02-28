@@ -14,7 +14,7 @@ public interface ReviewService {
 
 	void deleteReview(Long reviewId);
 
-	List<GetReviewResponse> getReviewsByRestaurantId(Long restaurantId);
+	Slice<GetReviewResponse> getReviewsByRestaurantId(Long id, long restaurantId, Pageable pageable);
 
 	Slice<GetReviewResponse> getReviewsByUserId(Long id, long userId, Pageable pageable);
 }

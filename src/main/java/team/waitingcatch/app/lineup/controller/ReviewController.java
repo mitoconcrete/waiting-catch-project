@@ -57,8 +57,12 @@ public class ReviewController {
 	}
 
 	@GetMapping("/restaurants/{restaurantId}/reviews")
-	public GenericResponse<GetReviewResponse> getReviewsByRestaurant(@PathVariable long restaurantId) {
-		return new GenericResponse(reviewService.getReviewsByRestaurantId(restaurantId));
+	public GenericResponse<GetReviewResponse> getReviewsByRestaurant(
+		@PathVariable long restaurantId,
+		@RequestParam(required = false) Long lastId,
+		Pageable pageable) {
+
+		return new GenericResponse(reviewService.getReviewsByRestaurantId(lastId, restaurantId, pageable));
 	}
 
 	@GetMapping("/customer/reviews")
@@ -66,6 +70,7 @@ public class ReviewController {
 		@RequestParam(required = false) Long lastId,
 		@AuthenticationPrincipal UserDetailsImpl userDetails,
 		Pageable pageable) {
+
 		return new GenericResponse(reviewService.getReviewsByUserId(lastId, userDetails.getId(), pageable));
 	}
 }

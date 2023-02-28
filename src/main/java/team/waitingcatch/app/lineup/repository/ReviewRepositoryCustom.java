@@ -8,7 +8,7 @@ import org.springframework.data.domain.Slice;
 import team.waitingcatch.app.lineup.dto.GetReviewResponse;
 
 public interface ReviewRepositoryCustom {
-	List<GetReviewResponse> findAllByRestaurantId(Long restaurantId);
+	Slice<GetReviewResponse> findAllByRestaurantId(Long id, long restaurantId, Pageable pageable);
 
 	Slice<GetReviewResponse> findAllByUserId(Long id, long userId, Pageable pageable);
 }
