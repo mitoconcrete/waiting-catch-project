@@ -64,6 +64,34 @@
 </div>
 </body>
 <script>
+
+    // $(document).ready(function () {
+    //     var xhr = new XMLHttpRequest();
+    //     xhr.open('GET', '/api/getTokenHeader', true);
+    //     xhr.onreadystatechange = function () {
+    //         if (xhr.readyState == 4 && xhr.status == 200) {
+    //             var tokenHeader = xhr.getResponseHeader('Authorization');
+    //             console.log(tokenHeader);
+    //             if (tokenHeader === null) {
+    //                 alert("아무일도없음")
+    //             } else {
+    //                 alert("새로운 쿠키를 다시받는다")
+    //                 let host = window.location.host;
+    //                 let url = host + '/seller';
+    //                 let todayDate = new Date();
+    //                 todayDate.setDate(todayDate.getDate() + 30); // 현재 시각 + 일 단위로 쿠키 만료 날짜
+    //                 document.cookie =
+    //                     'Authorization' + "=" + xhr.getResponseHeader('Authorization') + "; " +
+    //                     "path=/; expires=" + todayDate.toString() + ";";
+    //                 alert("로그인 성공")
+    //                 window.location.href = 'http://' + url;
+    //             }
+    //         }
+    //     };
+    //     xhr.send();
+    // });
+
+
     // function getLineupList() {
     //     window.location.href = '/seller/lineup-page';
     // }
