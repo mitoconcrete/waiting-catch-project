@@ -77,11 +77,11 @@ public class LineupController {
 
 	@GetMapping("/customer/lineup-records")
 	public GenericResponse<LineupRecordWithTypeResponse> getLineupRecords(
-		@RequestParam(required = false) @Pattern(regexp = "^(WAIT|CALL|CANCEL|ARRIVE)$") String arrivalStatus,
+		@RequestParam(required = false) @Pattern(regexp = "^(WAIT|CALL|CANCEL|ARRIVE)$") String status,
 		@AuthenticationPrincipal UserDetailsImpl userDetails) {
 
 		var serviceRequest = new GetLineupRecordsServiceRequest(userDetails.getId(),
-			arrivalStatus != null ? ArrivalStatusEnum.valueOf(arrivalStatus) : null);
+			status != null ? ArrivalStatusEnum.valueOf(status) : null);
 
 		return new GenericResponse(lineupService.getLineupRecords(serviceRequest));
 	}
@@ -89,12 +89,12 @@ public class LineupController {
 	@GetMapping("/customer/lineup-history-records")
 	public GenericResponse<LineupRecordWithTypeResponse> getLineupRecords(
 		@RequestParam(required = false) Long lastId,
-		@RequestParam(required = false) @Pattern(regexp = "^(WAIT|CALL|CANCEL|ARRIVE)$") String arrivalStatus,
+		@RequestParam(required = false) @Pattern(regexp = "^(WAIT|CALL|CANCEL|ARRIVE)$") String status,
 		@AuthenticationPrincipal UserDetailsImpl userDetails,
 		Pageable pageable) {
 
 		var serviceRequest = new GetLineupHistoryRecordsServiceRequest(lastId, userDetails.getId(),
-			arrivalStatus != null ? ArrivalStatusEnum.valueOf(arrivalStatus) : null);
+			status != null ? ArrivalStatusEnum.valueOf(status) : null);
 
 		return new GenericResponse(lineupService.getLineupHistoryRecords(serviceRequest, pageable));
 	}
