@@ -17,6 +17,7 @@ import team.waitingcatch.app.common.util.JwtUtil;
 import team.waitingcatch.app.redis.repository.AliveTokenRepository;
 import team.waitingcatch.app.redis.repository.KilledAccessTokenRepository;
 import team.waitingcatch.app.user.dto.CreateUserServiceRequest;
+import team.waitingcatch.app.user.dto.DeleteUserRequest;
 import team.waitingcatch.app.user.dto.GetCustomerByIdAndRoleServiceRequest;
 import team.waitingcatch.app.user.dto.LoginRequest;
 import team.waitingcatch.app.user.dto.LogoutRequest;
@@ -51,6 +52,10 @@ class UserServiceImplTest {
 		User user = new User(UserRoleEnum.USER, "김태훈", "xogns98@gmail.com", "xogns656", "Test1234!", "mitoconcre",
 			"010-1234-1234");
 		userRepository.save(user);
+
+		User seller = new User(UserRoleEnum.SELLER, "김태훈", "1@seller.com", "seller01", "Test1234!", "seller01",
+			"010-1234-0001");
+		userRepository.save(seller);
 	}
 
 	@Test
@@ -237,4 +242,24 @@ class UserServiceImplTest {
 		assertTrue(aliveTokenRepository.existsById(response.getAccessToken().substring(7)));
 		assertThrows(IllegalArgumentException.class, () -> userService.createAccessTokenByEmail(disabledEmail));
 	}
+
+	@Test
+	@DisplayName("유저 삭제")
+	void deleteCustomer() {
+		// given
+		var allowedUsername = "xogns656";
+		var disablesUsername = "xogns98";
+		var request = mock(DeleteUserRequest.class);
+		when(request.getUsername()).thenReturn(allowedUsername);
+
+		// when
+		userService.deleteCustomer(request);
+
+		// then
+		assertFalse(userRepository.findByUsernameAndIsDeletedFalse(allowedUsername).isPresent());
+
+		when(request.getUsername()).thenReturn(disablesUsername);
+		assertThrows(IllegalArgumentException.class, () -> userService.deleteCustomer(request));
+	}
+
 }
