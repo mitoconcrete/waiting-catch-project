@@ -31,7 +31,7 @@ public class Restaurant extends TimeStamped {
 	@Column(name = "restaurant_id")
 	private Long id;
 
-	@Column(nullable = false)
+	@Column(nullable = false, length = 8)
 	private String name;
 
 	private String images;
@@ -39,34 +39,34 @@ public class Restaurant extends TimeStamped {
 	@Embedded
 	private Position position;
 
-	@Column(nullable = false)
+	@Column(nullable = false, length = 5)
 	private String zipCode;
 
-	@Column(nullable = false)
+	@Column(nullable = false, length = 50)
 	private String address;
 
-	@Column(nullable = false)
+	@Column(nullable = false, length = 30)
 	private String detailAddress;
 
 	// @Embedded
 	// private Address address;
 
-	@Column(nullable = false)
+	@Column(nullable = false, length = 13)
 	private String phoneNumber;
 
 	@Column(nullable = false)
 	private boolean isDeleted;
 
-	@Column(nullable = false)
+	@Column(nullable = false, length = 50)
 	private String searchKeywords;
 
-	@Column(nullable = false)
+	@Column(nullable = false, length = 255)
 	private String description;
 
-	// @Column(nullable = false)
+	@Column(nullable = false)
 	private int capacity;
 
-	@Column(nullable = false)
+	@Column(nullable = false, length = 12)
 	private String businessLicenseNo;
 
 	@OneToOne(fetch = FetchType.LAZY)
