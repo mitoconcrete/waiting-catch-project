@@ -54,6 +54,7 @@ public class DemandSignUpSellerControllerRequest {
 	// @NotBlank
 	// private String street;
 
+	@Pattern(regexp = "^[0-9]{3}-[0-9]{2}-[0-9]{5}$", message = "사업자번호 형식에 맞게 작성해주세요.")
 	@NotEmpty(message = "사업자번호는 필수 입력값입니다.")
 	private String businessLicenseNo;
 
