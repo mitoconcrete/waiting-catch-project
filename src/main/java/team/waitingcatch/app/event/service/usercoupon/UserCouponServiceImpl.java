@@ -35,8 +35,9 @@ public class UserCouponServiceImpl implements UserCouponService, InternalUserCou
 		UserCoupon userCoupon = new UserCoupon(user, couponCreator);
 		if (couponCreator.createCoupon()) {
 			userCouponRepository.save(userCoupon);
+		} else {
+			throw new IllegalArgumentException("쿠폰이 모두 소진되었습니다.");
 		}
-		throw new IllegalArgumentException("쿠폰이 모두 소진되었습니다.");
 
 	}
 
@@ -44,7 +45,6 @@ public class UserCouponServiceImpl implements UserCouponService, InternalUserCou
 	@Override
 	public List<GetUserCouponResponse> getUserCoupons(User user) {
 		List<UserCoupon> userCoupons = userCouponRepository.findByUserAndIsUsedFalse(user);
-		System.out.println(userCoupons.size());
 		List<GetUserCouponResponse> getUserCouponResponses = new ArrayList<>();
 
 		for (UserCoupon userCoupon : userCoupons) {
