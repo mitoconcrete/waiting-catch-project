@@ -84,10 +84,11 @@
                 type: 'GET',
                 url: `/api/general/categories`,
                 success: function (response, status) {
-                    console.log(response)
+                    let responseList = response.data;
+                    console.log(responseList)
                     if (status === 'success') {
-                        for (let i = 0; i < response.length; i++) {
-                            let responseDto = response[i];
+                        for (let i = 0; i < responseList.length; i++) {
+                            let responseDto = responseList[i];
                             let tempHtml = parentCategoryBox(responseDto);
                             $('.selectParentCategoryBox').append(tempHtml);
                         }
@@ -121,10 +122,11 @@
                 type: 'GET',
                 url: `/api/general/categories/` + parentId,
                 success: function (response, status) {
-                    console.log(response)
+                    let responseList = response.data;
+                    console.log(responseList)
                     if (status === 'success') {
-                        for (let i = 0; i < response.length; i++) {
-                            let responseDto = response[i];
+                        for (let i = 0; i < responseList.length; i++) {
+                            let responseDto = responseList[i];
                             let tempHtml = childCategoryBox(responseDto);
                             $('.selectChildCategoryBox').append(tempHtml);
                         }
@@ -152,10 +154,11 @@
                 type: 'GET',
                 url: `/api/general/categories/` + parentId,
                 success: function (response, status) {
-                    console.log(response)
+                    let responseList = response.data;
+                    console.log(responseList)
                     if (status === 'success') {
-                        for (let i = 0; i < response.length; i++) {
-                            let responseDto = response[i];
+                        for (let i = 0; i < responseList.length; i++) {
+                            let responseDto = responseList[i];
                             let tempHtml = grandChildCategoryBox(responseDto);
                             $('.selectGrandChildCategoryBox').append(tempHtml);
                         }
