@@ -25,14 +25,20 @@ import team.waitingcatch.app.restaurant.dto.category.CreateCategoryRequest;
 import team.waitingcatch.app.restaurant.dto.category.DeleteCategoryServiceRequest;
 import team.waitingcatch.app.restaurant.dto.category.GetChildCategoryServiceRequest;
 import team.waitingcatch.app.restaurant.dto.category.UpdateCategoryServiceRequest;
+import team.waitingcatch.app.restaurant.dto.requestseller.ConnectCategoryRestaurantServiceRequest;
 import team.waitingcatch.app.restaurant.entity.Category;
+import team.waitingcatch.app.restaurant.entity.CategoryRestaurant;
 import team.waitingcatch.app.restaurant.repository.CategoryRepository;
+import team.waitingcatch.app.restaurant.repository.CategoryRestaurantRepository;
 
 @ExtendWith(MockitoExtension.class)
 class CategoryServiceImplTest {
 
 	@Mock
 	private CategoryRepository categoryRepository;
+
+	@Mock
+	private CategoryRestaurantRepository categoryRestaurantRepository;
 
 	@InjectMocks
 	private CategoryServiceImpl categoryService;
@@ -87,6 +93,31 @@ class CategoryServiceImplTest {
 		// then
 		assertEquals("한식", responses.get(0).getName());
 		assertEquals("양식", responses.get(1).getName());
+	}
+
+	@Test
+	@DisplayName("판매자요청 페이지 하위 카테고리 조회")
+	void getChildCategoryForSellerManagement() {
+		// given
+		List<Category> categories = new ArrayList<>();
+		Category category1 = mock(Category.class);
+		Category category2 = mock(Category.class);
+		categories.add(category1);
+		categories.add(category2);
+
+		when(category1.getParentId()).thenReturn(1L);
+		when(category1.getName()).thenReturn("한식1");
+		when(category2.getParentId()).thenReturn(1L);
+		when(category2.getName()).thenReturn("한식2");
+		when(categoryRepository.findAllByParentId(any(Long.class))).thenReturn(categories);
+
+		// when
+		List<CategoryResponse> responses = categoryService.getChildCategoriesForSellerManagement(1L);
+
+		// then
+		assertEquals("한식1", responses.get(0).getName());
+		assertEquals("한식2", responses.get(1).getName());
+
 	}
 
 	@Test
@@ -168,5 +199,71 @@ class CategoryServiceImplTest {
 		// then
 		assertNull(category1.getId());
 		assertEquals("한식", category1.getName());
+	}
+
+	@Test
+	@DisplayName("카테고리, 레스토랑 매핑")
+	void connectCategoryRestaurant() {
+		// given
+		ConnectCategoryRestaurantServiceRequest request = mock(ConnectCategoryRestaurantServiceRequest.class);
+		List<Category> categories = new ArrayList<>();
+		Category category1 = mock(Category.class);
+		Category category2 = mock(Category.class);
+		categories.add(category1);
+		categories.add(category2);
+
+		when(request.getCategoryIds()).thenReturn("1 2");
+		when(categoryRepository.findAllByIdIn(any(List.class))).thenReturn(categories);
+
+		// when
+		categoryService.connectCategoryRestaurant(request);
+
+		// then
+		verify(categoryRestaurantRepository, times(2)).save(any(CategoryRestaurant.class));
+	}
+
+	@Test
+	@DisplayName("Internal 카테고리명 조회")
+	void _getCategoryNames() {
+		// given
+		List<Long> categoryIds = new ArrayList<>();
+		categoryIds.add(1L);
+		categoryIds.add(2L);
+		List<String> categoryNames = new ArrayList<>();
+		categoryNames.add("한식");
+		categoryNames.add("중식");
+
+		when(categoryRepository.findNameByIdIn(categoryIds)).thenReturn(categoryNames);
+
+		// when
+		List<String> categoryNames1 = categoryService._getCategoryNames(categoryIds);
+
+		// then
+		assertEquals("한식", categoryNames1.get(0));
+		assertEquals("중식", categoryNames1.get(1));
+	}
+
+	@Test
+	@DisplayName("Internal 모든 카테고리 조회")
+	void getAllCategories() {
+		// given
+		Category category1 = mock(Category.class);
+		Category category2 = mock(Category.class);
+		List<Category> categories = new ArrayList<>();
+		categories.add(category1);
+		categories.add(category2);
+
+		when(category1.getId()).thenReturn(1L);
+		when(category1.getName()).thenReturn("한식");
+		when(category2.getId()).thenReturn(2L);
+		when(category2.getName()).thenReturn("중식");
+		when(categoryRepository.findAll()).thenReturn(categories);
+
+		// when
+		List<CategoryResponse> responses = categoryService.getAllCategories();
+
+		// then
+		assertEquals("한식", responses.get(0).getName());
+		assertEquals("중식", responses.get(1).getName());
 	}
 }
