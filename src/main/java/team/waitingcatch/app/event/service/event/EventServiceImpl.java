@@ -42,7 +42,7 @@ public class EventServiceImpl implements EventService, InternalEventService {
 	//레스토랑 이벤트를 생성한다.
 	@Override
 	public void createSellerEvent(CreateEventServiceRequest createEventServiceRequest) {
-		
+
 		Restaurant restaurant = restaurantService._getRestaurantByUserId(createEventServiceRequest.getId());
 		CreateEventRequest createEventRequest = new CreateEventRequest(createEventServiceRequest, restaurant);
 		Event event = new Event(createEventRequest);
@@ -119,7 +119,8 @@ public class EventServiceImpl implements EventService, InternalEventService {
 	public List<GetEventsResponse> _getEventsResponse(List<Event> events) {
 		List<GetEventsResponse> getEventsResponse = new ArrayList<>();
 		for (Event event : events) {
-			List<CouponCreator> couponCreators = couponCreatorRepository.findByEventAndIsDeletedFalse(event);
+			//List<CouponCreator> couponCreators = couponCreatorRepository.findByEventAndIsDeletedFalse(event);
+			List<CouponCreator> couponCreators = couponCreatorRepository.findByEventWithEvent(event);
 			List<GetCouponCreatorResponse> getCouponCreatorResponses = new ArrayList<>();
 			for (CouponCreator couponCreator : couponCreators) {
 				GetCouponCreatorResponse getCouponCreatorResponse = new GetCouponCreatorResponse(couponCreator);

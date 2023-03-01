@@ -211,7 +211,7 @@ class EventServiceImplTest {
 
 		List<Event> events = new ArrayList<>();
 		List<CouponCreator> couponCreators = new ArrayList<>();
-		
+
 		Event event = mock(Event.class);
 		events.add(event);
 		when(eventRepository.findByRestaurantIsNullAndIsDeletedFalse()).thenReturn(events);
@@ -220,7 +220,7 @@ class EventServiceImplTest {
 		when(couponCreator.getName()).thenReturn("테스트생성자");
 
 		couponCreators.add(couponCreator);
-		when(couponCreatorRepository.findByEventAndIsDeletedFalse(any(Event.class))).thenReturn(couponCreators);
+		when(couponCreatorRepository.findByEventWithEvent(any(Event.class))).thenReturn(couponCreators);
 		when(eventRepository.findByIdAndIsDeletedFalse(any(Long.class))).thenReturn(Optional.of(event));
 
 		List<GetEventsResponse> list = eventService.getGlobalEvents();

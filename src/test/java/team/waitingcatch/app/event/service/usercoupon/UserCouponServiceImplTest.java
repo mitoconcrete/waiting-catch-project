@@ -77,7 +77,7 @@ class UserCouponServiceImplTest {
 		when(userCoupon.getCouponCreator()).thenReturn(couponCreator);
 		when(userCoupon.getCouponCreator().getEvent().getRestaurant().getName()).thenReturn("테스터");
 		coupons.add(userCoupon);
-		when(userCouponRepository.findByUserAndIsUsedFalse(user)).thenReturn(coupons);
+		when(userCouponRepository.findByUserWithUserAndCouponCreator(user)).thenReturn(coupons);
 
 		List<GetUserCouponResponse> list = userCouponService.getUserCoupons(user);
 
