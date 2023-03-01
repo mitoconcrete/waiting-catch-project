@@ -29,7 +29,7 @@
 // 		List<RestaurantsWithinRadiusJpaResponse> restaurants =
 // 			// restaurantInfoRepository.findRestaurantsByDistance(37.339141, 127.082427, 3);
 //
-// 		assertEquals(3, restaurants.size());
+// 			assertEquals(3, restaurants.size());
 // 	}
 //
 // }

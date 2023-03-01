@@ -40,7 +40,7 @@ public class BlacklistDemand extends TimeStamped {
 	@Enumerated(value = EnumType.STRING)
 	private AcceptedStatusEnum status;
 
-	@Column(nullable = false)
+	@Column(nullable = false, length = 100)
 	@Size(max = 100)
 	private String description;
 

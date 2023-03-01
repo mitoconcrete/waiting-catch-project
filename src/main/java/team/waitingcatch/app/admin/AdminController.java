@@ -108,12 +108,6 @@ public class AdminController {
 		model.addAttribute("customers", userService.getCustomers());
 		return new ModelAndView("/admin/user-list");
 	}
-	//
-	// @GetMapping("/admin/templates/user-list")
-	// public ModelAndView userListPage(Model model) {
-	// 	model.addAttribute("requestSeller", sellerManagementService.getDemandSignUpSellers());
-	// 	return new ModelAndView("/admin/user-list");
-	// }
 
 	@GetMapping("/admin/templates/customers/{customerId}")
 	public ModelAndView getCustomer(@PathVariable Long customerId, Model model) {
