@@ -39,10 +39,10 @@ public class SellerManagement extends TimeStamped {
 	@Column(nullable = false)
 	private String email;
 
-	@Column(name = "phone_number", nullable = false)
+	@Column(nullable = false)
 	private String phoneNumber;
 
-	@Column(name = "restaurant_name", nullable = false)
+	@Column(nullable = false)
 	private String restaurantName;
 
 	@Column(nullable = false)
@@ -74,7 +74,7 @@ public class SellerManagement extends TimeStamped {
 	// @Column(name = "search_keywords", nullable = false)
 	// private String searchKeyWords;
 
-	@Column(name = "business_license_no", nullable = false)
+	@Column(nullable = false)
 	private String businessLicenseNo;
 
 	public SellerManagement(DemandSignUpSellerServiceRequest demandSignupSellerServiceRequest) {
