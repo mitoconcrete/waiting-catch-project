@@ -1,6 +1,7 @@
 package team.waitingcatch.app.lineup;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -15,7 +16,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.transaction.annotation.Transactional;
 
-import team.waitingcatch.app.common.Address;
 import team.waitingcatch.app.common.Position;
 import team.waitingcatch.app.lineup.dto.CancelWaitingRequest;
 import team.waitingcatch.app.lineup.dto.GetLineupRecordsServiceRequest;
@@ -84,7 +84,7 @@ class LineupIntegrationTest {
 		userRepository.save(seller);
 
 		Restaurant restaurant = new Restaurant(
-			new SaveDummyRestaurantRequest("레스토랑1", new Address("서울시", "강남구", "강남대로"), new Position(0.0, 0.0),
+			new SaveDummyRestaurantRequest("레스토랑1", "서울시 강남구 강남대로", new Position(0.0, 0.0),
 				"01000000000", "일식>스시>오마카세", seller));
 		openRestaurant(restaurant);
 	}
@@ -200,7 +200,7 @@ class LineupIntegrationTest {
 			userRepository.save(seller);
 
 			Restaurant restaurant = new Restaurant(
-				new SaveDummyRestaurantRequest("레스토랑" + i, new Address("서울시", "강남구", "강남대로"), new Position(0.0, 0.0),
+				new SaveDummyRestaurantRequest("레스토랑" + i, "서울시 강남구 강남대로", new Position(0.0, 0.0),
 					"0100000000" + i, "일식>스시>오마카세", seller));
 
 			openRestaurant(restaurant);

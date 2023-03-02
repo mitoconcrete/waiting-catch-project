@@ -211,8 +211,9 @@ class CategoryServiceImplTest {
 		Category category2 = mock(Category.class);
 		categories.add(category1);
 		categories.add(category2);
+		// List<Long> categoryIds = new ArrayList<>();
 
-		when(request.getCategoryIds()).thenReturn("1 2");
+		// when(request.getCategoryIds()).thenReturn("1 2");
 		when(categoryRepository.findAllByIdIn(any(List.class))).thenReturn(categories);
 
 		// when

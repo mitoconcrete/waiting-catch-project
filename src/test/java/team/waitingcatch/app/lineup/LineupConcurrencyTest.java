@@ -1,6 +1,6 @@
 package team.waitingcatch.app.lineup;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.time.LocalDateTime;
 import java.util.concurrent.CountDownLatch;
@@ -18,7 +18,6 @@ import org.springframework.test.annotation.Commit;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.transaction.annotation.Transactional;
 
-import team.waitingcatch.app.common.Address;
 import team.waitingcatch.app.common.Position;
 import team.waitingcatch.app.lineup.dto.StartWaitingServiceRequest;
 import team.waitingcatch.app.lineup.entity.WaitingNumber;
@@ -76,13 +75,13 @@ public class LineupConcurrencyTest {
 		userRepository.save(seller2);
 
 		Restaurant restaurant1 = new Restaurant(
-			new SaveDummyRestaurantRequest("맛집1", new Address("서울시", "강남구", "강남대로"), new Position(0.0, 0.0),
+			new SaveDummyRestaurantRequest("맛집1", "서울시 강남구 강남대로", new Position(0.0, 0.0),
 				"01000000001", "일식>스시>오마카세", seller1));
 		restaurantRepository.save(restaurant1);
 		openRestaurant(restaurant1);
 
 		Restaurant restaurant2 = new Restaurant(
-			new SaveDummyRestaurantRequest("레스토랑2", new Address("서울시", "강남구", "강남대로"), new Position(0.0, 0.0),
+			new SaveDummyRestaurantRequest("레스토랑2", "서울시 강남구 강남대로", new Position(0.0, 0.0),
 				"01000000001", "일식>스시>오마카세", seller2));
 		restaurantRepository.save(restaurant2);
 		openRestaurant(restaurant2);
