@@ -27,7 +27,7 @@
     <input class="password-input" id="password" type="password" name="password" placeholder="비밀번호">
 
     <button id="login-id-submit" class="btn login-btn" onclick="login()">로그인</button>
-    <button class="btn login-btn" onclick="location.href='/signup'">판매자 신청</button>
+    <button class="btn login-btn" onclick="location.href='/general/templates/seller/signup'">판매자 신청</button>
 
     <div id="login-failed" style="display:none" class="alert alert-danger" role="alert">로그인에 실패하였습니다.</div>
 </div>
@@ -55,13 +55,13 @@
 
         $.ajax({
             type: "POST",
-            url: `/login`,
+            url: `/api/general/seller/login`,
             contentType: "application/json",
             data: JSON.stringify({username: username, password: password}),
             success: function (response, status, xhr) {
                 if (response === 'success') {
                     let host = window.location.host;
-                    let url = host + '/seller';
+                    let url = host + '/seller/templates/seller';
                     let todayDate = new Date();
                     todayDate.setDate(todayDate.getDate() + 30); // 현재 시각 + 일 단위로 쿠키 만료 날짜
                     document.cookie =

@@ -72,14 +72,14 @@ public class SellerController {
 	private final RestaurantService restaurantService;
 	/*     로그인 프론트     */
 
-	@GetMapping("/login")
+	@GetMapping("/general/templates/seller/login")
 	public String login() {
 
 		return "login";
 	}
 
 	@ResponseBody
-	@PostMapping("/login")
+	@PostMapping("/api/general/seller/login")
 	public String login(@RequestBody LoginRequest loginRequest, HttpServletResponse response) {
 		LoginServiceResponse loginServiceResponse = userService.login(loginRequest);
 		// 엑세스 토큰을 서비스로 부터 반환 받아 헤더에 넣어준다.
@@ -87,12 +87,12 @@ public class SellerController {
 		return "success";
 	}
 
-	@GetMapping("/signup")
+	@GetMapping("/general/templates/seller/signup")
 	public String signup() {
 		return "register";
 	}
 
-	@PostMapping("/signup")
+	@PostMapping("/api/general/seller/signup")
 	public String demandSignUpSeller(
 		@Valid DemandSignUpSellerControllerRequest demandSignUpControllerRequest) {
 		System.out.println(demandSignUpControllerRequest.getPhoneNumber());
@@ -114,7 +114,7 @@ public class SellerController {
 
 	/*     메뉴 프론트     */
 
-	@GetMapping("/menu")
+	@GetMapping("/seller/templates/menu")
 	public String menu(Model model,
 		@AuthenticationPrincipal UserDetailsImpl userDetails) {
 		List<MenuResponse> menus = menuService.getMyRestaurantMenus(userDetails.getId());
@@ -122,13 +122,13 @@ public class SellerController {
 		return "menu";
 	}
 
-	@GetMapping("/menu/new")
+	@GetMapping("/seller/templates/menu/new")
 	public String createMenu() {
 		return "menu-new";
 	}
 
 	//@PostMapping("/seller/restaurants/{restaurantId}/menus")
-	@PostMapping("/menu/new")
+	@PostMapping("/api/seller/menu/new")
 	public String createMenu(
 		@RequestPart("image") MultipartFile multipartFile,
 		@Valid CreateMenuControllerRequest request,
@@ -136,16 +136,16 @@ public class SellerController {
 		CreateMenuServiceRequest serviceRequest = new CreateMenuServiceRequest(userDetails.getId(), multipartFile,
 			request);
 		menuService.createMenu(serviceRequest);
-		return "redirect:/menu";
+		return "redirect:/seller/templates/menu";
 	}
 
-	@GetMapping("/menu/update/{menuId}")
+	@GetMapping("/seller/templates/menu/update/{menuId}")
 	public String updateMenu(Model model, @PathVariable Long menuId) {
 		model.addAttribute("menuId", menuId);
 		return "menu-update";
 	}
 
-	@PutMapping("/menu/update/{menuId}")
+	@PutMapping("/api/seller/menu/update/{menuId}")
 	public String updateMenu(@PathVariable Long menuId,
 		@RequestPart("image") MultipartFile multipartFile,
 		@Valid UpdateMenuControllerRequest request, @AuthenticationPrincipal UserDetailsImpl userDetails
@@ -153,68 +153,68 @@ public class SellerController {
 		UpdateMenuServiceRequest serviceRequest = new UpdateMenuServiceRequest(menuId, request, multipartFile,
 			userDetails.getId());
 		menuService.updateMenu(serviceRequest);
-		return "redirect:/menu";
+		return "redirect:/seller/templates/menu";
 	}
 
-	@GetMapping("/menu/delete/{menuId}")
+	@GetMapping("/seller/templates/menu/delete/{menuId}")
 	public String deleteMenuSub(@PathVariable Long menuId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
 		deleteMenu(menuId, userDetails);
-		return "redirect:/menu";
+		return "redirect:/seller/templates/menu";
 	}
 
-	@DeleteMapping("/menu/delete/{menuId}")
+	@DeleteMapping("/api/seller/menu/delete/{menuId}")
 	public void deleteMenu(@PathVariable Long menuId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
 		DeleteMenuServiceRequest deleteMenuServiceRequest = new DeleteMenuServiceRequest(userDetails.getId(), menuId);
 		menuService.deleteMenu(deleteMenuServiceRequest);
 	}
 
 	/*     판매자 정보 프론트   */
-	@GetMapping("/seller")
+	@GetMapping("/seller/templates/seller")
 	public String seller() {
 		return "seller";
 	}
 
-	@GetMapping("/seller/logout")
+	@GetMapping("/api/seller/logout")
 	public String logoutSub(HttpServletRequest request) {
 		String token = jwtUtil.resolveToken(request);
 		LogoutRequest servicePayload = new LogoutRequest(token);
 		userService.logout(servicePayload);
-		return "redirect:/login";
+		return "redirect:/general/templates/seller/login";
 	}
 
-	@GetMapping("/seller/delete")
+	@GetMapping("/seller/templates/delete")
 	public String withdrawSellerSub(@AuthenticationPrincipal UserDetailsImpl userDetails) {
 		withdrawSeller(userDetails);
-		return "redirect:/login";
+		return "redirect:/general/templates/seller/login";
 	}
 
-	@DeleteMapping("/seller/delete")
+	@DeleteMapping("/api/seller/delete")
 	public void withdrawSeller(@AuthenticationPrincipal UserDetailsImpl userDetails) {
 		DeleteUserRequest servicePayload = new DeleteUserRequest(userDetails.getUsername());
 		userService.deleteSeller(servicePayload);
 	}
 
-	@GetMapping("/seller/infos")
+	@GetMapping("/seller/templates/infos")
 	public String updateSellerInfoSub() {
 		return "seller-infos";
 	}
 
-	@PutMapping("/seller/infos")
+	@PutMapping("/api/seller/infos")
 	public String updateSellerInfo(@Valid UpdateUserControllerRequest controllerRequest,
 		@AuthenticationPrincipal UserDetailsImpl userDetails) {
 		UpdateUserServiceRequest servicePayload = new UpdateUserServiceRequest(controllerRequest.getName(),
 			controllerRequest.getEmail(), userDetails.getUsername(), controllerRequest.getNickName(),
 			controllerRequest.getPhoneNumber());
 		userService.updateUser(servicePayload);
-		return "redirect:/seller";
+		return "redirect:/seller/templates/seller";
 	}
 
-	@GetMapping("/seller/updaterestaurant")
+	@GetMapping("/seller/templates/updaterestaurant")
 	public String updateRestaurantSub() {
 		return "seller-restaurantupdate";
 	}
 
-	@PutMapping("/seller/updaterestaurant")
+	@PutMapping("/api/seller/updaterestaurant")
 	public String updateRestaurant(
 		UpdateRestaurantControllerRequest updateRestaurantControllerRequest,
 		@RequestPart("image") List<MultipartFile> multipartFile,
@@ -224,7 +224,7 @@ public class SellerController {
 				userDetails.getId());
 		restaurantService.updateRestaurant(updateRestaurantServiceRequest);
 
-		return "redirect:/seller";
+		return "redirect:/seller/templates/seller";
 	}
 
 
@@ -232,35 +232,35 @@ public class SellerController {
 
 	/*     이벤트     */
 
-	@GetMapping("/event")
+	@GetMapping("/seller/templates/event")
 	public String event(Model model, @AuthenticationPrincipal UserDetailsImpl userDetails) {
 		List<GetEventsResponse> events = eventService.getRestaurantEvents(userDetails.getId());
 		model.addAttribute("events", events);
 		return "event";
 	}
 
-	@GetMapping("/event/new")
+	@GetMapping("/seller/templates/event/new")
 	public String createEvent() {
 		return "event-create";
 	}
 
-	@PostMapping("/event/new")
+	@PostMapping("/api/seller/event/new")
 	public String createEvent(
 		@Validated CreateEventControllerRequest createEventControllerRequest,
 		@AuthenticationPrincipal UserDetailsImpl userDetails) {
 		CreateEventServiceRequest createEventServiceRequest = new CreateEventServiceRequest(
 			createEventControllerRequest, userDetails.getId());
 		eventService.createSellerEvent(createEventServiceRequest);
-		return "redirect:/event";
+		return "redirect:/seller/templates/event";
 	}
 
-	@GetMapping("/event/couponcreator/{eventId}")
+	@GetMapping("/seller/templates/event/couponcreator/{eventId}")
 	public String createCouponCreator(Model model, @PathVariable Long eventId) {
 		model.addAttribute("eventId", eventId);
 		return "event-createcreator";
 	}
 
-	@PostMapping("/event/couponcreator/{eventId}")
+	@PostMapping("/api/seller/event/couponcreator/{eventId}")
 	public String createCouponCreator(@PathVariable Long eventId,
 		@Validated CreateCouponCreatorControllerRequest createCouponCreatorControllerRequest,
 		@AuthenticationPrincipal UserDetailsImpl userDetails) {
@@ -269,32 +269,32 @@ public class SellerController {
 			createCouponCreatorControllerRequest, eventId, userDetails.getId());
 
 		couponCreatorService.createSellerCouponCreator(createSellerCouponCreatorServiceRequest);
-		return "redirect:/event";
+		return "redirect:/seller/templates/event";
 	}
 
-	@GetMapping("/event/update/{eventId}")
+	@GetMapping("/seller/templates/event/update/{eventId}")
 	public String updateEvent(Model model, @PathVariable Long eventId) {
 		model.addAttribute("eventId", eventId);
 		return "event-update";
 	}
 
-	@PutMapping("/event/update/{eventId}")
+	@PutMapping("/api/seller/event/update/{eventId}")
 	public String updateEvent(UpdateEventControllerRequest updateEventControllerRequest,
 		@PathVariable Long eventId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
 		UpdateSellerEventServiceRequest updateSellerEventServiceRequest = new UpdateSellerEventServiceRequest(
 			updateEventControllerRequest, eventId, userDetails.getId());
 		eventService.updateSellerEvent(updateSellerEventServiceRequest);
-		return "redirect:/event";
+		return "redirect:/seller/templates/event";
 	}
 
-	@GetMapping("/event/updateCouponCreator/{eventId}/{creatorId}")
+	@GetMapping("/seller/templates/event/updateCouponCreator/{eventId}/{creatorId}")
 	public String updateCouponCreator(Model model, @PathVariable Long eventId, @PathVariable Long creatorId) {
 		model.addAttribute("eventId", eventId);
 		model.addAttribute("creatorId", creatorId);
 		return "event-updatecreator";
 	}
 
-	@PutMapping("/event/updateCouponCreator/{eventId}/{creatorId}")
+	@PutMapping("/api/seller/event/updateCouponCreator/{eventId}/{creatorId}")
 	public String updateCouponCreator(
 		UpdateCouponCreatorControllerRequest updateCouponCreatorControllerRequest,
 		@PathVariable Long eventId, @PathVariable Long creatorId,
@@ -302,16 +302,16 @@ public class SellerController {
 		UpdateSellerCouponCreatorServiceRequest updateSellerCouponCreatorServiceRequest = new UpdateSellerCouponCreatorServiceRequest(
 			updateCouponCreatorControllerRequest, eventId, creatorId, userDetails.getId());
 		couponCreatorService.updateSellerCouponCreator(updateSellerCouponCreatorServiceRequest);
-		return "redirect:/event";
+		return "redirect:/seller/templates/event";
 	}
 
-	@GetMapping("/event/delete/{eventId}")
+	@GetMapping("/seller/templates/event/delete/{eventId}")
 	public String deleteEventSub(@PathVariable Long eventId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
 		deleteEvent(eventId, userDetails);
-		return "redirect:/event";
+		return "redirect:/seller/templates/event";
 	}
 
-	@DeleteMapping("/event/delete/{eventId}")
+	@DeleteMapping("/api/seller/event/delete/{eventId}")
 	public void deleteEvent(@PathVariable Long eventId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
 		DeleteEventServiceRequest deleteEventServiceRequest = new DeleteEventServiceRequest(eventId,
 			userDetails.getId());

@@ -28,10 +28,10 @@
 </header>
 <nav class="menus">
     <ul>
-        <a href="/seller/lineup-page">줄서기 현황</a>
-        <a href="/seller">매장 관리</a>
-        <a href="/menu">메뉴</a>
-        <a href="/event" style="color: #8B60C7">이벤트</a>
+        <a href="/seller/templates/lineup-page">줄서기 현황</a>
+        <a href="/seller/templates/seller" style="color: #8B60C7">매장 관리</a>
+        <a href="/seller/templates/menu">메뉴</a>
+        <a href="/seller/templates/event">이벤트</a>
     </ul>
 </nav>
 <div class="body">
@@ -47,7 +47,7 @@
         <!--<a href="/event-info">-->
         <!--    <button type="text">이벤트 목록 가저오기</button>-->
         <!--</a>-->
-        <a href="/event/new">
+        <a href="/seller/templates/event/new">
             <button type="text" class="btn">새로운 이벤트 생성</button>
         </a>
         <!--<a href="/event/couponcreator">-->
@@ -90,24 +90,25 @@
                                 <span th:text="${couponCreator.discountPrice}"></span>
                                 <span th:text="${couponCreator.discountType}"></span>
                                 <span th:text="${couponCreator.expireDate}"></span>
-                                <a th:href="@{/event/updateCouponCreator/{eventId}/{creatorId}(eventId=${event.eventId},creatorId=${couponCreator.id})}">
+                                <a th:href="@{/seller/templates/event/updateCouponCreator/{eventId}/{creatorId}(eventId=${event.eventId},creatorId=${couponCreator.id})}">
                                     <button type="button" class="btn">수정</button>
                                 </a>
                             </li>
                         </ul>
                     </td>
                     <td>
-                        <a th:href="@{/event/couponcreator/{eventId}(eventId=${event.eventId})}">
+                        <a th:href="@{/seller/templates/event/couponcreator/{eventId}(eventId=${event.eventId})}">
                             <button type="button" class="btn">추가</button>
                         </a>
                     </td>
                     <td>
-                        <a th:href="@{/event/update/{eventId}(eventId=${event.eventId})}">
+                        <a th:href="@{/seller/templates/event/update/{eventId}(eventId=${event.eventId})}">
                             <button type="button" class="btn">수정</button>
                         </a>
                     </td>
                     <td>
-                        <a th:href="@{/event/delete/{eventId}(eventId=${event.eventId})}" th:method="delete">
+                        <a th:href="@{/seller/templates/event/delete/{eventId}(eventId=${event.eventId})}"
+                           th:method="delete">
                             <button type="button" class="btn">삭제</button>
                         </a>
                     </td>

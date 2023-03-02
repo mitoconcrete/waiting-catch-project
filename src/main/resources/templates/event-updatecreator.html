@@ -6,7 +6,7 @@
 </head>
 <body>
 <h1>쿠폰생성자수정</h1>
-<form th:action="@{/event/updateCouponCreator/{eventId}/{creatorId}(eventId=${eventId},creatorId=${creatorId})}"
+<form th:action="@{/api/seller/event/updateCouponCreator/{eventId}/{creatorId}/{creatorId}(eventId=${eventId},creatorId=${creatorId})}"
       method="post" enctype="multipart/form-data">
     <input type="hidden" name="_method" value="PUT"/>
     <label for="name">name</label>
