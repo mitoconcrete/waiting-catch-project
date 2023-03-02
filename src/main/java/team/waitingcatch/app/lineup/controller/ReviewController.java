@@ -37,7 +37,7 @@ import team.waitingcatch.app.user.entitiy.UserDetailsImpl;
 public class ReviewController {
 	private final ReviewService reviewService;
 
-	@PostMapping(value = "/restaurants/{restaurantId}/reviews", consumes = {MediaType.APPLICATION_JSON_VALUE,
+	@PostMapping(value = "/customer/restaurants/{restaurantId}/reviews", consumes = {MediaType.APPLICATION_JSON_VALUE,
 		MediaType.MULTIPART_FORM_DATA_VALUE})
 	@ResponseStatus(HttpStatus.CREATED)
 	public void createReview(
@@ -53,12 +53,12 @@ public class ReviewController {
 		reviewService.createReview(serviceRequest);
 	}
 
-	@DeleteMapping("/admin/review/{reviewId}")
+	@DeleteMapping("/general/admin/review/{reviewId}")
 	public void deleteReview(@PathVariable long reviewId) {
 		reviewService.deleteReview(reviewId);
 	}
 
-	@GetMapping("/restaurants/{restaurantId}/reviews")
+	@GetMapping("/general/restaurants/{restaurantId}/reviews")
 	public GenericResponse<Slice<GetReviewResponse>> getReviewsByRestaurant(
 		@PathVariable long restaurantId,
 		@RequestParam(required = false) Long lastId,
