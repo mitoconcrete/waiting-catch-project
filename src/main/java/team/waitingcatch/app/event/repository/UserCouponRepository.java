@@ -11,6 +11,7 @@ import team.waitingcatch.app.event.entity.UserCoupon;
 import team.waitingcatch.app.user.entitiy.User;
 
 public interface UserCouponRepository extends JpaRepository<UserCoupon, Long> {
+	//@Lock(LockModeType.OPTIMISTIC)
 
 	List<UserCoupon> findByUserAndIsUsedFalse(User user);
 

@@ -33,6 +33,7 @@ public class UserCouponServiceImpl implements UserCouponService, InternalUserCou
 			createUserCouponserviceRequest.getCreatorId());
 		User user = internalUserService._getUserByUsername(createUserCouponserviceRequest.getUsername());
 		UserCoupon userCoupon = new UserCoupon(user, couponCreator);
+
 		if (couponCreator.hasCouponBalance()) {
 			userCouponRepository.save(userCoupon);
 		} else {
