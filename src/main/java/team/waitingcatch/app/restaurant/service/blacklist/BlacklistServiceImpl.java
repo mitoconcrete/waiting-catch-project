@@ -74,7 +74,6 @@ public class BlacklistServiceImpl implements BlacklistService, InternalBlacklist
 		GetBlackListByRestaurantServiceRequest getBlackListByRestaurantServiceRequest) {
 		Restaurant restaurant = restaurantRepository.findById(getBlackListByRestaurantServiceRequest.getSellerId())
 			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 레스토랑 요청입니다."));
-		System.out.println(restaurant.getId());
 		List<Blacklist> blackList = blacklistRepository.findAllByRestaurant_Id(restaurant.getId());
 		return blackList.stream().map(GetBlacklistResponse::new).collect(Collectors.toList());
 	}
