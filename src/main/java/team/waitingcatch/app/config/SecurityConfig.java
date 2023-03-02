@@ -21,6 +21,7 @@ import team.waitingcatch.app.redis.service.KilledAccessTokenService;
 import team.waitingcatch.app.security.service.AccessDeniedHandlerImpl;
 import team.waitingcatch.app.security.service.AuthenticationEntryPointImpl;
 import team.waitingcatch.app.security.service.JwtAuthFilter;
+import team.waitingcatch.app.user.enums.UserRoleEnum;
 
 @Configuration
 @EnableWebSecurity
@@ -41,6 +42,10 @@ public class SecurityConfig {
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+		String[] ignoreAuthorizationList = {"/api/general/**", "/general/templates/**"};
+		String[] customerOnlyAllowedList = {"/api/customer/**"};
+		String[] sellerOnlyAllowedList = {"/api/seller/**", "/seller/templates/**"};
+		String[] adminOnlyAllowedList = {"/admin/templates/**"};
 
 		// jwt 사용을 위한, stateless설정.
 		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
@@ -61,8 +66,13 @@ public class SecurityConfig {
 			return cors;
 		});
 
+		// 권한 별 접근 허용
 		http.authorizeRequests()
-			.anyRequest().permitAll();
+			.antMatchers(adminOnlyAllowedList).hasRole(UserRoleEnum.ADMIN.toString())
+			.antMatchers(sellerOnlyAllowedList).hasRole(UserRoleEnum.SELLER.toString())
+			.antMatchers(customerOnlyAllowedList).hasRole(UserRoleEnum.USER.toString())
+			.antMatchers(ignoreAuthorizationList).permitAll();
+
 		// Custom 로그인 페이지 사용하지 않음.
 		http.formLogin().disable();
 

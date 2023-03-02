@@ -45,4 +45,10 @@ public class ApplicationExceptionController {
 	public BasicExceptionResponse httpMessageNotReadableExceptionHandler(HttpMessageNotReadableException ex) {
 		return new BasicExceptionResponse(HttpStatus.BAD_REQUEST, ex.getRootCause().getMessage());
 	}
+
+	@ExceptionHandler({TokenNotFoundException.class})
+	@ResponseStatus(HttpStatus.UNAUTHORIZED)
+	public BasicExceptionResponse handleTokenNotFoundException(TokenNotFoundException ex) {
+		return new BasicExceptionResponse(HttpStatus.UNAUTHORIZED, ex.getMessage());
+	}
 }

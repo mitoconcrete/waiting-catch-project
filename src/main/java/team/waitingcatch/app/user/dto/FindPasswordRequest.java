@@ -15,7 +15,7 @@ public class FindPasswordRequest {
 	private String email;
 
 	@NotNull(message = "아이디는 비어있을 수 없습니다.")
-	@Pattern(regexp = "^(?=.*[a-z])(?=.*[0-9])[a-z0-9]{4,10}$",
+	@Pattern(regexp = "^(?=.*[a-zA-Z0-9])[a-zA-Z0-9]{4,15}$",
 		message = "4자 이상 10자 이내여야하며, 하나 이상의 알파벳 소문자와 숫자의 조합으로 이뤄져야 합니다.")
 	private String username;
 }
