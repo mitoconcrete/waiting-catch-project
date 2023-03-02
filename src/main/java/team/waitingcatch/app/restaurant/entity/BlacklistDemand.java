@@ -36,7 +36,7 @@ public class BlacklistDemand extends TimeStamped {
 	@JoinColumn(name = "user_id", nullable = false)
 	private User user;
 
-	@Column(nullable = false)
+	@Column(nullable = false, length = 30)
 	@Enumerated(value = EnumType.STRING)
 	private AcceptedStatusEnum status;
 
@@ -71,7 +71,6 @@ public class BlacklistDemand extends TimeStamped {
 
 	public void updateApprovalStatus() {
 		this.status = AcceptedStatusEnum.APPROVE;
-		System.out.println("status = " + status);
 	}
 
 	public void checkBlacklistRequest() {

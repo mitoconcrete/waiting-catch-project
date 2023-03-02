@@ -60,10 +60,10 @@ public class Restaurant extends TimeStamped {
 	@Column(nullable = false)
 	private String description;
 
-	@Column(nullable = false)
+	@Column(nullable = false, length = 100)
 	private int capacity;
 
-	@Column(nullable = false)
+	@Column(nullable = false, length = 100)
 	private String businessLicenseNo;
 
 	@OneToOne(fetch = FetchType.LAZY)

@@ -10,8 +10,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.querydsl.jpa.impl.JPAQueryFactory;
-
 import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.common.util.DistanceCalculator;
 import team.waitingcatch.app.common.util.image.ImageUploader;
@@ -39,8 +37,6 @@ import team.waitingcatch.app.restaurant.repository.RestaurantRepository;
 public class RestaurantServiceImpl implements RestaurantService, InternalRestaurantService {
 	private final RestaurantRepository restaurantRepository;
 	private final RestaurantInfoRepository restaurantInfoRepository;
-	private final JPAQueryFactory queryFactory;
-
 	private final ImageUploader imageUploader;
 	private final DistanceCalculator distanceCalculator;
 
