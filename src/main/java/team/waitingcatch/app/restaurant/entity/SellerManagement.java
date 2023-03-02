@@ -1,6 +1,10 @@
 package team.waitingcatch.app.restaurant.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -15,6 +19,7 @@ import lombok.NoArgsConstructor;
 import team.waitingcatch.app.common.Address;
 import team.waitingcatch.app.common.Position;
 import team.waitingcatch.app.common.entity.TimeStamped;
+import team.waitingcatch.app.common.util.StringListConverter;
 import team.waitingcatch.app.restaurant.dto.requestseller.DemandSignUpSellerServiceRequest;
 import team.waitingcatch.app.restaurant.enums.AcceptedStatusEnum;
 
@@ -58,8 +63,8 @@ public class SellerManagement extends TimeStamped {
 	@Column(nullable = false)
 	private String categories;
 
-	@Column(name = "search_keywords", nullable = false)
-	private String searchKeyWords;
+	@Convert(converter = StringListConverter.class)
+	private List<String> searchKeywords = new ArrayList<>();
 
 	@Column(name = "business_license_no", nullable = false)
 	private String businessLicenseNo;
@@ -74,7 +79,7 @@ public class SellerManagement extends TimeStamped {
 		this.description = demandSignupSellerServiceRequest.getDescription();
 		this.status = AcceptedStatusEnum.WAIT;
 		this.categories = demandSignupSellerServiceRequest.getCategories();
-		this.searchKeyWords = demandSignupSellerServiceRequest.getSearchKeyWords();
+		this.searchKeywords = demandSignupSellerServiceRequest.getSearchKeyWords();
 		this.businessLicenseNo = demandSignupSellerServiceRequest.getBusinessLicenseNo();
 		this.name = demandSignupSellerServiceRequest.getName();
 	}

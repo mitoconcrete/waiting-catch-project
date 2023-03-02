@@ -1,5 +1,7 @@
 package team.waitingcatch.app.restaurant.dto.requestseller;
 
+import java.util.List;
+
 import lombok.Getter;
 import team.waitingcatch.app.common.Address;
 import team.waitingcatch.app.common.Position;
@@ -17,7 +19,7 @@ public class ApproveSignUpSellerManagementEntityPassToRestaurantEntityRequest {
 	private final Address address;
 	private final Position position;
 	private final String businessLicenseNo;
-	private final String searchKeyWords;
+	private final List<String> searchKeyWords;
 
 	public ApproveSignUpSellerManagementEntityPassToRestaurantEntityRequest(SellerManagement sellerManagement,
 		User seller) {
@@ -29,7 +31,7 @@ public class ApproveSignUpSellerManagementEntityPassToRestaurantEntityRequest {
 		this.description = sellerManagement.getDescription();
 		this.address = sellerManagement.getAddress();
 		this.position = sellerManagement.getPosition();
-		this.searchKeyWords = sellerManagement.getSearchKeyWords();
+		this.searchKeyWords = sellerManagement.getSearchKeywords();
 		this.businessLicenseNo = sellerManagement.getBusinessLicenseNo();
 	}
 }

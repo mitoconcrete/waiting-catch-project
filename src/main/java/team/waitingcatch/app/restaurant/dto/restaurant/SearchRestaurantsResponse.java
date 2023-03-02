@@ -10,7 +10,7 @@ public class SearchRestaurantsResponse {
 	private final String name;
 	private final List<String> imageUrl;
 	private final float rate;
-	private final String[] category;
+	private String[] category;
 	private final double distance;
 	private final int currentWaitingNumber;
 	private final boolean isLineupActive;
@@ -20,7 +20,9 @@ public class SearchRestaurantsResponse {
 		this.name = jpaResponse.getName();
 		this.imageUrl = jpaResponse.getImages();
 		this.rate = jpaResponse.getRate();
-		this.category = jpaResponse.getSearchKeyword().split(" ");
+		for (int i = 0; i < jpaResponse.getSearchKeyword().size(); i++) {
+			this.category = jpaResponse.getSearchKeyword().get(i).split(" ");
+		}
 		this.distance = distance;
 		this.currentWaitingNumber = jpaResponse.getCurrentWaitingNumber();
 		this.isLineupActive = jpaResponse.isLineupActive();

@@ -1,5 +1,7 @@
 package team.waitingcatch.app.restaurant.dto.requestseller;
 
+import java.util.List;
+
 import lombok.Getter;
 import team.waitingcatch.app.restaurant.entity.SellerManagement;
 import team.waitingcatch.app.restaurant.enums.AcceptedStatusEnum;
@@ -18,7 +20,7 @@ public class GetDemandSignUpSellerResponse {
 	private final String province;
 	private final String city;
 	private final String street;
-	private final String searchKeyWords;
+	private final List<String> searchKeyWords;
 	private final String businessLicenseNo;
 	private final String name;
 	private final AcceptedStatusEnum status;
@@ -36,7 +38,7 @@ public class GetDemandSignUpSellerResponse {
 		this.province = sellerManagement.getAddress().getProvince();
 		this.city = sellerManagement.getAddress().getCity();
 		this.street = sellerManagement.getAddress().getStreet();
-		this.searchKeyWords = sellerManagement.getSearchKeyWords();
+		this.searchKeyWords = sellerManagement.getSearchKeywords();
 		this.businessLicenseNo = sellerManagement.getBusinessLicenseNo();
 		this.name = sellerManagement.getName();
 		this.status = sellerManagement.getStatus();

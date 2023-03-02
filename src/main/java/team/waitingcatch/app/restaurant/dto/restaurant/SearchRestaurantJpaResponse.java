@@ -13,14 +13,15 @@ public class SearchRestaurantJpaResponse {
 	private final String name;
 	private final List<String> images;
 	private final float rate;
-	private final String searchKeyword;
+	private final List<String> searchKeyword;
 	private final double latitude;
 	private final double longitude;
 	private final int currentWaitingNumber;
 	private final boolean isLineupActive;
 
 	@QueryProjection
-	public SearchRestaurantJpaResponse(Long id, String name, List<String> images, float rate, String searchKeyword,
+	public SearchRestaurantJpaResponse(Long id, String name, List<String> images, float rate,
+		List<String> searchKeyword,
 		Position position, int currentWaitingNumber, boolean isLineupActive) {
 		this.id = id;
 		this.name = name;

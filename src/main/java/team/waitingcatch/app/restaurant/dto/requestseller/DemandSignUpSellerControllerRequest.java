@@ -1,5 +1,7 @@
 package team.waitingcatch.app.restaurant.dto.requestseller;
 
+import java.util.List;
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -58,5 +60,5 @@ public class DemandSignUpSellerControllerRequest {
 	private String businessLicenseNo;
 
 	@NotBlank
-	private String searchKeyWords;
+	private List<String> searchKeyWords;
 }

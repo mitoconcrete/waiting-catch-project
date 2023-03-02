@@ -18,7 +18,7 @@ public class RestaurantDetailedInfoResponse {
 
 	public RestaurantDetailedInfoResponse(Restaurant restaurant, RestaurantInfo restaurantInfo) {
 		this.id = restaurant.getId();
-		this.category = restaurant.getSearchKeywords().split(" ");
+		this.category = restaurant.getCategory().split(" ");
 		this.name = restaurant.getName();
 		this.address = restaurant.getProvince() + " " + restaurant.getCity() + " " + restaurant.getStreet();
 		this.phoneNumber = restaurant.getPhoneNumber();

@@ -1,5 +1,7 @@
 package team.waitingcatch.app.restaurant.dto.requestseller;
 
+import java.util.List;
+
 import lombok.Getter;
 import team.waitingcatch.app.common.Address;
 import team.waitingcatch.app.common.Position;
@@ -15,7 +17,7 @@ public class DemandSignUpSellerServiceRequest {
 	private final String description;
 	private final Position position;
 	private final Address address;
-	private final String searchKeyWords;
+	private final List<String> searchKeyWords;
 	private final String businessLicenseNo;
 
 	public DemandSignUpSellerServiceRequest(DemandSignUpSellerControllerRequest demandSignUpSellerControllerRequest,

@@ -54,8 +54,8 @@ public class Restaurant extends TimeStamped {
 	@Column(nullable = false)
 	private boolean isDeleted;
 
-	@Column(nullable = false)
-	private String searchKeywords;
+	@Convert(converter = StringListConverter.class)
+	private List<String> searchKeywords = new ArrayList<>();
 
 	@Column(nullable = false)
 	private String description;
@@ -94,7 +94,6 @@ public class Restaurant extends TimeStamped {
 		this.businessLicenseNo = String.valueOf(UUID.randomUUID());
 		this.capacity = 30;
 		this.description = request.getName() + "은 한국 최고의 음식 입니다.";
-		this.searchKeywords = request.getCategory();
 		this.phoneNumber = request.getPhoneNumber();
 		this.position = request.getPosition();
 		this.category = request.getCategory();

@@ -17,7 +17,7 @@ public class RestaurantResponse {
 	private final String province;
 	private final String city;
 	private final String street;
-	private final String searchKeywords;
+	private final List<String> searchKeywords;
 	private final String category;
 
 	private final List<String> images;
