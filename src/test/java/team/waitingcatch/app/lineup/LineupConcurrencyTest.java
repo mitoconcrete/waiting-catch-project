@@ -65,11 +65,11 @@ public class LineupConcurrencyTest {
 	@Commit
 	@Order(1)
 	void insertDummyDataBeforeConcurrentWaitingTest() {
-		User seller1 = new User(UserRoleEnum.SELLER, "맛집 판매자1", "abcdef@gmail.com", "sellerIdA", "pw123", "sjsjA",
+		User seller1 = new User(UserRoleEnum.SELLER, "판매자1", "abcdef@gmail.com", "sellerIdA", "pw123", "sjsjA",
 			"01012301230");
 		userRepository.save(seller1);
 
-		User seller2 = new User(UserRoleEnum.SELLER, "맛집 판매자2", "ghijk@gmail.com", "sellerIdB", "pw123", "sjsjB",
+		User seller2 = new User(UserRoleEnum.SELLER, "판매자2", "ghijk@gmail.com", "sellerIdB", "pw123", "sjsjB",
 			"01012001200");
 		userRepository.save(seller2);
 
