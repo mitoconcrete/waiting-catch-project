@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import lombok.RequiredArgsConstructor;
+import team.waitingcatch.app.common.dto.GenericResponse;
 import team.waitingcatch.app.restaurant.dto.blacklist.DeleteBlacklistByRestaurantServiceRequest;
 import team.waitingcatch.app.restaurant.dto.blacklist.GetBlackListByRestaurantServiceRequest;
 import team.waitingcatch.app.restaurant.dto.blacklist.GetBlacklistByRestaurantIdServiceRequest;
@@ -31,9 +32,9 @@ public class BlacklistController {
 	}
 
 	@GetMapping("/admin/restaurants/{restaurantId}/blacklists")
-	public List<GetBlacklistResponse> getBlacklistsByRestaurant(@PathVariable Long restaurantId) {
+	public GenericResponse<GetBlacklistResponse> getBlacklistsByRestaurant(@PathVariable Long restaurantId) {
 		var serviceRequest = new GetBlacklistByRestaurantIdServiceRequest(restaurantId);
-		return blacklistService.getBlackListByRestaurantId(serviceRequest);
+		return new GenericResponse(blacklistService.getBlackListByRestaurantId(serviceRequest));
 	}
 
 	@GetMapping("/seller/restaurants/blacklist")

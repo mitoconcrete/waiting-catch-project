@@ -1,7 +1,5 @@
 package team.waitingcatch.app.restaurant.controller;
 
-import java.util.List;
-
 import javax.validation.Valid;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -15,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import lombok.RequiredArgsConstructor;
+import team.waitingcatch.app.common.dto.GenericResponse;
 import team.waitingcatch.app.restaurant.dto.blacklist.ApproveBlacklistDemandServiceRequest;
 import team.waitingcatch.app.restaurant.dto.blacklist.BlacklistDemandControllerRequest;
 import team.waitingcatch.app.restaurant.dto.blacklist.CancelBlacklistDemandServiceRequest;
@@ -50,8 +49,8 @@ public class BlacklistDemandController {
 	}
 
 	@GetMapping("/admin/restaurants/blacklist-demands")
-	public List<GetBlacklistDemandResponse> getBlacklistDemands() {
-		return blacklistDemandService.getBlacklistDemands();
+	public GenericResponse<GetBlacklistDemandResponse> getBlacklistDemands() {
+		return new GenericResponse(blacklistDemandService.getBlacklistDemands());
 	}
 
 	@PostMapping("/admin/restaurants/blacklist-demands/{blacklistDemandId}")

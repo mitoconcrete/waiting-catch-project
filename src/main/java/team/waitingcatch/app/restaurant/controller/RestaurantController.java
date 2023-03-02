@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import lombok.RequiredArgsConstructor;
+import team.waitingcatch.app.common.dto.GenericResponse;
 import team.waitingcatch.app.restaurant.dto.restaurant.DeleteRestaurantByAdminServiceRequest;
 import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantBasicInfoResponse;
 import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantBasicInfoServiceRequest;
@@ -84,8 +85,8 @@ public class RestaurantController {
 
 	// Admin
 	@GetMapping("/admin/restaurants")
-	public Page<RestaurantResponse> getRestaurants(@PageableDefault Pageable pageable) {
-		return restaurantService.getRestaurants(pageable);
+	public GenericResponse<Page<RestaurantResponse>> getRestaurants(@PageableDefault Pageable pageable) {
+		return new GenericResponse(restaurantService.getRestaurants(pageable));
 	}
 
 	//관리자가 레스토랑을 삭제 한다
