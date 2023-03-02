@@ -43,7 +43,7 @@ public class SellerLineupController {
 		return "seller/lineup-list";
 	}
 
-	@GetMapping("/lineup-page")
+	@GetMapping("/templates/lineup-page")
 	public String getLineupPage() {
 		return "seller/lineup";
 	}
