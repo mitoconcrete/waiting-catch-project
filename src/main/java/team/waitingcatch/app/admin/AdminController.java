@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -34,11 +36,13 @@ import team.waitingcatch.app.restaurant.service.restaurant.RestaurantService;
 import team.waitingcatch.app.user.dto.CreateUserControllerRequest;
 import team.waitingcatch.app.user.dto.CreateUserServiceRequest;
 import team.waitingcatch.app.user.dto.GetCustomerByIdAndRoleServiceRequest;
+import team.waitingcatch.app.user.entitiy.UserDetailsImpl;
 import team.waitingcatch.app.user.enums.UserRoleEnum;
 import team.waitingcatch.app.user.service.UserService;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/admin/templates")
 public class AdminController {
 	private final UserService userService;
 	private final RestaurantService restaurantService;
@@ -104,8 +108,8 @@ public class AdminController {
 	//유저
 
 	@GetMapping("/admin/templates/customers")
-	public ModelAndView getCustomers(Model model) {
-		model.addAttribute("customers", userService.getCustomers());
+	public ModelAndView getCustomers(Model model , Pageable pageable) {
+		model.addAttribute("customers", userService.getCustomers(pageable));
 		return new ModelAndView("/admin/user-list");
 	}
 
