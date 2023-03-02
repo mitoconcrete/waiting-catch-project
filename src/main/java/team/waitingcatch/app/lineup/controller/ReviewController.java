@@ -5,6 +5,9 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -13,6 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,7 +37,7 @@ import team.waitingcatch.app.user.entitiy.UserDetailsImpl;
 public class ReviewController {
 	private final ReviewService reviewService;
 
-	@PostMapping(value = "/restaurants/{restaurantId}/reviews", consumes = {MediaType.APPLICATION_JSON_VALUE,
+	@PostMapping(value = "/customer/restaurants/{restaurantId}/reviews", consumes = {MediaType.APPLICATION_JSON_VALUE,
 		MediaType.MULTIPART_FORM_DATA_VALUE})
 	@ResponseStatus(HttpStatus.CREATED)
 	public void createReview(
@@ -54,13 +58,21 @@ public class ReviewController {
 		reviewService.deleteReview(reviewId);
 	}
 
-	@GetMapping("/restaurants/{restaurantId}/reviews")
-	public GenericResponse<GetReviewResponse> getReviewsByRestaurant(@PathVariable long restaurantId) {
-		return new GenericResponse<>(reviewService.getReviewsByRestaurantId(restaurantId));
+	@GetMapping("/customer/restaurants/{restaurantId}/reviews")
+	public GenericResponse<Slice<GetReviewResponse>> getReviewsByRestaurant(
+		@PathVariable long restaurantId,
+		@RequestParam(required = false) Long lastId,
+		@PageableDefault Pageable pageable) {
+
+		return new GenericResponse(reviewService.getReviewsByRestaurantId(lastId, restaurantId, pageable));
 	}
 
 	@GetMapping("/customer/reviews")
-	public GenericResponse<GetReviewResponse> getReviewsByUser(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-		return new GenericResponse<>(reviewService.getReviewsByUserId(userDetails.getId()));
+	public GenericResponse<Slice<GetReviewResponse>> getReviewsByUser(
+		@RequestParam(required = false) Long lastId,
+		@AuthenticationPrincipal UserDetailsImpl userDetails,
+		@PageableDefault Pageable pageable) {
+
+		return new GenericResponse(reviewService.getReviewsByUserId(lastId, userDetails.getId(), pageable));
 	}
 }

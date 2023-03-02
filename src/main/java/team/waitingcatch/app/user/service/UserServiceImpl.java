@@ -1,10 +1,12 @@
 package team.waitingcatch.app.user.service;
 
-import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -50,7 +52,6 @@ public class UserServiceImpl implements UserService, InternalUserService {
 	private final InternalLineupHistoryService internalLineupHistoryService;
 	private final InternalEventService internalEventService;
 	private final InternalReviewService internalReviewService;
-
 	@Value("${spring.mail.username}")
 	private String smtpSenderEmail;
 
@@ -80,8 +81,10 @@ public class UserServiceImpl implements UserService, InternalUserService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public List<UserInfoResponse> getCustomers() {
-		return userRepository.findAll().stream().map(UserInfoResponse::new).collect(Collectors.toList());
+	public Page<UserInfoResponse> getCustomers(Pageable payload) {
+		Page<User> result = userRepository.findAll(payload);
+		return new PageImpl<>(result.getContent().stream().map(UserInfoResponse::new).collect(Collectors.toList()),
+			result.getPageable(), result.getTotalPages());
 	}
 
 	@Override
@@ -171,7 +174,6 @@ public class UserServiceImpl implements UserService, InternalUserService {
 	@Override
 	public void deleteSeller(DeleteUserRequest payload) {
 		User user = _getUserByUsername(payload.getUsername());
-		userRepository.deleteById(user.getId());
 		_deleteSellerAndRelatedInformation(user.getId());
 	}
 

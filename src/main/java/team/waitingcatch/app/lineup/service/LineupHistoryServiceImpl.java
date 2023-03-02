@@ -1,7 +1,7 @@
 package team.waitingcatch.app.lineup.service;
 
-import java.util.List;
-
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,8 +26,10 @@ public class LineupHistoryServiceImpl implements LineupHistoryService, InternalL
 
 	@Transactional(readOnly = true)
 	@Override
-	public List<LineupRecordResponse> _getRecordsByUserId(Long userId, ArrivalStatusEnum statusCond) {
-		return lineupHistoryRepository.findLineupRecordsByUserIdAndStatus(userId, statusCond);
+	public Slice<LineupRecordResponse> _getRecordsByUserId(Long id, long userId, ArrivalStatusEnum statusCond,
+		Pageable pageable) {
+
+		return lineupHistoryRepository.findLineupRecordsByUserIdAndStatus(id, userId, statusCond, pageable);
 	}
 
 	@Override

@@ -1,6 +1,7 @@
 package team.waitingcatch.app.user.service;
 
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import team.waitingcatch.app.user.dto.CreateUserServiceRequest;
 import team.waitingcatch.app.user.dto.DeleteUserRequest;
@@ -18,7 +19,7 @@ public interface UserService {
 
 	void logout(LogoutRequest payload);
 
-	List<UserInfoResponse> getCustomers();
+	Page<UserInfoResponse> getCustomers(Pageable payload);
 
 	UserInfoResponse getByUserIdAndRole(GetCustomerByIdAndRoleServiceRequest payload);
 

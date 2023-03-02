@@ -28,7 +28,7 @@
 <script>
     function cancel(blacklistDemandId) {
         $.ajax({
-            url: `/blacklist-demands/${blacklistDemandId}`,
+            url: `/seller/blacklist-demands/${blacklistDemandId}`,
             type: 'DELETE',
             headers: {
                 'Authorization': localStorage.getItem('accessToken')
