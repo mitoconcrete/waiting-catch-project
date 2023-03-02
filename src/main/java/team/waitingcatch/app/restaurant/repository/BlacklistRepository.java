@@ -19,7 +19,7 @@ public interface BlacklistRepository extends JpaRepository<Blacklist, Long> {
 	@Query(value = "select b from Blacklist b join fetch b.user where b.restaurant.id = :res1")
 	List<Blacklist> findAllByRestaurant_Id(@Param("res1") Long restaurantId);
 
-	@Query(value = "select b from Blacklist b join fetch b.user where b.isDeleted =false")
+	@Query(value = "select b from Blacklist b join fetch b.user where b.isDeleted =false", countQuery = "select count(b) from Blacklist b where b.isDeleted=false")
 	Page<Blacklist> findAllByIsDeletedFalse(Pageable pageable);
 
 	@Query("select b from Blacklist b where b.id = :black1 and b.restaurant.user.id = :seller1")
