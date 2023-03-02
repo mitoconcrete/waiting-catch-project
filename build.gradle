@@ -71,8 +71,6 @@ clean {
     delete('out', 'src/main/generated', 'src/test/generated_tests')
 }
 
-/* for Continuous Deployment
 jar {
 	enabled = false
 }
- */
