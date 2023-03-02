@@ -33,7 +33,7 @@ public class UserCouponServiceImpl implements UserCouponService, InternalUserCou
 			createUserCouponserviceRequest.getCreatorId());
 		User user = internalUserService._getUserByUsername(createUserCouponserviceRequest.getUsername());
 		UserCoupon userCoupon = new UserCoupon(user, couponCreator);
-		if (couponCreator.createCoupon()) {
+		if (couponCreator.hasCouponBalance()) {
 			userCouponRepository.save(userCoupon);
 		} else {
 			throw new IllegalArgumentException("쿠폰이 모두 소진되었습니다.");

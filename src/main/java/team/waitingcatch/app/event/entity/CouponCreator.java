@@ -100,7 +100,7 @@ public class CouponCreator extends TimeStamped {
 		this.isDeleted = true;
 	}
 
-	public boolean createCoupon() {
+	public boolean hasCouponBalance() {
 		if (this.quantity > 0) {
 			this.quantity -= 1;
 			return true;
