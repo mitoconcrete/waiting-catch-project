@@ -45,7 +45,7 @@ public class SecurityConfig {
 		String[] ignoreAuthorizationList = {"/api/general/**", "/general/templates/**"};
 		String[] customerOnlyAllowedList = {"/api/customer/**"};
 		String[] sellerOnlyAllowedList = {"/api/seller/**", "/seller/templates/**"};
-		String[] adminOnlyAllowedList = {"/api/admin/**", "/admin/templates/**"};
+		String[] adminOnlyAllowedList = {"/admin/templates/**"};
 
 		// jwt 사용을 위한, stateless설정.
 		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);

@@ -1,10 +1,11 @@
 package team.waitingcatch.app.user.service;
 
-import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -80,8 +81,10 @@ public class UserServiceImpl implements UserService, InternalUserService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public List<UserInfoResponse> getCustomers(Pageable payload) {
-		return userRepository.findPageableAll(payload).stream().map(UserInfoResponse::new).collect(Collectors.toList());
+	public Page<UserInfoResponse> getCustomers(Pageable payload) {
+		Page<User> result = userRepository.findPageableAll(payload);
+		return new PageImpl<>(result.getContent().stream().map(UserInfoResponse::new).collect(Collectors.toList()),
+			result.getPageable(), result.getTotalPages());
 	}
 
 	@Override

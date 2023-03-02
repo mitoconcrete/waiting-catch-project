@@ -1,12 +1,11 @@
 package team.waitingcatch.app.user.controller;
 
-import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.validation.constraints.Pattern;
 
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -118,7 +117,7 @@ public class UserController {
 
 	// admin
 	@GetMapping("/admin/customers")
-	public GenericResponse<List<UserInfoResponse>> getCustomers(Pageable pageable) {
+	public GenericResponse<Page<UserInfoResponse>> getCustomers(Pageable pageable) {
 		return new GenericResponse<>(userService.getCustomers(pageable));
 	}
 
