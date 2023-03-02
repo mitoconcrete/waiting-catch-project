@@ -1,8 +1,11 @@
 package team.waitingcatch.app.restaurant.entity;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -18,6 +21,7 @@ import lombok.NoArgsConstructor;
 import team.waitingcatch.app.common.Address;
 import team.waitingcatch.app.common.Position;
 import team.waitingcatch.app.common.entity.TimeStamped;
+import team.waitingcatch.app.common.util.StringListConverter;
 import team.waitingcatch.app.restaurant.dto.requestseller.ApproveSignUpSellerManagementEntityPassToRestaurantEntityRequest;
 import team.waitingcatch.app.restaurant.dto.restaurant.SaveDummyRestaurantRequest;
 import team.waitingcatch.app.restaurant.dto.restaurant.UpdateRestaurantEntityRequest;
@@ -35,7 +39,8 @@ public class Restaurant extends TimeStamped {
 	@Column(nullable = false)
 	private String name;
 
-	private String images;
+	@Convert(converter = StringListConverter.class)
+	private final List<String> imagePaths = new ArrayList<>();
 
 	@Embedded
 	private Position position;
@@ -125,7 +130,7 @@ public class Restaurant extends TimeStamped {
 	}
 
 	public void updateRestaurant(UpdateRestaurantEntityRequest updateRestaurantEntityRequest) {
-		this.images = updateRestaurantEntityRequest.getImages();
+		this.imagePaths.addAll(updateRestaurantEntityRequest.getImagePaths());
 		this.phoneNumber = updateRestaurantEntityRequest.getPhoneNumber();
 		this.capacity = updateRestaurantEntityRequest.getCapacity();
 		this.description = updateRestaurantEntityRequest.getDescription();
