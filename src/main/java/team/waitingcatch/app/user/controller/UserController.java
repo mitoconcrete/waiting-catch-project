@@ -1,12 +1,12 @@
 package team.waitingcatch.app.user.controller;
 
-import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.validation.constraints.Pattern;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
+import team.waitingcatch.app.common.dto.GenericResponse;
 import team.waitingcatch.app.common.util.JwtUtil;
 import team.waitingcatch.app.user.dto.CreateUserControllerRequest;
 import team.waitingcatch.app.user.dto.CreateUserServiceRequest;
@@ -51,7 +52,7 @@ public class UserController {
 	private final UserService userService;
 
 	// global
-	@PostMapping({"/customer/signin", "/seller/signin", "/admin/signin"})
+	@PostMapping({"/general/customer/signin", "/general/seller/signin", "/general/admin/signin"})
 	public void login(@RequestBody @Valid LoginRequest loginRequest, HttpServletResponse response) {
 		LoginServiceResponse loginServiceResponse = userService.login(loginRequest);
 		// 엑세스 토큰을 서비스로 부터 반환 받아 헤더에 넣어준다.
@@ -67,8 +68,8 @@ public class UserController {
 
 	// customer
 	@GetMapping("/customer/info")
-	public UserInfoResponse getCustomer(@AuthenticationPrincipal UserDetails userDetails) {
-		return new UserInfoResponse(((UserDetailsImpl)userDetails).getUser());
+	public GenericResponse<UserInfoResponse> getCustomer(@AuthenticationPrincipal UserDetails userDetails) {
+		return new GenericResponse<>(new UserInfoResponse(((UserDetailsImpl)userDetails).getUser()));
 	}
 
 	@DeleteMapping("/customer/withdraw")
@@ -77,13 +78,13 @@ public class UserController {
 		userService.deleteCustomer(servicePayload);
 	}
 
-	@PostMapping("/customer/signup")
+	@PostMapping("/general/customer/signup")
 	@ResponseStatus(HttpStatus.CREATED)
 	public void createCustomer(@RequestBody @Valid CreateUserControllerRequest controllerRequest) {
 		_createUserService(UserRoleEnum.USER, controllerRequest);
 	}
 
-	@PostMapping("/customer/find-password")
+	@PostMapping("/general/customer/find-password")
 	public void findCustomerPassword(@RequestBody @Valid FindPasswordRequest findPasswordRequest) {
 		userService.findUserAndSendEmail(findPasswordRequest);
 	}
@@ -116,30 +117,30 @@ public class UserController {
 
 	// admin
 	@GetMapping("/admin/customers")
-	public List<UserInfoResponse> getCustomers() {
-		return userService.getCustomers();
+	public GenericResponse<Page<UserInfoResponse>> getCustomers(Pageable pageable) {
+		return new GenericResponse<>(userService.getCustomers(pageable));
 	}
 
 	@GetMapping("/admin/customers/{customerId}")
-	public UserInfoResponse getCustomer(@PathVariable Long customerId) {
+	public GenericResponse<UserInfoResponse> getCustomer(@PathVariable Long customerId) {
 		GetCustomerByIdAndRoleServiceRequest servicePayload =
 			new GetCustomerByIdAndRoleServiceRequest(
 				customerId,
 				UserRoleEnum.USER
 			);
 
-		return userService.getByUserIdAndRole(servicePayload);
+		return new GenericResponse<>(userService.getByUserIdAndRole(servicePayload));
 	}
 
 	@GetMapping("/admin/sellers/{sellerId}")
-	public UserInfoResponse getSeller(@PathVariable Long sellerId) {
+	public GenericResponse<UserInfoResponse> getSeller(@PathVariable Long sellerId) {
 		GetCustomerByIdAndRoleServiceRequest servicePayload =
 			new GetCustomerByIdAndRoleServiceRequest(
 				sellerId,
 				UserRoleEnum.SELLER
 			);
 
-		return userService.getByUserIdAndRole(servicePayload);
+		return new GenericResponse<>(userService.getByUserIdAndRole(servicePayload));
 	}
 
 	@PostMapping("/admin/signup")
@@ -148,7 +149,7 @@ public class UserController {
 		_createUserService(UserRoleEnum.ADMIN, controllerRequest);
 	}
 
-	@GetMapping("/google/callback")
+	@GetMapping("/general/google/callback")
 	@ResponseStatus(HttpStatus.CREATED)
 	public void createTokenByEmail(
 		@RequestParam @Pattern(regexp = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+.[A-Za-z]{2,6}$",

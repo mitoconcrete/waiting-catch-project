@@ -2,6 +2,7 @@ package team.waitingcatch.app.admin;
 
 import javax.validation.Valid;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.ui.Model;
@@ -91,8 +92,8 @@ public class AdminController {
 	//유저
 
 	@GetMapping("/customers")
-	public ModelAndView getCustomers(Model model) {
-		model.addAttribute("customers", userService.getCustomers());
+	public ModelAndView getCustomers(Model model, Pageable pageable) {
+		model.addAttribute("customers", userService.getCustomers(pageable));
 		return new ModelAndView("/admin/user-list");
 	}
 
