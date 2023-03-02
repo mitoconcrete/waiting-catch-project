@@ -130,7 +130,7 @@ public class RestaurantServiceImpl implements RestaurantService, InternalRestaur
 	}
 
 	@Override
-	public RestaurantInfo _getRestaurantInfoByRestaurantId(Long id) {
+	public RestaurantInfo _getRestaurantInfoByRestaurantIdWithRestaurant(Long id) {
 		return restaurantInfoRepository.findByRestaurantId(id)
 			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 레스토랑 정보입니다."));
 	}

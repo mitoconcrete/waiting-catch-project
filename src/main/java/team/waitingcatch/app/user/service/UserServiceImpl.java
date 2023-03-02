@@ -82,7 +82,7 @@ public class UserServiceImpl implements UserService, InternalUserService {
 	@Override
 	@Transactional(readOnly = true)
 	public Page<UserInfoResponse> getCustomers(Pageable payload) {
-		Page<User> result = userRepository.findPageableAll(payload);
+		Page<User> result = userRepository.findAll(payload);
 		return new PageImpl<>(result.getContent().stream().map(UserInfoResponse::new).collect(Collectors.toList()),
 			result.getPageable(), result.getTotalPages());
 	}

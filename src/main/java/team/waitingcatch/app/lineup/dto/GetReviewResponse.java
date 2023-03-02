@@ -10,6 +10,7 @@ import lombok.Getter;
 
 @Getter
 public class GetReviewResponse {
+	private final long id;
 	private final int rate;
 	private final String content;
 	private final List<String> imagePaths = new ArrayList<>();
@@ -17,8 +18,10 @@ public class GetReviewResponse {
 	private final LocalDateTime modifiedDate;
 
 	@QueryProjection
-	public GetReviewResponse(int rate, String content, List<String> imagePaths, LocalDateTime createdDate,
+	public GetReviewResponse(long id, int rate, String content, List<String> imagePaths, LocalDateTime createdDate,
 		LocalDateTime modifiedDate) {
+
+		this.id = id;
 		this.rate = rate;
 		this.content = content;
 		this.imagePaths.addAll(imagePaths);

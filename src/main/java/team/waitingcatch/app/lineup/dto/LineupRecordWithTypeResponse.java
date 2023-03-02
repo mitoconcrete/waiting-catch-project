@@ -11,7 +11,7 @@ import team.waitingcatch.app.lineup.enums.StoredLineupTableNameEnum;
 @Getter
 public class LineupRecordWithTypeResponse {
 	private final StoredLineupTableNameEnum type;
-	private final long lineupId;
+	private final long id;
 	private final long restaurantId;
 	private final String restaurantName;
 	private final int numOfMembers;
@@ -21,12 +21,12 @@ public class LineupRecordWithTypeResponse {
 	private final LocalDateTime arrivedAt;
 
 	@QueryProjection
-	public LineupRecordWithTypeResponse(StoredLineupTableNameEnum type, long lineupId, long restaurantId,
+	public LineupRecordWithTypeResponse(StoredLineupTableNameEnum type, long id, long restaurantId,
 		String restaurantName, int numOfMembers, ArrivalStatusEnum status, boolean isReviewed, LocalDateTime startedAt,
 		LocalDateTime arrivedAt) {
 
 		this.type = type;
-		this.lineupId = lineupId;
+		this.id = id;
 		this.restaurantId = restaurantId;
 		this.restaurantName = restaurantName;
 		this.numOfMembers = numOfMembers;
@@ -37,7 +37,7 @@ public class LineupRecordWithTypeResponse {
 	}
 
 	public static LineupRecordWithTypeResponse of(LineupRecordResponse recordResponse, StoredLineupTableNameEnum type) {
-		return new LineupRecordWithTypeResponse(type, recordResponse.getLineupId(), recordResponse.getRestaurantId(),
+		return new LineupRecordWithTypeResponse(type, recordResponse.getId(), recordResponse.getRestaurantId(),
 			recordResponse.getRestaurantName(), recordResponse.getNumOfMembers(), recordResponse.getStatus(),
 			recordResponse.isReviewed(), recordResponse.getStartedAt(), recordResponse.getArrivedAt());
 	}

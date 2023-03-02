@@ -2,7 +2,11 @@ package team.waitingcatch.app.lineup.service;
 
 import java.util.List;
 
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+
 import team.waitingcatch.app.lineup.dto.CancelWaitingRequest;
+import team.waitingcatch.app.lineup.dto.GetLineupHistoryRecordsServiceRequest;
 import team.waitingcatch.app.lineup.dto.GetLineupRecordsServiceRequest;
 import team.waitingcatch.app.lineup.dto.LineupRecordWithTypeResponse;
 import team.waitingcatch.app.lineup.dto.StartWaitingServiceRequest;
@@ -21,6 +25,9 @@ public interface LineupService {
 	List<TodayLineupResponse> getTodayLineups(Long sellerId);
 
 	List<LineupRecordWithTypeResponse> getLineupRecords(GetLineupRecordsServiceRequest serviceRequest);
+
+	Slice<LineupRecordWithTypeResponse> getLineupHistoryRecords(GetLineupHistoryRecordsServiceRequest serviceRequest,
+		Pageable pageable);
 
 	void updateArrivalStatus(UpdateArrivalStatusServiceRequest serviceRequest);
 }
