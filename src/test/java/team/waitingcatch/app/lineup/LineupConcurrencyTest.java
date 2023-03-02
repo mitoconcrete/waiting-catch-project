@@ -15,6 +15,7 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Commit;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.transaction.annotation.Transactional;
 
 import team.waitingcatch.app.common.Address;
@@ -34,6 +35,7 @@ import team.waitingcatch.app.user.enums.UserRoleEnum;
 import team.waitingcatch.app.user.repository.UserRepository;
 
 @SpringBootTest
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
 @Transactional
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class LineupConcurrencyTest {
@@ -65,11 +67,11 @@ public class LineupConcurrencyTest {
 	@Commit
 	@Order(1)
 	void insertDummyDataBeforeConcurrentWaitingTest() {
-		User seller1 = new User(UserRoleEnum.SELLER, "맛집 판매자1", "abcdef@gmail.com", "sellerIdA", "pw123", "sjsjA",
+		User seller1 = new User(UserRoleEnum.SELLER, "판매자1", "abcdef@gmail.com", "sellerIdA", "pw123", "sjsjA",
 			"01012301230");
 		userRepository.save(seller1);
 
-		User seller2 = new User(UserRoleEnum.SELLER, "맛집 판매자2", "ghijk@gmail.com", "sellerIdB", "pw123", "sjsjB",
+		User seller2 = new User(UserRoleEnum.SELLER, "판매자2", "ghijk@gmail.com", "sellerIdB", "pw123", "sjsjB",
 			"01012001200");
 		userRepository.save(seller2);
 

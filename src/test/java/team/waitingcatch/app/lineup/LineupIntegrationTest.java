@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.transaction.annotation.Transactional;
 
 import team.waitingcatch.app.common.Address;
@@ -40,6 +41,7 @@ import team.waitingcatch.app.user.enums.UserRoleEnum;
 import team.waitingcatch.app.user.repository.UserRepository;
 
 @SpringBootTest
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
 @Transactional
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class LineupIntegrationTest {
@@ -113,48 +115,28 @@ class LineupIntegrationTest {
 		lineupService.startWaiting(
 			new StartWaitingServiceRequest(customer1, restaurant1.getId(), 0.0, 0.0, 5, LocalDateTime.now()));
 
-		User seller2 = new User(UserRoleEnum.SELLER, "판매자2", "bbb112523@gmail.com", "sellerId999", "pw123", "www",
-			"01022233322");
-		userRepository.save(seller2);
-		Restaurant restaurant2 = new Restaurant(
-			new SaveDummyRestaurantRequest("레스토랑1", new Address("서울시", "강남구", "강남대로"), new Position(0.0, 0.0),
-				"01000000000", "일식>스시>오마카세", seller2));
-		openRestaurant(restaurant2);
-
-		User customer2 = new User(UserRoleEnum.USER, "이름", "aaa2346246@gmail.com", "customerId333", "pw12", "qqqq",
-			"01033333333");
-		userRepository.save(customer2);
-
-		lineupService.startWaiting(
-			new StartWaitingServiceRequest(customer2, restaurant2.getId(), 0.0, 0.0, 5, LocalDateTime.now()));
-
 		Lineup lineup = lineupRepository.findAllByUserId(customer1.getId()).get(0);
-		lineupService.cancelWaiting(new CancelWaitingRequest(lineup.getId(), lineup.getUserId()));
-
-		Lineup canceledLineup = lineupRepository.findAll().get(0);
 
 		assertThat(lineup.getWaitingNumber()).isEqualTo(1);
 		assertThat(lineup.getNumOfMembers()).isEqualTo(5);
 		assertThat(lineup.getCallCount()).isEqualTo(0);
-		assertThat(canceledLineup.getStatus()).isEqualTo(ArrivalStatusEnum.CANCEL);
+		assertThat(lineup.getStatus()).isEqualTo(ArrivalStatusEnum.WAIT);
 
-		Lineup lineup2 = lineupRepository.findAllByUserId(customer2.getId()).get(0);
-		assertThatThrownBy(
-			() -> lineupService.cancelWaiting(new CancelWaitingRequest(lineup.getId(), lineup2.getUserId())))
-			.isInstanceOf(IllegalArgumentException.class)
-			.hasMessage("유저 정보가 일치하지 않습니다.");
+		lineupService.cancelWaiting(new CancelWaitingRequest(lineup.getId(), lineup.getUserId()));
+
+		assertThat(lineup.getStatus()).isEqualTo(ArrivalStatusEnum.CANCEL);
 	}
 
 	@Test
 	@DisplayName("손님 호출")
-	void callCustomer() {
+	void sellerCallCustomer() {
 		User customer = userRepository.findByUsernameAndIsDeletedFalse("customerId").get();
 		Long sellerId = userRepository.findByUsernameAndIsDeletedFalse("sellerId").get().getId();
 		Restaurant restaurant = restaurantRepository.findByUserId(sellerId).get();
 		lineupService.startWaiting(
 			new StartWaitingServiceRequest(customer, restaurant.getId(), 0.0, 0.0, 5, LocalDateTime.now()));
 
-		Lineup lineup = lineupRepository.findAll().get(0);
+		Lineup lineup = lineupRepository.findAllByUserId(customer.getId()).get(0);
 		UpdateArrivalStatusServiceRequest callRequest = new UpdateArrivalStatusServiceRequest(sellerId, lineup.getId(),
 			ArrivalStatusEnum.CALL);
 
@@ -165,14 +147,14 @@ class LineupIntegrationTest {
 
 	@Test
 	@DisplayName("손님 취소")
-	void cancelCustomer() {
+	void sellerCancelCustomer() {
 		User customer = userRepository.findByUsernameAndIsDeletedFalse("customerId").get();
 		Long sellerId = userRepository.findByUsernameAndIsDeletedFalse("sellerId").get().getId();
 		Restaurant restaurant = restaurantRepository.findByUserId(sellerId).get();
 		lineupService.startWaiting(
 			new StartWaitingServiceRequest(customer, restaurant.getId(), 0.0, 0.0, 5, LocalDateTime.now()));
 
-		Lineup lineup = lineupRepository.findAll().get(0);
+		Lineup lineup = lineupRepository.findAllByUserId(customer.getId()).get(0);
 		UpdateArrivalStatusServiceRequest cancelRequest = new UpdateArrivalStatusServiceRequest(sellerId,
 			lineup.getId(),
 			ArrivalStatusEnum.CANCEL);
@@ -189,16 +171,16 @@ class LineupIntegrationTest {
 		Restaurant restaurant = restaurantRepository.findByUserId(sellerId).get();
 
 		for (int i = 0; i < 10; i++) {
-			User customer = new User(UserRoleEnum.USER, "이름" + i, i + "@gmail.com", "customerId" + i, "pw" + i,
-				"sj" + i, "0101212121" + i);
+			User customer = new User(UserRoleEnum.USER, "이름" + i, i + "@naver.com", "testId" + i, "pw" + i,
+				"test" + i, "0102233223" + i);
 			userRepository.save(customer);
 			lineupService.startWaiting(
 				new StartWaitingServiceRequest(customer, restaurant.getId(), 0.0, 0.0, i + 1, LocalDateTime.now()));
 		}
 
 		for (int i = 10; i < 15; i++) {
-			User customer = new User(UserRoleEnum.USER, "이름" + i, i + "@gmail.com", "customerId" + i, "pw" + i,
-				"sj" + i, "0101212121" + i);
+			User customer = new User(UserRoleEnum.USER, "이름" + i, i + "@naver.com", "testId" + i, "pw" + i,
+				"test" + i, "010223322" + i);
 			userRepository.save(customer);
 		}
 

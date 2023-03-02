@@ -1,5 +1,6 @@
 package team.waitingcatch.app.user.service;
 
+import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -12,7 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.test.annotation.Rollback;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.extern.slf4j.Slf4j;
@@ -53,28 +54,24 @@ import team.waitingcatch.app.user.enums.UserRoleEnum;
 import team.waitingcatch.app.user.repository.UserRepository;
 
 @SpringBootTest
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
 @Transactional
-@Rollback(value = true)
 @Slf4j
 class UserServiceImplTest {
-
 	static {
 		System.setProperty("com.amazonaws.sdk.disableEc2Metadata", "true");
 	}
 
 	@Autowired
 	private RestaurantInfoRepository restaurantInfoRepository;
-
 	@Autowired
 	private LineupHistoryRepository lineupHistoryRepository;
 	@Autowired
 	private RestaurantRepository restaurantRepository;
 	@Autowired
 	private LineupRepository lineupRepository;
-
 	@Autowired
 	private EventRepository eventRepository;
-
 	@Autowired
 	private ReviewRepository reviewRepository;
 	@Autowired
@@ -182,13 +179,13 @@ class UserServiceImplTest {
 		Pageable pageable4 = Pageable.ofSize(5).withPage(0);
 		Pageable pageable5 = Pageable.ofSize(5).withPage(1);
 		Pageable pageable6 = Pageable.ofSize(5).withPage(2);
-		assertEquals(userService.getCustomers(pageable1).getContent().size(), 3);
-		assertEquals(userService.getCustomers(pageable2).getContent().size(), 3);
-		assertEquals(userService.getCustomers(pageable3).getContent().size(), 1);
+		assertThat(userService.getCustomers(pageable1).getContent().size()).isEqualTo(3);
+		assertThat(userService.getCustomers(pageable2).getContent().size()).isEqualTo(3);
+		assertThat(userService.getCustomers(pageable3).getContent().size()).isEqualTo(1);
 
-		assertEquals(userService.getCustomers(pageable4).getContent().size(), 5);
-		assertEquals(userService.getCustomers(pageable5).getContent().size(), 2);
-		assertEquals(userService.getCustomers(pageable6).getContent().size(), 0);
+		assertThat(userService.getCustomers(pageable4).getContent().size()).isEqualTo(5);
+		assertThat(userService.getCustomers(pageable5).getContent().size()).isEqualTo(2);
+		assertThat(userService.getCustomers(pageable6).getContent().size()).isEqualTo(0);
 	}
 
 	@Test
