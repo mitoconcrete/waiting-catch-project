@@ -1,5 +1,7 @@
 package team.waitingcatch.app.restaurant.controller;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.springframework.http.HttpStatus;
@@ -37,17 +39,18 @@ public class CategoryController {
 	}
 
 	@GetMapping("/general/categories")
-	public GenericResponse<CategoryResponse> getParentCategoriesForSellerManagement() {
+	public GenericResponse<List<CategoryResponse>> getParentCategoriesForSellerManagement() {
 		return new GenericResponse<>(categoryService.getParentCategories());
 	}
 
 	@GetMapping("/admin/categories")
-	public GenericResponse<CategoryResponse> getParentCategories() {
+	public GenericResponse<List<CategoryResponse>> getParentCategories() {
 		return new GenericResponse<>(categoryService.getParentCategories());
 	}
 
 	@GetMapping("/general/categories/{categoryId}")
-	public GenericResponse<CategoryResponse> getChildCategoriesForSellerManagement(@PathVariable Long categoryId) {
+	public GenericResponse<List<CategoryResponse>> getChildCategoriesForSellerManagement(
+		@PathVariable Long categoryId) {
 		return new GenericResponse<>(categoryService.getChildCategoriesForSellerManagement(categoryId));
 	}
 
