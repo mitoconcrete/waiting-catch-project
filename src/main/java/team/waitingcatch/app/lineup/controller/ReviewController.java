@@ -53,12 +53,12 @@ public class ReviewController {
 		reviewService.createReview(serviceRequest);
 	}
 
-	@DeleteMapping("/general/admin/review/{reviewId}")
+	@DeleteMapping("/admin/review/{reviewId}")
 	public void deleteReview(@PathVariable long reviewId) {
 		reviewService.deleteReview(reviewId);
 	}
 
-	@GetMapping("/general/restaurants/{restaurantId}/reviews")
+	@GetMapping("/restaurants/{restaurantId}/reviews")
 	public GenericResponse<Slice<GetReviewResponse>> getReviewsByRestaurant(
 		@PathVariable long restaurantId,
 		@RequestParam(required = false) Long lastId,

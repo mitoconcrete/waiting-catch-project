@@ -72,7 +72,7 @@ public class LineupController {
 		lineupService.cancelWaiting(new CancelWaitingRequest(lineupId, userDetails.getId()));
 	}
 
-	@GetMapping("/general/seller/lineup")
+	@GetMapping("/seller/lineup")
 	public GenericResponse<TodayLineupResponse> getLineups(@AuthenticationPrincipal UserDetailsImpl userDetails) {
 		return new GenericResponse(lineupService.getTodayLineups(userDetails.getId()));
 	}
