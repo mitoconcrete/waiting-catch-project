@@ -6,7 +6,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -36,13 +34,11 @@ import team.waitingcatch.app.restaurant.service.restaurant.RestaurantService;
 import team.waitingcatch.app.user.dto.CreateUserControllerRequest;
 import team.waitingcatch.app.user.dto.CreateUserServiceRequest;
 import team.waitingcatch.app.user.dto.GetCustomerByIdAndRoleServiceRequest;
-import team.waitingcatch.app.user.entitiy.UserDetailsImpl;
 import team.waitingcatch.app.user.enums.UserRoleEnum;
 import team.waitingcatch.app.user.service.UserService;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/admin/templates")
 public class AdminController {
 	private final UserService userService;
 	private final RestaurantService restaurantService;
@@ -65,7 +61,7 @@ public class AdminController {
 		return new ModelAndView("/admin/index");
 	}
 
-	@PostMapping("/register")
+	@PostMapping("/general/templates/admin/register")
 	@ResponseStatus(HttpStatus.CREATED)
 	public void createAdmin(
 		@ModelAttribute("CreateUserControllerRequest") @Valid CreateUserControllerRequest controllerRequest) {
@@ -108,7 +104,7 @@ public class AdminController {
 	//유저
 
 	@GetMapping("/admin/templates/customers")
-	public ModelAndView getCustomers(Model model , Pageable pageable) {
+	public ModelAndView getCustomers(Model model, Pageable pageable) {
 		model.addAttribute("customers", userService.getCustomers(pageable));
 		return new ModelAndView("/admin/user-list");
 	}
@@ -153,7 +149,7 @@ public class AdminController {
 		return new ModelAndView("/admin/seller-view");
 	}
 
-	@DeleteMapping("/restaurants/{restaurant_id}")
+	@DeleteMapping("/admin/templates/restaurants/{restaurant_id}")
 	public void deleteRestaurantByAdmin(@PathVariable Long restaurant_id) {
 		DeleteRestaurantByAdminServiceRequest deleteRestaurantByAdminServiceRequest
 			= new DeleteRestaurantByAdminServiceRequest(restaurant_id);
@@ -185,27 +181,27 @@ public class AdminController {
 		return new ModelAndView("/admin/category");
 	}
 
-	@PostMapping("/category")
+	@PostMapping("/admin/templates/category")
 	@ResponseStatus(value = HttpStatus.CREATED)
 	public void createCategory(@ModelAttribute @Valid CreateCategoryRequest request) {
 		categoryService.createCategory(request);
 	}
 
-	@PutMapping("/categories-update")
+	@PutMapping("/admin/templates/categories-update")
 	public void updateCategory(@ModelAttribute @Valid UpdateCategoryControllerRequest controllerRequest) {
 		UpdateCategoryServiceRequest serviceRequest =
 			new UpdateCategoryServiceRequest(controllerRequest.getCategoryId(), controllerRequest.getName());
 		categoryService.updateCategory(serviceRequest);
 	}
 
-	@DeleteMapping("/categories-form-delete")
+	@DeleteMapping("/admin/templates/categories-form-delete")
 	public void deleteCategory(@ModelAttribute DeleteCategoryControllerRequest deleteCategoryControllerRequest) {
 		DeleteCategoryServiceRequest request = new DeleteCategoryServiceRequest(
 			deleteCategoryControllerRequest.getCategoryId());
 		categoryService.deleteCategory(request);
 	}
 
-	@DeleteMapping("/categories-direct-delete/{categoryId}")
+	@DeleteMapping("/admin/templates/categories-direct-delete/{categoryId}")
 	public void deleteCategory(@PathVariable Long categoryId) {
 		DeleteCategoryServiceRequest request = new DeleteCategoryServiceRequest(
 			categoryId);

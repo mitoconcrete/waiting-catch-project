@@ -70,7 +70,7 @@ public class LineupController {
 
 	@GetMapping("/seller/lineup")
 	public GenericResponse<TodayLineupResponse> getLineups(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-		return new GenericResponse<>(lineupService.getTodayLineups(userDetails.getId()));
+		return new GenericResponse(lineupService.getTodayLineups(userDetails.getId()));
 	}
 
 	@GetMapping("/customer/lineup-records")
@@ -80,7 +80,7 @@ public class LineupController {
 
 		GetLineupRecordsServiceRequest serviceRequest = new GetLineupRecordsServiceRequest(
 			userDetails.getId(), arrivalStatus != null ? ArrivalStatusEnum.valueOf(arrivalStatus) : null);
-		return new GenericResponse<>(lineupService.getLineupRecords(serviceRequest));
+		return new GenericResponse(lineupService.getLineupRecords(serviceRequest));
 	}
 
 	@PutMapping("/seller/lineup/{lineupId}/status")

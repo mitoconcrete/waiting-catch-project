@@ -1,12 +1,14 @@
 package team.waitingcatch.app.restaurant.dto.restaurant;
 
+import java.util.List;
+
 import lombok.Getter;
 
 @Getter
 public class SearchRestaurantsResponse {
 	private final Long id;
 	private final String name;
-	private final String imageUrl;
+	private final List<String> imageUrl;
 	private final float rate;
 	private final String[] category;
 	private final double distance;
