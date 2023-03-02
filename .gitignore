@@ -18,10 +18,9 @@ build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
-**/src/**/resources/*.properties
+**/src/main/resources/*.properties
 **/src/**/resources/.vscode
 
 ### Querydsl ###
 /src/main/generated/
 /src/test/generated_tests/
-*.properties
