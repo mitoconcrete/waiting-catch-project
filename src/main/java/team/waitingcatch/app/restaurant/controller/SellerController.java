@@ -130,7 +130,7 @@ public class SellerController {
 	//@PostMapping("/seller/restaurants/{restaurantId}/menus")
 	@PostMapping("/api/seller/menu/new")
 	public String createMenu(
-		@RequestPart("image") MultipartFile multipartFile,
+		@RequestPart(value = "image", required = false) MultipartFile multipartFile,
 		@Valid CreateMenuControllerRequest request,
 		@AuthenticationPrincipal UserDetailsImpl userDetails) {
 		CreateMenuServiceRequest serviceRequest = new CreateMenuServiceRequest(userDetails.getId(), multipartFile,
@@ -147,7 +147,7 @@ public class SellerController {
 
 	@PutMapping("/api/seller/menu/update/{menuId}")
 	public String updateMenu(@PathVariable Long menuId,
-		@RequestPart("image") MultipartFile multipartFile,
+		@RequestPart(value = "image", required = false) MultipartFile multipartFile,
 		@Valid UpdateMenuControllerRequest request, @AuthenticationPrincipal UserDetailsImpl userDetails
 	) {
 		UpdateMenuServiceRequest serviceRequest = new UpdateMenuServiceRequest(menuId, request, multipartFile,
@@ -217,7 +217,7 @@ public class SellerController {
 	@PutMapping("/api/seller/updaterestaurant")
 	public String updateRestaurant(
 		UpdateRestaurantControllerRequest updateRestaurantControllerRequest,
-		@RequestPart("image") List<MultipartFile> multipartFile,
+		@RequestPart(value = "image", required = false) List<MultipartFile> multipartFile,
 		@AuthenticationPrincipal UserDetailsImpl userDetails) throws IOException {
 		UpdateRestaurantServiceRequest updateRestaurantServiceRequest =
 			new UpdateRestaurantServiceRequest(updateRestaurantControllerRequest, multipartFile,
