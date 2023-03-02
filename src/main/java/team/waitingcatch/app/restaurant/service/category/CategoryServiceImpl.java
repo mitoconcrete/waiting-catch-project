@@ -1,6 +1,5 @@
 package team.waitingcatch.app.restaurant.service.category;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -79,7 +78,7 @@ public class CategoryServiceImpl implements CategoryService, InternalCategorySer
 
 	@Override
 	public void _connectCategoryRestaurant(ConnectCategoryRestaurantServiceRequest serviceRequest) {
-		List<Long> categoryIds = Arrays.stream(serviceRequest.getCategoryIds().split(" "))
+		List<Long> categoryIds = serviceRequest.getCategoryIds().stream()
 			.map(Long::parseLong)
 			.collect(Collectors.toList());
 

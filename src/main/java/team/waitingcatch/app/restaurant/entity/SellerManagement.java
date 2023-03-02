@@ -1,6 +1,9 @@
 package team.waitingcatch.app.restaurant.entity;
 
+import java.util.List;
+
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -14,6 +17,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import team.waitingcatch.app.common.Position;
 import team.waitingcatch.app.common.entity.TimeStamped;
+import team.waitingcatch.app.common.util.StringListConverter;
 import team.waitingcatch.app.restaurant.dto.requestseller.DemandSignUpSellerServiceRequest;
 import team.waitingcatch.app.restaurant.enums.AcceptedStatusEnum;
 
@@ -64,7 +68,8 @@ public class SellerManagement extends TimeStamped {
 	private AcceptedStatusEnum status;
 
 	@Column(nullable = false)
-	private String categories;
+	@Convert(converter = StringListConverter.class)
+	private List<String> categories;
 
 	// @Column(name = "search_keywords", nullable = false)
 	// private String searchKeyWords;

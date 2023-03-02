@@ -192,6 +192,8 @@
             let address = $('#sample6_address').val();
             let detailAddress = $('#sample6_detailAddress').val();
 
+            let categoryList = categories.split(" ");
+
             $.ajax({
                 type: 'POST',
                 url: `/api/seller/demand`,
@@ -203,7 +205,7 @@
                     phoneNumber: phoneNumber,
                     businessLicenseNo: businessLicenseNo,
                     restaurantName: restaurantName,
-                    categories: categories,
+                    categories: categoryList,
                     description: description,
                     zipCode: zipCode,
                     address: address,

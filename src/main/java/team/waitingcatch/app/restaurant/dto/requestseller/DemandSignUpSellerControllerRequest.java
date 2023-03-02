@@ -1,5 +1,7 @@
 package team.waitingcatch.app.restaurant.dto.requestseller;
 
+import java.util.List;
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -35,8 +37,8 @@ public class DemandSignUpSellerControllerRequest {
 	@Pattern(regexp = "[가-힣a-zA-Z1-9]{1,12}", message = "레스토랑 이름은 한글,영어,숫자 포함해서 12자리 이내로 입력해주세요.")
 	private String restaurantName;
 
-	@NotBlank(message = "카테고리는 필수 입력값입니다.")
-	private String categories;
+	@NotNull(message = "카테고리는 필수 입력값입니다.")
+	private List<String> categories;
 
 	@NotBlank(message = "레스토랑 설명은 필수 입력값입니다.")
 	private String description;

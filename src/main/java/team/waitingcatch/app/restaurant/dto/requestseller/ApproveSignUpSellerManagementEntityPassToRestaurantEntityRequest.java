@@ -1,5 +1,7 @@
 package team.waitingcatch.app.restaurant.dto.requestseller;
 
+import java.util.List;
+
 import lombok.Getter;
 import team.waitingcatch.app.common.Position;
 import team.waitingcatch.app.restaurant.entity.SellerManagement;
@@ -11,7 +13,7 @@ public class ApproveSignUpSellerManagementEntityPassToRestaurantEntityRequest {
 	private final String restaurantName;
 	private final String email;
 	private final String phoneNumber;
-	private final String categories;
+	private final List<String> categories;
 	private final String description;
 	private final String zipCode;
 	private final String address;

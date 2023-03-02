@@ -1,5 +1,7 @@
 package team.waitingcatch.app.restaurant.dto.requestseller;
 
+import java.util.List;
+
 import lombok.Getter;
 import team.waitingcatch.app.restaurant.entity.SellerManagement;
 import team.waitingcatch.app.restaurant.enums.AcceptedStatusEnum;
@@ -11,7 +13,7 @@ public class GetDemandSignUpSellerResponse {
 	private final String email;
 	private final String phoneNumber;
 	private final String restaurantName;
-	private final String categories;
+	private final List<String> categories;
 	private final double latitude;
 	private final double longitude;
 	private final String description;

@@ -1,6 +1,5 @@
 package team.waitingcatch.app.restaurant.service.requestseller;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -95,7 +94,7 @@ public class SellerManagementServiceImpl implements SellerManagementService, Int
 
 		User seller = internalUserService._getUserByUsername(sellerManagement.getUsername());
 		// 레스토랑 만들기
-		List<Long> categoryIds = Arrays.stream(sellerManagement.getCategories().split(" "))
+		List<Long> categoryIds = sellerManagement.getCategories().stream()
 			.map(Long::parseLong)
 			.collect(Collectors.toList());
 

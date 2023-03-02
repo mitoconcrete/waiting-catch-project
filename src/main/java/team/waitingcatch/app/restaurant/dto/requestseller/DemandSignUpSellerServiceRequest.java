@@ -1,5 +1,7 @@
 package team.waitingcatch.app.restaurant.dto.requestseller;
 
+import java.util.List;
+
 import lombok.Getter;
 import team.waitingcatch.app.common.Position;
 
@@ -10,7 +12,7 @@ public class DemandSignUpSellerServiceRequest {
 	private final String email;
 	private final String phoneNumber;
 	private final String restaurantName;
-	private final String categories;
+	private final List<String> categories;
 	private final String description;
 	private final Position position;
 	private final String zipCode;
