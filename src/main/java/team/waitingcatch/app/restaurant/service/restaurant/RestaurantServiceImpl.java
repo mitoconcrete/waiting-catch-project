@@ -105,7 +105,7 @@ public class RestaurantServiceImpl implements RestaurantService, InternalRestaur
 	@Override
 	public void updateRestaurant(UpdateRestaurantServiceRequest updateRestaurantServiceRequest) throws IOException {
 		Restaurant restaurant = _getRestaurantByUserId(updateRestaurantServiceRequest.getSellerId());
-		RestaurantInfo restaurantInfo = _getRestaurantInfoByRestaurantId(restaurant.getId());
+		RestaurantInfo restaurantInfo = _getRestaurantInfoByRestaurantIdWithRestaurant(restaurant.getId());
 		String imageName = "";
 
 		List<String> imageUrls = imageUploader.uploadList(updateRestaurantServiceRequest.getFiles(), "restaurant");
