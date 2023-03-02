@@ -4,18 +4,20 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
+import team.waitingcatch.app.lineup.entity.WaitingNumber;
 import team.waitingcatch.app.lineup.repository.WaitingNumberRepository;
 
 @Service
-@RequiredArgsConstructor
 @Transactional
+@RequiredArgsConstructor
 public class WaitingNumberServiceImpl implements InternalWaitingNumberService {
 	private final WaitingNumberRepository waitingNumberRepository;
 
 	@Override
-	public int getNextWaitingNumber(Long restaurantId) {
-		int waitingNumber = waitingNumberRepository.findByRestaurantId(restaurantId);
-		waitingNumberRepository.updateWaitingNumber(restaurantId);
-		return waitingNumber;
+	public int getWaitingNumber(Long restaurantId) {
+		WaitingNumber waitingNumber = waitingNumberRepository.findByRestaurantId(restaurantId)
+			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 대기 번호입니다."));
+		waitingNumber.updateNextNumber();
+		return waitingNumber.getNextNumber() - 1;
 	}
 }
