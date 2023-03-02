@@ -51,7 +51,7 @@
 
         $.ajax({
             type: "POST",
-            url: `/api/admin/signin`,
+            url: `/api/general/admin/signin`,
             contentType: "application/json",
             data: JSON.stringify({username: username, password: password}),
             success: function (response, status, xhr) {

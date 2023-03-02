@@ -16,7 +16,7 @@
     <div class="col-sm-6">
         <h3 style="margin-top: 10px">Sign Up Now</h3>
         <p>Please fill out this to register</p>
-        <form th:action="@{/admin/templates/register}" th:object="${CreateUserControllerRequest}" method="post">
+        <form th:action="@{/general/templates/admin/register}" th:object="${CreateUserControllerRequest}" method="post">
             <div class="form-group">
                 <label for="username">username</label>
                 <input type="text" class="form-control" required th:field="*{username}"
