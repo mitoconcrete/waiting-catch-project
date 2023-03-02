@@ -1,5 +1,6 @@
 package team.waitingcatch.app.user.service;
 
+import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -182,13 +183,13 @@ class UserServiceImplTest {
 		Pageable pageable4 = Pageable.ofSize(5).withPage(0);
 		Pageable pageable5 = Pageable.ofSize(5).withPage(1);
 		Pageable pageable6 = Pageable.ofSize(5).withPage(2);
-		assertEquals(userService.getCustomers(pageable1).getContent().size(), 3);
-		assertEquals(userService.getCustomers(pageable2).getContent().size(), 3);
-		assertEquals(userService.getCustomers(pageable3).getContent().size(), 1);
+		assertThat(userService.getCustomers(pageable1).getContent().size()).isEqualTo(3);
+		assertThat(userService.getCustomers(pageable2).getContent().size()).isEqualTo(3);
+		assertThat(userService.getCustomers(pageable3).getContent().size()).isEqualTo(1);
 
-		assertEquals(userService.getCustomers(pageable4).getContent().size(), 5);
-		assertEquals(userService.getCustomers(pageable5).getContent().size(), 2);
-		assertEquals(userService.getCustomers(pageable6).getContent().size(), 0);
+		assertThat(userService.getCustomers(pageable4).getContent().size()).isEqualTo(5);
+		assertThat(userService.getCustomers(pageable5).getContent().size()).isEqualTo(2);
+		assertThat(userService.getCustomers(pageable6).getContent().size()).isEqualTo(0);
 	}
 
 	@Test
