@@ -9,7 +9,7 @@ import team.waitingcatch.app.lineup.enums.ArrivalStatusEnum;
 
 @Getter
 public class LineupRecordResponse {
-	private final long lineupId;
+	private final long id;
 	private final long restaurantId;
 	private final String restaurantName;
 	private final int numOfMembers;
@@ -19,10 +19,10 @@ public class LineupRecordResponse {
 	private final LocalDateTime arrivedAt;
 
 	@QueryProjection
-	public LineupRecordResponse(long lineupId, long restaurantId, String restaurantName, int numOfMembers,
+	public LineupRecordResponse(long id, long restaurantId, String restaurantName, int numOfMembers,
 		ArrivalStatusEnum status, boolean isReviewed, LocalDateTime startedAt, LocalDateTime arrivedAt) {
 
-		this.lineupId = lineupId;
+		this.id = id;
 		this.restaurantId = restaurantId;
 		this.restaurantName = restaurantName;
 		this.numOfMembers = numOfMembers;

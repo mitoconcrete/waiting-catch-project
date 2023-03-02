@@ -21,19 +21,26 @@ import team.waitingcatch.app.lineup.dto.CustomerLineupInfoResponse;
 import team.waitingcatch.app.lineup.entity.LineupHistory;
 import team.waitingcatch.app.lineup.repository.LineupHistoryRepository;
 import team.waitingcatch.app.lineup.repository.LineupRepository;
+import team.waitingcatch.app.lineup.repository.WaitingNumberRepository;
 
 @Service
 @EnableScheduling
+@Transactional
 @RequiredArgsConstructor
 public class LineupSchedulerService {
 	private final LineupRepository lineupRepository;
 	private final LineupHistoryRepository lineupHistoryRepository;
+	private final WaitingNumberRepository waitingNumberRepository;
 
 	private final SmsService smsService;
 
+	@Scheduled(cron = "0 30 4 * * *")
+	public void resetStartWaitingNumber() {
+		waitingNumberRepository.bulkResetWaitingNumber();
+	}
+
 	@Scheduled(cron = "0 0 5 * * *")
-	@Transactional
-	public void run() {
+	public void transferLineupToLineupHistory() {
 		List<LineupHistory> lineupList = lineupRepository.findAll()
 			.stream()
 			.map(LineupHistory::createLineupHistory)

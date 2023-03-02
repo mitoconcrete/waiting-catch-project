@@ -7,7 +7,7 @@ import team.waitingcatch.app.restaurant.entity.RestaurantInfo;
 public interface InternalRestaurantService {
 	Restaurant _getRestaurantById(Long id);
 
-	RestaurantInfo _getRestaurantInfoByRestaurantId(Long id);
+	RestaurantInfo _getRestaurantInfoByRestaurantIdWithRestaurant(Long id);
 
 	Restaurant _getRestaurantByUserId(Long userId);
 

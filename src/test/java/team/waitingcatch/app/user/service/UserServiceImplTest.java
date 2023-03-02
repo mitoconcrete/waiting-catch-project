@@ -182,13 +182,13 @@ class UserServiceImplTest {
 		Pageable pageable4 = Pageable.ofSize(5).withPage(0);
 		Pageable pageable5 = Pageable.ofSize(5).withPage(1);
 		Pageable pageable6 = Pageable.ofSize(5).withPage(2);
-		assertEquals(userService.getCustomers(pageable1).size(), 3);
-		assertEquals(userService.getCustomers(pageable2).size(), 3);
-		assertEquals(userService.getCustomers(pageable3).size(), 1);
+		assertEquals(userService.getCustomers(pageable1).getContent().size(), 3);
+		assertEquals(userService.getCustomers(pageable2).getContent().size(), 3);
+		assertEquals(userService.getCustomers(pageable3).getContent().size(), 1);
 
-		assertEquals(userService.getCustomers(pageable4).size(), 5);
-		assertEquals(userService.getCustomers(pageable5).size(), 2);
-		assertEquals(userService.getCustomers(pageable6).size(), 0);
+		assertEquals(userService.getCustomers(pageable4).getContent().size(), 5);
+		assertEquals(userService.getCustomers(pageable5).getContent().size(), 2);
+		assertEquals(userService.getCustomers(pageable6).getContent().size(), 0);
 	}
 
 	@Test

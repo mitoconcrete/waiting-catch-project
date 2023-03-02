@@ -23,20 +23,28 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     implementation 'org.springframework.boot:spring-boot-starter-security'
-    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
-    implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
-    implementation 'org.springframework.boot:spring-boot-starter-mail'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
+
     implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+    implementation 'org.springframework:spring-aspects'
+    implementation 'org.springframework.retry:spring-retry'
+
+    implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
     implementation 'io.springfox:springfox-boot-starter:3.0.0'
 
     runtimeOnly 'com.mysql:mysql-connector-j'
 
+<<<<<<< HEAD
+    implementation 'io.jsonwebtoken:jjwt-api:0.11.2'
+    implementation 'io.jsonwebtoken:jjwt-impl:0.11.2'
+    implementation 'io.jsonwebtoken:jjwt-jackson:0.11.2'
+=======
     implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.2'
     implementation group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.2'
     implementation group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.2'
-
-    implementation group: 'org.json', name: 'json', version: '20220924'
+>>>>>>> lineup
 
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
@@ -58,7 +66,7 @@ dependencies {
     testCompileOnly 'org.projectlombok:lombok'
     testAnnotationProcessor 'org.projectlombok:lombok'
 
-    testRuntimeOnly 'com.h2database:h2'
+    testRuntimeOnly 'com.h2database:h2:1.4.200'
 }
 
 tasks.named('test') {
@@ -69,8 +77,6 @@ clean {
     delete('out', 'src/main/generated', 'src/test/generated_tests')
 }
 
-/* for Continuous Deployment
 jar {
 	enabled = false
 }
- */

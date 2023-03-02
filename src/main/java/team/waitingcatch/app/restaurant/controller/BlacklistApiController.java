@@ -36,12 +36,12 @@ public class BlacklistApiController {
 	@GetMapping("/admin/restaurants/{restaurantId}/blacklists")
 	public GenericResponse<GetBlacklistResponse> getBlacklistsByRestaurant(@PathVariable Long restaurantId) {
 		var serviceRequest = new GetBlacklistByRestaurantIdServiceRequest(restaurantId);
-		return new GenericResponse<>(blacklistService.getBlackListByRestaurantId(serviceRequest));
+		return new GenericResponse(blacklistService.getBlackListByRestaurantId(serviceRequest));
 	}
 
 	@GetMapping("/admin/blacklists")
 	public GenericResponse<GetBlacklistResponse> getBlacklist() {
-		return new GenericResponse<>(blacklistService.getBlacklist());
+		return new GenericResponse(blacklistService.getBlacklist());
 	}
 
 	@GetMapping("/seller/restaurant/blacklist")

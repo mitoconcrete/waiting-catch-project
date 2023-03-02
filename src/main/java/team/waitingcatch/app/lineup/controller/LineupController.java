@@ -5,6 +5,9 @@ import java.time.LocalDateTime;
 import javax.validation.Valid;
 import javax.validation.constraints.Pattern;
 
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
@@ -22,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.common.dto.GenericResponse;
 import team.waitingcatch.app.lineup.dto.CancelWaitingRequest;
+import team.waitingcatch.app.lineup.dto.GetLineupHistoryRecordsServiceRequest;
 import team.waitingcatch.app.lineup.dto.GetLineupRecordsServiceRequest;
 import team.waitingcatch.app.lineup.dto.LineupRecordWithTypeResponse;
 import team.waitingcatch.app.lineup.dto.StartLineupControllerRequest;
@@ -57,7 +61,7 @@ public class LineupController {
 		@Valid @RequestBody StartLineupControllerRequest controllerRequest,
 		@AuthenticationPrincipal UserDetailsImpl userDetails) {
 
-		StartWaitingServiceRequest serviceRequest = new StartWaitingServiceRequest(userDetails.getUser(), restaurantId,
+		var serviceRequest = new StartWaitingServiceRequest(userDetails.getUser(), restaurantId,
 			controllerRequest.getLatitude(), controllerRequest.getLongitude(), controllerRequest.getNumOfMember(),
 			LocalDateTime.now());
 		lineupService.startWaiting(serviceRequest);
@@ -70,17 +74,31 @@ public class LineupController {
 
 	@GetMapping("/seller/lineup")
 	public GenericResponse<TodayLineupResponse> getLineups(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-		return new GenericResponse<>(lineupService.getTodayLineups(userDetails.getId()));
+		return new GenericResponse(lineupService.getTodayLineups(userDetails.getId()));
 	}
 
 	@GetMapping("/customer/lineup-records")
-	public GenericResponse<LineupRecordWithTypeResponse> getLineupRecords(
-		@RequestParam(required = false) @Pattern(regexp = "^(WAIT|CALL|CANCEL|ARRIVE)$") String arrivalStatus,
+	public GenericResponse<Slice<LineupRecordWithTypeResponse>> getLineupRecords(
+		@RequestParam(required = false) @Pattern(regexp = "^(WAIT|CALL|CANCEL|ARRIVE)$") String status,
 		@AuthenticationPrincipal UserDetailsImpl userDetails) {
 
-		GetLineupRecordsServiceRequest serviceRequest = new GetLineupRecordsServiceRequest(
-			userDetails.getId(), arrivalStatus != null ? ArrivalStatusEnum.valueOf(arrivalStatus) : null);
-		return new GenericResponse<>(lineupService.getLineupRecords(serviceRequest));
+		var serviceRequest = new GetLineupRecordsServiceRequest(userDetails.getId(),
+			status != null ? ArrivalStatusEnum.valueOf(status) : null);
+
+		return new GenericResponse(lineupService.getLineupRecords(serviceRequest));
+	}
+
+	@GetMapping("/customer/lineup-history-records")
+	public GenericResponse<Slice<LineupRecordWithTypeResponse>> getLineupRecords(
+		@RequestParam(required = false) Long lastId,
+		@RequestParam(required = false) @Pattern(regexp = "^(WAIT|CALL|CANCEL|ARRIVE)$") String status,
+		@AuthenticationPrincipal UserDetailsImpl userDetails,
+		@PageableDefault Pageable pageable) {
+
+		var serviceRequest = new GetLineupHistoryRecordsServiceRequest(lastId, userDetails.getId(),
+			status != null ? ArrivalStatusEnum.valueOf(status) : null);
+
+		return new GenericResponse(lineupService.getLineupHistoryRecords(serviceRequest, pageable));
 	}
 
 	@PutMapping("/seller/lineup/{lineupId}/status")
@@ -89,7 +107,7 @@ public class LineupController {
 		@Valid @RequestBody UpdateArrivalStatusControllerRequest controllerRequest,
 		@AuthenticationPrincipal UserDetailsImpl userDetails) {
 
-		ArrivalStatusEnum status = ArrivalStatusEnum.valueOf(controllerRequest.getStatus());
+		var status = ArrivalStatusEnum.valueOf(controllerRequest.getStatus());
 		lineupService.updateArrivalStatus(new UpdateArrivalStatusServiceRequest(userDetails.getId(), lineupId, status));
 	}
 }

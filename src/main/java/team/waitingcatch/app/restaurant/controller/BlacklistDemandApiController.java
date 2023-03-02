@@ -51,7 +51,7 @@ public class BlacklistDemandApiController {
 
 	@GetMapping("/admin/restaurants/blacklist-demands")
 	public GenericResponse<GetBlacklistDemandResponse> getBlacklistDemands() {
-		return new GenericResponse<>(blacklistDemandService.getBlacklistDemands());
+		return new GenericResponse(blacklistDemandService.getBlacklistDemands());
 	}
 
 	@PostMapping("/admin/restaurants/blacklist-demands/{blacklistDemandId}")

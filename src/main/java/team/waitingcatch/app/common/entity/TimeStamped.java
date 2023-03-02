@@ -2,6 +2,7 @@ package team.waitingcatch.app.common.entity;
 
 import java.time.LocalDateTime;
 
+import javax.persistence.Column;
 import javax.persistence.EntityListeners;
 import javax.persistence.MappedSuperclass;
 
@@ -16,8 +17,10 @@ import lombok.Getter;
 @EntityListeners({AuditingEntityListener.class})
 public abstract class TimeStamped {
 	@CreatedDate
+	@Column(nullable = false)
 	private LocalDateTime createdDate;
 
 	@LastModifiedDate
+	@Column(nullable = false)
 	private LocalDateTime modifiedDate;
 }
