@@ -3,8 +3,11 @@ package team.waitingcatch.app.restaurant.service.restaurant;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -19,6 +22,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import team.waitingcatch.app.common.Address;
 import team.waitingcatch.app.common.Position;
 import team.waitingcatch.app.common.util.DistanceCalculator;
+import team.waitingcatch.app.common.util.image.ImageUploader;
+import team.waitingcatch.app.restaurant.dto.requestseller.ApproveSignUpSellerManagementEntityPassToRestaurantEntityRequest;
+import team.waitingcatch.app.restaurant.dto.restaurant.DeleteRestaurantByAdminServiceRequest;
 import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantBasicInfoResponse;
 import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantBasicInfoServiceRequest;
 import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantDetailedInfoResponse;
@@ -30,6 +36,8 @@ import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantsWithinRadiusSe
 import team.waitingcatch.app.restaurant.dto.restaurant.SearchRestaurantJpaResponse;
 import team.waitingcatch.app.restaurant.dto.restaurant.SearchRestaurantServiceRequest;
 import team.waitingcatch.app.restaurant.dto.restaurant.SearchRestaurantsResponse;
+import team.waitingcatch.app.restaurant.dto.restaurant.UpdateRestaurantEntityRequest;
+import team.waitingcatch.app.restaurant.dto.restaurant.UpdateRestaurantServiceRequest;
 import team.waitingcatch.app.restaurant.entity.Restaurant;
 import team.waitingcatch.app.restaurant.entity.RestaurantInfo;
 import team.waitingcatch.app.restaurant.repository.RestaurantInfoRepository;
@@ -47,6 +55,9 @@ class RestaurantServiceImplTest {
 
 	@Mock
 	private DistanceCalculator distanceCalculator;
+
+	@Mock
+	private ImageUploader imageUploader;
 
 	@InjectMocks
 	private RestaurantServiceImpl restaurantService;
@@ -176,6 +187,47 @@ class RestaurantServiceImplTest {
 	}
 
 	@Test
+	@DisplayName("레스토랑 삭제")
+	void deleteRestaurantByAdmin() {
+		// given
+		DeleteRestaurantByAdminServiceRequest request = mock(DeleteRestaurantByAdminServiceRequest.class);
+		Restaurant restaurant = mock(Restaurant.class);
+
+		when(restaurantRepository.findById(any(Long.class))).thenReturn(Optional.of(restaurant));
+
+		// when
+		restaurantService.deleteRestaurantByAdmin(request);
+
+		// then
+		verify(restaurant, times(1)).deleteRestaurant();
+	}
+
+	@Test
+	@DisplayName("레스토랑 수정")
+	void updateRestaurant() throws IOException {
+		// given
+		UpdateRestaurantServiceRequest request = mock(UpdateRestaurantServiceRequest.class);
+		Restaurant restaurant = mock(Restaurant.class);
+		RestaurantInfo restaurantInfo = mock(RestaurantInfo.class);
+		List<String> imageUrls = new ArrayList<>();
+		String imageUrl1 = "aaa";
+		String imageUrl2 = "bbb";
+		imageUrls.add(imageUrl1);
+		imageUrls.add(imageUrl2);
+
+		when(restaurantRepository.findByUserId(any(Long.class))).thenReturn(Optional.of(restaurant));
+		when(restaurantInfoRepository.findById(any(Long.class))).thenReturn(Optional.of(restaurantInfo));
+		when(imageUploader.uploadList(any(List.class), any(String.class))).thenReturn(imageUrls);
+
+		// when
+		restaurantService.updateRestaurant(request);
+
+		// then
+		verify(restaurant, times(1)).updateRestaurant(any(UpdateRestaurantEntityRequest.class));
+		verify(restaurantInfo, times(1)).updateRestaurantInfo(any(UpdateRestaurantEntityRequest.class));
+	}
+
+	@Test
 	@DisplayName("레스토랑 조회 메소드")
 	void _getRestaurant() {
 		// given
@@ -189,6 +241,24 @@ class RestaurantServiceImplTest {
 
 		// then
 		assertEquals("aaaa", restaurant1.getName());
+	}
+
+	@Test
+	@DisplayName("RestaurantId로 RestaurantInfo 조회")
+	void _getRestaurantInfoByRestaurantId() {
+		// given
+		RestaurantInfo restaurantInfo = mock(RestaurantInfo.class);
+		Restaurant restaurant = mock(Restaurant.class);
+
+		when(restaurantInfo.getRestaurant()).thenReturn(restaurant);
+		when(restaurant.getName()).thenReturn("aaa");
+		when(restaurantInfoRepository.findByRestaurantId(any(Long.class))).thenReturn(Optional.of(restaurantInfo));
+
+		// when
+		RestaurantInfo restaurantInfo1 = restaurantService._getRestaurantInfoByRestaurantId(any(Long.class));
+
+		// then
+		assertEquals("aaa", restaurantInfo1.getRestaurant().getName());
 	}
 
 	@Test
@@ -210,5 +280,65 @@ class RestaurantServiceImplTest {
 		// then
 		assertEquals("aaaa", restaurant1.getName());
 		assertEquals(1L, restaurant1.getUser().getId());
+	}
+
+	@Test
+	@DisplayName("레스토랑 생성")
+	void _createRestaurant() {
+		// given
+		ApproveSignUpSellerManagementEntityPassToRestaurantEntityRequest request =
+			mock(ApproveSignUpSellerManagementEntityPassToRestaurantEntityRequest.class);
+
+		// when
+		restaurantService._createRestaurant(request);
+
+		// then
+		verify(restaurantRepository, times(1)).save(any(Restaurant.class));
+		verify(restaurantInfoRepository, times(1)).save(any(RestaurantInfo.class));
+	}
+
+	@Test
+	@DisplayName("줄서기 활성화")
+	void _openLineup() {
+		// given
+		RestaurantInfo restaurantInfo = mock(RestaurantInfo.class);
+
+		when(restaurantInfoRepository.findByRestaurantId(any(Long.class))).thenReturn(Optional.of(restaurantInfo));
+
+		// when
+		restaurantService._openLineup(any(Long.class));
+
+		// then
+		verify(restaurantInfo, times(1)).openLineup();
+	}
+
+	@Test
+	@DisplayName("줄서기 비활성화")
+	void _closeLineup() {
+		// given
+		RestaurantInfo restaurantInfo = mock(RestaurantInfo.class);
+
+		when(restaurantInfoRepository.findByRestaurantId(any(Long.class))).thenReturn(Optional.of(restaurantInfo));
+
+		// when
+		restaurantService._closeLineup(any(Long.class));
+
+		// then
+		verify(restaurantInfo, times(1)).closeLineup();
+	}
+
+	@Test
+	@DisplayName("SellerId로 Restaurant 삭제")
+	void _deleteRestaurantBySellerId() {
+		// given
+		Restaurant restaurant = mock(Restaurant.class);
+
+		when(restaurantRepository.findByUserId(any(Long.class))).thenReturn(Optional.of(restaurant));
+
+		// when
+		restaurant = restaurantService._deleteRestaurantBySellerId(any(Long.class));
+
+		// then
+		verify(restaurant, times(1)).deleteRestaurant();
 	}
 }

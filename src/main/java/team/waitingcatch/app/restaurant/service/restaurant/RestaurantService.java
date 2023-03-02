@@ -3,7 +3,6 @@ package team.waitingcatch.app.restaurant.service.restaurant;
 import java.io.IOException;
 import java.util.List;
 
-import team.waitingcatch.app.restaurant.dto.requestseller.ApproveSignUpSellerManagementEntityPassToRestaurantEntityRequest;
 import team.waitingcatch.app.restaurant.dto.restaurant.DeleteRestaurantByAdminServiceRequest;
 import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantBasicInfoResponse;
 import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantBasicInfoServiceRequest;
@@ -32,5 +31,5 @@ public interface RestaurantService {
 
 	void updateRestaurant(UpdateRestaurantServiceRequest updateRestaurantServiceRequest) throws IOException;
 
-	void createRestaurant(ApproveSignUpSellerManagementEntityPassToRestaurantEntityRequest request);
+	// void createRestaurant(ApproveSignUpSellerManagementEntityPassToRestaurantEntityRequest request);
 }
