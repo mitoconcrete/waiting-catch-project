@@ -102,7 +102,7 @@ public class CouponCreator extends TimeStamped {
 
 	public boolean createCoupon() {
 		if (this.quantity > 0) {
-			this.quantity = this.quantity - 1;
+			this.quantity -= 1;
 			return true;
 		}
 		return false;
