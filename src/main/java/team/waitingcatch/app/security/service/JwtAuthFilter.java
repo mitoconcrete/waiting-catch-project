@@ -52,7 +52,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 				ValidateTokenRequest servicePayload = new ValidateTokenRequest(token);
 				killedAccessTokenService.validateToken(servicePayload);
 
-				Claims info = jwtUtils.getUserInfoFromToken(token);
+				Claims info = jwtUtils.getTokenClaims(token);
 				setAuthentication(info.getSubject());
 			} catch (TokenExpiredException accessTokenExpiredException) {
 				// 2. 토큰이 만료되었을 경우
@@ -65,19 +65,22 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 					jwtUtils.validateToken(refreshToken);
 
 					// 2. 리프레시 토큰으로부터 정보들을 얻어 새로운 accessToken 생성
-					Claims userInfoFromRefreshToken = jwtUtils.getUserInfoFromToken(refreshToken);
-					String username = userInfoFromRefreshToken.getSubject();
-					String role = userInfoFromRefreshToken.get(JwtUtil.AUTHORIZATION_KEY, String.class);
+					Claims refreshTokenClaims = jwtUtils.getTokenClaims(refreshToken);
+					String username = refreshTokenClaims.getSubject();
+					String role = refreshTokenClaims.get(JwtUtil.AUTHORIZATION_KEY, String.class);
 					String updateAccessToken = jwtUtils.createAccessToken(username, UserRoleEnum.valueOf(role));
 
 					// 3. redis 의 정보 업데이트
 					UpdateTokenRequest updateServicePayload = new UpdateTokenRequest(token,
 						updateAccessToken.substring(7),
-						refreshToken);
+						refreshToken, JwtUtil.REFRESH_TOKEN_TIME);
 					aliveTokenService.updateToken(updateServicePayload);
 
-					// 4. 새로운 access Token 헤더에 넣어서 반환.
-					response.setStatus(HttpStatus.CREATED.value());
+					// 4. 새로 발급받은 accesstoken 을 이용하여, context에 principal에 넣어준다.
+					Claims info = jwtUtils.getTokenClaims(updateAccessToken.substring(7));
+					setAuthentication(info.getSubject());
+
+					// 5. 새로운 access Token 헤더에 넣어서 반환.
 					response.setHeader(JwtUtil.AUTHORIZATION_HEADER, updateAccessToken);
 				} catch (TokenExpiredException refreshTokenExpiredException) {
 					// 해당 토큰이 만료되었고, redis 내에 리프레시 토큰또한 만료되었다면, 리프레시토큰을 DB에서 제거한다. -> 로그아웃
@@ -85,11 +88,12 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 					aliveTokenService.removeToken(removeServicePayload);
 					SecurityExceptionUtil exceptionUtil = new SecurityExceptionUtil();
 					exceptionUtil.active(response, HttpStatus.UNAUTHORIZED, refreshTokenExpiredException.getMessage());
+					return;
 				} catch (RuntimeException runtimeException) {
 					SecurityExceptionUtil exceptionUtil = new SecurityExceptionUtil();
 					exceptionUtil.active(response, HttpStatus.UNAUTHORIZED, runtimeException.getMessage());
+					return;
 				}
-				return;
 			} catch (RuntimeException runtimeException) {
 				SecurityExceptionUtil exceptionUtil = new SecurityExceptionUtil();
 				exceptionUtil.active(response, HttpStatus.UNAUTHORIZED, runtimeException.getMessage());
