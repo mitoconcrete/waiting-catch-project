@@ -96,8 +96,10 @@ public class Restaurant extends TimeStamped {
 	//dummy data
 	public Restaurant(SaveDummyRestaurantRequest request) {
 		this.name = request.getName();
+		this.zipCode = request.getZipCode();
 		this.address = request.getAddress();
-		this.businessLicenseNo = String.valueOf(UUID.randomUUID());
+		this.detailAddress = request.getDetailAddress();
+		this.businessLicenseNo = String.valueOf(UUID.randomUUID()).substring(0, 12);
 		this.capacity = 30;
 		this.description = request.getName() + "은 한국 최고의 음식 입니다.";
 		this.searchKeywords = request.getCategory();

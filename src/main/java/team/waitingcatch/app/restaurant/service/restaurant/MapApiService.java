@@ -58,7 +58,9 @@ public class MapApiService {
 				double latitude = Double.parseDouble(adList.get("y"));
 				double longitude = Double.parseDouble(adList.get("x"));
 
+				String zipCode = "";
 				String address = adList.get("road_address_name");
+				String detailAddress = "detailAddress";
 				// String province = addressName.substring(0, 2);
 				// String city = addressName.substring(3, 7);
 				// String street = addressName.substring(8);
@@ -72,7 +74,8 @@ public class MapApiService {
 				// Address address = new Address(province, reCity, street);
 
 				SaveDummyRestaurantRequest saveDummyRestaurantRequest = new SaveDummyRestaurantRequest(placeName,
-					address, position, phone, replaceCategory, user);
+					zipCode,
+					address, detailAddress, position, phone, replaceCategory, user);
 				Restaurant restaurant = new Restaurant(saveDummyRestaurantRequest);
 				restaurantRepository.save(restaurant);
 				RestaurantInfo restaurantInfo = new RestaurantInfo(restaurant);

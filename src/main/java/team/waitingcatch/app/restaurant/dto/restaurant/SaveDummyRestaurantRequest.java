@@ -8,16 +8,21 @@ import team.waitingcatch.app.user.entitiy.User;
 public class SaveDummyRestaurantRequest {
 	private final String name;
 	private final Position position;
+	private final String zipCode;
 	private final String address;
+	private final String detailAddress;
 	private final String category;
 	private final String phoneNumber;
 	private final User user;
 
-	public SaveDummyRestaurantRequest(String name, String address, Position position, String phone, String category,
+	public SaveDummyRestaurantRequest(String name, String zipCode, String address, String detailAddress,
+		Position position, String phone, String category,
 		User user) {
 
 		this.name = name;
+		this.zipCode = zipCode;
 		this.address = address;
+		this.detailAddress = detailAddress;
 		this.position = position;
 		this.phoneNumber = phone;
 		this.category = category;
