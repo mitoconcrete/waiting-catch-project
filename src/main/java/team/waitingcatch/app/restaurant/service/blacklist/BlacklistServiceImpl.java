@@ -3,6 +3,9 @@ package team.waitingcatch.app.restaurant.service.blacklist;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -62,10 +65,10 @@ public class BlacklistServiceImpl implements BlacklistService, InternalBlacklist
 
 	@Transactional(readOnly = true)
 	@Override
-	public List<GetBlacklistResponse> getBlacklist() {
-		return blacklistRepository.findAllByIsDeletedFalse().stream()
-			.map(GetBlacklistResponse::new)
-			.collect(Collectors.toList());
+	public Page<GetBlacklistResponse> getBlacklist(Pageable payload) {
+		Page<Blacklist> result = blacklistRepository.findAllByIsDeletedFalse(payload);
+		return new PageImpl<>(result.getContent().stream().map(GetBlacklistResponse::new).collect(Collectors.toList()),
+			payload, result.getTotalElements());
 	}
 
 	@Transactional(readOnly = true)

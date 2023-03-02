@@ -13,6 +13,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 
 import team.waitingcatch.app.restaurant.dto.blacklist.CreateBlacklistInternalServiceRequest;
 import team.waitingcatch.app.restaurant.dto.blacklist.DeleteBlacklistByRestaurantServiceRequest;
@@ -91,21 +94,22 @@ class BlacklistServiceImplTest {
 	@Test
 	@DisplayName("Get a blacklist")
 	void getBlacklist() {
+		Pageable pageable = mock(Pageable.class);
+
+		List<Blacklist> blacklistList = new ArrayList<>();
+		Page<Blacklist> pagedResponse = new PageImpl<>(blacklistList);
+
 		Restaurant restaurant = mock(Restaurant.class);
 		User user = mock(User.class);
 		CreateBlacklistInternalServiceRequest serviceRequest = new CreateBlacklistInternalServiceRequest(restaurant,
 			user);
 
-		List<Blacklist> blacklistList = new ArrayList<>();
-		Blacklist blacklist = new Blacklist(serviceRequest);
-		blacklistList.add(blacklist);
-
-		when(restaurant.getName()).thenReturn("korean");
-		when(blacklistRepository.findAllByIsDeletedFalse()).thenReturn(blacklistList);
+		when(blacklistRepository.findAllByIsDeletedFalse(pageable)).thenReturn(pagedResponse);
 		//when
-		List<GetBlacklistResponse> blacklistResponses = blacklistService.getBlacklist();
+		Page<GetBlacklistResponse> blacklistResponses = blacklistService.getBlacklist(pageable);
 		//then
-		assertEquals("korean", blacklistResponses.get(0).getRestaurantName());
+		assertEquals(1, blacklistResponses.getTotalPages());
+
 	}
 
 	@Test
