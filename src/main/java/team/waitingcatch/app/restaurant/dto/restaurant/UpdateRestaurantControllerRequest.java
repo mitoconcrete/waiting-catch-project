@@ -7,10 +7,10 @@ import javax.validation.constraints.Size;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.RequiredArgsConstructor;
 
 @Getter
-@Setter
+@RequiredArgsConstructor
 @NoArgsConstructor
 public class UpdateRestaurantControllerRequest {
 	@NotNull
