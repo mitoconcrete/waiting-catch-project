@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.test.annotation.Rollback;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.extern.slf4j.Slf4j;
@@ -53,28 +53,24 @@ import team.waitingcatch.app.user.enums.UserRoleEnum;
 import team.waitingcatch.app.user.repository.UserRepository;
 
 @SpringBootTest
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
 @Transactional
-@Rollback(value = true)
 @Slf4j
 class UserServiceImplTest {
-
 	static {
 		System.setProperty("com.amazonaws.sdk.disableEc2Metadata", "true");
 	}
 
 	@Autowired
 	private RestaurantInfoRepository restaurantInfoRepository;
-
 	@Autowired
 	private LineupHistoryRepository lineupHistoryRepository;
 	@Autowired
 	private RestaurantRepository restaurantRepository;
 	@Autowired
 	private LineupRepository lineupRepository;
-
 	@Autowired
 	private EventRepository eventRepository;
-
 	@Autowired
 	private ReviewRepository reviewRepository;
 	@Autowired

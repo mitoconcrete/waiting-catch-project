@@ -15,6 +15,7 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Commit;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.transaction.annotation.Transactional;
 
 import team.waitingcatch.app.common.Address;
@@ -34,6 +35,7 @@ import team.waitingcatch.app.user.enums.UserRoleEnum;
 import team.waitingcatch.app.user.repository.UserRepository;
 
 @SpringBootTest
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
 @Transactional
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class LineupConcurrencyTest {
