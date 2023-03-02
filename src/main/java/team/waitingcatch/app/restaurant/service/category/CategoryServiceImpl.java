@@ -78,7 +78,7 @@ public class CategoryServiceImpl implements CategoryService, InternalCategorySer
 	}
 
 	@Override
-	public void connectCategoryRestaurant(ConnectCategoryRestaurantServiceRequest serviceRequest) {
+	public void _connectCategoryRestaurant(ConnectCategoryRestaurantServiceRequest serviceRequest) {
 		List<Long> categoryIds = Arrays.stream(serviceRequest.getCategoryIds().split(" "))
 			.map(Long::parseLong)
 			.collect(Collectors.toList());

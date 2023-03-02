@@ -216,7 +216,7 @@ class CategoryServiceImplTest {
 		when(categoryRepository.findAllByIdIn(any(List.class))).thenReturn(categories);
 
 		// when
-		categoryService.connectCategoryRestaurant(request);
+		categoryService._connectCategoryRestaurant(request);
 
 		// then
 		verify(categoryRestaurantRepository, times(2)).save(any(CategoryRestaurant.class));

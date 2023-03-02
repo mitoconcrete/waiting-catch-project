@@ -8,7 +8,7 @@ import team.waitingcatch.app.restaurant.entity.Category;
 public interface InternalCategoryService {
 	Category _getCategory(Long categoryId);
 
-	void connectCategoryRestaurant(ConnectCategoryRestaurantServiceRequest serviceRequest);
+	void _connectCategoryRestaurant(ConnectCategoryRestaurantServiceRequest serviceRequest);
 
 	List<String> _getCategoryNames(List<Long> categoryIds);
 }

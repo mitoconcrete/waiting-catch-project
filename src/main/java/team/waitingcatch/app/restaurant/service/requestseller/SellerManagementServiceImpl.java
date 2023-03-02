@@ -115,7 +115,7 @@ public class SellerManagementServiceImpl implements SellerManagementService, Int
 
 		ConnectCategoryRestaurantServiceRequest serviceRequest = new ConnectCategoryRestaurantServiceRequest(restaurant,
 			sellerManagement.getCategories());
-		categoryService.connectCategoryRestaurant(serviceRequest);
+		categoryService._connectCategoryRestaurant(serviceRequest);
 
 		RestaurantInfo restaurantInfo = new RestaurantInfo(restaurant);
 		restaurantInfoRepository.save(restaurantInfo);
