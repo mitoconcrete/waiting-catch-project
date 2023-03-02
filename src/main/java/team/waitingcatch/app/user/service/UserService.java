@@ -36,4 +36,6 @@ public interface UserService {
 	void deleteSeller(DeleteUserRequest payload);
 
 	void updatePassword(UpdatePasswordServiceRequest payload);
+
+	Page<UserInfoResponse> getCustomersByUserName(String searchVal, Pageable pageable);
 }
