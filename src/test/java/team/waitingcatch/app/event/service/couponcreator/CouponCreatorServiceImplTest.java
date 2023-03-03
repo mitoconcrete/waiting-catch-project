@@ -97,7 +97,6 @@ class CouponCreatorServiceImplTest {
 		Restaurant restaurant = mock(Restaurant.class);
 		when(restaurant.getName()).thenReturn("TestRes");
 		when(restaurant.getId()).thenReturn(1L);
-		when(restaurant.getSearchKeywords()).thenReturn("TestKeyword");
 		when(restaurantService._getRestaurantByUserId(any(Long.class))).thenReturn(restaurant);
 
 		Event event = mock(Event.class);
@@ -148,7 +147,6 @@ class CouponCreatorServiceImplTest {
 		Restaurant restaurant = mock(Restaurant.class);
 		when(restaurant.getName()).thenReturn("TestRes");
 		when(restaurant.getId()).thenReturn(1L);
-		when(restaurant.getSearchKeywords()).thenReturn("TestKeyword");
 		when(restaurantService._getRestaurantByUserId(any(Long.class))).thenReturn(restaurant);
 
 		Event event = mock(Event.class);

@@ -73,7 +73,6 @@ class EventServiceImplTest {
 		//객체의 getname이 호출될때 song이 반환되도록 설정
 		when(restaurant.getName()).thenReturn("TestRes");
 		when(restaurant.getId()).thenReturn(1L);
-		when(restaurant.getSearchKeywords()).thenReturn("TestKeyword");
 		when(createEventServiceRequest.getName()).thenReturn("song");
 		when(createEventServiceRequest.getEventStartDate()).thenReturn(localTime.plus(1, ChronoUnit.DAYS));
 		when(createEventServiceRequest.getEventEndDate()).thenReturn(localTime.plus(2, ChronoUnit.DAYS));
@@ -122,7 +121,6 @@ class EventServiceImplTest {
 		Event event = mock(Event.class);
 		when(restaurant.getName()).thenReturn("TestRes");
 		when(restaurant.getId()).thenReturn(1L);
-		when(restaurant.getSearchKeywords()).thenReturn("TestKeyword");
 		when(updateSellerEventServiceRequest.getEventId()).thenReturn(1L);
 		when(updateSellerEventServiceRequest.getName()).thenReturn("aa");
 		when(updateSellerEventServiceRequest.getEventStartDate()).thenReturn(localTime.plus(1, ChronoUnit.DAYS));
@@ -163,7 +161,6 @@ class EventServiceImplTest {
 		Restaurant restaurant = mock(Restaurant.class);
 		when(restaurant.getName()).thenReturn("TestRes");
 		when(restaurant.getId()).thenReturn(1L);
-		when(restaurant.getSearchKeywords()).thenReturn("TestKeyword");
 		when(restaurantService._getRestaurantByUserId(any(Long.class))).thenReturn(restaurant);
 
 		DeleteEventServiceRequest deleteEventControllerRequest = mock(DeleteEventServiceRequest.class);
@@ -206,7 +203,6 @@ class EventServiceImplTest {
 		Restaurant restaurant = mock(Restaurant.class);
 		when(restaurant.getName()).thenReturn("TestRes");
 		when(restaurant.getId()).thenReturn(1L);
-		when(restaurant.getSearchKeywords()).thenReturn("TestKeyword");
 		when(restaurantService._getRestaurantByUserId(any(Long.class))).thenReturn(restaurant);
 
 		List<Event> events = new ArrayList<>();
