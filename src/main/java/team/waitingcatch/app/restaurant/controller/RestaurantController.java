@@ -46,31 +46,31 @@ public class RestaurantController {
 
 	// Customer
 	@GetMapping("/restaurants/{restaurantId}")
-	public RestaurantBasicInfoResponse getRestaurantBasicInfo(@PathVariable Long restaurantId) {
+	public GenericResponse<RestaurantBasicInfoResponse> getRestaurantBasicInfo(@PathVariable Long restaurantId) {
 		RestaurantBasicInfoServiceRequest request = new RestaurantBasicInfoServiceRequest(restaurantId);
-		return restaurantService.getRestaurantBasicInfo(request);
+		return new GenericResponse<>(restaurantService.getRestaurantBasicInfo(request));
 	}
 
 	@GetMapping("/restaurants/{restaurantId}/details")
-	public RestaurantDetailedInfoResponse getRestaurantDetailedInfo(@PathVariable Long restaurantId) {
+	public GenericResponse<RestaurantDetailedInfoResponse> getRestaurantDetailedInfo(@PathVariable Long restaurantId) {
 		RestaurantDetailedInfoServiceRequest request = new RestaurantDetailedInfoServiceRequest(restaurantId);
-		return restaurantService.getRestaurantDetailedInfo(request);
+		return new GenericResponse<>(restaurantService.getRestaurantDetailedInfo(request));
 	}
 
 	@GetMapping("/restaurants/search")
-	public Slice<SearchRestaurantsResponse> searchRestaurantsByKeyword(@RequestParam String keyword,
+	public GenericResponse<Slice<SearchRestaurantsResponse>> searchRestaurantsByKeyword(@RequestParam String keyword,
 		@RequestParam double latitude, @RequestParam double longitude, Pageable pageable) {
 		SearchRestaurantServiceRequest request =
 			new SearchRestaurantServiceRequest(keyword, latitude, longitude, pageable);
-		return restaurantService.searchRestaurantsByKeyword(request);
+		return new GenericResponse<>(restaurantService.searchRestaurantsByKeyword(request));
 	}
 
 	@GetMapping("/restaurants")
-	public Slice<RestaurantsWithinRadiusResponse> getRestaurantsWithinRadius(
+	public GenericResponse<Slice<RestaurantsWithinRadiusResponse>> getRestaurantsWithinRadius(
 		@RequestParam double latitude, @RequestParam double longitude, Pageable pageable) {
 		RestaurantsWithinRadiusServiceRequest request =
 			new RestaurantsWithinRadiusServiceRequest(latitude, longitude, 3, pageable);
-		return restaurantService.getRestaurantsWithinRadius(request);
+		return new GenericResponse<>(restaurantService.getRestaurantsWithinRadius(request));
 	}
 
 	// Seller
