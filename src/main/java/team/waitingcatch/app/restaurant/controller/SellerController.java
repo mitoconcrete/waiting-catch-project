@@ -7,6 +7,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -235,8 +238,9 @@ public class SellerController {
 	/*     이벤트     */
 
 	@GetMapping("/seller/templates/event")
-	public String event(Model model, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-		List<GetEventsResponse> events = eventService.getRestaurantEvents(userDetails.getId());
+	public String event(Model model, @AuthenticationPrincipal UserDetailsImpl userDetails,
+		@PageableDefault(size = 10, page = 0) Pageable pageable) {
+		Page<GetEventsResponse> events = eventService.getRestaurantEvents(userDetails.getId(), pageable);
 		model.addAttribute("events", events);
 		return "event";
 	}

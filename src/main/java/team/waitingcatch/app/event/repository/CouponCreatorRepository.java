@@ -15,6 +15,6 @@ public interface CouponCreatorRepository extends JpaRepository<CouponCreator, Lo
 
 	List<CouponCreator> findByEventAndIsDeletedFalse(Event event);
 
-	@Query("select cc from CouponCreator cc join fetch cc.event where cc.event = :event and cc.isDeleted = false")
+	@Query("select cc from CouponCreator cc join fetch cc.event e where e = :event and cc.isDeleted = false")
 	List<CouponCreator> findByEventWithEvent(@Param("event") Event event);
 }

@@ -3,6 +3,9 @@ package team.waitingcatch.app.event.service.event;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -89,20 +92,20 @@ public class EventServiceImpl implements EventService, InternalEventService {
 	public List<GetEventsResponse> getGlobalEvents() {
 		//이벤트중 restaurant이 null인것만 조회
 		List<Event> events = eventRepository.findByRestaurantIsNullAndIsDeletedFalse();
-		return _getEventsResponse(events);
+		return _getGlobalEventsResponse(events);
 
 	}
 
 	//레스토랑 이벤트를 조회한다.
 	@Override
 	@Transactional(readOnly = true)
-	public List<GetEventsResponse> getRestaurantEvents(Long id) {
+	public Page<GetEventsResponse> getRestaurantEvents(Long id, Pageable pageable) {
 
 		//레스토랑 아이디로 레스토랑 객체를 찾아야함
 		Restaurant restaurant = restaurantService._getRestaurantByUserId(id);
-		//찾은 객체로 이벤트 검색
-		List<Event> events = eventRepository.findByRestaurantAndIsDeletedFalse(restaurant);
-		return _getEventsResponse(events);
+
+		Page<Event> events = eventRepository.findByRestaurantAndIsDeletedFalse(restaurant, pageable);
+		return _getEventsResponse(events, restaurant, pageable);
 
 	}
 
@@ -116,7 +119,8 @@ public class EventServiceImpl implements EventService, InternalEventService {
 
 	//이벤트 목록 + 쿠폰생성자를 DTO형태로 리턴
 	@Override
-	public List<GetEventsResponse> _getEventsResponse(List<Event> events) {
+	public Page<GetEventsResponse> _getEventsResponse(Page<Event> events, Restaurant restaurant, Pageable pageable) {
+
 		List<GetEventsResponse> getEventsResponse = new ArrayList<>();
 		for (Event event : events) {
 			//List<CouponCreator> couponCreators = couponCreatorRepository.findByEventAndIsDeletedFalse(event);
@@ -128,6 +132,30 @@ public class EventServiceImpl implements EventService, InternalEventService {
 			}
 			getEventsResponse.add(new GetEventsResponse(event, getCouponCreatorResponses));
 		}
+
+		return new PageImpl<>(getEventsResponse, pageable, events.getTotalElements());
+		// return new PageImpl<>(eventRepository.findByRestaurantAndIsDeletedFalse(restaurant, pageable)
+		// 	.getContent()
+		// 	.stream()
+		// 	.map(GetEventsResponse::new)
+		// 	.collect(Collectors.toList()),
+		// 	pageable, events.getTotalElements());
+	}
+
+	public List<GetEventsResponse> _getGlobalEventsResponse(List<Event> events) {
+
+		List<GetEventsResponse> getEventsResponse = new ArrayList<>();
+		for (Event event : events) {
+			//List<CouponCreator> couponCreators = couponCreatorRepository.findByEventAndIsDeletedFalse(event);
+			List<CouponCreator> couponCreators = couponCreatorRepository.findByEventWithEvent(event);
+			List<GetCouponCreatorResponse> getCouponCreatorResponses = new ArrayList<>();
+			for (CouponCreator couponCreator : couponCreators) {
+				GetCouponCreatorResponse getCouponCreatorResponse = new GetCouponCreatorResponse(couponCreator);
+				getCouponCreatorResponses.add(getCouponCreatorResponse);
+			}
+			getEventsResponse.add(new GetEventsResponse(event, getCouponCreatorResponses));
+		}
+
 		return getEventsResponse;
 	}
 
