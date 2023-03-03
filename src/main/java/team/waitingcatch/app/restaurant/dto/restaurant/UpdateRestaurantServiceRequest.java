@@ -1,5 +1,6 @@
 package team.waitingcatch.app.restaurant.dto.restaurant;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
@@ -9,7 +10,6 @@ import lombok.Getter;
 @Getter
 public class UpdateRestaurantServiceRequest {
 
-	private final List<MultipartFile> files;
 	private final String phoneNumber;
 	private final int capacity;
 	private final String description;
@@ -17,9 +17,13 @@ public class UpdateRestaurantServiceRequest {
 	private final String openTime;
 	private final String closeTime;
 
+	private final List<MultipartFile> images = new ArrayList<>();
+
 	public UpdateRestaurantServiceRequest(UpdateRestaurantControllerRequest updateRestaurantControllerRequest,
-		List<MultipartFile> multipartFile, Long userId) {
-		this.files = multipartFile;
+		List<MultipartFile> images, Long userId) {
+		if (images != null) {
+			this.images.addAll(images);
+		}
 		this.phoneNumber = updateRestaurantControllerRequest.getPhoneNumber();
 		this.capacity = updateRestaurantControllerRequest.getCapacity();
 		this.description = updateRestaurantControllerRequest.getDescription();

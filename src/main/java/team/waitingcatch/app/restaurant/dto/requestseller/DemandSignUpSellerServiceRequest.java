@@ -19,7 +19,7 @@ public class DemandSignUpSellerServiceRequest {
 	private final String address;
 	private final String detailAddress;
 	// private final Address address;
-	// private final String searchKeyWords;
+	// private final List<String> searchKeyWords;
 	private final String businessLicenseNo;
 
 	public DemandSignUpSellerServiceRequest(DemandSignUpSellerControllerRequest demandSignUpSellerControllerRequest,

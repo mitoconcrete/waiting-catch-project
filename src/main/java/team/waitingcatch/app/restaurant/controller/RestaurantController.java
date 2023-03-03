@@ -3,6 +3,11 @@ package team.waitingcatch.app.restaurant.controller;
 import java.io.IOException;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,10 +16,12 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import lombok.RequiredArgsConstructor;
+import team.waitingcatch.app.common.dto.GenericResponse;
 import team.waitingcatch.app.restaurant.dto.restaurant.DeleteRestaurantByAdminServiceRequest;
 import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantBasicInfoResponse;
 import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantBasicInfoServiceRequest;
@@ -67,7 +74,9 @@ public class RestaurantController {
 	// Seller
 
 	//판매자가 자신의 레스토랑 정보를 수정한다.
-	@PutMapping("/restaurant/info")
+	@PutMapping(value = "/restaurant/info", consumes = {MediaType.APPLICATION_JSON_VALUE,
+		MediaType.MULTIPART_FORM_DATA_VALUE})
+	@ResponseStatus(HttpStatus.CREATED)
 	public void updateRestaurant(
 		@RequestPart("updateRestaurantRequest") UpdateRestaurantControllerRequest updateRestaurantControllerRequest,
 		@RequestPart(value = "images", required = false) List<MultipartFile> multipartFile,
@@ -81,8 +90,8 @@ public class RestaurantController {
 
 	// Admin
 	@GetMapping("/admin/restaurants")
-	public List<RestaurantResponse> getRestaurants() {
-		return restaurantService.getRestaurants();
+	public GenericResponse<Page<RestaurantResponse>> getRestaurants(@PageableDefault Pageable pageable) {
+		return new GenericResponse(restaurantService.getRestaurants(pageable));
 	}
 
 	//관리자가 레스토랑을 삭제 한다

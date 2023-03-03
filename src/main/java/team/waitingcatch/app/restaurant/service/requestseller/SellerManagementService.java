@@ -1,6 +1,7 @@
 package team.waitingcatch.app.restaurant.service.requestseller;
 
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import team.waitingcatch.app.restaurant.dto.requestseller.ApproveSignUpSellerResponse;
 import team.waitingcatch.app.restaurant.dto.requestseller.ApproveSignUpSellerServiceRequest;
@@ -12,7 +13,7 @@ import team.waitingcatch.app.restaurant.dto.requestseller.RejectSignUpSellerServ
 public interface SellerManagementService {
 	void demandSignUpSeller(DemandSignUpSellerServiceRequest demandSignupSellerServiceRequest);
 
-	List<GetDemandSignUpSellerResponse> getDemandSignUpSellers();
+	Page<GetDemandSignUpSellerResponse> getDemandSignUpSellers(Pageable pageable);
 
 	ApproveSignUpSellerResponse approveSignUpSeller(
 		ApproveSignUpSellerServiceRequest approveSignUpSellerServiceRequest);
@@ -21,4 +22,6 @@ public interface SellerManagementService {
 
 	GetDemandSignUpSellerResponse getRequestSellerByRestaurant(
 		GetRequestSellerByRestaurantRequest getRequestSellerByRestaurantRequest);
+
+	Page<GetDemandSignUpSellerResponse> getDemandSignUpSellersById(String searchVal, Pageable pageable);
 }

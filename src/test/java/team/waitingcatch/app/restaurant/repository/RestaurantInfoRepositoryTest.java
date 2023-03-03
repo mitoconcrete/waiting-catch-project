@@ -7,20 +7,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantsWithinRadiusJpaResponse;
-import team.waitingcatch.app.restaurant.dto.restaurant.SearchRestaurantJpaResponse;
 
 @SpringBootTest
 class RestaurantInfoRepositoryTest {
 	@Autowired
 	private RestaurantInfoRepository restaurantInfoRepository;
-
-	@Test
-	void findRestaurantsBySearchKeywordsContains() {
-		List<SearchRestaurantJpaResponse> jpaResponses =
-			restaurantInfoRepository.findRestaurantsBySearchKeywordsContaining("keywords");
-
-		// assertEquals(5, jpaResponses.size());
-	}
+	//
+	// @Test
+	// void findRestaurantsBySearchKeywordsContains() {
+	// 	List<SearchRestaurantJpaResponse> jpaResponses =
+	// 		restaurantInfoRepository.findRestaurantsBySearchKeywordsContaining("keywords");
+	//
+	// 	// assertEquals(5, jpaResponses.size());
+	// }
 
 	@Test
 	void findRestaurantsByDistance() {

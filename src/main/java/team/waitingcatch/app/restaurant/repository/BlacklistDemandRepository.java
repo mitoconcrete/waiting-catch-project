@@ -3,6 +3,8 @@ package team.waitingcatch.app.restaurant.repository;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -23,8 +25,9 @@ public interface BlacklistDemandRepository extends JpaRepository<BlacklistDemand
 	Optional<BlacklistDemand> findByUser_IdAndRestaurant_User_IdAndStatusApproval(@Param("user1") Long userId,
 		@Param("seller11") Long sellerId);
 
-	@Query(value = "select bd from BlacklistDemand bd where bd.status = :status")
-	List<BlacklistDemand> findAllByStatus(@Param("status") AcceptedStatusEnum status);
+	@Query(value = "select bd from BlacklistDemand bd join fetch bd.user where bd.status = :status", countQuery = "select count(b) from BlacklistDemand b where b.status=:status")
+	Page<BlacklistDemand> findAllByStatus(@Param("status") AcceptedStatusEnum status, Pageable pageable);
 
-	List<BlacklistDemand> findAllByRestaurant_Id(Long restaurantId);
+	@Query(value = "select bd from BlacklistDemand bd join fetch bd.user where bd.restaurant.id = :res1")
+	List<BlacklistDemand> findAllByRestaurant_Id(@Param("res1") Long restaurantId);
 }

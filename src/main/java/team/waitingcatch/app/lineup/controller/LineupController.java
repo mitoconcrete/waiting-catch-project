@@ -61,7 +61,7 @@ public class LineupController {
 		@Valid @RequestBody StartLineupControllerRequest controllerRequest,
 		@AuthenticationPrincipal UserDetailsImpl userDetails) {
 
-		var serviceRequest = new StartWaitingServiceRequest(userDetails.getUser(), restaurantId,
+		StartWaitingServiceRequest serviceRequest = new StartWaitingServiceRequest(userDetails.getUser(), restaurantId,
 			controllerRequest.getLatitude(), controllerRequest.getLongitude(), controllerRequest.getNumOfMember(),
 			LocalDateTime.now());
 		lineupService.startWaiting(serviceRequest);

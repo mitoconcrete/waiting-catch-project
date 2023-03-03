@@ -27,7 +27,8 @@ public class RestaurantInfoRepositoryCustomImpl implements RestaurantInfoReposit
 	public List<SearchRestaurantJpaResponse> findRestaurantsBySearchKeywordsContaining(String keyword) {
 		return jpaQueryFactory
 			.select(
-				new QSearchRestaurantJpaResponse(restaurant.id, restaurant.name, restaurant.images, restaurantInfo.rate,
+				new QSearchRestaurantJpaResponse(restaurant.id, restaurant.name, restaurant.imagePaths,
+					restaurantInfo.rate,
 					restaurant.searchKeywords, restaurant.position, restaurantInfo.currentWaitingNumber,
 					restaurantInfo.isLineupActive))
 			.from(restaurantInfo)
@@ -46,7 +47,7 @@ public class RestaurantInfoRepositoryCustomImpl implements RestaurantInfoReposit
 		NumberExpression<Double> radiansLot = radians(restaurant.position.longitude);
 
 		return jpaQueryFactory
-			.select(new QRestaurantsWithinRadiusJpaResponse(restaurant.id, restaurant.name, restaurant.images,
+			.select(new QRestaurantsWithinRadiusJpaResponse(restaurant.id, restaurant.name, restaurant.imagePaths,
 				restaurantInfo.rate,
 				restaurant.searchKeywords, restaurant.position, restaurantInfo.currentWaitingNumber,
 				restaurantInfo.isLineupActive))
