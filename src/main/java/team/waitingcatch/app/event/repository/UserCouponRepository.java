@@ -3,15 +3,18 @@ package team.waitingcatch.app.event.repository;
 import java.util.List;
 import java.util.Optional;
 
+import javax.persistence.LockModeType;
+
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import team.waitingcatch.app.event.entity.CouponCreator;
 import team.waitingcatch.app.event.entity.UserCoupon;
 import team.waitingcatch.app.user.entitiy.User;
 
 public interface UserCouponRepository extends JpaRepository<UserCoupon, Long> {
-	//@Lock(LockModeType.OPTIMISTIC)
 
 	List<UserCoupon> findByUserAndIsUsedFalse(User user);
 
@@ -24,6 +27,11 @@ public interface UserCouponRepository extends JpaRepository<UserCoupon, Long> {
 
 	@Query("select r.name from UserCoupon uc join uc.couponCreator cc join cc.event e join e.restaurant r where uc =:userCoupon")
 	String findRestaurantNameByUserCoupon(@Param("userCoupon") UserCoupon userCoupon);
+
+	@Lock(LockModeType.OPTIMISTIC)
+	@Query("select uc from UserCoupon uc join fetch uc.user join fetch uc.couponCreator cc join fetch cc.event e join fetch e.restaurant r where uc.user = :user and uc.couponCreator = :couponCreator")
+	UserCoupon findUserCouponWithRelations(@Param("user") User user,
+		@Param("couponCreator") CouponCreator couponCreator);
 
 }
 

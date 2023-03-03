@@ -47,4 +47,14 @@ public class UserCoupon {
 	public void useCoupon() {
 		this.isUsed = true;
 	}
+
+	// 쿠폰 발급 가능한지 확인하고, 발급 처리합니다.
+	public synchronized boolean issueCoupon() {
+		if (this.couponCreator.hasCouponBalance()) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 }

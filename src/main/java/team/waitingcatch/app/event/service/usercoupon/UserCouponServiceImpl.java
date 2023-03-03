@@ -3,6 +3,8 @@ package team.waitingcatch.app.event.service.usercoupon;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.OptimisticLockException;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,12 +34,33 @@ public class UserCouponServiceImpl implements UserCouponService, InternalUserCou
 		CouponCreator couponCreator = internalCouponCreatorService._getCouponCreatorById(
 			createUserCouponserviceRequest.getCreatorId());
 		User user = internalUserService._getUserByUsername(createUserCouponserviceRequest.getUsername());
-		UserCoupon userCoupon = new UserCoupon(user, couponCreator);
 
-		if (couponCreator.hasCouponBalance()) {
-			userCouponRepository.save(userCoupon);
-		} else {
-			throw new IllegalArgumentException("쿠폰이 모두 소진되었습니다.");
+		int retryCount = 3;
+		// 쿠폰 발급 가능 여부를 확인하고, 발급 처리합니다.
+		UserCoupon userCoupon = null;
+
+		for (int i = 1; i <= retryCount; i++) {
+			try {
+				//이미 발급받은 쿠폰이 있는지
+				userCoupon = userCouponRepository.findUserCouponWithRelations(user, couponCreator);
+				if (userCoupon == null) {
+					userCoupon = new UserCoupon(user, couponCreator);
+				} else {
+					throw new IllegalArgumentException("이미 발급받은 쿠폰입니다.");
+				}
+				if (userCoupon.isUsed()) {
+					throw new IllegalArgumentException("이미 사용한 쿠폰입니다.");
+				}
+				boolean isCouponIssued = userCoupon.issueCoupon();
+				if (isCouponIssued) {
+					userCouponRepository.save(userCoupon);
+					break;
+				}
+			} catch (OptimisticLockException ex) {
+				if (i == retryCount) {
+					throw new IllegalArgumentException("시도횟수가 초과하였습니다. 다시 시도해주세요");
+				}
+			}
 		}
 
 	}
