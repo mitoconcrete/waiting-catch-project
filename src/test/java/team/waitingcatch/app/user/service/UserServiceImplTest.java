@@ -1,8 +1,12 @@
 package team.waitingcatch.app.user.service;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -17,7 +21,6 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.extern.slf4j.Slf4j;
-import team.waitingcatch.app.common.Address;
 import team.waitingcatch.app.common.Position;
 import team.waitingcatch.app.common.util.JwtUtil;
 import team.waitingcatch.app.event.dto.event.CreateEventControllerRequest;
@@ -309,7 +312,7 @@ class UserServiceImplTest {
 		var seller = userRepository.findByUsernameAndIsDeletedFalse("seller01").get();
 
 		// 레스토랑
-		var payload = new SaveDummyRestaurantRequest("이이", new Address("1", "2", "3"), new Position(0, 0), "1234", "1",
+		var payload = new SaveDummyRestaurantRequest("이이", "12345", "1 2 3", "1", new Position(0, 0), "1234", "1",
 			seller);
 		var restaurant = new Restaurant(payload);
 		var createdRestaurant = restaurantRepository.save(restaurant);

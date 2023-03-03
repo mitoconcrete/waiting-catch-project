@@ -1,6 +1,7 @@
 package team.waitingcatch.app.restaurant.entity;
 
 import java.util.ArrayList;
+
 import java.util.List;
 
 import javax.persistence.Column;
@@ -16,7 +17,6 @@ import javax.persistence.Id;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import team.waitingcatch.app.common.Address;
 import team.waitingcatch.app.common.Position;
 import team.waitingcatch.app.common.entity.TimeStamped;
 import team.waitingcatch.app.common.util.StringListConverter;
@@ -41,14 +41,23 @@ public class SellerManagement extends TimeStamped {
 	@Column(nullable = false)
 	private String email;
 
-	@Column(name = "phone_number", nullable = false)
+	@Column(nullable = false)
 	private String phoneNumber;
 
-	@Column(name = "restaurant_name", nullable = false)
+	@Column(nullable = false)
 	private String restaurantName;
 
-	@Embedded
-	private Address address;
+	@Column(nullable = false)
+	private String zipCode;
+
+	@Column(nullable = false)
+	private String address;
+
+	@Column(nullable = false)
+	private String detailAddress;
+
+	// @Embedded
+	// private Address address;
 
 	@Embedded
 	private Position position;
@@ -61,12 +70,13 @@ public class SellerManagement extends TimeStamped {
 	private AcceptedStatusEnum status;
 
 	@Column(nullable = false)
-	private String categories;
-
 	@Convert(converter = StringListConverter.class)
-	private List<String> searchKeywords = new ArrayList<>();
+	private List<String> categories;
 
-	@Column(name = "business_license_no", nullable = false)
+	// @Column(name = "search_keywords", nullable = false)
+	// private String searchKeyWords;
+
+	@Column(nullable = false)
 	private String businessLicenseNo;
 
 	public SellerManagement(DemandSignUpSellerServiceRequest demandSignupSellerServiceRequest) {
@@ -74,12 +84,15 @@ public class SellerManagement extends TimeStamped {
 		this.email = demandSignupSellerServiceRequest.getEmail();
 		this.phoneNumber = demandSignupSellerServiceRequest.getPhoneNumber();
 		this.restaurantName = demandSignupSellerServiceRequest.getRestaurantName();
+		this.zipCode = demandSignupSellerServiceRequest.getZipCode();
 		this.address = demandSignupSellerServiceRequest.getAddress();
+		this.detailAddress = demandSignupSellerServiceRequest.getDetailAddress();
+		// this.address = demandSignupSellerServiceRequest.getAddress();
 		this.position = demandSignupSellerServiceRequest.getPosition();
 		this.description = demandSignupSellerServiceRequest.getDescription();
 		this.status = AcceptedStatusEnum.WAIT;
 		this.categories = demandSignupSellerServiceRequest.getCategories();
-		this.searchKeywords = demandSignupSellerServiceRequest.getSearchKeyWords();
+		// this.searchKeyWords = "";
 		this.businessLicenseNo = demandSignupSellerServiceRequest.getBusinessLicenseNo();
 		this.name = demandSignupSellerServiceRequest.getName();
 	}

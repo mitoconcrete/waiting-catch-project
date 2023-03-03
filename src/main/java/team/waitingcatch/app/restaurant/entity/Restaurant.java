@@ -18,7 +18,6 @@ import javax.persistence.OneToOne;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import team.waitingcatch.app.common.Address;
 import team.waitingcatch.app.common.Position;
 import team.waitingcatch.app.common.entity.TimeStamped;
 import team.waitingcatch.app.common.util.StringListConverter;
@@ -36,7 +35,7 @@ public class Restaurant extends TimeStamped {
 	@Column(name = "restaurant_id")
 	private Long id;
 
-	@Column(nullable = false)
+	@Column(nullable = false, length = 8)
 	private String name;
 
 	@Convert(converter = StringListConverter.class)
@@ -45,10 +44,19 @@ public class Restaurant extends TimeStamped {
 	@Embedded
 	private Position position;
 
-	@Embedded
-	private Address address;
+	@Column(nullable = false, length = 5)
+	private String zipCode;
 
-	@Column(nullable = false)
+	@Column(nullable = false, length = 50)
+	private String address;
+
+	@Column(nullable = false, length = 30)
+	private String detailAddress;
+
+	// @Embedded
+	// private Address address;
+
+	@Column(nullable = false, length = 13)
 	private String phoneNumber;
 
 	@Column(nullable = false)
@@ -57,26 +65,29 @@ public class Restaurant extends TimeStamped {
 	@Convert(converter = StringListConverter.class)
 	private List<String> searchKeywords = new ArrayList<>();
 
-	@Column(nullable = false)
+	@Column(nullable = false, length = 255)
 	private String description;
 
 	@Column(nullable = false, length = 100)
 	private int capacity;
 
-	@Column(nullable = false, length = 100)
+	@Column(nullable = false, length = 12)
 	private String businessLicenseNo;
 
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id", nullable = false)
 	private User user;
 
-	@Column(nullable = false)
-	private String category;
+	// @Column(nullable = false)
+	// private String category;
 
 	public Restaurant(ApproveSignUpSellerManagementEntityPassToRestaurantEntityRequest entityRequest) {
 		this.name = entityRequest.getRestaurantName();
 		this.position = entityRequest.getPosition();
+		this.zipCode = entityRequest.getZipCode();
 		this.address = entityRequest.getAddress();
+		this.detailAddress = entityRequest.getDetailAddress();
+		// this.address = entityRequest.getAddress();
 		this.phoneNumber = entityRequest.getPhoneNumber();
 		this.isDeleted = false;
 		this.searchKeywords = entityRequest.getSearchKeyWords();
@@ -84,33 +95,35 @@ public class Restaurant extends TimeStamped {
 		this.businessLicenseNo = entityRequest.getBusinessLicenseNo();
 		this.capacity = 0;
 		this.user = entityRequest.getUser();
-		this.category = entityRequest.getCategories();
+		// this.category = entityRequest.getCategories();
 	}
 
 	//dummy data
 	public Restaurant(SaveDummyRestaurantRequest request) {
 		this.name = request.getName();
+		this.zipCode = request.getZipCode();
 		this.address = request.getAddress();
-		this.businessLicenseNo = String.valueOf(UUID.randomUUID());
+		this.detailAddress = request.getDetailAddress();
+		this.businessLicenseNo = String.valueOf(UUID.randomUUID()).substring(0, 12);
 		this.capacity = 30;
 		this.description = request.getName() + "은 한국 최고의 음식 입니다.";
 		this.phoneNumber = request.getPhoneNumber();
 		this.position = request.getPosition();
-		this.category = request.getCategory();
+		// this.category = request.getCategory();
 		this.user = request.getUser();
 	}
 
-	public String getProvince() {
-		return this.getAddress().getProvince();
-	}
-
-	public String getCity() {
-		return this.getAddress().getCity();
-	}
-
-	public String getStreet() {
-		return this.getAddress().getStreet();
-	}
+	// public String getProvince() {
+	// 	return this.getAddress().getProvince();
+	// }
+	//
+	// public String getCity() {
+	// 	return this.getAddress().getCity();
+	// }
+	//
+	// public String getStreet() {
+	// 	return this.getAddress().getStreet();
+	// }
 
 	public double getLatitude() {
 		return this.getPosition().getLatitude();

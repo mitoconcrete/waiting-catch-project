@@ -153,7 +153,7 @@ public class RestaurantServiceImpl implements RestaurantService, InternalRestaur
 	}
 
 	@Override
-	public void createRestaurant(ApproveSignUpSellerManagementEntityPassToRestaurantEntityRequest request) {
+	public void _createRestaurant(ApproveSignUpSellerManagementEntityPassToRestaurantEntityRequest request) {
 		Restaurant restaurant = new Restaurant(request);
 		restaurantRepository.save(restaurant);
 		RestaurantInfo restaurantInfo = new RestaurantInfo(restaurant);

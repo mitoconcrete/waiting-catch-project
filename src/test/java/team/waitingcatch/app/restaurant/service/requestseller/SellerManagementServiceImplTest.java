@@ -19,7 +19,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.mail.javamail.JavaMailSender;
 
-import team.waitingcatch.app.common.Address;
 import team.waitingcatch.app.common.Position;
 import team.waitingcatch.app.lineup.repository.WaitingNumberRepository;
 import team.waitingcatch.app.restaurant.dto.requestseller.DemandSignUpSellerServiceRequest;
@@ -133,12 +132,12 @@ class SellerManagementServiceImplTest {
 	void getRequestSellerByRestaurant() {
 		GetRequestSellerByRestaurantRequest request = mock(GetRequestSellerByRestaurantRequest.class);
 		Position position = mock(Position.class);
-		Address address = mock(Address.class);
+		// Address address = mock(Address.class);
 		SellerManagement sellerManagement1 = mock(SellerManagement.class);
 		when(sellerManagement1.getUsername()).thenReturn("korean");
 		when(sellerManagement1.getEmail()).thenReturn("aaa@nate.com");
 		when(sellerManagement1.getPosition()).thenReturn(position);
-		when(sellerManagement1.getAddress()).thenReturn(address);
+		// when(sellerManagement1.getAddress()).thenReturn(address);
 
 		when(sellerManagementRepository.findTopByUsernameAndEmailOrderByCreatedDateDesc(
 			request.getRequestSellerName(), request.getEmail()

@@ -37,28 +37,41 @@ public class DemandSignUpSellerControllerRequest {
 	@Pattern(regexp = "[가-힣a-zA-Z1-9]{1,12}", message = "레스토랑 이름은 한글,영어,숫자 포함해서 12자리 이내로 입력해주세요.")
 	private String restaurantName;
 
-	@NotBlank(message = "카테고리는 필수 입력값입니다.")
-	private String categories;
+	@NotNull(message = "카테고리는 필수 입력값입니다.")
+	private List<String> categories;
 
 	@NotBlank(message = "레스토랑 설명은 필수 입력값입니다.")
 	private String description;
 
-	private double latitude;
+	// private double latitude;
 
-	private double longitude;
+	// private double longitude;
 
-	@NotBlank
-	private String province;
+	// @NotBlank
+	// private String province;
+	//
+	// @NotBlank
+	// private String city;
+	//
+	// @NotBlank
+	// private String street;
 
-	@NotBlank
-	private String city;
-
-	@NotBlank
-	private String street;
-
+	@Pattern(regexp = "^[0-9]{3}-[0-9]{2}-[0-9]{5}$", message = "사업자번호 형식에 맞게 작성해주세요.")
 	@NotEmpty(message = "사업자번호는 필수 입력값입니다.")
 	private String businessLicenseNo;
 
-	@NotBlank
-	private List<String> searchKeyWords;
+	@NotBlank(message = "주소는 필수 입력값입니다.")
+	private String zipCode;
+
+	@NotBlank(message = "주소는 필수 입력값입니다.")
+	private String address;
+
+	@NotBlank(message = "주소는 필수 입력값입니다.")
+	private String detailAddress;
+
+	@NotNull(message = "주소는 필수 입력값입니다.")
+	private String query;
+
+	// @NotBlank
+	// private List<String> searchKeyWords;
 }

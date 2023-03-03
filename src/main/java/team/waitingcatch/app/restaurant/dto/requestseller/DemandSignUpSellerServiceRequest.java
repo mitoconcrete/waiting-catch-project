@@ -3,7 +3,6 @@ package team.waitingcatch.app.restaurant.dto.requestseller;
 import java.util.List;
 
 import lombok.Getter;
-import team.waitingcatch.app.common.Address;
 import team.waitingcatch.app.common.Position;
 
 @Getter
@@ -13,15 +12,18 @@ public class DemandSignUpSellerServiceRequest {
 	private final String email;
 	private final String phoneNumber;
 	private final String restaurantName;
-	private final String categories;
+	private final List<String> categories;
 	private final String description;
 	private final Position position;
-	private final Address address;
-	private final List<String> searchKeyWords;
+	private final String zipCode;
+	private final String address;
+	private final String detailAddress;
+	// private final Address address;
+	// private final List<String> searchKeyWords;
 	private final String businessLicenseNo;
 
 	public DemandSignUpSellerServiceRequest(DemandSignUpSellerControllerRequest demandSignUpSellerControllerRequest,
-		Address address, Position position) {
+		Position position) {
 		this.username = demandSignUpSellerControllerRequest.getUsername();
 		this.email = demandSignUpSellerControllerRequest.getEmail();
 		this.phoneNumber = demandSignUpSellerControllerRequest.getPhoneNumber();
@@ -29,8 +31,11 @@ public class DemandSignUpSellerServiceRequest {
 		this.categories = demandSignUpSellerControllerRequest.getCategories();
 		this.description = demandSignUpSellerControllerRequest.getDescription();
 		this.position = position;
-		this.address = address;
-		this.searchKeyWords = demandSignUpSellerControllerRequest.getSearchKeyWords();
+		this.zipCode = demandSignUpSellerControllerRequest.getZipCode();
+		this.address = demandSignUpSellerControllerRequest.getAddress();
+		this.detailAddress = demandSignUpSellerControllerRequest.getDetailAddress();
+		// this.address = address;
+		// this.searchKeyWords = demandSignUpSellerControllerRequest.getSearchKeyWords();
 		this.businessLicenseNo = demandSignUpSellerControllerRequest.getBusinessLicenseNo();
 		this.name = demandSignUpSellerControllerRequest.getName();
 	}

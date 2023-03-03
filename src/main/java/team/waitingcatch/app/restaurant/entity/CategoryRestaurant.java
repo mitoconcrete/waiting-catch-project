@@ -29,4 +29,9 @@ public class CategoryRestaurant {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "restaurant_id", nullable = false)
 	private Restaurant restaurant;
+
+	public CategoryRestaurant(Category category, Restaurant restaurant) {
+		this.category = category;
+		this.restaurant = restaurant;
+	}
 }

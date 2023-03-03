@@ -28,7 +28,7 @@ public class Menu extends TimeStamped {
 	@JoinColumn(name = "restaurant_id", nullable = false)
 	private Restaurant restaurant;
 
-	@Column(nullable = false)
+	@Column(nullable = false, length = 20)
 	private String name;
 
 	@Column(nullable = false)
