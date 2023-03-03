@@ -62,8 +62,8 @@
                 if (response === 'success') {
                     let host = window.location.host;
                     let url = host + '/seller/templates/seller';
-                    let todayDate = new Date();
-                    todayDate.setDate(todayDate.getDate() + 30); // 현재 시각 + 일 단위로 쿠키 만료 날짜
+                    let todayDate = new Date().getTime() + 1000 * 60 * 30;
+                    //todayDate.setDate(todayDate.getDate() + 30); // 현재 시각 + 일 단위로 쿠키 만료 날짜
                     document.cookie =
                         'Authorization' + "=" + xhr.getResponseHeader('Authorization') + "; " +
                         "path=/; expires=" + todayDate.toString() + ";";
