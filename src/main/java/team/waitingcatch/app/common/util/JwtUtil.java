@@ -68,7 +68,17 @@ public class JwtUtil {
 		String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
 
 		if (bearerToken == null && request.getHeader("Cookie") != null) {
-			bearerToken = request.getHeader("Cookie").split("=")[1];
+			String[] cookies = request.getHeader("Cookie").split("; ");
+			for (String cookie : cookies) {
+				String[] parsedCookie = cookie.split("=");
+				String key = parsedCookie[0];
+				String value = parsedCookie[1];
+
+				if (key.equals("Authorization")) {
+					bearerToken = value;
+					break;
+				}
+			}
 		}
 
 		if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER_PREFIX)) {
