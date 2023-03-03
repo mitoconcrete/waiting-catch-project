@@ -21,6 +21,7 @@ public class GetBlacklistDemandResponse {
 	public GetBlacklistDemandResponse(BlacklistDemand blackListDemand) {
 		this.id = blackListDemand.getId();
 		this.customerName = blackListDemand.getUser().getUsername();
+		
 		this.sellerName = blackListDemand.getRestaurant().getUser().getUsername();
 		this.description = blackListDemand.getDescription();
 		this.status = blackListDemand.getStatus();

@@ -1,8 +1,11 @@
 package team.waitingcatch.app.restaurant.entity;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -17,6 +20,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import team.waitingcatch.app.common.Position;
 import team.waitingcatch.app.common.entity.TimeStamped;
+import team.waitingcatch.app.common.util.StringListConverter;
 import team.waitingcatch.app.restaurant.dto.requestseller.ApproveSignUpSellerManagementEntityPassToRestaurantEntityRequest;
 import team.waitingcatch.app.restaurant.dto.restaurant.SaveDummyRestaurantRequest;
 import team.waitingcatch.app.restaurant.dto.restaurant.UpdateRestaurantEntityRequest;
@@ -34,7 +38,8 @@ public class Restaurant extends TimeStamped {
 	@Column(nullable = false, length = 8)
 	private String name;
 
-	private String images;
+	@Convert(converter = StringListConverter.class)
+	private final List<String> imagePaths = new ArrayList<>();
 
 	@Embedded
 	private Position position;
@@ -57,13 +62,14 @@ public class Restaurant extends TimeStamped {
 	@Column(nullable = false)
 	private boolean isDeleted;
 
-	@Column(nullable = false, length = 50)
-	private String searchKeywords;
+	@Convert(converter = StringListConverter.class)
+	@Column(name = "search_keywords")
+	private List<String> searchKeywords = new ArrayList<>();
 
 	@Column(nullable = false, length = 255)
 	private String description;
 
-	@Column(nullable = false)
+	@Column(nullable = false, length = 100)
 	private int capacity;
 
 	@Column(nullable = false, length = 12)
@@ -102,11 +108,11 @@ public class Restaurant extends TimeStamped {
 		this.businessLicenseNo = String.valueOf(UUID.randomUUID()).substring(0, 12);
 		this.capacity = 30;
 		this.description = request.getName() + "은 한국 최고의 음식 입니다.";
-		this.searchKeywords = request.getCategory();
 		this.phoneNumber = request.getPhoneNumber();
 		this.position = request.getPosition();
 		// this.category = request.getCategory();
 		this.user = request.getUser();
+		this.searchKeywords = request.getSearchkeywords();
 	}
 
 	// public String getProvince() {
@@ -138,7 +144,7 @@ public class Restaurant extends TimeStamped {
 	}
 
 	public void updateRestaurant(UpdateRestaurantEntityRequest updateRestaurantEntityRequest) {
-		this.images = updateRestaurantEntityRequest.getImages();
+		this.imagePaths.addAll(updateRestaurantEntityRequest.getImagePaths());
 		this.phoneNumber = updateRestaurantEntityRequest.getPhoneNumber();
 		this.capacity = updateRestaurantEntityRequest.getCapacity();
 		this.description = updateRestaurantEntityRequest.getDescription();

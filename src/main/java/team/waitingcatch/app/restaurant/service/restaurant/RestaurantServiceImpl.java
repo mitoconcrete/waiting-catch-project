@@ -2,9 +2,11 @@ package team.waitingcatch.app.restaurant.service.restaurant;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,7 +37,6 @@ import team.waitingcatch.app.restaurant.repository.RestaurantRepository;
 public class RestaurantServiceImpl implements RestaurantService, InternalRestaurantService {
 	private final RestaurantRepository restaurantRepository;
 	private final RestaurantInfoRepository restaurantInfoRepository;
-
 	private final ImageUploader imageUploader;
 	private final DistanceCalculator distanceCalculator;
 
@@ -85,8 +86,26 @@ public class RestaurantServiceImpl implements RestaurantService, InternalRestaur
 
 	@Override
 	@Transactional(readOnly = true)
-	public List<RestaurantResponse> getRestaurants() {
-		return restaurantRepository.findAll().stream().map(RestaurantResponse::new).collect(Collectors.toList());
+	public Page<RestaurantResponse> getRestaurants(Pageable pageable) {
+		Page<Restaurant> restaurants = restaurantRepository.findAll(pageable);
+		return new PageImpl<>(
+			(restaurantRepository.findAll(pageable).getContent().stream().map(RestaurantResponse::new).collect(
+				Collectors.toList())), pageable,
+			restaurants.getTotalElements());
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public Page<RestaurantResponse> getRestaurantsByRestaurantName(String searchVal, Pageable pageable) {
+		Page<Restaurant> restaurants = restaurantRepository.findByNameContaining(searchVal, pageable);
+		return new PageImpl<>(
+			(restaurantRepository.findByNameContaining(searchVal, pageable)
+				.getContent()
+				.stream()
+				.map(RestaurantResponse::new)
+				.collect(
+					Collectors.toList())), pageable,
+			restaurants.getTotalElements());
 	}
 
 	@Override
@@ -104,21 +123,13 @@ public class RestaurantServiceImpl implements RestaurantService, InternalRestaur
 	//업데이트시 -> 현재 있는것은 1.새로 2. 새로 3. 새로 4.새로
 	@Override
 	public void updateRestaurant(UpdateRestaurantServiceRequest updateRestaurantServiceRequest) throws IOException {
-		Restaurant restaurant = _getRestaurantByUserId(updateRestaurantServiceRequest.getSellerId());
-		RestaurantInfo restaurantInfo = _getRestaurantInfoByRestaurantIdWithRestaurant(restaurant.getId());
-		String imageName = "";
-
-		List<String> imageUrls = imageUploader.uploadList(updateRestaurantServiceRequest.getFiles(), "restaurant");
-		for (String imageUrl : imageUrls) {
-			if (Objects.equals(imageUrl, "기본값")) {
-				imageName += "기본값" + ",";
-			}
-			imageName += imageUrl + ",";
-		}
-		String lastCommaCutURL = imageName.substring(0, imageName.length() - 1);
-
+		Restaurant restaurant = restaurantRepository.findByUserId(updateRestaurantServiceRequest.getSellerId())
+			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 레스토랑 입니다."));
+		RestaurantInfo restaurantInfo = restaurantInfoRepository.findById(restaurant.getId())
+			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 레스토랑 정보입니다."));
+		List<String> imagePaths = imageUploader.uploadList(updateRestaurantServiceRequest.getImages(), "restaurant");
 		UpdateRestaurantEntityRequest updateRestaurantEntityRequest = new UpdateRestaurantEntityRequest(
-			updateRestaurantServiceRequest, lastCommaCutURL);
+			updateRestaurantServiceRequest, imagePaths);
 		restaurant.updateRestaurant(updateRestaurantEntityRequest);
 		restaurantInfo.updateRestaurantInfo(updateRestaurantEntityRequest);
 	}

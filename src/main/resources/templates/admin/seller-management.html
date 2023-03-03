@@ -14,6 +14,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
     <link rel="stylesheet" th:href="@{/css/css.css}">
     <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/restaurant-list.css}">
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
             integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
             crossorigin="anonymous"></script>
@@ -107,6 +108,10 @@
     <!--    </div>-->
 
     <h1 style="color: #8B60C7">판매자 요청</h1>
+    <form th:action="@{/admin/templates/seller-management}" method="get">
+        <input type="text" name="searchVal" th:name="searchVal">
+        <button type="submit">검색</button>
+    </form>
     <div class="sellerManagement">
         <table class="table table-striped">
             <thead>
@@ -158,6 +163,57 @@
         </table>
     </div>
 </div>
+
+
+<!-- 페이징 -->
+
+<nav class="pagenav">
+    <!--표에 사용될 변수값 초기화 -->
+    <ul class="pagination"
+        th:with="start=${T(java.lang.Math).floor(requestSeller.number/10)*10 },
+                    last=(${start + 9 < requestSeller.totalPages -1 ? start + 9 : requestSeller.totalPages -1 })">
+        <th:block th:with="
+                firstAddr=@{/admin/templates/seller-management(page=0, searchVal=${param.searchVal})},
+                prevAddr=@{/admin/templates/seller-management(page=${requestSeller.number -1}, searchVal=${param.searchVal})},
+                nextAddr=@{/admin/templates/seller-management(page=${requestSeller.number + 1}, searchVal=${param.searchVal})},
+                lastAddr=@{/admin/templates/seller-management(page=${requestSeller.totalPages -1}, searchVal=${param.searchVal})}">
+            <li>
+                <a th:href="${firstAddr}" aria-label="First">
+                    <span class="firstpage" aria-hidden="true"><<</span>
+                </a>
+            </li>
+            <!-- 이전 페이지로 가기 버튼 -->
+            <li th:class="${requestSeller.first} ? 'disabled'">
+                <a th:href="${requestSeller.first} ? '#' :${prevAddr}"
+                   aria-label="Previous">
+                    <span class="restaurantPage1" aria-hidden="true">&lt;</span>
+                </a>
+            </li>
+            <!--1,2,3,4,.. 등 페이지-->
+            <li th:each="page: ${#numbers.sequence(start, last)}"
+                th:class="${page == requestSeller.number + 1} ? 'active'">
+                <a class="restaurantPage" th:text="${page}"
+                   th:href="@{/admin/templates/seller-management(page=${page}, searchVal=${param.searchVal})}"></a>
+            </li>
+            <!--다음 페이지로 -->
+            <li th:class="${requestSeller.last} ? 'disabled'">
+                <a th:href="${requestSeller.last} ? '#' : ${nextAddr}"
+                   aria-label="Next">
+                    <span class="restaurantPage2" aria-hidden="true">&gt;</span>
+                </a>
+            </li>
+            <!--맨 마지막 페이지로 이동 -->
+            <li>
+                <a th:href="${lastAddr}" aria-label="Last">
+                    <span class="lastpage" aria-hidden="true">>></span>
+                </a>
+            </li>
+        </th:block>
+    </ul>
+</nav>
+
+<!-- 페이징끝 -->
+
 </body>
 
 

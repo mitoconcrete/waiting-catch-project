@@ -84,7 +84,7 @@ public class UserServiceImpl implements UserService, InternalUserService {
 	public Page<UserInfoResponse> getCustomers(Pageable payload) {
 		Page<User> result = userRepository.findAll(payload);
 		return new PageImpl<>(result.getContent().stream().map(UserInfoResponse::new).collect(Collectors.toList()),
-			result.getPageable(), result.getTotalPages());
+			payload, result.getTotalElements());
 	}
 
 	@Override
@@ -238,5 +238,18 @@ public class UserServiceImpl implements UserService, InternalUserService {
 			refreshToken.substring(7), JwtUtil.REFRESH_TOKEN_TIME);
 		refreshTokenService.createToken(servicePayload);
 		return accessToken;
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public Page<UserInfoResponse> getCustomersByUserName(String searchVal, Pageable pageable) {
+		Page<User> users = userRepository.findByUsernameContaining(searchVal,
+			pageable);
+		return new PageImpl<>(userRepository.findByUsernameContaining(searchVal, pageable)
+			.getContent()
+			.stream()
+			.map(UserInfoResponse::new)
+			.collect(Collectors.toList()),
+			pageable, users.getTotalElements());
 	}
 }

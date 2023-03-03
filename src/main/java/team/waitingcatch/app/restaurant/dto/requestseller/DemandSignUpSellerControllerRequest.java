@@ -73,5 +73,5 @@ public class DemandSignUpSellerControllerRequest {
 	private String query;
 
 	// @NotBlank
-	// private String searchKeyWords;
+	// private List<String> searchKeyWords;
 }
