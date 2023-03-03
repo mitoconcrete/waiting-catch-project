@@ -14,7 +14,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.NumberExpression;
+import com.querydsl.core.types.dsl.StringTemplate;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import lombok.RequiredArgsConstructor;
@@ -30,6 +32,7 @@ public class RestaurantInfoRepositoryCustomImpl implements RestaurantInfoReposit
 	@Override
 	public Slice<SearchRestaurantJpaResponse> findRestaurantsBySearchKeywordsContaining(String keyword,
 		Pageable pageable) {
+		StringTemplate st = Expressions.stringTemplate("cast({0} as string)", restaurant.searchKeywords);
 		List<SearchRestaurantJpaResponse> fetch = jpaQueryFactory
 			.select(
 				new QSearchRestaurantJpaResponse(
@@ -44,7 +47,8 @@ public class RestaurantInfoRepositoryCustomImpl implements RestaurantInfoReposit
 				))
 			.from(restaurantInfo)
 			.join(restaurantInfo.restaurant, restaurant)
-			.where(restaurant.searchKeywords.contains(keyword).or(restaurant.name.contains(keyword))
+			.where(st.contains(keyword)
+				.or(restaurant.name.contains(keyword))
 				.and(restaurant.isDeleted.isFalse()))
 			.limit(pageable.getPageSize() + 1)
 			.fetch();
