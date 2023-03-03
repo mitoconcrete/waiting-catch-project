@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -57,17 +58,18 @@ public class RestaurantController {
 	}
 
 	@GetMapping("/restaurants/search")
-	public List<SearchRestaurantsResponse> searchRestaurantsByKeyword(@RequestParam String keyword,
-		@RequestParam double latitude, @RequestParam double longitude) {
-		SearchRestaurantServiceRequest request = new SearchRestaurantServiceRequest(keyword, latitude, longitude);
+	public Slice<SearchRestaurantsResponse> searchRestaurantsByKeyword(@RequestParam String keyword,
+		@RequestParam double latitude, @RequestParam double longitude, Pageable pageable) {
+		SearchRestaurantServiceRequest request =
+			new SearchRestaurantServiceRequest(keyword, latitude, longitude, pageable);
 		return restaurantService.searchRestaurantsByKeyword(request);
 	}
 
 	@GetMapping("/restaurants")
-	public List<RestaurantsWithinRadiusResponse> getRestaurantsWithinRadius(
-		@RequestParam double latitude, @RequestParam double longitude) {
-		RestaurantsWithinRadiusServiceRequest request = new RestaurantsWithinRadiusServiceRequest(latitude,
-			longitude, 3);
+	public Slice<RestaurantsWithinRadiusResponse> getRestaurantsWithinRadius(
+		@RequestParam double latitude, @RequestParam double longitude, Pageable pageable) {
+		RestaurantsWithinRadiusServiceRequest request =
+			new RestaurantsWithinRadiusServiceRequest(latitude, longitude, 3, pageable);
 		return restaurantService.getRestaurantsWithinRadius(request);
 	}
 
