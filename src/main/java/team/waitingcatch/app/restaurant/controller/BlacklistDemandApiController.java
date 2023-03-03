@@ -4,6 +4,9 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -59,8 +62,9 @@ public class BlacklistDemandApiController {
 	}
 
 	@GetMapping("/admin/restaurants/blacklist-demands")
-	public GenericResponse<List<GetBlacklistDemandResponse>> getBlacklistDemands() {
-		return new GenericResponse<>(blacklistDemandService.getBlacklistDemands());
+	public GenericResponse<Page<GetBlacklistDemandResponse>> getBlacklistDemands(
+		@PageableDefault Pageable pageable) {
+		return new GenericResponse<>(blacklistDemandService.getBlacklistDemands(pageable));
 	}
 
 	@PostMapping("/admin/restaurants/blacklist-demands/{blacklistDemandId}")

@@ -1,0 +1,25 @@
+.pagenav {
+    text-align: center;
+}
+
+.firstpage, .lastpage {
+
+    padding: 10px;
+
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    letter-spacing: 3px;
+    font-size: 15px;
+}
+
+.restaurantPage {
+
+    padding: 10px;
+}
+
+.restaurantPage1, .restaurantPage2 {
+    padding: 10px;
+}

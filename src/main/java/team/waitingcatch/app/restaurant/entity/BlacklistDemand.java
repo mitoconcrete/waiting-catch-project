@@ -10,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.Size;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -35,11 +36,12 @@ public class BlacklistDemand extends TimeStamped {
 	@JoinColumn(name = "user_id", nullable = false)
 	private User user;
 
-	@Column(nullable = false)
+	@Column(nullable = false, length = 30)
 	@Enumerated(value = EnumType.STRING)
 	private AcceptedStatusEnum status;
 
-	@Column(nullable = false)
+	@Column(nullable = false, length = 100)
+	@Size(max = 100)
 	private String description;
 
 	public BlacklistDemand(Restaurant restaurant, User user, String description) {

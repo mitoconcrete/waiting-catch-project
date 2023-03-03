@@ -1,5 +1,7 @@
 package team.waitingcatch.app.restaurant.dto.restaurant;
 
+import java.util.List;
+
 import lombok.Getter;
 import team.waitingcatch.app.restaurant.entity.Restaurant;
 import team.waitingcatch.app.user.entitiy.User;
@@ -19,10 +21,10 @@ public class RestaurantResponse {
 	private final String zipCode;
 	private final String address;
 	private final String detailAddress;
-	private final String searchKeywords;
+	private final List<String> searchKeywords;
 	// private final String category;
 
-	private final String images;
+	private final List<String> images;
 	private final String description;
 	private final int capacity;
 	private final String businessNo;
@@ -45,8 +47,8 @@ public class RestaurantResponse {
 		this.address = restaurant.getAddress();
 		this.detailAddress = restaurant.getDetailAddress();
 		this.searchKeywords = restaurant.getSearchKeywords();
+		this.images = restaurant.getImagePaths();
 		// this.category = restaurant.getCategory();
-		this.images = restaurant.getImages();
 		this.description = restaurant.getDescription();
 		this.capacity = restaurant.getCapacity();
 		this.businessNo = restaurant.getBusinessLicenseNo();

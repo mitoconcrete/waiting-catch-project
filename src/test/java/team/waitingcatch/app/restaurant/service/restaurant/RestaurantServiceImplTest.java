@@ -15,9 +15,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 
 import team.waitingcatch.app.common.Address;
-import team.waitingcatch.app.common.Position;
 import team.waitingcatch.app.common.util.DistanceCalculator;
 import team.waitingcatch.app.common.util.image.ImageUploader;
 import team.waitingcatch.app.restaurant.dto.requestseller.ApproveSignUpSellerManagementEntityPassToRestaurantEntityRequest;
@@ -62,26 +64,21 @@ class RestaurantServiceImplTest {
 	@Test
 	@DisplayName("모든 레스토랑 조회")
 	void getRestaurants() {
+		Pageable pageable = mock(Pageable.class);
 		// given
 		User user = mock(User.class);
-		Position position = mock(Position.class);
-		Address address = mock(Address.class);
 		List<Restaurant> restaurants = new ArrayList<>();
 		Restaurant restaurant = mock(Restaurant.class);
 
-		restaurants.add(restaurant);
+		Page<Restaurant> page = new PageImpl<>(restaurants);
 
-		when(restaurantRepository.findAll()).thenReturn(restaurants);
-		when(restaurant.getUser()).thenReturn(user);
-		// when(restaurant.getPosition()).thenReturn(position);
-		// when(restaurant.getAddress()).thenReturn(address);
-		when(restaurant.getName()).thenReturn("aaaa");
+		when(restaurantRepository.findAll(pageable)).thenReturn(page);
 
 		// when
-		List<RestaurantResponse> responses = restaurantService.getRestaurants();
+		Page<RestaurantResponse> responses = restaurantService.getRestaurants(pageable);
 
 		// then
-		assertEquals("aaaa", responses.get(0).getRestaurantName());
+		assertEquals(1, responses.getTotalPages());
 	}
 
 	@Test
@@ -114,9 +111,12 @@ class RestaurantServiceImplTest {
 		Restaurant restaurant = mock(Restaurant.class);
 		RestaurantInfo restaurantInfo = mock(RestaurantInfo.class);
 		Address address = mock(Address.class);
+		List<String> search = new ArrayList<>();
+		search.add("한식");
+		search.add("중식");
 
 		when(restaurant.getName()).thenReturn("aaaa");
-		when(restaurant.getSearchKeywords()).thenReturn("a a a");
+		when(restaurant.getSearchKeywords()).thenReturn(search);
 		// when(restaurant.getAddress()).thenReturn(address);
 		// when(restaurant.getAddress().getProvince()).thenReturn("a");
 		// when(restaurant.getAddress().getCity()).thenReturn("A");
@@ -139,9 +139,12 @@ class RestaurantServiceImplTest {
 		List<SearchRestaurantJpaResponse> jpaResponses = new ArrayList<>();
 		SearchRestaurantJpaResponse jpaResponse = mock(SearchRestaurantJpaResponse.class);
 		jpaResponses.add(jpaResponse);
+		List<String> search = new ArrayList<>();
+		search.add("한식");
+		search.add("중식");
 
 		when(request.getKeyword()).thenReturn("aa");
-		when(jpaResponse.getSearchKeyword()).thenReturn("a a a");
+		when(jpaResponse.getSearchKeyword()).thenReturn(search);
 		when(jpaResponse.getName()).thenReturn("aaa");
 
 		when(restaurantInfoRepository.findRestaurantsBySearchKeywordsContaining(any(String.class))).thenReturn(
@@ -162,11 +165,14 @@ class RestaurantServiceImplTest {
 		List<RestaurantsWithinRadiusJpaResponse> jpaResponses = new ArrayList<>();
 		RestaurantsWithinRadiusJpaResponse jpaResponse = mock(RestaurantsWithinRadiusJpaResponse.class);
 		jpaResponses.add(jpaResponse);
+		List<String> search = new ArrayList<>();
+		search.add("한식");
+		search.add("중식");
 
 		when(request.getLatitude()).thenReturn(0.0);
 		when(request.getLongitude()).thenReturn(0.0);
 		when(jpaResponse.getName()).thenReturn("aaa");
-		when(jpaResponse.getSearchKeyword()).thenReturn("a a a");
+		when(jpaResponse.getSearchKeyword()).thenReturn(search);
 		when(jpaResponse.getLatitude()).thenReturn(0.0);
 		when(jpaResponse.getLongitude()).thenReturn(0.0);
 		when(distanceCalculator.distanceInKilometerByHaversine(

@@ -2,6 +2,8 @@ package team.waitingcatch.app.restaurant.repository;
 
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -12,7 +14,7 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, Long> {
 	@Query("select r from Restaurant r where r.user.id = :userId")
 	Optional<Restaurant> findByUserId(@Param("userId") Long userId);
 
-	Optional<Restaurant> findByUser_Username(String sellerName);
+	Page<Restaurant> findByNameContaining(String searchVal, Pageable pageable);
 
 	// @Query(value = "select new team.waitingcatch.app.restaurant.dto.restaurant.SearchRestaurantJpaResponse("
 	// 	+ "r.name, r.images, i.rate, r.searchKeywords, r.position, i.currentWaitingNumber, i.isLineupActiveStatus) "

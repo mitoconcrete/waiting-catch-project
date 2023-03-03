@@ -3,6 +3,7 @@ package team.waitingcatch.app.lineup;
 import static org.assertj.core.api.Assertions.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -12,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.transaction.annotation.Transactional;
 
 import team.waitingcatch.app.common.Position;
@@ -39,7 +41,7 @@ import team.waitingcatch.app.user.enums.UserRoleEnum;
 import team.waitingcatch.app.user.repository.UserRepository;
 
 @SpringBootTest
-// @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
 @Transactional
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class LineupIntegrationTest {
@@ -82,6 +84,8 @@ class LineupIntegrationTest {
 
 	@BeforeEach
 	public void beforeEach() {
+		List<String> searchKeywords = List.of("korean", "japan");
+
 		User customer = new User(UserRoleEnum.USER, "유저1", "aaa@gmail.com", "customerId", "pw12", "sj",
 			"01012341234");
 		userRepository.save(customer);
@@ -92,7 +96,7 @@ class LineupIntegrationTest {
 
 		Restaurant restaurant = new Restaurant(
 			new SaveDummyRestaurantRequest("레스토랑1", "12345", "서울시 강남구 강남대로", "1", new Position(0.0, 0.0),
-				"01000000000", "일식>스시>오마카세", seller));
+				"01000000000", "일식>스시>오마카세", seller, searchKeywords));
 		openRestaurant(restaurant);
 	}
 
@@ -200,6 +204,7 @@ class LineupIntegrationTest {
 	@DisplayName("줄서기 히스토리 조회")
 	void getLineupHistories() {
 		User customer = userRepository.findByUsernameAndIsDeletedFalse("customerId").get();
+		List<String> searchKeywords = List.of("korean", "japan");
 
 		for (int i = 0; i < 10; i++) {
 			User seller = new User(UserRoleEnum.SELLER, "사장" + i, i + "@naver.com", "sellerId" + i, "pw" + i,
@@ -208,7 +213,7 @@ class LineupIntegrationTest {
 
 			Restaurant restaurant = new Restaurant(
 				new SaveDummyRestaurantRequest("레스토랑" + i, "12345", "서울시 강남구 강남대로", "1", new Position(0.0, 0.0),
-					"0100000000" + i, "일식>스시>오마카세", seller));
+					"0100000000" + i, "일식>스시>오마카세", seller, searchKeywords));
 
 			openRestaurant(restaurant);
 

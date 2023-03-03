@@ -6,6 +6,7 @@ import static org.mockito.Mockito.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -306,10 +307,11 @@ class UserServiceImplTest {
 		// given
 		var customer = userRepository.findByUsernameAndIsDeletedFalse("xogns656").get();
 		var seller = userRepository.findByUsernameAndIsDeletedFalse("seller01").get();
+		List<String> searchKeywords = List.of("korean", "japan");
 
 		// 레스토랑
 		var payload = new SaveDummyRestaurantRequest("이이", "12345", "1 2 3", "1", new Position(0, 0), "1234", "1",
-			seller);
+			seller, searchKeywords);
 		var restaurant = new Restaurant(payload);
 		var createdRestaurant = restaurantRepository.save(restaurant);
 		var info = new RestaurantInfo(createdRestaurant, "", "");

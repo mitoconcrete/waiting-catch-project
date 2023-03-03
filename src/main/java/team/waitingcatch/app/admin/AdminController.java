@@ -2,9 +2,10 @@ package team.waitingcatch.app.admin;
 
 import javax.validation.Valid;
 
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,10 +13,11 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.restaurant.dto.category.CreateCategoryRequest;
@@ -24,47 +26,50 @@ import team.waitingcatch.app.restaurant.dto.category.DeleteCategoryServiceReques
 import team.waitingcatch.app.restaurant.dto.category.GetChildCategoryServiceRequest;
 import team.waitingcatch.app.restaurant.dto.category.UpdateCategoryControllerRequest;
 import team.waitingcatch.app.restaurant.dto.category.UpdateCategoryServiceRequest;
+import team.waitingcatch.app.restaurant.dto.requestseller.GetDemandSignUpSellerResponse;
 import team.waitingcatch.app.restaurant.dto.restaurant.DeleteRestaurantByAdminServiceRequest;
+import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantResponse;
 import team.waitingcatch.app.restaurant.service.category.CategoryService;
 import team.waitingcatch.app.restaurant.service.requestseller.SellerManagementService;
 import team.waitingcatch.app.restaurant.service.restaurant.RestaurantService;
 import team.waitingcatch.app.user.dto.CreateUserControllerRequest;
 import team.waitingcatch.app.user.dto.CreateUserServiceRequest;
 import team.waitingcatch.app.user.dto.GetCustomerByIdAndRoleServiceRequest;
-import team.waitingcatch.app.user.entitiy.UserDetailsImpl;
+import team.waitingcatch.app.user.dto.UserInfoResponse;
 import team.waitingcatch.app.user.enums.UserRoleEnum;
 import team.waitingcatch.app.user.service.UserService;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/admin/templates")
 public class AdminController {
 	private final UserService userService;
 	private final RestaurantService restaurantService;
 	private final SellerManagementService sellerManagementService;
 	private final CategoryService categoryService;
 
-	@GetMapping("/login")
+	@GetMapping("/general/templates/admin/login")
 	public ModelAndView loginPage() {
 		return new ModelAndView("/admin/login");
 	}
 
-	@GetMapping("/register")
+	@GetMapping("/general/templates/admin/register")
 	public ModelAndView registerPage(Model model) {
 		model.addAttribute("CreateUserControllerRequest", new CreateUserControllerRequest());
 		return new ModelAndView("/admin/register");
 	}
 
-	@GetMapping("/main")
+	@GetMapping("/admin/templates/main")
 	public ModelAndView adminMainPage() {
 		return new ModelAndView("/admin/index");
 	}
 
-	@PostMapping("/register")
+	@PostMapping("/general/templates/admin/register")
 	@ResponseStatus(HttpStatus.CREATED)
-	public void createAdmin(
-		@ModelAttribute("CreateUserControllerRequest") @Valid CreateUserControllerRequest controllerRequest) {
+	public String createAdmin(
+		@ModelAttribute("CreateUserControllerRequest") @Valid CreateUserControllerRequest controllerRequest,
+		RedirectAttributes redirectAttributes) {
 		_createUserService(UserRoleEnum.ADMIN, controllerRequest);
+		return "redirect:/general/";
 	}
 
 	private void _createUserService(UserRoleEnum role, CreateUserControllerRequest controllerRequest) {
@@ -84,26 +89,40 @@ public class AdminController {
 	}
 
 	//판매자요청
-	@GetMapping("/seller-management")
-	public ModelAndView sellerManagementPage(Model model, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-		model.addAttribute("requestSeller", sellerManagementService.getDemandSignUpSellers());
+	@GetMapping("/admin/templates/seller-management")
+	public ModelAndView sellerManagementPage(Model model, @PageableDefault(size = 10, page = 0) Pageable pageable,
+		@RequestParam(value = "searchVal", required = false) String searchVal) {
+		Page<GetDemandSignUpSellerResponse> demandSignUpSellerResponses = null;
+
+		if (searchVal == null) {
+			demandSignUpSellerResponses = sellerManagementService.getDemandSignUpSellers(pageable);
+		} else {
+			demandSignUpSellerResponses = sellerManagementService.getDemandSignUpSellersById(searchVal,
+				pageable);
+		}
+
+		model.addAttribute("requestSeller", demandSignUpSellerResponses);
+
 		return new ModelAndView("/admin/seller-management");
 	}
 	//유저
 
-	@GetMapping("/customers")
-	public ModelAndView getCustomers(Model model, Pageable pageable) {
-		model.addAttribute("customers", userService.getCustomers(pageable));
+	@GetMapping("/admin/templates/customers")
+	public ModelAndView getCustomers(Model model, @PageableDefault(size = 10, page = 0) Pageable pageable,
+		@RequestParam(value = "searchVal", required = false) String searchVal) {
+		Page<UserInfoResponse> userInfoResponses = null;
+
+		if (searchVal == null) {
+			userInfoResponses = userService.getCustomers(pageable);
+		} else {
+			userInfoResponses = userService.getCustomersByUserName(searchVal, pageable);
+		}
+
+		model.addAttribute("customers", userInfoResponses);
 		return new ModelAndView("/admin/user-list");
 	}
 
-	@GetMapping("/user-list")
-	public ModelAndView userListPage(Model model) {
-		model.addAttribute("requestSeller", sellerManagementService.getDemandSignUpSellers());
-		return new ModelAndView("/admin/user-list");
-	}
-
-	@GetMapping("/customers/{customerId}")
+	@GetMapping("/admin/templates/customers/{customerId}")
 	public ModelAndView getCustomer(@PathVariable Long customerId, Model model) {
 
 		GetCustomerByIdAndRoleServiceRequest servicePayload =
@@ -116,13 +135,23 @@ public class AdminController {
 	}
 
 	//레스토랑, 셀러
-	@GetMapping("/restaurants")
-	public ModelAndView restaurantListPage(Model model) {
-		model.addAttribute("restaurants", restaurantService.getRestaurants());
+	@GetMapping("/admin/templates/restaurants")
+	public ModelAndView restaurantListPage(Model model, @PageableDefault(size = 10, page = 0) Pageable pageable,
+		@RequestParam(value = "searchVal", required = false) String searchVal) {
+		Page<RestaurantResponse> restaurants = null;
+
+		if (searchVal == null) {
+			restaurants = restaurantService.getRestaurants(pageable);
+		} else {
+			restaurants = restaurantService.getRestaurantsByRestaurantName(searchVal,
+				pageable);
+		}
+
+		model.addAttribute("restaurants", restaurants);
 		return new ModelAndView("/admin/restaurant-list");
 	}
 
-	@GetMapping("/sellers/{sellerId}")
+	@GetMapping("/admin/templates/sellers/{sellerId}")
 	public ModelAndView getSeller(@PathVariable Long sellerId, Model model) {
 		GetCustomerByIdAndRoleServiceRequest servicePayload =
 			new GetCustomerByIdAndRoleServiceRequest(
@@ -133,30 +162,30 @@ public class AdminController {
 		return new ModelAndView("/admin/seller-view");
 	}
 
-	@DeleteMapping("/restaurants/{restaurant_id}")
+	@DeleteMapping("/admin/templates/restaurants/{restaurant_id}")
 	public void deleteRestaurantByAdmin(@PathVariable Long restaurant_id) {
 		DeleteRestaurantByAdminServiceRequest deleteRestaurantByAdminServiceRequest
 			= new DeleteRestaurantByAdminServiceRequest(restaurant_id);
 		restaurantService.deleteRestaurantByAdmin(deleteRestaurantByAdminServiceRequest);
 	}
 
-	@GetMapping("/event")
+	@GetMapping("/admin/templates/event")
 	public ModelAndView eventPage() {
 		return new ModelAndView("/admin/event");
 	}
 
-	@GetMapping("/blacklist")
+	@GetMapping("/admin/templates/blacklist")
 	public ModelAndView blacklistPage() {
 		return new ModelAndView("/admin/blacklist");
 	}
 
-	@GetMapping("/review")
+	@GetMapping("/admin/templates/review")
 	public ModelAndView censorReview() {
 		return new ModelAndView("/admin/review");
 	}
 
 	//카테고리
-	@GetMapping("/category")
+	@GetMapping("/admin/templates/category")
 	public ModelAndView categoryPage(Model model) {
 		model.addAttribute("categories", categoryService.getParentCategories());
 		model.addAttribute("CreateCategoryRequest", new CreateCategoryRequest());
@@ -165,34 +194,34 @@ public class AdminController {
 		return new ModelAndView("/admin/category");
 	}
 
-	@PostMapping("/category")
+	@PostMapping("/admin/templates/category")
 	@ResponseStatus(value = HttpStatus.CREATED)
 	public void createCategory(@ModelAttribute @Valid CreateCategoryRequest request) {
 		categoryService.createCategory(request);
 	}
 
-	@PutMapping("/categories-update")
+	@PutMapping("/admin/templates/categories-update")
 	public void updateCategory(@ModelAttribute @Valid UpdateCategoryControllerRequest controllerRequest) {
 		UpdateCategoryServiceRequest serviceRequest =
 			new UpdateCategoryServiceRequest(controllerRequest.getCategoryId(), controllerRequest.getName());
 		categoryService.updateCategory(serviceRequest);
 	}
 
-	@DeleteMapping("/categories-form-delete")
+	@DeleteMapping("/admin/templates/categories-form-delete")
 	public void deleteCategory(@ModelAttribute DeleteCategoryControllerRequest deleteCategoryControllerRequest) {
 		DeleteCategoryServiceRequest request = new DeleteCategoryServiceRequest(
 			deleteCategoryControllerRequest.getCategoryId());
 		categoryService.deleteCategory(request);
 	}
 
-	@DeleteMapping("/categories-direct-delete/{categoryId}")
+	@DeleteMapping("/admin/templates/categories-direct-delete/{categoryId}")
 	public void deleteCategory(@PathVariable Long categoryId) {
 		DeleteCategoryServiceRequest request = new DeleteCategoryServiceRequest(
 			categoryId);
 		categoryService.deleteCategory(request);
 	}
 
-	@GetMapping("/categories/{categoryId}")
+	@GetMapping("/admin/templates/categories/{categoryId}")
 	public ModelAndView getChildCategories(@PathVariable Long categoryId, Model model) {
 		GetChildCategoryServiceRequest request = new GetChildCategoryServiceRequest(categoryId);
 		model.addAttribute("abc", categoryService.getChildCategories(request).getChildCategories());

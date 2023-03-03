@@ -21,10 +21,10 @@ public class ApproveSignUpSellerManagementEntityPassToRestaurantEntityRequest {
 	// private final Address address;
 	private final Position position;
 	private final String businessLicenseNo;
-	private final String searchKeyWords;
+	private final List<String> searchKeyWords;
 
 	public ApproveSignUpSellerManagementEntityPassToRestaurantEntityRequest(SellerManagement sellerManagement,
-		User seller, String searchKeywords) {
+		User seller, List<String> searchKeywords) {
 		this.user = seller;
 		this.restaurantName = sellerManagement.getRestaurantName();
 		this.email = sellerManagement.getEmail();

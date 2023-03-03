@@ -2,6 +2,9 @@ package team.waitingcatch.app.restaurant.controller;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -40,8 +43,9 @@ public class BlacklistApiController {
 	}
 
 	@GetMapping("/admin/blacklists")
-	public GenericResponse<GetBlacklistResponse> getBlacklist() {
-		return new GenericResponse(blacklistService.getBlacklist());
+	public GenericResponse<Page<GetBlacklistResponse>> getBlacklist(
+		@PageableDefault Pageable pageable) {
+		return new GenericResponse<>(blacklistService.getBlacklist(pageable));
 	}
 
 	@GetMapping("/seller/restaurant/blacklist")
