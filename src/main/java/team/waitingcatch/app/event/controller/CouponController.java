@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -38,7 +37,6 @@ import team.waitingcatch.app.event.service.event.EventService;
 import team.waitingcatch.app.event.service.usercoupon.UserCouponService;
 import team.waitingcatch.app.user.entitiy.UserDetailsImpl;
 
-@RequestMapping("/api")
 @RequiredArgsConstructor
 @RestController
 public class CouponController {
@@ -51,20 +49,20 @@ public class CouponController {
 	/*  어드민  */
 
 	//새로운 광역 이벤트를 생성한다.
-	@PostMapping("/admin/events")
+	@PostMapping("/api/admin/events")
 	@ResponseStatus(value = HttpStatus.CREATED)
 	public void createAdminEvent(@Validated @RequestBody CreateEventControllerRequest createEventControllerRequest) {
 		eventService.createAdminEvent(createEventControllerRequest);
 	}
 
 	// 광역 이벤트 목록을 조회한다.
-	@GetMapping("/admin/events")
+	@GetMapping("/api/admin/events")
 	public List<GetEventsResponse> getAdminEvents() {
 		return eventService.getGlobalEvents();
 	}
 
 	//광역 이벤트를 수정한다.
-	@PutMapping("/admin/events/{eventId}")
+	@PutMapping("/api/admin/events/{eventId}")
 	public void updateAdminEvent(@RequestBody UpdateEventControllerRequest updateEventControllerRequest,
 		@PathVariable Long eventId) {
 		UpdateEventServiceRequest updateEventServiceRequest = new UpdateEventServiceRequest(
@@ -73,7 +71,7 @@ public class CouponController {
 	}
 
 	//광역 이벤트를 삭제한다.
-	@DeleteMapping("/admin/events/{eventId}")
+	@DeleteMapping("/api/admin/events/{eventId}")
 	public void deleteAdminEvent(@PathVariable Long eventId) {
 		DeleteEventControllerRequest deleteEventControllerRequest = new DeleteEventControllerRequest(eventId);
 		eventService.deleteAdminEvent(deleteEventControllerRequest);
@@ -82,7 +80,7 @@ public class CouponController {
 	/*  레스토랑  */
 
 	//새로운 레스토랑 이벤트를 생성한다.
-	@PostMapping("/seller/restaurants/{restaurant_id}/events")
+	@PostMapping("/api/seller/restaurants/{restaurant_id}/events")
 	@ResponseStatus(value = HttpStatus.CREATED)
 	public void createSellerEvent(@Validated @RequestBody CreateEventControllerRequest createEventControllerRequest,
 		@PathVariable Long restaurant_id) {
@@ -92,7 +90,7 @@ public class CouponController {
 	}
 
 	//레스토랑 이벤트를 수정한다.
-	@PutMapping("/seller/events/{eventId}")
+	@PutMapping("/api/seller/events/{eventId}")
 	public void updateSellerEvent(@RequestBody UpdateEventControllerRequest updateEventControllerRequest,
 		@PathVariable Long eventId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
 		UpdateSellerEventServiceRequest updateSellerEventServiceRequest = new UpdateSellerEventServiceRequest(
@@ -101,7 +99,7 @@ public class CouponController {
 	}
 
 	//레스토랑 이벤트를 삭제한다.
-	@DeleteMapping("/seller/events/{eventId}")
+	@DeleteMapping("/api/seller/events/{eventId}")
 	public void deleteSellerEvent(@PathVariable Long eventId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
 		DeleteEventServiceRequest deleteEventServiceRequest = new DeleteEventServiceRequest(eventId,
@@ -111,7 +109,7 @@ public class CouponController {
 
 	/*  유저  */
 	//광역 이벤트 목록 출력 + 해당 이벤트의 쿠폰생성자 출력
-	@GetMapping("/events")
+	@GetMapping("/api/customer/events")
 	public List<GetEventsResponse> getEvents() {
 		return eventService.getGlobalEvents();
 	}
@@ -126,7 +124,7 @@ public class CouponController {
 	/*  쿠폰 생성자  */
 
 	//광역 이벤트 쿠폰 생성자 생성
-	@PostMapping("/admin/events/{eventId}/creator")
+	@PostMapping("/api/admin/events/{eventId}/creator")
 	@ResponseStatus(value = HttpStatus.CREATED)
 	public void createAdminCouponCreator(
 		@Validated @RequestBody CreateCouponCreatorControllerRequest createCouponCreatorControllerRequest,
@@ -139,7 +137,7 @@ public class CouponController {
 	}
 
 	//레스토랑 이벤트 쿠폰 생성자 생성
-	@PostMapping("/seller/events/{eventId}/creator")
+	@PostMapping("/api/seller/events/{eventId}/creator")
 	@ResponseStatus(value = HttpStatus.CREATED)
 	public void createSellerCouponCreator(
 		@Validated @RequestBody CreateCouponCreatorControllerRequest createCouponCreatorControllerRequest,
@@ -151,13 +149,13 @@ public class CouponController {
 	}
 
 	// 광역 이벤트 쿠폰 생성자 조회
-	@GetMapping("/admin/events/{eventId}/creator")
+	@GetMapping("/api/admin/events/{eventId}/creator")
 	public List<GetCouponCreatorResponse> getAdminCouponCreator(@PathVariable Long eventId) {
 		return couponCreatorService.getAdminCouponCreator(eventId);
 	}
 
 	//광역 이벤트 쿠폰 생성자 수정
-	@PutMapping("/admin/events/{eventId}/creator/{creatorId}")
+	@PutMapping("/api/admin/events/{eventId}/creator/{creatorId}")
 	public void updateAdminCouponCreator(
 		@RequestBody UpdateCouponCreatorControllerRequest updateCouponCreatorControllerRequest,
 		@PathVariable Long eventId, @PathVariable Long creatorId) {
@@ -167,7 +165,7 @@ public class CouponController {
 	}
 
 	//레스토랑 이벤트 쿠폰 생성자 수정
-	@PutMapping("/seller/events/{eventId}/creator/{creatorId}")
+	@PutMapping("/api/seller/events/{eventId}/creator/{creatorId}")
 	public void updateSellerCouponCreator(
 		@RequestBody UpdateCouponCreatorControllerRequest updateCouponCreatorControllerRequest,
 		@PathVariable Long eventId, @PathVariable Long creatorId,
@@ -180,10 +178,21 @@ public class CouponController {
 
 	/*  유저 쿠폰  */
 
-	//유저 쿠폰 생성
-	@PostMapping("/coupons/creators/{creatorId}")
+	//광역 쿠폰 생성
+	@PostMapping("/api/admin/coupons/creators/{creatorId}")
 	@ResponseStatus(value = HttpStatus.CREATED)
-	public void createUserCoupon(@Validated @PathVariable Long creatorId,
+	public void createAdminCoupon(@Validated @PathVariable Long creatorId,
+		@AuthenticationPrincipal UserDetailsImpl userDetails) {
+		CreateUserCouponServiceRequest createUserCouponserviceRequest = new CreateUserCouponServiceRequest(creatorId,
+			userDetails.getUsername());
+
+		userCouponService.createUserCoupon(createUserCouponserviceRequest);
+	}
+
+	//셀러 쿠폰 생성
+	@PostMapping("/api/seller/coupons/creators/{creatorId}")
+	@ResponseStatus(value = HttpStatus.CREATED)
+	public void createSellerCoupon(@Validated @PathVariable Long creatorId,
 		@AuthenticationPrincipal UserDetailsImpl userDetails) {
 		CreateUserCouponServiceRequest createUserCouponserviceRequest = new CreateUserCouponServiceRequest(creatorId,
 			userDetails.getUsername());
@@ -192,13 +201,13 @@ public class CouponController {
 	}
 
 	//유저 쿠폰 조회
-	@GetMapping("/customer/coupons")
+	@GetMapping("/api/customer/coupons")
 	public List<GetUserCouponResponse> getUserCoupon(@AuthenticationPrincipal UserDetailsImpl userDetails) {
 		return userCouponService.getUserCoupons(userDetails.getUser());
 	}
 
 	//유저 쿠폰 사용
-	@PutMapping("/customer/coupons/{couponId}")
+	@PutMapping("/api/customer/coupons/{couponId}")
 	public void useCoupon(@PathVariable Long couponId) {
 		userCouponService.useCoupon(couponId);
 	}
