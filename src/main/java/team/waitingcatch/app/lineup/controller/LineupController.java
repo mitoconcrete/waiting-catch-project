@@ -1,6 +1,7 @@
 package team.waitingcatch.app.lineup.controller;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Pattern;
@@ -44,12 +45,12 @@ import team.waitingcatch.app.user.entitiy.UserDetailsImpl;
 public class LineupController {
 	private final LineupService lineupService;
 
-	@PutMapping("/seller/start-lineup")
+	@PutMapping("/seller/open-lineup")
 	public void openLineup(@AuthenticationPrincipal UserDetailsImpl userDetails) {
 		lineupService.openLineup(userDetails.getId());
 	}
 
-	@PutMapping("/seller/end-lineup")
+	@PutMapping("/seller/close-lineup")
 	public void closeLineup(@AuthenticationPrincipal UserDetailsImpl userDetails) {
 		lineupService.closeLineup(userDetails.getId());
 	}
@@ -73,19 +74,19 @@ public class LineupController {
 	}
 
 	@GetMapping("/seller/lineup")
-	public GenericResponse<TodayLineupResponse> getLineups(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-		return new GenericResponse(lineupService.getTodayLineups(userDetails.getId()));
+	public GenericResponse<List<TodayLineupResponse>> getLineups(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+		return new GenericResponse<>(lineupService.getTodayLineups(userDetails.getId()));
 	}
 
 	@GetMapping("/customer/lineup-records")
-	public GenericResponse<Slice<LineupRecordWithTypeResponse>> getLineupRecords(
+	public GenericResponse<List<LineupRecordWithTypeResponse>> getLineupRecords(
 		@RequestParam(required = false) @Pattern(regexp = "^(WAIT|CALL|CANCEL|ARRIVE)$") String status,
 		@AuthenticationPrincipal UserDetailsImpl userDetails) {
 
 		var serviceRequest = new GetLineupRecordsServiceRequest(userDetails.getId(),
 			status != null ? ArrivalStatusEnum.valueOf(status) : null);
 
-		return new GenericResponse(lineupService.getLineupRecords(serviceRequest));
+		return new GenericResponse<>(lineupService.getLineupRecords(serviceRequest));
 	}
 
 	@GetMapping("/customer/lineup-history-records")
@@ -98,7 +99,7 @@ public class LineupController {
 		var serviceRequest = new GetLineupHistoryRecordsServiceRequest(lastId, userDetails.getId(),
 			status != null ? ArrivalStatusEnum.valueOf(status) : null);
 
-		return new GenericResponse(lineupService.getLineupHistoryRecords(serviceRequest, pageable));
+		return new GenericResponse<>(lineupService.getLineupHistoryRecords(serviceRequest, pageable));
 	}
 
 	@PutMapping("/seller/lineup/{lineupId}/status")

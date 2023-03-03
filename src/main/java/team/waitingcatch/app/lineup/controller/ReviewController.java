@@ -64,7 +64,7 @@ public class ReviewController {
 		@RequestParam(required = false) Long lastId,
 		@PageableDefault Pageable pageable) {
 
-		return new GenericResponse(reviewService.getReviewsByRestaurantId(lastId, restaurantId, pageable));
+		return new GenericResponse<>(reviewService.getReviewsByRestaurantId(lastId, restaurantId, pageable));
 	}
 
 	@GetMapping("/customer/reviews")
@@ -73,6 +73,6 @@ public class ReviewController {
 		@AuthenticationPrincipal UserDetailsImpl userDetails,
 		@PageableDefault Pageable pageable) {
 
-		return new GenericResponse(reviewService.getReviewsByUserId(lastId, userDetails.getId(), pageable));
+		return new GenericResponse<>(reviewService.getReviewsByUserId(lastId, userDetails.getId(), pageable));
 	}
 }
