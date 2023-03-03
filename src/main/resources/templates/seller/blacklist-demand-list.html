@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <div id="blacklistDemandList">
     <table class="table table-striped">
         <thead>
@@ -9,26 +9,55 @@
             <th>상태</th>
             <th>등록 시간</th>
             <th>수정 시간</th>
+            <th></th>
         </tr>
         </thead>
-        <tbody>
-        <tr th:each="blacklistDemand : ${blacklistDemandList}">
-            <td th:text="${blacklistDemand.customerName}"></td>
-            <td th:text="${blacklistDemand.description}"></td>
-            <td th:text="${blacklistDemand.status.value}"></td>
-            <td th:text="${blacklistDemand.createdDate}"></td>
-            <td th:text="${blacklistDemand.modifiedDate}"></td>
-            <td>
-                <button type="button" th:onclick="cancel([[${blacklistDemand.id}]])">취소</button>
-            </td>
-        </tr>
+        <tbody id="blacklistDemand">
+
         </tbody>
     </table>
 </div>
 <script>
+    $(document).ready(function () {
+        blacklistDemandList();
+    });
+
+    function blacklistDemandList() {
+        $.ajax({
+            type: 'GET',
+            url: '/api/seller/blacklist-demands',
+            headers: {
+                'Authorization': localStorage.getItem('accessToken')
+            },
+            success: function (response) {
+                let rows = response['data'];
+                for (let i = 0; i < rows.length; i++) {
+                    let id = rows[i]['id'];
+                    let customerName = rows[i]['customerName'];
+                    let description = rows[i]['description'];
+                    let status = rows[i]['status'];
+                    let createdDate = rows[i]['createdDate'];
+                    let modifiedDate = rows[i]['modifiedDate'];
+
+                    let temp_html = `<tr>
+                                        <td>${customerName}</td>
+                                        <td>${description}</td>
+                                        <td>${status}</td>
+                                        <td>${createdDate}</td>
+                                        <td>${modifiedDate}</td>
+                                        <td>
+                                            <button type="button" class="btn" onclick="cancel('${id}')">취소</button>
+                                        </td>
+                                    </tr>`;
+                    $('#blacklistDemand').prepend(temp_html);
+                }
+            },
+        });
+    }
+
     function cancel(blacklistDemandId) {
         $.ajax({
-            url: `/seller/blacklist-demands/${blacklistDemandId}`,
+            url: `/api/seller/blacklist-demands/${blacklistDemandId}`,
             type: 'DELETE',
             headers: {
                 'Authorization': localStorage.getItem('accessToken')
@@ -38,7 +67,7 @@
                 window.location.reload();
             },
             error: function (response) {
-                console.log(response);
+                alert(response.responseJSON.message);
             }
         })
     }

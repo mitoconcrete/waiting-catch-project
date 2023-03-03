@@ -2,11 +2,12 @@ package team.waitingcatch.app.restaurant.dto.blacklist;
 
 import javax.validation.constraints.NotNull;
 
-import lombok.AllArgsConstructor;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
-@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class BlacklistDemandControllerRequest {
 	@NotNull
 	private long userId;
