@@ -76,11 +76,10 @@ public class BlacklistDemandServiceImpl implements BlacklistDemandService, Inter
 	@Transactional(readOnly = true)
 	@Override
 	public Page<GetBlacklistDemandResponse> getBlacklistDemands(Pageable payload) {
-		Page<BlacklistDemand> result = blacklistDemandRepository.findAllByStatus(AcceptedStatusEnum.WAIT,
-			payload);
+		Page<BlacklistDemand> result = blacklistDemandRepository.findAllByStatus(AcceptedStatusEnum.WAIT, payload);
 		return new PageImpl<>(
-			result.getContent().stream().map(GetBlacklistDemandResponse::new).collect(Collectors.toList()),
-			payload, result.getTotalElements());
+			result.getContent().stream().map(GetBlacklistDemandResponse::new).collect(Collectors.toList()), payload,
+			result.getTotalElements());
 	}
 
 	@Override

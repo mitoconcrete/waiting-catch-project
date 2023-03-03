@@ -9,6 +9,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -64,6 +65,7 @@ public class LineupConcurrencyTest {
 	private final int NUM_OF_TASKS = 10;
 
 	@Test
+	@DisplayName("더미 데이터 저장")
 	@Commit
 	@Order(1)
 	void insertDummyDataBeforeConcurrentWaitingTest() {
@@ -97,6 +99,7 @@ public class LineupConcurrencyTest {
 	}
 
 	@Test
+	@DisplayName("줄서기 동시성 테스트")
 	@Commit
 	@Order(2)
 	void concurrentWaiting() throws InterruptedException {
@@ -136,6 +139,7 @@ public class LineupConcurrencyTest {
 	}
 
 	@Test
+	@DisplayName("결과 검증")
 	@Order(3)
 	void assertResult() {
 		Long sellerId1 = userRepository.findByUsernameAndIsDeletedFalse("sellerIdA").get().getId();

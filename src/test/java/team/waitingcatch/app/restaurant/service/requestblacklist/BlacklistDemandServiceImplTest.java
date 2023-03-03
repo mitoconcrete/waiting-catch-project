@@ -60,8 +60,7 @@ class BlacklistDemandServiceImplTest {
 		when(userRepository.findById(any(Long.class))).thenReturn(Optional.ofNullable(user));
 		when(blacklistDemandRepository.findByUser_IdAndRestaurant_User_Id(any(Long.class), any(Long.class))).thenReturn(
 			blacklistDemandList);
-		when(restaurantRepository.findByUserId(any(Long.class))).thenReturn(
-			Optional.ofNullable(restaurant));
+		when(restaurantRepository.findByUserId(any(Long.class))).thenReturn(Optional.ofNullable(restaurant));
 		//when
 		blacklistDemandService.submitBlacklistDemand(serviceRequest);
 		//then
@@ -90,16 +89,20 @@ class BlacklistDemandServiceImplTest {
 		Pageable pageable = mock(Pageable.class);
 		User user = mock(User.class);
 		Restaurant restaurant = mock(Restaurant.class);
+		AcceptedStatusEnum statusEnum = mock(AcceptedStatusEnum.class);
 
 		List<BlacklistDemand> blacklistDemandList = new ArrayList<>();
 		BlacklistDemand blacklistDemand = mock(BlacklistDemand.class);
 		BlacklistDemand blacklistDemand1 = mock(BlacklistDemand.class);
+
 		when(blacklistDemand.getUser()).thenReturn(user);
 		when(blacklistDemand1.getUser()).thenReturn(user);
 		when(blacklistDemand.getRestaurant()).thenReturn(restaurant);
 		when(blacklistDemand1.getRestaurant()).thenReturn(restaurant);
 		when(blacklistDemand.getRestaurant().getUser()).thenReturn(user);
 		when(blacklistDemand1.getRestaurant().getUser()).thenReturn(user);
+		when(blacklistDemand.getStatus()).thenReturn(statusEnum);
+		when(blacklistDemand1.getStatus()).thenReturn(statusEnum);
 
 		blacklistDemandList.add(blacklistDemand);
 		blacklistDemandList.add(blacklistDemand1);
@@ -122,8 +125,7 @@ class BlacklistDemandServiceImplTest {
 		Restaurant restaurant = mock(Restaurant.class);
 		User user = mock(User.class);
 		BlacklistDemand blacklistDemand = new BlacklistDemand(restaurant, user, "hiyo");
-		when(blacklistDemandRepository.findById(any(Long.class))).thenReturn(
-			Optional.ofNullable(blacklistDemand));
+		when(blacklistDemandRepository.findById(any(Long.class))).thenReturn(Optional.of(blacklistDemand));
 		//when
 		blacklistDemandService.approveBlacklistDemand(request);
 		//then

@@ -16,16 +16,16 @@ public interface BlacklistDemandRepository extends JpaRepository<BlacklistDemand
 	List<BlacklistDemand> findByUser_IdAndRestaurant_User_Id(Long userId,
 		Long sellerId);
 
-	@Query(value = "select bd from BlacklistDemand bd where bd.user.id =:user1 and bd.restaurant.user.id =:seller1")
+	@Query(value = "select bd from BlacklistDemand bd where bd.user.id =:user1 and bd.restaurant.user.id = :seller1")
 	Optional<BlacklistDemand> findByIdAndRestaurantUserId(@Param("user1") Long userId,
 		@Param("seller1") Long sellerId);
 
-	@Query(value = "select bd from BlacklistDemand bd where bd.user.id =:user1 and bd.restaurant.user.id =:seller11 "
+	@Query(value = "select bd from BlacklistDemand bd where bd.user.id =:user1 and bd.restaurant.user.id = :seller11 "
 		+ "and bd.status = team.waitingcatch.app.restaurant.enums.AcceptedStatusEnum.APPROVE")
 	Optional<BlacklistDemand> findByUser_IdAndRestaurant_User_IdAndStatusApproval(@Param("user1") Long userId,
 		@Param("seller11") Long sellerId);
 
-	@Query(value = "select bd from BlacklistDemand bd join fetch bd.user where bd.status = :status", countQuery = "select count(b) from BlacklistDemand b where b.status=:status")
+	@Query(value = "select bd from BlacklistDemand bd join fetch bd.user where bd.status = :status", countQuery = "select count(b) from BlacklistDemand b where b.status = :status")
 	Page<BlacklistDemand> findAllByStatus(@Param("status") AcceptedStatusEnum status, Pageable pageable);
 
 	@Query(value = "select bd from BlacklistDemand bd join fetch bd.user where bd.restaurant.id = :res1")
