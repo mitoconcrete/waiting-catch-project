@@ -7,15 +7,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import lombok.RequiredArgsConstructor;
 
 @Controller
-@RequestMapping("/seller")
 @RequiredArgsConstructor
 public class LineupController {
-	@GetMapping("/lineup")
-	public String getLineups() {
-		return "seller/lineup-list";
-	}
-
-	@GetMapping("/templates/lineup-page")
+	@GetMapping("/seller/lineup")
 	public String getLineupPage() {
 		return "seller/lineup";
 	}
