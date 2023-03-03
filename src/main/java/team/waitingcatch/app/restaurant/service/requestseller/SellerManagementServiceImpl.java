@@ -16,6 +16,7 @@ import team.waitingcatch.app.lineup.repository.WaitingNumberRepository;
 import team.waitingcatch.app.restaurant.dto.requestseller.ApproveSignUpSellerManagementEntityPassToRestaurantEntityRequest;
 import team.waitingcatch.app.restaurant.dto.requestseller.ApproveSignUpSellerResponse;
 import team.waitingcatch.app.restaurant.dto.requestseller.ApproveSignUpSellerServiceRequest;
+import team.waitingcatch.app.restaurant.dto.requestseller.ConnectCategoryRestaurantServiceRequest;
 import team.waitingcatch.app.restaurant.dto.requestseller.DemandSignUpSellerServiceRequest;
 import team.waitingcatch.app.restaurant.dto.requestseller.GetDemandSignUpSellerResponse;
 import team.waitingcatch.app.restaurant.dto.requestseller.GetRequestSellerByRestaurantRequest;
@@ -26,7 +27,7 @@ import team.waitingcatch.app.restaurant.entity.SellerManagement;
 import team.waitingcatch.app.restaurant.repository.RestaurantInfoRepository;
 import team.waitingcatch.app.restaurant.repository.RestaurantRepository;
 import team.waitingcatch.app.restaurant.repository.SellerManagementRepository;
-import team.waitingcatch.app.restaurant.service.restaurant.InternalRestaurantService;
+import team.waitingcatch.app.restaurant.service.category.InternalCategoryService;
 import team.waitingcatch.app.user.dto.CreateUserServiceRequest;
 import team.waitingcatch.app.user.entitiy.User;
 import team.waitingcatch.app.user.enums.UserRoleEnum;
@@ -43,6 +44,7 @@ public class SellerManagementServiceImpl implements SellerManagementService, Int
 	private final RestaurantRepository restaurantRepository;
 	private final RestaurantInfoRepository restaurantInfoRepository;
 	private final WaitingNumberRepository waitingNumberRepository;
+	private final InternalCategoryService categoryService;
 
 	private final InternalUserService internalUserService;
 	private final UserService userService;
@@ -92,12 +94,27 @@ public class SellerManagementServiceImpl implements SellerManagementService, Int
 
 		User seller = internalUserService._getUserByUsername(sellerManagement.getUsername());
 		// 레스토랑 만들기
+		List<Long> categoryIds = sellerManagement.getCategories().stream()
+			.map(Long::parseLong)
+			.collect(Collectors.toList());
+
+		List<String> categoryNames = categoryService._getCategoryNames(categoryIds);
+		String searchKeywords = "";
+		for (String categoryName : categoryNames) {
+			searchKeywords += categoryName + " ";
+		}
+
 		ApproveSignUpSellerManagementEntityPassToRestaurantEntityRequest
 			approveSignUpSellerManagementEntityPassToRestaurantEntityRequest
-			= new ApproveSignUpSellerManagementEntityPassToRestaurantEntityRequest(sellerManagement, seller);
+			= new ApproveSignUpSellerManagementEntityPassToRestaurantEntityRequest(sellerManagement, seller,
+			searchKeywords);
 
 		Restaurant restaurant = new Restaurant(approveSignUpSellerManagementEntityPassToRestaurantEntityRequest);
 		restaurantRepository.save(restaurant);
+
+		ConnectCategoryRestaurantServiceRequest serviceRequest = new ConnectCategoryRestaurantServiceRequest(restaurant,
+			sellerManagement.getCategories());
+		categoryService._connectCategoryRestaurant(serviceRequest);
 
 		RestaurantInfo restaurantInfo = new RestaurantInfo(restaurant);
 		restaurantInfoRepository.save(restaurantInfo);

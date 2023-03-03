@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import lombok.RequiredArgsConstructor;
-import team.waitingcatch.app.common.Address;
 import team.waitingcatch.app.common.Position;
 import team.waitingcatch.app.restaurant.dto.requestseller.ApproveSignUpSellerResponse;
 import team.waitingcatch.app.restaurant.dto.requestseller.ApproveSignUpSellerServiceRequest;
@@ -24,6 +23,7 @@ import team.waitingcatch.app.restaurant.dto.requestseller.GetRequestSellerByRest
 import team.waitingcatch.app.restaurant.dto.requestseller.GetRequestSellerControllerRequest;
 import team.waitingcatch.app.restaurant.dto.requestseller.RejectSignUpSellerServiceRequest;
 import team.waitingcatch.app.restaurant.service.requestseller.SellerManagementService;
+import team.waitingcatch.app.restaurant.service.restaurant.MapApiService;
 
 @RequestMapping("/api")
 @RestController
@@ -31,6 +31,7 @@ import team.waitingcatch.app.restaurant.service.requestseller.SellerManagementSe
 public class SellerManagementController {
 
 	private final SellerManagementService sellerManagementService;
+	private final MapApiService mapApiService;
 
 	//판매자 권한 부분
 
@@ -38,18 +39,20 @@ public class SellerManagementController {
 	@PostMapping("/seller/demand")
 	public void demandSignUpSeller(
 		@Valid @RequestBody DemandSignUpSellerControllerRequest demandSignUpControllerRequest) {
-		Address address = new Address(
-			demandSignUpControllerRequest.getProvince(),
-			demandSignUpControllerRequest.getCity(),
-			demandSignUpControllerRequest.getStreet()
-		);
-		Position position = new Position(
-			demandSignUpControllerRequest.getLatitude(),
-			demandSignUpControllerRequest.getLongitude()
-		);
+		// Address address = new Address(
+		// 	demandSignUpControllerRequest.getProvince(),
+		// 	demandSignUpControllerRequest.getCity(),
+		// 	demandSignUpControllerRequest.getStreet()
+		// );
+		// Position position = new Position(
+		// 	demandSignUpControllerRequest.getLatitude(),
+		// 	demandSignUpControllerRequest.getLongitude()
+		// );
+
+		Position position = mapApiService.getPosition(demandSignUpControllerRequest.getQuery());
 
 		DemandSignUpSellerServiceRequest demandSignupSellerServiceRequest = new DemandSignUpSellerServiceRequest(
-			demandSignUpControllerRequest, address, position);
+			demandSignUpControllerRequest, position);
 		sellerManagementService.demandSignUpSeller(demandSignupSellerServiceRequest);
 	}
 

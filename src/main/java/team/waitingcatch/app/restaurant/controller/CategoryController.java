@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
+import team.waitingcatch.app.common.dto.GenericResponse;
 import team.waitingcatch.app.restaurant.dto.category.CategoryResponse;
 import team.waitingcatch.app.restaurant.dto.category.ChildCategoryResponse;
 import team.waitingcatch.app.restaurant.dto.category.CreateCategoryRequest;
@@ -37,9 +38,20 @@ public class CategoryController {
 		categoryService.createCategory(request);
 	}
 
+	@GetMapping("/general/categories")
+	public GenericResponse<List<CategoryResponse>> getParentCategoriesForSellerManagement() {
+		return new GenericResponse<>(categoryService.getParentCategories());
+	}
+
 	@GetMapping("/admin/categories")
-	public List<CategoryResponse> getParentCategories() {
-		return categoryService.getParentCategories();
+	public GenericResponse<List<CategoryResponse>> getParentCategories() {
+		return new GenericResponse<>(categoryService.getParentCategories());
+	}
+
+	@GetMapping("/general/categories/{categoryId}")
+	public GenericResponse<List<CategoryResponse>> getChildCategoriesForSellerManagement(
+		@PathVariable Long categoryId) {
+		return new GenericResponse<>(categoryService.getChildCategoriesForSellerManagement(categoryId));
 	}
 
 	@GetMapping("/admin/categories/{categoryId}")
