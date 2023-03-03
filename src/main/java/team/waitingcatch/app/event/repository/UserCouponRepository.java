@@ -29,7 +29,7 @@ public interface UserCouponRepository extends JpaRepository<UserCoupon, Long> {
 	String findRestaurantNameByUserCoupon(@Param("userCoupon") UserCoupon userCoupon);
 
 	@Lock(LockModeType.OPTIMISTIC)
-	@Query("select uc from UserCoupon uc join fetch uc.user join fetch uc.couponCreator cc join fetch cc.event e join fetch e.restaurant r where uc.user = :user and uc.couponCreator = :couponCreator")
+	@Query("select uc from UserCoupon uc join uc.user join uc.couponCreator cc join cc.event e join e.restaurant r where uc.user = :user and uc.couponCreator = :couponCreator")
 	Optional<UserCoupon> findUserCouponWithRelations(@Param("user") User user,
 		@Param("couponCreator") CouponCreator couponCreator);
 
