@@ -39,7 +39,7 @@ public class SellerManagementController {
 	//판매자 권한 부분
 
 	//판매자 셀러 요청
-	@PostMapping("/seller/demand")
+	@PostMapping("/general/demand")
 	public void demandSignUpSeller(
 		@Valid @RequestBody DemandSignUpSellerControllerRequest demandSignUpControllerRequest) {
 		// Address address = new Address(
