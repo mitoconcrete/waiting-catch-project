@@ -1,7 +1,6 @@
 package team.waitingcatch.app.lineup;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -13,7 +12,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.transaction.annotation.Transactional;
 
 import team.waitingcatch.app.common.Position;
@@ -41,7 +39,7 @@ import team.waitingcatch.app.user.enums.UserRoleEnum;
 import team.waitingcatch.app.user.repository.UserRepository;
 
 @SpringBootTest
-@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
+// @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
 @Transactional
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class LineupIntegrationTest {
@@ -72,6 +70,15 @@ class LineupIntegrationTest {
 
 	@Autowired
 	SellerManagementService sellerManagementService;
+
+	@Test
+	void test() {
+		User customer = userRepository.findByUsernameAndIsDeletedFalse("customerId").get();
+		// lineupHistoryRepository.findUserCouponWithRelations(customer, null);
+		// lineupHistoryRepository.fetchjointest(null);
+		// lineupHistoryRepository.findRestaurantNameByUserCouponId(1L);
+		// lineupHistoryRepository.getRestaurantLineupStatistics(1L);
+	}
 
 	@BeforeEach
 	public void beforeEach() {
