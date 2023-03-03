@@ -35,7 +35,7 @@ public class Restaurant extends TimeStamped {
 	@Column(name = "restaurant_id")
 	private Long id;
 
-	@Column(nullable = false, length = 100)
+	@Column(nullable = false)
 	private String name;
 
 	@Convert(converter = StringListConverter.class)

@@ -22,6 +22,7 @@ import team.waitingcatch.app.common.Position;
 import team.waitingcatch.app.restaurant.dto.requestseller.DummyAPIdata;
 import team.waitingcatch.app.restaurant.entity.SellerManagement;
 import team.waitingcatch.app.restaurant.repository.SellerManagementRepository;
+import team.waitingcatch.app.restaurant.service.requestseller.SellerManagementService;
 
 @Service
 @RequiredArgsConstructor
@@ -29,6 +30,8 @@ public class MapApiService {
 	private final SellerManagementRepository sellerManagementRepository;
 	@Value("${kakao.key}")
 	private String apiKey;
+
+	private final SellerManagementService sellerManagementService;
 
 	public void getXYMapFromJson(String jsonString, String username, String name, String email, String nullPhone) {
 		ObjectMapper mapper = new ObjectMapper();
@@ -70,6 +73,7 @@ public class MapApiService {
 					address, nullPhone);
 				SellerManagement sellerManagement = new SellerManagement(request);
 				sellerManagementRepository.save(sellerManagement);
+				sellerManagementService.approveDummySignUpSeller();
 				//				Restaurant restaurant = new Restaurant(saveDummyRestaurantRequest);
 				//				restaurantRepository.save(restaurant);
 				//				RestaurantInfo restaurantInfo = new RestaurantInfo(restaurant);
