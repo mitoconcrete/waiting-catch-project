@@ -24,4 +24,6 @@ public interface SellerManagementService {
 		GetRequestSellerByRestaurantRequest getRequestSellerByRestaurantRequest);
 
 	Page<GetDemandSignUpSellerResponse> getDemandSignUpSellersById(String searchVal, Pageable pageable);
+
+	void approveDummySignUpSeller();
 }

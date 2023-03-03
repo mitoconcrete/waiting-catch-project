@@ -4,8 +4,8 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
-import io.lettuce.core.dynamic.annotation.Param;
 import team.waitingcatch.app.restaurant.entity.Category;
 
 public interface CategoryRepository extends JpaRepository<Category, Long> {
@@ -13,6 +13,10 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
 
 	List<Category> findAllByIdIn(List<Long> categoryId);
 
+	@Query(value = "select c from Category c where c.name in(:categoryIds)")
+	List<Category> findAllByName(@Param("categoryIds") List<String> name);
+
 	@Query(value = "select c.name from Category c where c.id in(:categoryIds)")
 	List<String> findNameByIdIn(@Param("categoryIds") List<Long> categoryIds);
+
 }

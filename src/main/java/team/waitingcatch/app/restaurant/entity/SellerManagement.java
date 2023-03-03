@@ -1,7 +1,5 @@
 package team.waitingcatch.app.restaurant.entity;
 
-import java.util.ArrayList;
-
 import java.util.List;
 
 import javax.persistence.Column;
@@ -21,6 +19,7 @@ import team.waitingcatch.app.common.Position;
 import team.waitingcatch.app.common.entity.TimeStamped;
 import team.waitingcatch.app.common.util.StringListConverter;
 import team.waitingcatch.app.restaurant.dto.requestseller.DemandSignUpSellerServiceRequest;
+import team.waitingcatch.app.restaurant.dto.requestseller.DummyAPIdata;
 import team.waitingcatch.app.restaurant.enums.AcceptedStatusEnum;
 
 @Getter
@@ -95,6 +94,28 @@ public class SellerManagement extends TimeStamped {
 		// this.searchKeyWords = "";
 		this.businessLicenseNo = demandSignupSellerServiceRequest.getBusinessLicenseNo();
 		this.name = demandSignupSellerServiceRequest.getName();
+	}
+
+	public SellerManagement(DummyAPIdata dummyAPIdata) {
+		this.username = dummyAPIdata.getUsername();
+		this.email = dummyAPIdata.getEmail();
+		if (phoneNumber == null) {
+			this.phoneNumber = dummyAPIdata.getNullPhoneNumber();
+		} else {
+			this.phoneNumber = dummyAPIdata.getPhoneNumber();
+		}
+		this.restaurantName = dummyAPIdata.getRestaurantName();
+		this.zipCode = dummyAPIdata.getZipCode();
+		this.address = dummyAPIdata.getAddress();
+		this.detailAddress = dummyAPIdata.getDetailAddress();
+		// this.address = demandSignupSellerServiceRequest.getAddress();
+		this.position = dummyAPIdata.getPosition();
+		this.description = dummyAPIdata.getDescription();
+		this.status = AcceptedStatusEnum.WAIT;
+		this.categories = dummyAPIdata.getCategories();
+		// this.searchKeyWords = "";
+		this.businessLicenseNo = dummyAPIdata.getBusinessLicenseNo();
+		this.name = dummyAPIdata.getName();
 	}
 
 	public void approveUpdateStatus() {

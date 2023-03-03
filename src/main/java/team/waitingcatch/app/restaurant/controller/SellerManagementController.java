@@ -92,6 +92,11 @@ public class SellerManagementController {
 		sellerManagementService.rejectSignUpSeller(rejectSignUpSellerServiceRequest);
 	}
 
+	@PostMapping("/general/seller-managements/dummy")
+	public void approveDummySignUpSeller() {
+		sellerManagementService.approveDummySignUpSeller();
+	}
+
 }
 
 

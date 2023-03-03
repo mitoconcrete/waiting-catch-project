@@ -28,6 +28,7 @@ import team.waitingcatch.app.restaurant.dto.requestseller.RejectSignUpSellerServ
 import team.waitingcatch.app.restaurant.entity.Restaurant;
 import team.waitingcatch.app.restaurant.entity.RestaurantInfo;
 import team.waitingcatch.app.restaurant.entity.SellerManagement;
+import team.waitingcatch.app.restaurant.enums.AcceptedStatusEnum;
 import team.waitingcatch.app.restaurant.repository.RestaurantInfoRepository;
 import team.waitingcatch.app.restaurant.repository.RestaurantRepository;
 import team.waitingcatch.app.restaurant.repository.SellerManagementRepository;
@@ -121,9 +122,10 @@ public class SellerManagementServiceImpl implements SellerManagementService, Int
 			.collect(Collectors.toList());
 
 		List<String> categoryNames = categoryService._getCategoryNames(categoryIds);
+		// List<String> categoryNames = sellerManagement.getCategories();
 		List<String> searchKeywords = new ArrayList<>();
 		for (String categoryName : categoryNames) {
-			searchKeywords.add(categoryName + " ");
+			searchKeywords.add(categoryName);
 		}
 
 		ApproveSignUpSellerManagementEntityPassToRestaurantEntityRequest
@@ -154,6 +156,55 @@ public class SellerManagementServiceImpl implements SellerManagementService, Int
 			+ "\n로그인 후에 비밀번호를 변경을 해주세요.");
 		emailSender.send(message);
 		return new ApproveSignUpSellerResponse(sellerManagement.getUsername(), uuidPassword);
+	}
+
+	@Override
+	public void approveDummySignUpSeller() {
+		List<SellerManagement> sellerManagements = sellerManagementRepository.findAllByStatus(AcceptedStatusEnum.WAIT);
+		for (SellerManagement sellerManagement : sellerManagements) {
+			sellerManagement.checkReject();
+			sellerManagement.checkApprove();
+
+			sellerManagement.approveUpdateStatus();
+			sellerManagementRepository.save(sellerManagement);
+			//비밀번호
+			String uuidPassword = UUID.randomUUID().toString().substring(1, 8);
+			//회원가입
+			CreateUserServiceRequest
+				userCreateServiceRequest
+				= new CreateUserServiceRequest(UserRoleEnum.SELLER, sellerManagement.getName(),
+				sellerManagement.getEmail(),
+				sellerManagement.getUsername(), uuidPassword, null, sellerManagement.getPhoneNumber());
+			userService.createUser(userCreateServiceRequest);
+
+			User seller = internalUserService._getUserByUsername(sellerManagement.getUsername());
+			// 레스토랑 만들기
+			List<String> categoryNames = sellerManagement.getCategories();
+			List<String> searchKeywords = new ArrayList<>();
+			for (String categoryName : categoryNames) {
+				searchKeywords.add(categoryName);
+			}
+
+			ApproveSignUpSellerManagementEntityPassToRestaurantEntityRequest
+				approveSignUpSellerManagementEntityPassToRestaurantEntityRequest
+				= new ApproveSignUpSellerManagementEntityPassToRestaurantEntityRequest(sellerManagement, seller,
+				searchKeywords);
+
+			Restaurant restaurant = new Restaurant(approveSignUpSellerManagementEntityPassToRestaurantEntityRequest);
+			restaurantRepository.save(restaurant);
+
+			ConnectCategoryRestaurantServiceRequest serviceRequest = new ConnectCategoryRestaurantServiceRequest(
+				restaurant,
+				sellerManagement.getCategories());
+			categoryService._connectCategoryRestaurantDummy(serviceRequest);
+
+			RestaurantInfo restaurantInfo = new RestaurantInfo(restaurant);
+			restaurantInfoRepository.save(restaurantInfo);
+
+			WaitingNumber waitingNumber = WaitingNumber.createWaitingNumber(restaurant);
+			waitingNumberRepository.save(waitingNumber);
+		}
+
 	}
 
 	public void rejectSignUpSeller(RejectSignUpSellerServiceRequest rejectSignUpSellerServiceRequest) {

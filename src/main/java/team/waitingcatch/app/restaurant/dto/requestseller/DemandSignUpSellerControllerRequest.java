@@ -17,16 +17,16 @@ import lombok.Setter;
 @NoArgsConstructor
 public class DemandSignUpSellerControllerRequest {
 	@NotNull
-	@Pattern(regexp = "^(?=.*[a-z])(?=.*[0-9])[a-z0-9]{4,10}$",
+	@Pattern(regexp = "^(?=.*[a-z])(?=.*[0-9])[a-z0-9]{4,15}$",
 		message = "4자 이상 10자 이내여야하며, 하나 이상의 알파벳 소문자와 숫자의 조합으로 이뤄져야 합니다.")
 	private String username;
 
 	@NotNull
-	@Size(min = 2, max = 5, message = "이름은 최소 2글자에서 5글자 사이어야합니다.")
+	@Size(min = 2, max = 15, message = "이름은 최소 2글자에서 5글자 사이어야합니다.")
 	private String name;
 
 	@NotNull
-	@Pattern(regexp = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+.[A-Za-z]{2,6}$", message = "이메일 형식을 맞춰주세요.")
+	@Pattern(regexp = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+.[A-Za-z]{2,15}$", message = "이메일 형식을 맞춰주세요.")
 	private String email;
 
 	@NotNull
@@ -34,7 +34,7 @@ public class DemandSignUpSellerControllerRequest {
 	private String phoneNumber;
 
 	@NotNull(message = "레스토랑 이름은 필수 입력값입니다.")
-	@Pattern(regexp = "[가-힣a-zA-Z1-9]{1,12}", message = "레스토랑 이름은 한글,영어,숫자 포함해서 12자리 이내로 입력해주세요.")
+	@Pattern(regexp = "[가-힣a-zA-Z1-9]{1,15}", message = "레스토랑 이름은 한글,영어,숫자 포함해서 12자리 이내로 입력해주세요.")
 	private String restaurantName;
 
 	@NotNull(message = "카테고리는 필수 입력값입니다.")

@@ -19,26 +19,18 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.common.Position;
-import team.waitingcatch.app.restaurant.dto.restaurant.SaveDummyRestaurantRequest;
-import team.waitingcatch.app.restaurant.entity.Restaurant;
-import team.waitingcatch.app.restaurant.entity.RestaurantInfo;
-import team.waitingcatch.app.restaurant.repository.RestaurantInfoRepository;
-import team.waitingcatch.app.restaurant.repository.RestaurantRepository;
-import team.waitingcatch.app.user.entitiy.User;
-import team.waitingcatch.app.user.repository.UserRepository;
+import team.waitingcatch.app.restaurant.dto.requestseller.DummyAPIdata;
+import team.waitingcatch.app.restaurant.entity.SellerManagement;
+import team.waitingcatch.app.restaurant.repository.SellerManagementRepository;
 
 @Service
 @RequiredArgsConstructor
 public class MapApiService {
-	private final RestaurantRepository restaurantRepository;
-	private final RestaurantInfoRepository restaurantInfoRepository;
-	private final UserRepository userRepository;
-
+	private final SellerManagementRepository sellerManagementRepository;
 	@Value("${kakao.key}")
 	private String apiKey;
 
-	public void getXYMapFromJson(String jsonString) {
-		User user = userRepository.findByUsernameAndIsDeletedFalse("seller15").orElseThrow();
+	public void getXYMapFromJson(String jsonString, String username, String name, String email, String nullPhone) {
 		ObjectMapper mapper = new ObjectMapper();
 
 		try {
@@ -62,37 +54,26 @@ public class MapApiService {
 				String zipCode = "";
 				String address = adList.get("road_address_name");
 				String detailAddress = "detailAddress";
-				// String province = addressName.substring(0, 2);
-				// String city = addressName.substring(3, 7);
-				// String street = addressName.substring(8);
-				// String reCity = city.replace(" ", "");
 
 				String category = adList.get("category_name");
 				String subCategory = category.substring(6, 8);
 				String replaceCategory = subCategory.replace(" ", "");
 
 				Position position = new Position(latitude, longitude);
-				// Address address = new Address(province, reCity, street);
-
 				List<String> categoryList = new ArrayList<>();
 				categoryList.add(replaceCategory);
-
-				SaveDummyRestaurantRequest saveDummyRestaurantRequest = new SaveDummyRestaurantRequest(placeName,
-					zipCode, address, detailAddress, position, phone, replaceCategory, user, categoryList);
-				// DemandSignUpSellerControllerRequest corequest = new DemandSignUpSellerControllerRequest();
-				// corequest.setEmail("");
-				// corequest.setPhoneNumber(phone);
-				// corequest.getCategories().add(replaceCategory);
-				// corequest.setRestaurantName(placeName);
 				//
-				// DemandSignUpSellerServiceRequest request = new DemandSignUpSellerServiceRequest(corequest,
-				// 	position);
-				// SellerManagement sellerManagement = new SellerManagement(request);
-				Restaurant restaurant = new Restaurant(saveDummyRestaurantRequest);
-				restaurantRepository.save(restaurant);
-				RestaurantInfo restaurantInfo = new RestaurantInfo(restaurant);
+				// SaveDummyRestaurantRequest saveDummyRestaurantRequest = new SaveDummyRestaurantRequest(placeName,
+				// 	zipCode, address, detailAddress, position, phone, replaceCategory, user, categoryList);
 
-				restaurantInfoRepository.save(restaurantInfo);
+				DummyAPIdata request = new DummyAPIdata(username, name, email, phone, placeName, categoryList, position,
+					address, nullPhone);
+				SellerManagement sellerManagement = new SellerManagement(request);
+				sellerManagementRepository.save(sellerManagement);
+				//				Restaurant restaurant = new Restaurant(saveDummyRestaurantRequest);
+				//				restaurantRepository.save(restaurant);
+				//				RestaurantInfo restaurantInfo = new RestaurantInfo(restaurant);
+				//				restaurantInfoRepository.save(restaurantInfo);
 			}
 		} catch (IOException e) {
 			e.printStackTrace();

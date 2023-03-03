@@ -10,5 +10,7 @@ public interface InternalCategoryService {
 
 	void _connectCategoryRestaurant(ConnectCategoryRestaurantServiceRequest serviceRequest);
 
+	void _connectCategoryRestaurantDummy(ConnectCategoryRestaurantServiceRequest serviceRequest);
+
 	List<String> _getCategoryNames(List<Long> categoryIds);
 }

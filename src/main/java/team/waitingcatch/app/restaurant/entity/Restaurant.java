@@ -35,7 +35,7 @@ public class Restaurant extends TimeStamped {
 	@Column(name = "restaurant_id")
 	private Long id;
 
-	@Column(nullable = false, length = 8)
+	@Column(nullable = false, length = 100)
 	private String name;
 
 	@Convert(converter = StringListConverter.class)
@@ -44,7 +44,7 @@ public class Restaurant extends TimeStamped {
 	@Embedded
 	private Position position;
 
-	@Column(nullable = false, length = 5)
+	@Column(nullable = false, length = 10)
 	private String zipCode;
 
 	@Column(nullable = false, length = 50)
@@ -56,7 +56,7 @@ public class Restaurant extends TimeStamped {
 	// @Embedded
 	// private Address address;
 
-	@Column(nullable = false, length = 13)
+	@Column(nullable = false, length = 20)
 	private String phoneNumber;
 
 	@Column(nullable = false)

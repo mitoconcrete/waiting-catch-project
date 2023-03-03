@@ -81,12 +81,27 @@ public class CategoryServiceImpl implements CategoryService, InternalCategorySer
 		List<Long> categoryIds = serviceRequest.getCategoryIds().stream()
 			.map(Long::parseLong)
 			.collect(Collectors.toList());
-
 		List<Category> categories = categoryRepository.findAllByIdIn(categoryIds);
 
 		for (Category category : categories) {
 			CategoryRestaurant categoryRestaurant = new CategoryRestaurant(category, serviceRequest.getRestaurant());
 			categoryRestaurantRepository.save(categoryRestaurant);
+		}
+	}
+
+	@Override
+	public void _connectCategoryRestaurantDummy(ConnectCategoryRestaurantServiceRequest serviceRequest) {
+		List<Category> categories = categoryRepository.findAllByName(serviceRequest.getCategoryIds());
+		System.out.println("1 = " + 1);
+		for (Category category : categories) {
+			System.out.println("2 = " + 2);
+
+			CategoryRestaurant categoryRestaurant = new CategoryRestaurant(category, serviceRequest.getRestaurant());
+			System.out.println("3 = " + 3);
+
+			categoryRestaurantRepository.save(categoryRestaurant);
+			System.out.println("4 = " + 4);
+
 		}
 	}
 
