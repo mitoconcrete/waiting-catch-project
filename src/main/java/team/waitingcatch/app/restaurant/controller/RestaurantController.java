@@ -44,26 +44,26 @@ public class RestaurantController {
 	private final RestaurantService restaurantService;
 
 	// Customer
-	@GetMapping("/restaurants/{restaurantId}")
+	@GetMapping({"/customer/restaurants/{restaurantId}", "/admin/restaurants/{restaurantId}"})
 	public RestaurantBasicInfoResponse getRestaurantBasicInfo(@PathVariable Long restaurantId) {
 		RestaurantBasicInfoServiceRequest request = new RestaurantBasicInfoServiceRequest(restaurantId);
 		return restaurantService.getRestaurantBasicInfo(request);
 	}
 
-	@GetMapping("/restaurants/{restaurantId}/details")
+	@GetMapping({"/customer/restaurants/{restaurantId}/details", "/admin/restaurants/{restaurantId}/details"})
 	public RestaurantDetailedInfoResponse getRestaurantDetailedInfo(@PathVariable Long restaurantId) {
 		RestaurantDetailedInfoServiceRequest request = new RestaurantDetailedInfoServiceRequest(restaurantId);
 		return restaurantService.getRestaurantDetailedInfo(request);
 	}
 
-	@GetMapping("/restaurants/search")
+	@GetMapping("/general/restaurants/search")
 	public List<SearchRestaurantsResponse> searchRestaurantsByKeyword(@RequestParam String keyword,
 		@RequestParam double latitude, @RequestParam double longitude) {
 		SearchRestaurantServiceRequest request = new SearchRestaurantServiceRequest(keyword, latitude, longitude);
 		return restaurantService.searchRestaurantsByKeyword(request);
 	}
 
-	@GetMapping("/restaurants")
+	@GetMapping("/general/restaurants")
 	public List<RestaurantsWithinRadiusResponse> getRestaurantsWithinRadius(
 		@RequestParam double latitude, @RequestParam double longitude) {
 		RestaurantsWithinRadiusServiceRequest request = new RestaurantsWithinRadiusServiceRequest(latitude,
@@ -74,7 +74,7 @@ public class RestaurantController {
 	// Seller
 
 	//판매자가 자신의 레스토랑 정보를 수정한다.
-	@PutMapping(value = "/restaurant/info", consumes = {MediaType.APPLICATION_JSON_VALUE,
+	@PutMapping(value = "/seller/restaurant/info", consumes = {MediaType.APPLICATION_JSON_VALUE,
 		MediaType.MULTIPART_FORM_DATA_VALUE})
 	@ResponseStatus(HttpStatus.CREATED)
 	public void updateRestaurant(
