@@ -41,17 +41,11 @@ public class UserCouponServiceImpl implements UserCouponService, InternalUserCou
 			createUserCouponserviceRequest.getCreatorId());
 		User user = internalUserService._getUserByUsername(createUserCouponserviceRequest.getUsername());
 
-		// 쿠폰 발급 가능 여부를 확인하고, 발급 처리합니다.
-		//Optional<UserCoupon> userCoupon = userCouponRepository.findUserCouponWithRelations(user, couponCreator);
-
 		userCouponRepository.findUserCouponWithRelations(user, couponCreator).ifPresent(
 			u -> {
 				throw new IllegalArgumentException("이미 발급받은 쿠폰입니다.");
 			}
 		);
-		// if (userCoupon.isPresent()) {
-		// 	throw new IllegalArgumentException("이미 발급받은 쿠폰입니다.");
-		// }
 		UserCoupon userCoupon = new UserCoupon(user, couponCreator);
 		boolean isCouponIssued = couponCreator.hasCouponBalance();
 		// boolean isCouponIssued = userCoupon.issueCoupon();
@@ -61,26 +55,6 @@ public class UserCouponServiceImpl implements UserCouponService, InternalUserCou
 		} else {
 			throw new IllegalStateException("요청이 많습니다. 다시 시도해주세요");
 		}
-
-		// for (int i = 1; i <= retryCount; i++) {
-		// 	try {
-		// 		//이미 발급받은 쿠폰이 있는지
-		// 		userCoupon = userCouponRepository.findUserCouponWithRelations(user, couponCreator);
-		// 		if (userCoupon.isPresent()) {
-		// 			throw new IllegalArgumentException("이미 발급받은 쿠폰입니다.");
-		// 		}
-		// 		userCoupon = Optional.of(new UserCoupon(user, couponCreator));
-		// 		boolean isCouponIssued = userCoupon.get().issueCoupon();
-		// 		if (isCouponIssued) {
-		// 			userCouponRepository.save(userCoupon.get());
-		// 			break;
-		// 		}
-		// 	} catch (OptimisticLockException ex) {
-		// 		if (i == retryCount) {
-		// 			throw new IllegalArgumentException("시도횟수가 초과하였습니다. 다시 시도해주세요");
-		// 		}
-		// 	}
-		// }
 
 	}
 

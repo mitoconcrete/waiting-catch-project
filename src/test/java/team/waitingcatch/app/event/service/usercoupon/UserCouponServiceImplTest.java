@@ -12,11 +12,16 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import team.waitingcatch.app.event.dto.usercoupon.CreateUserCouponServiceRequest;
 import team.waitingcatch.app.event.dto.usercoupon.GetUserCouponResponse;
+import team.waitingcatch.app.event.dto.usercoupon.UserCouponResponse;
+import team.waitingcatch.app.event.dto.usercoupon.UserCouponServiceResponse;
 import team.waitingcatch.app.event.entity.CouponCreator;
 import team.waitingcatch.app.event.entity.Event;
 import team.waitingcatch.app.event.entity.UserCoupon;
+import team.waitingcatch.app.event.repository.CouponCreatorRepository;
 import team.waitingcatch.app.event.repository.UserCouponRepository;
+import team.waitingcatch.app.event.service.couponcreator.InternalCouponCreatorService;
 import team.waitingcatch.app.restaurant.entity.Restaurant;
 import team.waitingcatch.app.user.entitiy.User;
 import team.waitingcatch.app.user.service.InternalUserService;
@@ -31,30 +36,31 @@ class UserCouponServiceImplTest {
 	private UserCouponRepository userCouponRepository;
 
 	@Mock
+	private CouponCreatorRepository couponCreatorRepository;
+	@Mock
 	private InternalUserService userService;
 
-	// @Test
-	// void createUserCoupon() {        //테스트오류? if문진입을 안함
-	// 	CreateUserCouponServiceRequest createUserCouponServiceRequest = mock(CreateUserCouponServiceRequest.class);
-	// 	when(createUserCouponServiceRequest.getCreatorId()).thenReturn(1L);
-	// 	when(createUserCouponServiceRequest.getUsername()).thenReturn("테스트");
-	//
-	// 	CouponCreator couponCreator = mock(CouponCreator.class);
-	// 	when(couponCreator.getId()).thenReturn(1L);
-	// 	when(couponCreator.getName()).thenReturn("테스트");
-	// 	when(couponCreator.getQuantity()).thenReturn(300);
-	// 	when(couponCreatorService._getCouponCreatorById(any(Long.class))).thenReturn(couponCreator);
-	//
-	// 	User user = mock(User.class);
-	// 	when(user.getId()).thenReturn(1L);
-	// 	when(user.getUsername()).thenReturn("테스터");
-	// 	when(userService._getUserByUsername(any(String.class))).thenReturn(user);
-	//
-	// 	userCouponService.createUserCoupon(createUserCouponServiceRequest);
-	//
-	// 	verify(userCouponRepository, times(1)).save(any(UserCoupon.class));
-	//
-	// }
+	@Mock
+	private InternalCouponCreatorService couponCreatorService;
+
+	@Test
+	void createUserCoupon() {
+		CreateUserCouponServiceRequest createUserCouponServiceRequest = mock(CreateUserCouponServiceRequest.class);
+		when(createUserCouponServiceRequest.getCreatorId()).thenReturn(1L);
+		when(createUserCouponServiceRequest.getUsername()).thenReturn("테스트");
+
+		CouponCreator couponCreator = mock(CouponCreator.class);
+		when(couponCreator.getId()).thenReturn(1L);
+		when(couponCreator.getName()).thenReturn("테스트");
+		when(couponCreator.getQuantity()).thenReturn(300);
+		when(couponCreator.hasCouponBalance()).thenReturn(true);
+		when(couponCreatorService._getCouponCreatorById(any(Long.class))).thenReturn(couponCreator);
+
+		userCouponService.createUserCoupon(createUserCouponServiceRequest);
+
+		verify(userCouponRepository, times(1)).save(any(UserCoupon.class));
+
+	}
 
 	@Test
 	void getUserCoupons() {
@@ -70,14 +76,24 @@ class UserCouponServiceImplTest {
 		when(user.getUsername()).thenReturn("테스터");
 		when(userService._getUserByUsername(any(String.class))).thenReturn(user);
 
-		List<UserCoupon> coupons = new ArrayList<>();
-		UserCoupon userCoupon = mock(UserCoupon.class);
-		when(userCoupon.getId()).thenReturn(1L);
+		List<UserCouponServiceResponse> userCouponServiceResponses = new ArrayList<>();
+		UserCouponServiceResponse userCouponServiceResponse = mock(UserCouponServiceResponse.class);
+		UserCouponResponse userCouponResponse = mock(UserCouponResponse.class);
 
+		UserCoupon userCoupon = mock(UserCoupon.class);
+
+		CouponCreator couponCreator1 = mock(CouponCreator.class);
+		when(userCouponServiceResponse.getRestaurants()).thenReturn("레스토랑테스트");
+		when(userCouponServiceResponse.getUserCoupons()).thenReturn(userCoupon);
+		when(userCouponResponse.getCouponCreator()).thenReturn(couponCreator1);
+		when(couponCreator1.getId()).thenReturn(1L);
+		when(couponCreator1.getName()).thenReturn("테스트");
+		when(userCouponServiceResponse.getUserCoupons()).thenReturn(userCoupon);
+		when(userCouponResponse.getUserCoupon()).thenReturn(userCoupon);
 		when(userCoupon.getCouponCreator()).thenReturn(couponCreator);
-		when(userCoupon.getCouponCreator().getEvent().getRestaurant().getName()).thenReturn("테스터");
-		coupons.add(userCoupon);
-		when(userCouponRepository.findByUserWithUserAndCouponCreator(user)).thenReturn(coupons);
+		userCouponServiceResponses.add(userCouponServiceResponse);
+
+		when(userCouponRepository.findRestaurantNameAndUserAll(user)).thenReturn(userCouponServiceResponses);
 
 		List<GetUserCouponResponse> list = userCouponService.getUserCoupons(user);
 
