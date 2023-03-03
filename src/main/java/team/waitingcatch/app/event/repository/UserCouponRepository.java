@@ -25,8 +25,14 @@ public interface UserCouponRepository extends JpaRepository<UserCoupon, Long> {
 	@Query("select uc from UserCoupon uc join fetch uc.user u join fetch uc.couponCreator where uc.user = :user and uc.isUsed=false")
 	List<UserCoupon> findByUserWithUserAndCouponCreator(@Param("user") User user);
 
-	@Query("select r.name from UserCoupon uc join uc.couponCreator cc join cc.event e join e.restaurant r where uc =:userCoupon")
-	String findRestaurantNameByUserCoupon(@Param("userCoupon") UserCoupon userCoupon);
+	// @Query("select r.name from UserCoupon uc join uc.couponCreator cc join cc.event e join e.restaurant r where uc =:userCoupon")
+	// String findRestaurantNameByUserCoupon(@Param("userCoupon") UserCoupon userCoupon);
+
+	//@Query("select r.name from UserCoupon uc join uc.couponCreator cc join cc.event e join e.restaurant r where uc.user =:userCoupon")
+	//List<String> findRestaurantNamesByUser(@Param("userCoupon") List<UserCoupon> userCoupon);
+
+	@Query("select r.name from UserCoupon uc join uc.couponCreator cc join cc.event e join e.restaurant r where uc.user in :userCoupon")
+	List<String> findRestaurantNamesByUser(@Param("userCoupon") List<UserCoupon> userCoupon);
 
 	@Lock(LockModeType.OPTIMISTIC)
 	@Query("select uc from UserCoupon uc join uc.user join uc.couponCreator cc join cc.event e join e.restaurant r where uc.user = :user and uc.couponCreator = :couponCreator")
