@@ -63,6 +63,7 @@ public class Restaurant extends TimeStamped {
 	private boolean isDeleted;
 
 	@Convert(converter = StringListConverter.class)
+	@Column(name = "search_keywords")
 	private List<String> searchKeywords = new ArrayList<>();
 
 	@Column(nullable = false, length = 255)
@@ -111,6 +112,7 @@ public class Restaurant extends TimeStamped {
 		this.position = request.getPosition();
 		// this.category = request.getCategory();
 		this.user = request.getUser();
+		this.searchKeywords = request.getSearchkeywords();
 	}
 
 	// public String getProvince() {

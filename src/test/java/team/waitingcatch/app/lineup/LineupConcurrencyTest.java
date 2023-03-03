@@ -1,8 +1,10 @@
 package team.waitingcatch.app.lineup;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -66,6 +68,10 @@ public class LineupConcurrencyTest {
 	@Commit
 	@Order(1)
 	void insertDummyDataBeforeConcurrentWaitingTest() {
+		List<String> searchkeywords = new ArrayList<>();
+		searchkeywords.add("korean");
+		searchkeywords.add("japan");
+
 		User seller1 = new User(UserRoleEnum.SELLER, "판매자1", "abcdef@gmail.com", "sellerIdA", "pw123", "sjsjA",
 			"01012301230");
 		userRepository.save(seller1);
@@ -76,13 +82,13 @@ public class LineupConcurrencyTest {
 
 		Restaurant restaurant1 = new Restaurant(
 			new SaveDummyRestaurantRequest("맛집1", "12345", "서울시 강남구 강남대로", "1", new Position(0.0, 0.0),
-				"01000000001", "일식>스시>오마카세", seller1));
+				"01000000001", "일식>스시>오마카세", seller1, searchkeywords));
 		restaurantRepository.save(restaurant1);
 		openRestaurant(restaurant1);
 
 		Restaurant restaurant2 = new Restaurant(
 			new SaveDummyRestaurantRequest("레스토랑2", "12345", "서울시 강남구 강남대로", "1", new Position(0.0, 0.0),
-				"01000000001", "일식>스시>오마카세", seller2));
+				"01000000001", "일식>스시>오마카세", seller2, searchkeywords));
 		restaurantRepository.save(restaurant2);
 		openRestaurant(restaurant2);
 

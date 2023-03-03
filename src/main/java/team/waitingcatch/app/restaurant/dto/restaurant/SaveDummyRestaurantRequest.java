@@ -1,5 +1,7 @@
 package team.waitingcatch.app.restaurant.dto.restaurant;
 
+import java.util.List;
+
 import lombok.Getter;
 import team.waitingcatch.app.common.Position;
 import team.waitingcatch.app.user.entitiy.User;
@@ -14,10 +16,11 @@ public class SaveDummyRestaurantRequest {
 	private final String category;
 	private final String phoneNumber;
 	private final User user;
+	private final List<String> searchkeywords;
 
 	public SaveDummyRestaurantRequest(String name, String zipCode, String address, String detailAddress,
 		Position position, String phone, String category,
-		User user) {
+		User user, List<String> searchkeywords) {
 
 		this.name = name;
 		this.zipCode = zipCode;
@@ -27,5 +30,6 @@ public class SaveDummyRestaurantRequest {
 		this.phoneNumber = phone;
 		this.category = category;
 		this.user = user;
+		this.searchkeywords = searchkeywords;
 	}
 }

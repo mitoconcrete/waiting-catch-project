@@ -7,6 +7,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -73,12 +74,24 @@ public class MapApiService {
 				Position position = new Position(latitude, longitude);
 				// Address address = new Address(province, reCity, street);
 
+				List<String> categoryList = new ArrayList<>();
+				categoryList.add(replaceCategory);
+
 				SaveDummyRestaurantRequest saveDummyRestaurantRequest = new SaveDummyRestaurantRequest(placeName,
-					zipCode,
-					address, detailAddress, position, phone, replaceCategory, user);
+					zipCode, address, detailAddress, position, phone, replaceCategory, user, categoryList);
+				// DemandSignUpSellerControllerRequest corequest = new DemandSignUpSellerControllerRequest();
+				// corequest.setEmail("");
+				// corequest.setPhoneNumber(phone);
+				// corequest.getCategories().add(replaceCategory);
+				// corequest.setRestaurantName(placeName);
+				//
+				// DemandSignUpSellerServiceRequest request = new DemandSignUpSellerServiceRequest(corequest,
+				// 	position);
+				// SellerManagement sellerManagement = new SellerManagement(request);
 				Restaurant restaurant = new Restaurant(saveDummyRestaurantRequest);
 				restaurantRepository.save(restaurant);
 				RestaurantInfo restaurantInfo = new RestaurantInfo(restaurant);
+
 				restaurantInfoRepository.save(restaurantInfo);
 			}
 		} catch (IOException e) {

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.restaurant.dto.category.CreateCategoryRequest;
@@ -64,9 +65,11 @@ public class AdminController {
 
 	@PostMapping("/general/templates/admin/register")
 	@ResponseStatus(HttpStatus.CREATED)
-	public void createAdmin(
-		@ModelAttribute("CreateUserControllerRequest") @Valid CreateUserControllerRequest controllerRequest) {
+	public String createAdmin(
+		@ModelAttribute("CreateUserControllerRequest") @Valid CreateUserControllerRequest controllerRequest,
+		RedirectAttributes redirectAttributes) {
 		_createUserService(UserRoleEnum.ADMIN, controllerRequest);
+		return "redirect:/general/";
 	}
 
 	private void _createUserService(UserRoleEnum role, CreateUserControllerRequest controllerRequest) {

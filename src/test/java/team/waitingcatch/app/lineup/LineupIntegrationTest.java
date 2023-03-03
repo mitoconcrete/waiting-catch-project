@@ -1,9 +1,9 @@
 package team.waitingcatch.app.lineup;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -75,6 +75,10 @@ class LineupIntegrationTest {
 
 	@BeforeEach
 	public void beforeEach() {
+		List<String> searchkeywords = new ArrayList<>();
+		searchkeywords.add("korean");
+		searchkeywords.add("japan");
+
 		User customer = new User(UserRoleEnum.USER, "유저1", "aaa@gmail.com", "customerId", "pw12", "sj",
 			"01012341234");
 		userRepository.save(customer);
@@ -85,7 +89,7 @@ class LineupIntegrationTest {
 
 		Restaurant restaurant = new Restaurant(
 			new SaveDummyRestaurantRequest("레스토랑1", "12345", "서울시 강남구 강남대로", "1", new Position(0.0, 0.0),
-				"01000000000", "일식>스시>오마카세", seller));
+				"01000000000", "일식>스시>오마카세", seller, searchkeywords));
 		openRestaurant(restaurant);
 	}
 
@@ -193,6 +197,9 @@ class LineupIntegrationTest {
 	@DisplayName("줄서기 히스토리 조회")
 	void getLineupHistories() {
 		User customer = userRepository.findByUsernameAndIsDeletedFalse("customerId").get();
+		List<String> searchkeywords = new ArrayList<>();
+		searchkeywords.add("korean");
+		searchkeywords.add("japan");
 
 		for (int i = 0; i < 10; i++) {
 			User seller = new User(UserRoleEnum.SELLER, "사장" + i, i + "@naver.com", "sellerId" + i, "pw" + i,
@@ -201,7 +208,7 @@ class LineupIntegrationTest {
 
 			Restaurant restaurant = new Restaurant(
 				new SaveDummyRestaurantRequest("레스토랑" + i, "12345", "서울시 강남구 강남대로", "1", new Position(0.0, 0.0),
-					"0100000000" + i, "일식>스시>오마카세", seller));
+					"0100000000" + i, "일식>스시>오마카세", seller, searchkeywords));
 
 			openRestaurant(restaurant);
 
