@@ -11,7 +11,7 @@ public interface InternalRestaurantService {
 
 	Restaurant _getRestaurantByUserId(Long userId);
 
-	void createRestaurant(ApproveSignUpSellerManagementEntityPassToRestaurantEntityRequest request);
+	void _createRestaurant(ApproveSignUpSellerManagementEntityPassToRestaurantEntityRequest request);
 
 	void _openLineup(Long restaurantId);
 

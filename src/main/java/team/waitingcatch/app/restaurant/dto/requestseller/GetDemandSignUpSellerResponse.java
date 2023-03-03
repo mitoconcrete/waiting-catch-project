@@ -1,5 +1,7 @@
 package team.waitingcatch.app.restaurant.dto.requestseller;
 
+import java.util.List;
+
 import lombok.Getter;
 import team.waitingcatch.app.restaurant.entity.SellerManagement;
 import team.waitingcatch.app.restaurant.enums.AcceptedStatusEnum;
@@ -11,14 +13,17 @@ public class GetDemandSignUpSellerResponse {
 	private final String email;
 	private final String phoneNumber;
 	private final String restaurantName;
-	private final String categories;
+	private final List<String> categories;
 	private final double latitude;
 	private final double longitude;
 	private final String description;
-	private final String province;
-	private final String city;
-	private final String street;
-	private final String searchKeyWords;
+	// private final String province;
+	// private final String city;
+	// private final String street;
+	private final String zipCode;
+	private final String address;
+	private final String detailAddress;
+	// private final String searchKeyWords;
 	private final String businessLicenseNo;
 	private final String name;
 	private final AcceptedStatusEnum status;
@@ -33,10 +38,13 @@ public class GetDemandSignUpSellerResponse {
 		this.latitude = sellerManagement.getPosition().getLatitude();
 		this.longitude = sellerManagement.getPosition().getLongitude();
 		this.description = sellerManagement.getDescription();
-		this.province = sellerManagement.getAddress().getProvince();
-		this.city = sellerManagement.getAddress().getCity();
-		this.street = sellerManagement.getAddress().getStreet();
-		this.searchKeyWords = sellerManagement.getSearchKeyWords();
+		// this.province = sellerManagement.getAddress().getProvince();
+		// this.city = sellerManagement.getAddress().getCity();
+		// this.street = sellerManagement.getAddress().getStreet();
+		this.zipCode = sellerManagement.getZipCode();
+		this.address = sellerManagement.getAddress();
+		this.detailAddress = sellerManagement.getDetailAddress();
+		// this.searchKeyWords = sellerManagement.getSearchKeyWords();
 		this.businessLicenseNo = sellerManagement.getBusinessLicenseNo();
 		this.name = sellerManagement.getName();
 		this.status = sellerManagement.getStatus();

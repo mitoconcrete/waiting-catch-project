@@ -5,12 +5,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class MenuRepositoryTest {
+class CategoryRepositoryTest {
 	@Autowired
-	MenuRepository menuRepository;
+	private CategoryRepository categoryRepository;
 
 	@Test
-	void findByRestaurantId() {
-		menuRepository.findAllByRestaurantId(null);
+	void findNameByIdIn() {
+		categoryRepository.findNameByIdIn(null);
 	}
 }

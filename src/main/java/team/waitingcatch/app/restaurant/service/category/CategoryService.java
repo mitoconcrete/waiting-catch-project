@@ -14,6 +14,8 @@ public interface CategoryService {
 
 	List<CategoryResponse> getParentCategories();
 
+	List<CategoryResponse> getChildCategoriesForSellerManagement(Long parentId);
+
 	ChildCategoryResponse getChildCategories(GetChildCategoryServiceRequest request);
 
 	void updateCategory(UpdateCategoryServiceRequest serviceRequest);
