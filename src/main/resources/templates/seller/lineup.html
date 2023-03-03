@@ -15,13 +15,13 @@
 </head>
 <body>
 <header>
-    <a href="/seller/lineup-page">
+    <a href="/seller/templates/lineup-page">
         <div>WAITING CATCH</div>
     </a>
     <nav>
         <ul>
             <a href="/">판매자 님</a>
-            <a href="hello.html" th:href="@{/hello}" th:method="get">
+            <a href="../hello.html" th:href="@{/hello}" th:method="get">
                 <button onclick="sendTokenLogout()" type="button" class="btn">Logout</button>
             </a>
         </ul>
@@ -33,6 +33,7 @@
         <a href="/seller">매장 관리</a>
         <a href="/menu">메뉴</a>
         <a href="/event">이벤트</a>
+        <a href="/seller/templates/blacklist-demand-page">블랙리스트</a>
     </ul>
 </nav>
 <div class="body">
@@ -49,7 +50,7 @@
 <script>
     $(document).ready(function () {
         $.ajax({
-            url: '/seller/lineup',
+            url: '/api/seller/lineup',
             type: 'GET',
             headers: {
                 'Authorization': localStorage.getItem('accessToken')
@@ -65,7 +66,7 @@
 
     function openLineup() {
         $.ajax({
-            url: '/seller/open-lineup',
+            url: '/api/seller/open-lineup',
             type: 'PUT',
             headers: {
                 'Authorization': localStorage.getItem('accessToken')
@@ -82,7 +83,7 @@
 
     function closeLineup() {
         $.ajax({
-            url: '/seller/close-lineup',
+            url: '/api/seller/close-lineup',
             type: 'PUT',
             headers: {
                 'Authorization': localStorage.getItem('accessToken')

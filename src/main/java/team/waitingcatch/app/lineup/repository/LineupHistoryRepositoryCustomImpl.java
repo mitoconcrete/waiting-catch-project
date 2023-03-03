@@ -4,16 +4,21 @@ import static team.waitingcatch.app.lineup.entity.QLineup.*;
 import static team.waitingcatch.app.lineup.entity.QLineupHistory.*;
 import static team.waitingcatch.app.restaurant.entity.QRestaurant.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 
+import com.querydsl.core.group.GroupBy;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import lombok.RequiredArgsConstructor;
+import team.waitingcatch.app.lineup.dto.LineupHistoryStatisticsResponse;
 import team.waitingcatch.app.lineup.dto.LineupRecordResponse;
 import team.waitingcatch.app.lineup.dto.QLineupRecordResponse;
 import team.waitingcatch.app.lineup.enums.ArrivalStatusEnum;
@@ -29,6 +34,7 @@ public class LineupHistoryRepositoryCustomImpl implements LineupHistoryRepositor
 		List<LineupRecordResponse> content = queryFactory
 			.select(new QLineupRecordResponse(
 				lineupHistory.id,
+				lineupHistory.user.id,
 				lineupHistory.restaurant.id,
 				restaurant.name,
 				lineupHistory.numOfMembers,

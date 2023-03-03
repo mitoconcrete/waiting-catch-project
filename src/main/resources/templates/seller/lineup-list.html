@@ -11,16 +11,21 @@
             <th>대기 시작 시간</th>
             <th>도착 시간</th>
             <th>호출 횟수</th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
         </tr>
         </thead>
         <tbody>
-        <tr th:each="lineup : ${lineupList}">
+        <tr th:each="lineup, i : ${lineupList}">
             <td th:text="${lineup.waitingNumber}">100</td>
             <td th:text="${lineup.name}">이름</td>
             <td th:text="${lineup.numOfMembers}">5</td>
             <td th:text="${lineup.status.value}">대기</td>
             <td th:text="${lineup.startedAt}">2023-03-01T11:00:00</td>
             <td th:text="${lineup.arrivedAt}">2023-03-01T12:00:00</td>
+            <td th:text="${lineup.callCount}">0</td>
             <td>
                 <button type="button" class="btn" th:onclick="call([[${lineup.id}]])">고객 호출</button>
             </td>
@@ -30,11 +35,41 @@
             <td>
                 <button type="button" class="btn" th:onclick="cancel([[${lineup.id}]])">취소</button>
             </td>
+            <td>
+                <button type="button" class="btn"
+                        th:onclick="openBlacklistDemandForm([[${lineup.id}]])">블랙리스트 신청
+                </button>
+                <div>
+                    <form th:id="${i.index}" method="post">
+                        <div>
+                            <label for="userId">
+                                <input type="text" id="userId" name="userId" th:value="${lineup.userId}" hidden="hidden">
+                            </label>
+                        </div>
+                        <div>
+                            <label for="description">사유
+                                <textarea type="text" id="description" name="description"></textarea>
+                            </label>
+                        </div>
+                        <div>
+                            <button th:onclick="submitBlacklistDemand([[${i.index}]])" type="button">신청</button>
+                            <button onclick="hideForm()" type="button">취소</button>
+                        </div>
+                    </form>
+                </div>
+            </td>
         </tr>
         </tbody>
     </table>
 </div>
 <script>
+    $(document).ready(function () {
+        let elements = document.getElementsByClassName('blacklistDemandForm');
+        for (let i = 0; i < elements.length; i++) {
+            const id = 'blacklistDemandForm' + i;
+            document.getElementById(id).style.visibility = 'hidden';
+        }
+    });
     function call(lineupId) {
         const status = 'CALL';
         $.ajax({
@@ -96,6 +131,33 @@
                 console.log(response);
             }
         })
+    }
+
+    function submitBlacklistDemand(blacklistDemandFormId) {
+        const formData = $(`#${blacklistDemandFormId}`).serialize();
+        $.ajax({
+            url: `/seller/blacklist-demands`,
+            data: formData,
+            type: 'POST',
+            headers: {
+                'Authorization': localStorage.getItem('accessToken')
+            },
+            success: function () {
+                alert("블랙리스트 신청 완료");
+                window.location.reload();
+            },
+            error: function (response) {
+                console.log(response);
+            }
+        })
+    }
+
+    function openBlacklistDemandForm(lineupId) {
+        document.getElementById('blacklistDemandForm').style.visibility = 'visible';
+    }
+
+    function hideForm() {
+
     }
 </script>
 </html>

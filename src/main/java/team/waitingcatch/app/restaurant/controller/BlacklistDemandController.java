@@ -29,7 +29,21 @@ import team.waitingcatch.app.user.entitiy.UserDetailsImpl;
 public class BlacklistDemandController {
 	private final BlacklistDemandService blacklistDemandService;
 
-	@PostMapping("/blacklist-demands")
+	@GetMapping("/seller/templates/blacklist-demand-page")
+	public String getBlacklistDemandPage() {
+		return "seller/blacklist-demand";
+	}
+
+	@GetMapping("/seller/blacklist-demands")
+	public String getBlackListDemandByRestaurant(Model model, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+		var serviceRequest = new GetBlackListDemandByRestaurantServiceRequest(userDetails.getId());
+		model.addAttribute("blacklistDemandList",
+			blacklistDemandService.getBlackListDemandsByRestaurant(serviceRequest));
+		return "seller/blacklist-demand-list";
+	}
+
+	@PostMapping("/seller/blacklist-demands")
+	@ResponseBody
 	public void createBlacklistDemand(
 		@Valid @ModelAttribute BlacklistDemandControllerRequest controllerRequest,
 		@AuthenticationPrincipal UserDetailsImpl userDetails) {
@@ -39,7 +53,7 @@ public class BlacklistDemandController {
 		blacklistDemandService.submitBlacklistDemand(serviceRequest);
 	}
 
-	@DeleteMapping("/blacklist-demands/{blacklistDemandId}")
+	@DeleteMapping("/seller/blacklist-demands/{blacklistDemandId}")
 	@ResponseBody
 	public void cancelBlacklistDemand(
 		@PathVariable Long blacklistDemandId,
@@ -58,21 +72,5 @@ public class BlacklistDemandController {
 	public void approveBlacklistDemand(@PathVariable Long blacklistDemandId) {
 		var serviceRequest = new ApproveBlacklistDemandServiceRequest(blacklistDemandId);
 		blacklistDemandService.approveBlacklistDemand(serviceRequest);
-	}
-
-	@GetMapping("/seller/restaurant/blacklist-demands")
-	public String getBlackListDemandByRestaurant(
-		Model model,
-		@AuthenticationPrincipal UserDetailsImpl userDetails) {
-
-		var serviceRequest = new GetBlackListDemandByRestaurantServiceRequest(userDetails.getId());
-		model.addAttribute("blacklistDemandList",
-			blacklistDemandService.getBlackListDemandsByRestaurant(serviceRequest));
-		return "seller/blacklist-demand-list";
-	}
-
-	@GetMapping("/seller/restaurant/blacklist-demand-page")
-	public String getBlacklistDemandPage() {
-		return "seller/blacklist-demand";
 	}
 }

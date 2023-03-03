@@ -7,10 +7,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
+import team.waitingcatch.app.lineup.service.InternalLineupService;
 import team.waitingcatch.app.restaurant.dto.blacklist.ApproveBlacklistDemandServiceRequest;
 import team.waitingcatch.app.restaurant.dto.blacklist.CancelBlacklistDemandServiceRequest;
 import team.waitingcatch.app.restaurant.dto.blacklist.CreateBlacklistDemandServiceRequest;
 import team.waitingcatch.app.restaurant.dto.blacklist.GetBlackListDemandByRestaurantServiceRequest;
+import team.waitingcatch.app.restaurant.dto.blacklist.GetBlacklistDemandCustomerInfoResponse;
 import team.waitingcatch.app.restaurant.dto.blacklist.GetBlacklistDemandResponse;
 import team.waitingcatch.app.restaurant.entity.BlacklistDemand;
 import team.waitingcatch.app.restaurant.entity.Restaurant;
@@ -29,7 +31,13 @@ public class BlacklistDemandServiceImpl implements BlacklistDemandService, Inter
 	private final UserRepository userRepository;
 	private final RestaurantRepository restaurantRepository;
 
+	private final InternalLineupService internalLineupService;
 	private final InternalBlacklistService internalBlackListService;
+
+	@Override
+	public GetBlacklistDemandCustomerInfoResponse getCustomerIdByLineupId(long lineupId) {
+		return GetBlacklistDemandCustomerInfoResponse.of(internalLineupService._getByIdWithUser(lineupId).getUser());
+	}
 
 	//판매자가 한명의 고객을 블랙리스트 요청을 한다.
 	@Override

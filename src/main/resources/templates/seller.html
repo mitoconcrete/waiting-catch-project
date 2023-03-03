@@ -14,7 +14,7 @@
 </head>
 <body>
 <header>
-    <a href="/seller/lineup-page">
+    <a href="/seller/templates/lineup-page">
         <div>WAITING CATCH</div>
     </a>
     <nav>
@@ -28,10 +28,11 @@
 </header>
 <nav class="menus">
     <ul>
-        <a href="/seller/lineup-page">줄서기 현황</a>
+        <a href="/seller/templates/lineup-page">줄서기 현황</a>
         <a href="/seller" style="color: #8B60C7">매장 관리</a>
         <a href="/menu">메뉴</a>
         <a href="/event">이벤트</a>
+        <a href="/seller/templates/blacklist-demand-page">블랙리스트</a>
     </ul>
 </nav>
 <div class="body">
@@ -44,7 +45,7 @@
         <button onclick="sendTokenDelete()" type="button" class="btn">회원탈퇴</button>
     </a>
 
-    <a href="seller-infos.html" th:href="@{/seller/infos}" th:method="get">
+    <a href="seller-info.html" th:href="@{/seller/info}" th:method="get">
         <button type="button" class="btn">판매자 정보 수정</button>
     </a>
     <a th:href="@{/seller/updaterestaurant}" th:method="get" enctype="multipart/form-data">
@@ -57,13 +58,13 @@
 
     <!--        <button type="button" onclick="closeLineup()" class="btn">줄서기 마감</button>-->
 
-    <button type="button" onclick="createBlacklistDemandList()" class="btn">블랙리스트 요청 목록</button>
+<!--    <button type="button" onclick="createBlacklistDemandList()" class="btn">블랙리스트 요청 목록</button>-->
 
 </div>
 </body>
 <script>
     // function getLineupList() {
-    //     window.location.href = '/seller/lineup-page';
+    //     window.location.href = '/seller/templates/lineup-page';
     // }
     //
     // function openLineup() {
@@ -100,9 +101,9 @@
     //     })
     // }
 
-    function createBlacklistDemandList() {
-        window.location.href = '/seller/restaurant/blacklist-demand-page';
-    }
+    // function createBlacklistDemandList() {
+    //     window.location.href = '/seller/templates/blacklist-demand-page';
+    // }
 
     function sendTokenLogout() {
         fetch("/seller/logout", {

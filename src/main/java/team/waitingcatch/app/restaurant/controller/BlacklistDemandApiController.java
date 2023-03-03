@@ -30,7 +30,7 @@ import team.waitingcatch.app.user.entitiy.UserDetailsImpl;
 public class BlacklistDemandApiController {
 	private final BlacklistDemandService blacklistDemandService;
 
-	@PostMapping("/blacklist-demands")
+	@PostMapping("/seller/blacklist-demands")
 	public void createBlacklistDemand(
 		@Valid @RequestBody BlacklistDemandControllerRequest controllerRequest,
 		@AuthenticationPrincipal UserDetailsImpl userDetails) {
@@ -40,7 +40,7 @@ public class BlacklistDemandApiController {
 		blacklistDemandService.submitBlacklistDemand(serviceRequest);
 	}
 
-	@PutMapping("/blacklist-demands/{blacklistDemandId}")
+	@PutMapping("/seller/blacklist-demands/{blacklistDemandId}")
 	public void cancelBlacklistDemand(
 		@PathVariable Long blacklistDemandId,
 		@AuthenticationPrincipal UserDetailsImpl userDetails) {

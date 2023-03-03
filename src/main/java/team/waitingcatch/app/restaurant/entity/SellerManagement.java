@@ -54,9 +54,6 @@ public class SellerManagement extends TimeStamped {
 	@Column(nullable = false)
 	private String detailAddress;
 
-	// @Embedded
-	// private Address address;
-
 	@Embedded
 	private Position position;
 
@@ -71,9 +68,6 @@ public class SellerManagement extends TimeStamped {
 	@Convert(converter = StringListConverter.class)
 	private List<String> categories;
 
-	// @Column(name = "search_keywords", nullable = false)
-	// private String searchKeyWords;
-
 	@Column(nullable = false)
 	private String businessLicenseNo;
 
@@ -85,12 +79,10 @@ public class SellerManagement extends TimeStamped {
 		this.zipCode = demandSignupSellerServiceRequest.getZipCode();
 		this.address = demandSignupSellerServiceRequest.getAddress();
 		this.detailAddress = demandSignupSellerServiceRequest.getDetailAddress();
-		// this.address = demandSignupSellerServiceRequest.getAddress();
 		this.position = demandSignupSellerServiceRequest.getPosition();
 		this.description = demandSignupSellerServiceRequest.getDescription();
 		this.status = AcceptedStatusEnum.WAIT;
 		this.categories = demandSignupSellerServiceRequest.getCategories();
-		// this.searchKeyWords = "";
 		this.businessLicenseNo = demandSignupSellerServiceRequest.getBusinessLicenseNo();
 		this.name = demandSignupSellerServiceRequest.getName();
 	}
