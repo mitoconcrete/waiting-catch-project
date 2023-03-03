@@ -1,8 +1,11 @@
 package team.waitingcatch.app.common.util;
 
 import java.security.Key;
+import java.util.Arrays;
 import java.util.Base64;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
@@ -68,7 +71,13 @@ public class JwtUtil {
 		String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
 
 		if (bearerToken == null && request.getHeader("Cookie") != null) {
-			bearerToken = request.getHeader("Cookie").split("=")[1];
+			List<String[]> authorizationCookie = Arrays.stream(request.getHeader("Cookie").split("; "))
+				.map(cookie -> cookie.split("="))
+				.filter(cookie -> cookie[0].equals("Authorization"))
+				.collect(
+					Collectors.toList());
+
+			bearerToken = authorizationCookie.isEmpty() ? null : authorizationCookie.get(0)[1];
 		}
 
 		if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER_PREFIX)) {
