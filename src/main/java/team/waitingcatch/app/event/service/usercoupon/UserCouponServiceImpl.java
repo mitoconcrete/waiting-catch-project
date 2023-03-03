@@ -2,7 +2,6 @@ package team.waitingcatch.app.event.service.usercoupon;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Recover;
@@ -43,16 +42,22 @@ public class UserCouponServiceImpl implements UserCouponService, InternalUserCou
 		User user = internalUserService._getUserByUsername(createUserCouponserviceRequest.getUsername());
 
 		// 쿠폰 발급 가능 여부를 확인하고, 발급 처리합니다.
-		Optional<UserCoupon> userCoupon = null;
+		//Optional<UserCoupon> userCoupon = userCouponRepository.findUserCouponWithRelations(user, couponCreator);
 
-		userCoupon = userCouponRepository.findUserCouponWithRelations(user, couponCreator);
-		if (userCoupon.isPresent()) {
-			throw new IllegalArgumentException("이미 발급받은 쿠폰입니다.");
-		}
-		userCoupon = Optional.of(new UserCoupon(user, couponCreator));
-		boolean isCouponIssued = userCoupon.get().issueCoupon();
+		userCouponRepository.findUserCouponWithRelations(user, couponCreator).ifPresent(
+			u -> {
+				throw new IllegalArgumentException("이미 발급받은 쿠폰입니다.");
+			}
+		);
+		// if (userCoupon.isPresent()) {
+		// 	throw new IllegalArgumentException("이미 발급받은 쿠폰입니다.");
+		// }
+		UserCoupon userCoupon = new UserCoupon(user, couponCreator);
+		boolean isCouponIssued = couponCreator.hasCouponBalance();
+		// boolean isCouponIssued = userCoupon.issueCoupon();
 		if (isCouponIssued) {
-			userCouponRepository.save(userCoupon.get());
+			couponCreator.useCoupon();
+			userCouponRepository.save(userCoupon);
 		} else {
 			throw new IllegalStateException("요청이 많습니다. 다시 시도해주세요");
 		}
