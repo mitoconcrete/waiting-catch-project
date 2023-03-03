@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import javax.persistence.OptimisticLockException;
-
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Recover;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
@@ -31,35 +33,55 @@ public class UserCouponServiceImpl implements UserCouponService, InternalUserCou
 
 	//유저 쿠폰을 생성한다
 	@Override
+	@Retryable(maxAttempts = 3, backoff = @Backoff(100), value = IllegalStateException.class, exclude = {
+		IllegalArgumentException.class})
+	//0.1초 지연후 3번까지 트라이, IllegalStateException발생시 리트라이, IllegalArgumentException는 익셉션처리
+	@Transactional(isolation = Isolation.READ_COMMITTED)    //트랜잭션이 commit 되어 확정된 데이터만을 읽도록 허용
 	public void createUserCoupon(CreateUserCouponServiceRequest createUserCouponserviceRequest) {
 		CouponCreator couponCreator = internalCouponCreatorService._getCouponCreatorById(
 			createUserCouponserviceRequest.getCreatorId());
 		User user = internalUserService._getUserByUsername(createUserCouponserviceRequest.getUsername());
 
-		int retryCount = 3;
 		// 쿠폰 발급 가능 여부를 확인하고, 발급 처리합니다.
 		Optional<UserCoupon> userCoupon = null;
 
-		for (int i = 1; i <= retryCount; i++) {
-			try {
-				//이미 발급받은 쿠폰이 있는지
-				userCoupon = userCouponRepository.findUserCouponWithRelations(user, couponCreator);
-				if (userCoupon.isPresent()) {
-					throw new IllegalArgumentException("이미 발급받은 쿠폰입니다.");
-				}
-				userCoupon = Optional.of(new UserCoupon(user, couponCreator));
-				boolean isCouponIssued = userCoupon.get().issueCoupon();
-				if (isCouponIssued) {
-					userCouponRepository.save(userCoupon.get());
-					break;
-				}
-			} catch (OptimisticLockException ex) {
-				if (i == retryCount) {
-					throw new IllegalArgumentException("시도횟수가 초과하였습니다. 다시 시도해주세요");
-				}
-			}
+		userCoupon = userCouponRepository.findUserCouponWithRelations(user, couponCreator);
+		if (userCoupon.isPresent()) {
+			throw new IllegalArgumentException("이미 발급받은 쿠폰입니다.");
+		}
+		userCoupon = Optional.of(new UserCoupon(user, couponCreator));
+		boolean isCouponIssued = userCoupon.get().issueCoupon();
+		if (isCouponIssued) {
+			userCouponRepository.save(userCoupon.get());
+		} else {
+			throw new IllegalStateException("요청이 많습니다. 다시 시도해주세요");
 		}
 
+		// for (int i = 1; i <= retryCount; i++) {
+		// 	try {
+		// 		//이미 발급받은 쿠폰이 있는지
+		// 		userCoupon = userCouponRepository.findUserCouponWithRelations(user, couponCreator);
+		// 		if (userCoupon.isPresent()) {
+		// 			throw new IllegalArgumentException("이미 발급받은 쿠폰입니다.");
+		// 		}
+		// 		userCoupon = Optional.of(new UserCoupon(user, couponCreator));
+		// 		boolean isCouponIssued = userCoupon.get().issueCoupon();
+		// 		if (isCouponIssued) {
+		// 			userCouponRepository.save(userCoupon.get());
+		// 			break;
+		// 		}
+		// 	} catch (OptimisticLockException ex) {
+		// 		if (i == retryCount) {
+		// 			throw new IllegalArgumentException("시도횟수가 초과하였습니다. 다시 시도해주세요");
+		// 		}
+		// 	}
+		// }
+
+	}
+
+	@Recover
+	String recover(IllegalArgumentException e) {
+		return e.getMessage();
 	}
 
 	//유저 쿠폰을 조회한다.
