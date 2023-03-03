@@ -102,11 +102,14 @@ public class CouponCreator extends TimeStamped {
 
 	public boolean hasCouponBalance() {
 		if (this.quantity > 0) {
-			this.quantity -= 1;
 			return true;
 		}
 		return false;
 
 	}
-	
+
+	public void useCoupon() {
+		this.quantity -= 1;
+	}
+
 }
