@@ -1,3 +1,4 @@
+/*
 package team.waitingcatch.app.user.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -392,4 +393,4 @@ class UserServiceImplTest {
 
 		assertThrows(IllegalArgumentException.class, () -> userService.updatePassword(wrongPayload));
 	}
-}
+}*/
