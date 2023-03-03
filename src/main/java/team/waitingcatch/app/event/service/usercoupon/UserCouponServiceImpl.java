@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.event.dto.usercoupon.CreateUserCouponServiceRequest;
 import team.waitingcatch.app.event.dto.usercoupon.GetUserCouponResponse;
-import team.waitingcatch.app.event.dto.usercoupon.UserCouponResponse;
+import team.waitingcatch.app.event.dto.usercoupon.UserCouponServiceResponse;
 import team.waitingcatch.app.event.entity.CouponCreator;
 import team.waitingcatch.app.event.entity.UserCoupon;
 import team.waitingcatch.app.event.repository.UserCouponRepository;
@@ -94,19 +94,26 @@ public class UserCouponServiceImpl implements UserCouponService, InternalUserCou
 	public List<GetUserCouponResponse> getUserCoupons(User user) {
 		//List<UserCoupon> userCoupons = userCouponRepository.findByUserAndIsUsedFalse(user);
 		//유저 아이디를 받아서 아이디에 맞는 쿠폰목록을 가저온다
-		List<UserCoupon> userCoupons = userCouponRepository.findByUserWithUserAndCouponCreator(user);
+		//List<UserCoupon> userCoupons = userCouponRepository.findByUserWithUserAndCouponCreator(user);
 		//유저쿠폰의 레스토랑 리스트 가저온다
-		List<String> restaurants = userCouponRepository.findRestaurantNamesByUser(userCoupons);
+		//List<String> restaurants = userCouponRepository.findRestaurantNamesByUser(userCoupons);
 		//쿠폰목록을 반환하기위한 리스트를 생성한다
+		List<UserCouponServiceResponse> userCouponServiceResponses = userCouponRepository.findRestaurantNameAndUserAll(
+			user);
+
 		List<GetUserCouponResponse> getUserCouponResponses = new ArrayList<>();
 
-		for (int i = 0; i < userCoupons.size(); i++) {
-			UserCouponResponse userCouponResponse = new UserCouponResponse(userCoupons.get(i));
-			String restaurantName = restaurants.get(i);
-			GetUserCouponResponse getUserCouponResponse = new GetUserCouponResponse(userCouponResponse, restaurantName);
+		for (UserCouponServiceResponse userCouponServiceResponse : userCouponServiceResponses) {
+			GetUserCouponResponse getUserCouponResponse = new GetUserCouponResponse(userCouponServiceResponse);
 			getUserCouponResponses.add(getUserCouponResponse);
-
 		}
+		return getUserCouponResponses;
+		// for (int i = 0; i < userCoupons.size(); i++) {
+		// 	UserCouponResponse userCouponResponse = new UserCouponResponse(userCoupons.get(i));
+		// 	String restaurantName = restaurants.get(i);
+		// 	GetUserCouponResponse getUserCouponResponse = new GetUserCouponResponse(userCouponResponse,
+		// 		restaurantName);
+		// 	getUserCouponResponses.add(getUserCouponResponse);
 
 		// for (UserCoupon userCoupon : userCoupons) {
 		// 	//유저쿠폰을 담기위한 리스폰스를 만든다
@@ -117,7 +124,7 @@ public class UserCouponServiceImpl implements UserCouponService, InternalUserCou
 		// 	GetUserCouponResponse getUserCouponResponse = new GetUserCouponResponse(userCouponResponse, restaurantName);
 		// 	getUserCouponResponses.add(getUserCouponResponse);
 		// }
-		return getUserCouponResponses;
+
 	}
 
 	@Override
