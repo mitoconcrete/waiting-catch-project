@@ -50,7 +50,7 @@
 <script>
     $(document).ready(function () {
         $.ajax({
-            url: '/api/seller/lineup',
+            url: '/seller/lineup',
             type: 'GET',
             headers: {
                 'Authorization': localStorage.getItem('accessToken')
@@ -76,7 +76,7 @@
                 window.location.reload();
             },
             error: function (response) {
-                console.log(response);
+                alert(response.responseJSON.message);
             }
         })
     }
@@ -93,7 +93,7 @@
                 window.location.reload();
             },
             error: function (response) {
-                console.log(response);
+                alert(response.responseJSON.message);
             }
         })
     }

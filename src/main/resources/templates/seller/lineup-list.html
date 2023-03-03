@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <div id="lineupList">
     <table class="table table-striped">
         <thead>
@@ -15,68 +15,108 @@
             <th></th>
             <th></th>
             <th></th>
+            <th></th>
         </tr>
         </thead>
-        <tbody>
-        <tr th:each="lineup, i : ${lineupList}">
-            <td th:text="${lineup.waitingNumber}">100</td>
-            <td th:text="${lineup.name}">이름</td>
-            <td th:text="${lineup.numOfMembers}">5</td>
-            <td th:text="${lineup.status.value}">대기</td>
-            <td th:text="${lineup.startedAt}">2023-03-01T11:00:00</td>
-            <td th:text="${lineup.arrivedAt}">2023-03-01T12:00:00</td>
-            <td th:text="${lineup.callCount}">0</td>
-            <td>
-                <button type="button" class="btn" th:onclick="call([[${lineup.id}]])">고객 호출</button>
-            </td>
-            <td>
-                <button type="button" class="btn" th:onclick="arrive([[${lineup.id}]])">고객 도착</button>
-            </td>
-            <td>
-                <button type="button" class="btn" th:onclick="cancel([[${lineup.id}]])">취소</button>
-            </td>
-            <td>
-                <button type="button" class="btn"
-                        th:onclick="openBlacklistDemandForm([[${lineup.id}]])">블랙리스트 신청
-                </button>
-                <div>
-                    <form th:id="${i.index}" method="post">
-                        <div>
-                            <label for="userId">
-                                <input type="text" id="userId" name="userId" th:value="${lineup.userId}" hidden="hidden">
-                            </label>
-                        </div>
-                        <div>
-                            <label for="description">사유
-                                <textarea type="text" id="description" name="description"></textarea>
-                            </label>
-                        </div>
-                        <div>
-                            <button th:onclick="submitBlacklistDemand([[${i.index}]])" type="button">신청</button>
-                            <button onclick="hideForm()" type="button">취소</button>
-                        </div>
-                    </form>
-                </div>
-            </td>
-        </tr>
+        <tbody id="lineup">
+
         </tbody>
     </table>
 </div>
 <script>
     $(document).ready(function () {
-        let elements = document.getElementsByClassName('blacklistDemandForm');
-        for (let i = 0; i < elements.length; i++) {
-            const id = 'blacklistDemandForm' + i;
-            document.getElementById(id).style.visibility = 'hidden';
-        }
+        lineupList();
     });
-    function call(lineupId) {
-        const status = 'CALL';
+
+    function lineupList() {
         $.ajax({
-            url: `/seller/lineup/${lineupId}/status`,
-            data: {
-                'status': status
+            type: 'GET',
+            url: '/api/seller/lineup',
+            data: {},
+            headers: {
+                'Authorization': localStorage.getItem('accessToken')
             },
+            success: function (response) {
+                let rows = response['data'];
+                for (let i = 0; i < rows.length; i++) {
+                    let id = rows[i]['id'];
+                    let userId = rows[i]['userId'];
+                    let waitingNumber = rows[i]['waitingNumber'];
+                    let name = rows[i]['name'];
+                    let numOfMembers = rows[i]['numOfMembers'];
+                    let status = rows[i]['status'];
+                    let callCount = rows[i]['callCount'];
+                    let startedAt = rows[i]['startedAt'];
+                    let arrivedAt = rows[i]['arrivedAt'];
+
+                    let temp_html = `<tr>
+                                        <td>${waitingNumber}</td>
+                                        <td>${name}</td>
+                                        <td>${numOfMembers}</td>
+                                        <td>${status}</td>
+                                        <td>${startedAt}</td>
+                                        <td>${arrivedAt}</td>
+                                        <td>${callCount}</td>
+                                        <td>
+                                            <button type="button" class="btn" onclick="call('${id}')">고객 호출</button>
+                                        </td>
+                                        <td>
+                                            <button type="button" class="btn" onclick="arrive('${id}')">고객 도착</button>
+                                        </td>
+                                        <td>
+                                            <button type="button" class="btn" onclick="cancel('${id}')">취소</button>
+                                        </td>
+                                        <td>
+                                            <button type="button" class="btn" data-bs-toggle="modal"
+                                                    data-bs-target="#exampleModal${id}" data-bs-whatever="@mdo"
+                                                    onclick="openBlacklistDemandForm('blacklistDemandForm${id}')">블랙리스트 신청
+                                            </button>
+                                        </td>
+                                        <td>
+                                            <div class="modal fade" id="exampleModal${id}" tabindex="-1" aria-labelledby="exampleModalLabel${id}" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h1 class="modal-title fs-5" id="exampleModalLabel${id}">블랙리스트 신청</h1>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <form>
+                                                                <div>
+                                                                    <input type="text" id="userId${id}" name="userId${id}" value="${userId}" hidden="hidden">
+                                                                </div>
+                                                                <div class="mb-3">
+                                                                    <label for="name${id}" class="col-form-label">이름: </label>
+                                                                    <input type="text" class="form-control" id="name${id}" value="${name}" readonly="readonly">
+                                                                </div>
+                                                                <div class="mb-3">
+                                                                    <label for="description${id}" class="col-form-label">사유: </label>
+                                                                    <textarea class="form-control" id="description${id}" name="description"></textarea>
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="button" class="btn btn-primary"
+                                                                            onclick="submitBlacklistDemand('${id}')">신청
+                                                                    </button>
+                                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소
+                                                                    </button>
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>`;
+                    $('#lineup').prepend(temp_html);
+                }
+            },
+        });
+    }
+
+    function call(lineupId) {
+        const data = {'status': 'CALL'};
+        $.ajax({
+            url: `/api/seller/lineup/${lineupId}/status`,
+            data: JSON.stringify(data),
+            contentType: 'application/json',
             type: 'PUT',
             headers: {
                 'Authorization': localStorage.getItem('accessToken')
@@ -86,18 +126,17 @@
                 window.location.reload();
             },
             error: function (response) {
-                console.log(response);
+                alert(response.responseJSON.message);
             }
         })
     }
 
     function arrive(lineupId) {
-        const status = 'ARRIVE';
+        const data = {'status': 'ARRIVE'};
         $.ajax({
-            url: `/seller/lineup/${lineupId}/status`,
-            data: {
-                'status': status
-            },
+            url: `/api/seller/lineup/${lineupId}/status`,
+            data: JSON.stringify(data),
+            contentType: 'application/json',
             type: 'PUT',
             headers: {
                 'Authorization': localStorage.getItem('accessToken')
@@ -107,18 +146,17 @@
                 window.location.reload();
             },
             error: function (response) {
-                console.log(response);
+                alert(response.responseJSON.message);
             }
         })
     }
 
     function cancel(lineupId) {
-        const status = 'CANCEL';
+        const data = {'status': 'CANCEL'};
         $.ajax({
-            url: `/seller/lineup/${lineupId}/status`,
-            data: {
-                'status': status
-            },
+            url: `/api/seller/lineup/${lineupId}/status`,
+            data: JSON.stringify(data),
+            contentType: 'application/json',
             type: 'PUT',
             headers: {
                 'Authorization': localStorage.getItem('accessToken')
@@ -128,16 +166,18 @@
                 window.location.reload();
             },
             error: function (response) {
-                console.log(response);
+                alert(response.responseJSON.message);
             }
         })
     }
 
-    function submitBlacklistDemand(blacklistDemandFormId) {
-        const formData = $(`#${blacklistDemandFormId}`).serialize();
+    function submitBlacklistDemand(lineupId) {
+        let userId = document.getElementById('userId' + lineupId).value;
+        let description = document.getElementById('description' + lineupId).value;
         $.ajax({
-            url: `/seller/blacklist-demands`,
-            data: formData,
+            url: `/api/seller/blacklist-demands`,
+            data: JSON.stringify({userId: userId, description: description}),
+            contentType: 'application/json',
             type: 'POST',
             headers: {
                 'Authorization': localStorage.getItem('accessToken')
@@ -147,17 +187,17 @@
                 window.location.reload();
             },
             error: function (response) {
-                console.log(response);
+                alert(response.responseJSON.message);
             }
         })
     }
 
-    function openBlacklistDemandForm(lineupId) {
-        document.getElementById('blacklistDemandForm').style.visibility = 'visible';
+    function openBlacklistDemandForm(blacklistDemandFormId) {
+        $(`#${blacklistDemandFormId}`).show();
     }
 
-    function hideForm() {
-
+    function hideBlacklistDemandForm(blacklistDemandFormId) {
+        $(`#${blacklistDemandFormId}`).hide();
     }
 </script>
 </html>
