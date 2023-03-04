@@ -149,7 +149,7 @@
 - Service 인자로 받는 것은 Dto 여야하고, 때려죽어도 바뀔 일이 없는 값은 컨트롤러 Dto를 그대로 가져와서 사용한다.<br>
 - ~~dto는 매개변수의 숫자와 관계없이 생성하여 전달합니다.~~dto는 매개변수 2개 이상일 경우에만 생성하여 사용한다.<br>
 - 단, InternalService는 dto를 사용하지 않는다.<br>
-**- 메소드 명은 `동사 + 명사`의 조합으로 사용다.** <br>
+**- 메소드 명은 `동사 + 명사`의 조합으로 사용한다.** <br>
 - DTO 네이밍은 메서드 네이밍 + 레이어네임(Service, Controller) + Response/Request 로 한다.(DTO 뺀다)
 `~~ControllerRequest, ~~ServiceResponse, ~~ServiceRequest`<br>
 
