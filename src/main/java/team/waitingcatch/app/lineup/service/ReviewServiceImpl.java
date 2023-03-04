@@ -1,5 +1,7 @@
 package team.waitingcatch.app.lineup.service;
 
+import static team.waitingcatch.app.common.enums.ImageDirectoryEnum.*;
+
 import java.io.IOException;
 import java.util.List;
 
@@ -9,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
+import team.waitingcatch.app.common.enums.ImageDirectoryEnum;
 import team.waitingcatch.app.common.util.image.ImageUploader;
 import team.waitingcatch.app.lineup.dto.CreateReviewEntityRequest;
 import team.waitingcatch.app.lineup.dto.CreateReviewServiceRequest;
@@ -40,7 +43,7 @@ public class ReviewServiceImpl implements ReviewService, InternalReviewService {
 			serviceRequest.getRestaurantId());
 		Restaurant restaurant = restaurantInfo.getRestaurant();
 
-		List<String> imagePaths = imageUploader.uploadList(serviceRequest.getImages(), "review");
+		List<String> imagePaths = imageUploader.uploadList(serviceRequest.getImages(), REVIEW.getValue());
 		CreateReviewEntityRequest entityRequest = new CreateReviewEntityRequest(serviceRequest.getUser(), restaurant,
 			serviceRequest.getRate(), serviceRequest.getContent(), imagePaths);
 
