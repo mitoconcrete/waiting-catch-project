@@ -19,7 +19,7 @@ import team.waitingcatch.app.restaurant.service.requestblacklist.BlacklistDemand
 public class BlacklistDemandController {
 	private final BlacklistDemandService blacklistDemandService;
 
-	@GetMapping("/seller/blacklist-demands")
+	@GetMapping("/seller/templates/blacklist-demands")
 	public String getBlacklistDemandPage() {
 		return "seller/blacklist-demand";
 	}

@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 @Controller
 @RequiredArgsConstructor
 public class LineupController {
-	@GetMapping("/seller/lineup")
+	@GetMapping("/seller/templates/lineup")
 	public String getLineupPage() {
 		return "seller/lineup";
 	}

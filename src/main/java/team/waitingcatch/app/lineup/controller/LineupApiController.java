@@ -55,7 +55,7 @@ public class LineupApiController {
 		lineupService.closeLineup(userDetails.getId());
 	}
 
-	@PostMapping("/restaurants/{restaurantId}/lineup")
+	@PostMapping("/customer/restaurants/{restaurantId}/lineup")
 	@ResponseStatus(HttpStatus.CREATED)
 	public void startWaiting(
 		@PathVariable long restaurantId,
@@ -68,7 +68,7 @@ public class LineupApiController {
 		lineupService.startWaiting(serviceRequest);
 	}
 
-	@DeleteMapping("/restaurants/lineup/{lineupId}")
+	@DeleteMapping("/customer/restaurants/lineup/{lineupId}")
 	public void cancelWaiting(@PathVariable long lineupId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
 		lineupService.cancelWaiting(new CancelWaitingRequest(lineupId, userDetails.getId()));
 	}
