@@ -32,7 +32,7 @@ public class MenuController {
 	private final MenuService menuService;
 
 	// customer
-	@GetMapping("/restaurants/{restaurantId}/menus")
+	@GetMapping("/customer/restaurants/{restaurantId}/menus")
 	public List<CustomerMenuResponse> getRestaurantMenus(@PathVariable Long restaurantId) {
 		return menuService.getRestaurantMenus(restaurantId);
 	}
