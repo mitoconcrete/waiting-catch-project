@@ -35,7 +35,7 @@ public class Restaurant extends TimeStamped {
 	@Column(name = "restaurant_id")
 	private Long id;
 
-	@Column(nullable = false, length = 8)
+	@Column(nullable = false, length = 100)
 	private String name;
 
 	@Convert(converter = StringListConverter.class)
@@ -44,32 +44,28 @@ public class Restaurant extends TimeStamped {
 	@Embedded
 	private Position position;
 
-	@Column(nullable = false, length = 5)
-	private String zipCode;
-
 	@Column(nullable = false, length = 50)
 	private String address;
 
 	@Column(nullable = false, length = 30)
 	private String detailAddress;
 
-	// @Embedded
-	// private Address address;
+	@Column(nullable = false, length = 5)
+	private String zipCode;
 
-	@Column(nullable = false, length = 13)
+	@Column(nullable = false, length = 13, unique = true)
 	private String phoneNumber;
 
 	@Column(nullable = false)
 	private boolean isDeleted;
 
 	@Convert(converter = StringListConverter.class)
-	@Column(name = "search_keywords")
 	private List<String> searchKeywords = new ArrayList<>();
 
-	@Column(nullable = false, length = 255)
+	@Column(nullable = false)
 	private String description;
 
-	@Column(nullable = false, length = 100)
+	@Column(nullable = false)
 	private int capacity;
 
 	@Column(nullable = false, length = 12)
@@ -79,16 +75,12 @@ public class Restaurant extends TimeStamped {
 	@JoinColumn(name = "user_id", nullable = false)
 	private User user;
 
-	// @Column(nullable = false)
-	// private String category;
-
 	public Restaurant(ApproveSignUpSellerManagementEntityPassToRestaurantEntityRequest entityRequest) {
 		this.name = entityRequest.getRestaurantName();
 		this.position = entityRequest.getPosition();
 		this.zipCode = entityRequest.getZipCode();
 		this.address = entityRequest.getAddress();
 		this.detailAddress = entityRequest.getDetailAddress();
-		// this.address = entityRequest.getAddress();
 		this.phoneNumber = entityRequest.getPhoneNumber();
 		this.isDeleted = false;
 		this.searchKeywords = entityRequest.getSearchKeyWords();
@@ -96,7 +88,6 @@ public class Restaurant extends TimeStamped {
 		this.businessLicenseNo = entityRequest.getBusinessLicenseNo();
 		this.capacity = 0;
 		this.user = entityRequest.getUser();
-		// this.category = entityRequest.getCategories();
 	}
 
 	//dummy data
@@ -107,25 +98,12 @@ public class Restaurant extends TimeStamped {
 		this.detailAddress = request.getDetailAddress();
 		this.businessLicenseNo = String.valueOf(UUID.randomUUID()).substring(0, 12);
 		this.capacity = 30;
-		this.description = request.getName() + "은 한국 최고의 음식 입니다.";
+		this.description = request.getName() + "은 한국 최고의 레스토랑입니다.";
 		this.phoneNumber = request.getPhoneNumber();
 		this.position = request.getPosition();
-		// this.category = request.getCategory();
 		this.user = request.getUser();
 		this.searchKeywords = request.getSearchkeywords();
 	}
-
-	// public String getProvince() {
-	// 	return this.getAddress().getProvince();
-	// }
-	//
-	// public String getCity() {
-	// 	return this.getAddress().getCity();
-	// }
-	//
-	// public String getStreet() {
-	// 	return this.getAddress().getStreet();
-	// }
 
 	public double getLatitude() {
 		return this.getPosition().getLatitude();

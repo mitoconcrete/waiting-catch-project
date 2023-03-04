@@ -5,8 +5,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Index;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -16,6 +18,9 @@ import team.waitingcatch.app.restaurant.dto.menu.CreateMenuEntityRequest;
 import team.waitingcatch.app.restaurant.dto.menu.UpdateMenuEntityRequest;
 
 @Entity
+@Table(indexes = {
+	@Index(name = "ix_menu_restaurant_id", columnList = "restaurant_id")
+})
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Menu extends TimeStamped {
@@ -28,22 +33,22 @@ public class Menu extends TimeStamped {
 	@JoinColumn(name = "restaurant_id", nullable = false)
 	private Restaurant restaurant;
 
-	@Column(nullable = false, length = 20)
+	@Column(nullable = false, length = 50)
 	private String name;
 
 	@Column(nullable = false)
 	private int price;
 
-	private String images;
+	private String image_paths;
 
 	@Column(nullable = false)
 	private boolean isDeleted;
 
-	public Menu(Restaurant restaurant, String name, int price, String images) {
+	public Menu(Restaurant restaurant, String name, int price, String image_paths) {
 		this.restaurant = restaurant;
 		this.name = name;
 		this.price = price;
-		this.images = images;
+		this.image_paths = image_paths;
 		this.isDeleted = false;
 	}
 
@@ -54,6 +59,6 @@ public class Menu extends TimeStamped {
 	public void update(UpdateMenuEntityRequest request) {
 		this.name = request.getName();
 		this.price = request.getPrice();
-		this.images = request.getImageUrl();
+		this.image_paths = request.getImageUrl();
 	}
 }

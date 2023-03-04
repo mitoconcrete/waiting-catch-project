@@ -18,7 +18,9 @@ import lombok.NoArgsConstructor;
 import team.waitingcatch.app.restaurant.entity.Restaurant;
 
 @Entity
-@Table(indexes = @Index(columnList = "restaurant_id", unique = true))
+@Table(indexes = {
+	@Index(name = "pk_waiting_number_waiting_number_id", columnList = "waiting_number_id", unique = true),
+	@Index(name = "ix_waiting_number_restaurant_id", columnList = "restaurant_id", unique = true)})
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class WaitingNumber {

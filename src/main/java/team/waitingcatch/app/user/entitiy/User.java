@@ -19,8 +19,8 @@ import team.waitingcatch.app.common.entity.TimeStamped;
 import team.waitingcatch.app.user.enums.UserRoleEnum;
 
 @Entity
-@Getter
 @SQLDelete(sql = "UPDATE user SET is_deleted = true WHERE user_id = ?")
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User extends TimeStamped {
 	@Id
@@ -28,26 +28,25 @@ public class User extends TimeStamped {
 	@Column(name = "user_id")
 	private Long id;
 
-	// 아이디는 고유해야하므로, unique 값으로 둡니다.
-	@Column(nullable = false, length = 15, unique = true)
+	@Column(nullable = false, length = 20, unique = true)
 	private String username;
 
-	@Column(nullable = false, length = 125)
+	@Column(nullable = false)
 	private String password;
 
-	@Column(nullable = false, length = 255, unique = true)
-	private String email;
-
-	@Column(unique = true, length = 10)
+	@Column(unique = true, length = 15)
 	private String nickname;
 
-	@Column(nullable = false, length = 5)
+	@Column(nullable = false, length = 30)
 	private String name;
+
+	@Column(nullable = false, unique = true)
+	private String email;
 
 	@Column(nullable = false, length = 13, unique = true)
 	private String phoneNumber;
 
-	@Column(nullable = false)
+	@Column(nullable = false, length = 20)
 	@Enumerated(EnumType.STRING)
 	private UserRoleEnum role;
 

@@ -28,17 +28,17 @@ public class RestaurantInfo extends TimeStamped {
 	@JoinColumn(name = "restaurant_id", nullable = false, unique = true)
 	private Restaurant restaurant;
 
-	@Column
+	@Column(length = 5)
 	private String openTime;
 
-	@Column
+	@Column(length = 5)
 	private String closeTime;
 
 	@Column(nullable = false)
-	private float rate = 0;
+	private float rate;
 
 	@Column(nullable = false)
-	private int totalReview = 0;
+	private int totalReview;
 
 	@Column(nullable = false)
 	private int totalLineup;
@@ -47,7 +47,10 @@ public class RestaurantInfo extends TimeStamped {
 	private boolean isLineupActive;
 
 	@Column(nullable = false)
-	private int currentWaitingNumber = 0;
+	private int currentWaitingNumber;
+
+	@Column(nullable = false)
+	private boolean isDeleted;
 
 	// 리뷰 작성시 해당 레스토랑의 평균 별점을 갱신한다.
 	public void updateAverageRate(float rate) {
@@ -83,12 +86,15 @@ public class RestaurantInfo extends TimeStamped {
 		this.closeTime = updateRestaurantEntityRequest.getCloseTime();
 	}
 
-
 	public void openLineup() {
 		isLineupActive = true;
 	}
 
 	public void closeLineup() {
 		isLineupActive = false;
+	}
+
+	public void deleteRestaurantInfo() {
+		isDeleted = false;
 	}
 }
