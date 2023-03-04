@@ -87,7 +87,7 @@ public class LineupConcurrencyTest {
 
 		Restaurant restaurant2 = new Restaurant(
 			new SaveDummyRestaurantRequest("레스토랑2", "12345", "서울시 강남구 강남대로", "1", new Position(0.0, 0.0),
-				"01000000001", "일식>스시>오마카세", seller2, searchKeywords));
+				"01000000002", "일식>스시>오마카세", seller2, searchKeywords));
 		restaurantRepository.save(restaurant2);
 		openRestaurant(restaurant2);
 
