@@ -72,7 +72,7 @@ public class MenuServiceImpl implements MenuService, InternalMenuService {
 		Menu menu = _getMenuById(serviceRequest.getMenuId());
 		String name = serviceRequest.getName();
 		int price = serviceRequest.getPrice();
-		String imageUrl = menu.getImages();
+		String imageUrl = menu.getImagePaths();
 
 		if (!serviceRequest.getMultipartFile().isEmpty()) {
 			try {
@@ -92,7 +92,7 @@ public class MenuServiceImpl implements MenuService, InternalMenuService {
 	@Override
 	public void deleteMenu(Long menuId) {
 		Menu menu = _getMenuById(menuId);
-		imageUploader.delete(menu.getImages());
+		imageUploader.delete(menu.getImagePaths());
 		menuRepository.delete(menu);
 	}
 

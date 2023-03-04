@@ -39,16 +39,16 @@ public class Menu extends TimeStamped {
 	@Column(nullable = false)
 	private int price;
 
-	private String image_paths;
+	private String imagePaths;
 
 	@Column(nullable = false)
 	private boolean isDeleted;
 
-	public Menu(Restaurant restaurant, String name, int price, String image_paths) {
+	public Menu(Restaurant restaurant, String name, int price, String imagePaths) {
 		this.restaurant = restaurant;
 		this.name = name;
 		this.price = price;
-		this.image_paths = image_paths;
+		this.imagePaths = imagePaths;
 		this.isDeleted = false;
 	}
 
@@ -59,6 +59,6 @@ public class Menu extends TimeStamped {
 	public void update(UpdateMenuEntityRequest request) {
 		this.name = request.getName();
 		this.price = request.getPrice();
-		this.image_paths = request.getImageUrl();
+		this.imagePaths = request.getImageUrl();
 	}
 }

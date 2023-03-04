@@ -52,7 +52,7 @@ public class BlacklistDemandServiceImpl implements BlacklistDemandService, Inter
 
 		if (blacklistDemandList.size() >= 1) {
 			for (BlacklistDemand blacklistDemand : blacklistDemandList) {
-				blacklistDemand.checkBlacklistRequest();
+				blacklistDemand.checkStatus();
 			}
 		}
 
@@ -69,7 +69,7 @@ public class BlacklistDemandServiceImpl implements BlacklistDemandService, Inter
 		// serviceRequest.getSellerId() 레스토랑 방문 여부 검증 로직 추가
 		BlacklistDemand blacklistDemand = blacklistDemandRepository.findById(serviceRequest.getBlacklistDemandId())
 			.orElseThrow(() -> new IllegalArgumentException("Not found black list request"));
-		blacklistDemand.checkWaitingStatus();
+		blacklistDemand.checkStatus();
 		blacklistDemand.updateCancelStatus();
 	}
 
@@ -86,7 +86,7 @@ public class BlacklistDemandServiceImpl implements BlacklistDemandService, Inter
 	public void approveBlacklistDemand(ApproveBlacklistDemandServiceRequest serviceRequest) {
 		BlacklistDemand blacklistDemand = blacklistDemandRepository.findById(serviceRequest.getBlacklistDemandId())
 			.orElseThrow(() -> new IllegalArgumentException("Not found black list request"));
-		blacklistDemand.checkWaitingStatus();
+		blacklistDemand.checkStatus();
 		blacklistDemand.updateApprovalStatus();
 		internalBlackListService._createBlackList(blacklistDemand.getRestaurant(), blacklistDemand.getUser());
 	}
@@ -95,7 +95,7 @@ public class BlacklistDemandServiceImpl implements BlacklistDemandService, Inter
 	public void rejectBlacklistDemand(Long blacklistDemandId) {
 		BlacklistDemand blacklistDemand = blacklistDemandRepository.findById(blacklistDemandId)
 			.orElseThrow(() -> new IllegalArgumentException("Not found blacklist request"));
-		blacklistDemand.checkWaitingStatus();
+		blacklistDemand.checkStatus();
 		blacklistDemand.updateRejectionStatus();
 	}
 

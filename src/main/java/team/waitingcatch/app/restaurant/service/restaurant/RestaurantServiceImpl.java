@@ -194,7 +194,7 @@ public class RestaurantServiceImpl implements RestaurantService, InternalRestaur
 
 		restaurant.deleteRestaurant();
 		restaurantInfo.deleteRestaurantInfo();
-		
+
 		return restaurant;
 	}
 }
