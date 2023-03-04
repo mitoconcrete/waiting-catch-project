@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
-import team.waitingcatch.app.common.enums.ImageDirectoryEnum;
 import team.waitingcatch.app.common.util.DistanceCalculator;
 import team.waitingcatch.app.common.util.image.ImageUploader;
 import team.waitingcatch.app.restaurant.dto.requestseller.ApproveSignUpSellerManagementEntityPassToRestaurantEntityRequest;
@@ -126,8 +125,10 @@ public class RestaurantServiceImpl implements RestaurantService, InternalRestaur
 	//업데이트시 -> 현재 있는것은 1.새로 2. 새로 3. 새로 4.새로
 	@Override
 	public void updateRestaurant(UpdateRestaurantServiceRequest serviceRequest) throws IOException {
-		Restaurant restaurant = _getRestaurantByUserId(serviceRequest.getSellerId());
-		RestaurantInfo restaurantInfo = _getRestaurantInfoByRestaurantId(restaurant.getId());
+		Restaurant restaurant = restaurantRepository.findByUserId(serviceRequest.getSellerId())
+			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 레스토랑입니다."));
+		RestaurantInfo restaurantInfo = restaurantInfoRepository.findById(restaurant.getId())
+			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 레스토랑 정보입니다."));
 
 		List<String> imagePaths = imageUploader.uploadList(serviceRequest.getImages(), RESTAURANT.getValue());
 		UpdateRestaurantEntityRequest updateRestaurantEntityRequest = new UpdateRestaurantEntityRequest(

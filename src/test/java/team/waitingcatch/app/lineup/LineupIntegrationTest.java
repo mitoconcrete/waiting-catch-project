@@ -212,7 +212,7 @@ class LineupIntegrationTest {
 
 			Restaurant restaurant = new Restaurant(
 				new SaveDummyRestaurantRequest("레스토랑" + i, "12345", "서울시 강남구 강남대로", "1", new Position(0.0, 0.0),
-					"0100000000" + i, "일식>스시>오마카세", seller, searchKeywords));
+					"0100000011" + i, "일식>스시>오마카세", seller, searchKeywords));
 
 			openRestaurant(restaurant);
 
