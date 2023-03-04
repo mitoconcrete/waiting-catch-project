@@ -190,7 +190,11 @@ public class RestaurantServiceImpl implements RestaurantService, InternalRestaur
 	@Override
 	public Restaurant _deleteRestaurantBySellerId(Long sellerId) {
 		Restaurant restaurant = _getRestaurantByUserId(sellerId);
+		RestaurantInfo restaurantInfo = _getRestaurantInfoByUserId(sellerId);
+
 		restaurant.deleteRestaurant();
+		restaurantInfo.deleteRestaurantInfo();
+		
 		return restaurant;
 	}
 }
