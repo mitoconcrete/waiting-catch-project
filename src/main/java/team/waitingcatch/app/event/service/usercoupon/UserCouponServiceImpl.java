@@ -1,7 +1,7 @@
 package team.waitingcatch.app.event.service.usercoupon;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.retry.annotation.Backoff;
@@ -12,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.event.dto.usercoupon.CreateUserCouponServiceRequest;
 import team.waitingcatch.app.event.dto.usercoupon.GetUserCouponResponse;
-import team.waitingcatch.app.event.dto.usercoupon.UserCouponServiceResponse;
 import team.waitingcatch.app.event.entity.CouponCreator;
 import team.waitingcatch.app.event.entity.UserCoupon;
 import team.waitingcatch.app.event.repository.UserCouponRepository;
@@ -46,7 +45,6 @@ public class UserCouponServiceImpl implements UserCouponService, InternalUserCou
 		);
 		UserCoupon userCoupon = new UserCoupon(user, couponCreator);
 		boolean isCouponIssued = couponCreator.hasCouponBalance();
-		// boolean isCouponIssued = userCoupon.issueCoupon();
 		if (isCouponIssued) {
 			couponCreator.useCoupon();
 			userCouponRepository.save(userCoupon);
@@ -59,39 +57,9 @@ public class UserCouponServiceImpl implements UserCouponService, InternalUserCou
 	//유저 쿠폰을 조회한다.
 	@Override
 	public List<GetUserCouponResponse> getUserCoupons(User user) {
-		//List<UserCoupon> userCoupons = userCouponRepository.findByUserAndIsUsedFalse(user);
-		//유저 아이디를 받아서 아이디에 맞는 쿠폰목록을 가저온다
-		//List<UserCoupon> userCoupons = userCouponRepository.findByUserWithUserAndCouponCreator(user);
-		//유저쿠폰의 레스토랑 리스트 가저온다
-		//List<String> restaurants = userCouponRepository.findRestaurantNamesByUser(userCoupons);
-		//쿠폰목록을 반환하기위한 리스트를 생성한다
-		List<UserCouponServiceResponse> userCouponServiceResponses = userCouponRepository.findRestaurantNameAndUserAll(
-			user);
-
-		List<GetUserCouponResponse> getUserCouponResponses = new ArrayList<>();
-
-		for (UserCouponServiceResponse userCouponServiceResponse : userCouponServiceResponses) {
-			GetUserCouponResponse getUserCouponResponse = new GetUserCouponResponse(userCouponServiceResponse);
-			getUserCouponResponses.add(getUserCouponResponse);
-		}
-		return getUserCouponResponses;
-		// for (int i = 0; i < userCoupons.size(); i++) {
-		// 	UserCouponResponse userCouponResponse = new UserCouponResponse(userCoupons.get(i));
-		// 	String restaurantName = restaurants.get(i);
-		// 	GetUserCouponResponse getUserCouponResponse = new GetUserCouponResponse(userCouponResponse,
-		// 		restaurantName);
-		// 	getUserCouponResponses.add(getUserCouponResponse);
-
-		// for (UserCoupon userCoupon : userCoupons) {
-		// 	//유저쿠폰을 담기위한 리스폰스를 만든다
-		// 	UserCouponResponse userCouponResponse = new UserCouponResponse(userCoupon);
-		// 	//유저쿠폰 레포지토리에서 해당유저쿠폰에 해당하는 레스토랑이름을 가저온다.(굳이?)
-		// 	String restaurantName = userCouponRepository.findRestaurantNameByUserCoupon(userCoupon);
-		// 	//반환하기위한 리스폰스+레스토랑 이름을 사용해 반환리스폰스를 작성한다
-		// 	GetUserCouponResponse getUserCouponResponse = new GetUserCouponResponse(userCouponResponse, restaurantName);
-		// 	getUserCouponResponses.add(getUserCouponResponse);
-		// }
-
+		return userCouponRepository.findRestaurantNameAndUserAll(user).stream()
+			.map(response -> new GetUserCouponResponse(response))
+			.collect(Collectors.toList());
 	}
 
 	@Override
