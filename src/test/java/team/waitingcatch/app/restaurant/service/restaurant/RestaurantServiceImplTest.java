@@ -189,8 +189,7 @@ class RestaurantServiceImplTest {
 		when(jpaResponse.getSearchKeyword()).thenReturn(search);
 		when(jpaResponse.getLatitude()).thenReturn(0.0);
 		when(jpaResponse.getLongitude()).thenReturn(0.0);
-		when(distanceCalculator.distanceInKilometerByHaversine(
-			0.0, 0.0, 0.0, 0.0)).thenReturn(0.0);
+		when(distanceCalculator.distanceInKilometerByHaversine(0.0, 0.0, 0.0, 0.0)).thenReturn(0.0);
 		when(restaurantInfoRepository.findRestaurantsByDistance(any(double.class), any(double.class),
 			any(int.class), any())).thenReturn(
 			restaurantsWithinRadiusJpaResponseSlice);
@@ -350,8 +349,10 @@ class RestaurantServiceImplTest {
 	void _deleteRestaurantBySellerId() {
 		// given
 		Restaurant restaurant = mock(Restaurant.class);
+		RestaurantInfo restaurantInfo = mock(RestaurantInfo.class);
 
 		when(restaurantRepository.findByUserId(any(Long.class))).thenReturn(Optional.of(restaurant));
+		when(restaurantInfoRepository.findByUserId(any(Long.class))).thenReturn(Optional.of(restaurantInfo));
 
 		// when
 		restaurant = restaurantService._deleteRestaurantBySellerId(any(Long.class));

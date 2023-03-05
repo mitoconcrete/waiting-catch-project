@@ -2,10 +2,10 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>쿠폰생성자 수정</title>
+    <title>쿠폰 생성자 수정</title>
 </head>
 <body>
-<h1>쿠폰생성자수정</h1>
+<h1>쿠폰 생성자 수정</h1>
 <form th:action="@{/event/updateCouponCreator/{eventId}/{creatorId}(eventId=${eventId},creatorId=${creatorId})}"
       method="post" enctype="multipart/form-data">
     <input type="hidden" name="_method" value="PUT"/>

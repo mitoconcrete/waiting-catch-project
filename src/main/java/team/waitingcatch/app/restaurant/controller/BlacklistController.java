@@ -32,9 +32,9 @@ public class BlacklistController {
 	}
 
 	@GetMapping("/admin/restaurants/{restaurantId}/blacklists")
-	public GenericResponse<GetBlacklistResponse> getBlacklistsByRestaurant(@PathVariable Long restaurantId) {
+	public GenericResponse<List<GetBlacklistResponse>> getBlacklistsByRestaurant(@PathVariable Long restaurantId) {
 		var serviceRequest = new GetBlacklistByRestaurantIdServiceRequest(restaurantId);
-		return new GenericResponse(blacklistService.getBlackListByRestaurantId(serviceRequest));
+		return new GenericResponse<>(blacklistService.getBlackListByRestaurantId(serviceRequest));
 	}
 
 	@GetMapping("/seller/restaurants/blacklist")

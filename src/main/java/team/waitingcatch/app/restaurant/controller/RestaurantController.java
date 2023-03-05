@@ -46,19 +46,19 @@ public class RestaurantController {
 	public static final int BASIC_DISTANCE = 3;
 
 	// Customer
-	@GetMapping("/restaurants/{restaurantId}")
+	@GetMapping({"/customer/restaurants/{restaurantId}", "/admin/restaurants/{restaurantId}"})
 	public GenericResponse<RestaurantBasicInfoResponse> getRestaurantBasicInfo(@PathVariable Long restaurantId) {
 		RestaurantBasicInfoServiceRequest request = new RestaurantBasicInfoServiceRequest(restaurantId);
 		return new GenericResponse<>(restaurantService.getRestaurantBasicInfo(request));
 	}
 
-	@GetMapping("/restaurants/{restaurantId}/details")
+	@GetMapping({"/customer/restaurants/{restaurantId}/details", "/admin/restaurants/{restaurantId}/details"})
 	public GenericResponse<RestaurantDetailedInfoResponse> getRestaurantDetailedInfo(@PathVariable Long restaurantId) {
 		RestaurantDetailedInfoServiceRequest request = new RestaurantDetailedInfoServiceRequest(restaurantId);
 		return new GenericResponse<>(restaurantService.getRestaurantDetailedInfo(request));
 	}
 
-	@GetMapping("/restaurants/search")
+	@GetMapping("/general/restaurants/search")
 	public GenericResponse<Slice<SearchRestaurantsResponse>> searchRestaurantsByKeyword(
 		@RequestParam(required = false) Long id,
 		@RequestParam String keyword,
@@ -70,7 +70,7 @@ public class RestaurantController {
 		return new GenericResponse<>(restaurantService.searchRestaurantsByKeyword(request));
 	}
 
-	@GetMapping("/restaurants")
+	@GetMapping("/general/restaurants")
 	public GenericResponse<Slice<RestaurantsWithinRadiusResponse>> getRestaurantsWithinRadius(
 		@RequestParam(required = false) Long id,
 		@RequestParam double latitude,
@@ -82,9 +82,8 @@ public class RestaurantController {
 	}
 
 	// Seller
-
-	//판매자가 자신의 레스토랑 정보를 수정한다.
-	@PutMapping(value = "/restaurant/info", consumes = {MediaType.APPLICATION_JSON_VALUE,
+	// 판매자가 자신의 레스토랑 정보를 수정한다.
+	@PutMapping(value = "/seller/restaurant/info", consumes = {MediaType.APPLICATION_JSON_VALUE,
 		MediaType.MULTIPART_FORM_DATA_VALUE})
 	@ResponseStatus(HttpStatus.CREATED)
 	public void updateRestaurant(
@@ -101,7 +100,7 @@ public class RestaurantController {
 	// Admin
 	@GetMapping("/admin/restaurants")
 	public GenericResponse<Page<RestaurantResponse>> getRestaurants(@PageableDefault Pageable pageable) {
-		return new GenericResponse(restaurantService.getRestaurants(pageable));
+		return new GenericResponse<>(restaurantService.getRestaurants(pageable));
 	}
 
 	//관리자가 레스토랑을 삭제 한다
@@ -111,5 +110,4 @@ public class RestaurantController {
 			= new DeleteRestaurantByAdminServiceRequest(restaurant_id);
 		restaurantService.deleteRestaurantByAdmin(deleteRestaurantByAdminServiceRequest);
 	}
-
 }

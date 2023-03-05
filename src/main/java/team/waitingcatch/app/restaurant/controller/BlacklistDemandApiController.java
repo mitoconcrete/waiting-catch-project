@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -33,6 +34,14 @@ import team.waitingcatch.app.user.entitiy.UserDetailsImpl;
 public class BlacklistDemandApiController {
 	private final BlacklistDemandService blacklistDemandService;
 
+	@GetMapping("/seller/blacklist-demands")
+	public GenericResponse<List<GetBlacklistDemandResponse>> getBlackListDemandByRestaurant(
+		@AuthenticationPrincipal UserDetailsImpl userDetails) {
+
+		var serviceRequest = new GetBlackListDemandByRestaurantServiceRequest(userDetails.getId());
+		return new GenericResponse<>(blacklistDemandService.getBlackListDemandsByRestaurant(serviceRequest));
+	}
+
 	@PostMapping("/seller/blacklist-demands")
 	public void createBlacklistDemand(
 		@Valid @RequestBody BlacklistDemandControllerRequest controllerRequest,
@@ -43,7 +52,7 @@ public class BlacklistDemandApiController {
 		blacklistDemandService.submitBlacklistDemand(serviceRequest);
 	}
 
-	@PutMapping("/seller/blacklist-demands/{blacklistDemandId}")
+	@DeleteMapping("/seller/blacklist-demands/{blacklistDemandId}")
 	public void cancelBlacklistDemand(
 		@PathVariable Long blacklistDemandId,
 		@AuthenticationPrincipal UserDetailsImpl userDetails) {
@@ -54,8 +63,8 @@ public class BlacklistDemandApiController {
 
 	@GetMapping("/admin/restaurants/blacklist-demands")
 	public GenericResponse<Page<GetBlacklistDemandResponse>> getBlacklistDemands(
-		@PageableDefault(size = 10, page = 0) Pageable pageable) {
-		return new GenericResponse(blacklistDemandService.getBlacklistDemands(pageable));
+		@PageableDefault Pageable pageable) {
+		return new GenericResponse<>(blacklistDemandService.getBlacklistDemands(pageable));
 	}
 
 	@PostMapping("/admin/restaurants/blacklist-demands/{blacklistDemandId}")
@@ -67,13 +76,5 @@ public class BlacklistDemandApiController {
 	@PutMapping("/admin/restaurants/blacklist-demand/{blacklistDemandId}")
 	public void rejectBlacklistDemand(@PathVariable Long blacklistDemandId) {
 		blacklistDemandService.rejectBlacklistDemand(blacklistDemandId);
-	}
-
-	@GetMapping("/seller/restaurant/blacklist-demands")
-	public List<GetBlacklistDemandResponse> getBlackListDemandByRestaurant(
-		@AuthenticationPrincipal UserDetailsImpl userDetails) {
-		GetBlackListDemandByRestaurantServiceRequest getBlackListDemandByRestaurantControllerRequest = new
-			GetBlackListDemandByRestaurantServiceRequest(userDetails.getId());
-		return blacklistDemandService.getBlackListDemandsByRestaurant(getBlackListDemandByRestaurantControllerRequest);
 	}
 }

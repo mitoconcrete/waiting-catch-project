@@ -32,13 +32,11 @@ import team.waitingcatch.app.restaurant.service.restaurant.MapApiService;
 @RestController
 @RequiredArgsConstructor
 public class SellerManagementController {
-
 	private final SellerManagementService sellerManagementService;
 	private final MapApiService mapApiService;
 
-	//판매자 권한 부분
-
-	//판매자 셀러 요청
+	// 판매자 권한 부분
+	// 판매자 셀러 요청
 	@PostMapping("/general/demand")
 	public void demandSignUpSeller(
 		@Valid @RequestBody DemandSignUpSellerControllerRequest demandSignUpControllerRequest) {
@@ -68,13 +66,13 @@ public class SellerManagementController {
 			sellerManagementService.getRequestSellerByRestaurant(getRequestSellerByRestaurantRequest));
 	}
 
-	//관리자 권한 부분
-
-	//판매자 요청 조회
+	// 관리자 권한 부분
+	// 판매자 요청 조회
 	@GetMapping("/admin/seller-management")
-	public GenericResponse<Page<GetDemandSignUpSellerResponse>> sellerManagementPage(Model model,
-		@PageableDefault(size = 10, page = 0) Pageable pageable) {
-		return new GenericResponse(sellerManagementService.getDemandSignUpSellers(pageable));
+	public GenericResponse<Page<GetDemandSignUpSellerResponse>> sellerManagementPage(
+		Model model,
+		@PageableDefault Pageable pageable) {
+		return new GenericResponse<>(sellerManagementService.getDemandSignUpSellers(pageable));
 	}
 
 	@PostMapping("/admin/seller-managements/{sellerManagementId}")
@@ -91,7 +89,4 @@ public class SellerManagementController {
 			sellerManagementId);
 		sellerManagementService.rejectSignUpSeller(rejectSignUpSellerServiceRequest);
 	}
-
 }
-
-

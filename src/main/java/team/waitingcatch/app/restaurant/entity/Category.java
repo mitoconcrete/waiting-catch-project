@@ -23,7 +23,7 @@ public class Category {
 
 	private Long parentId;
 
-	@Column(nullable = false, length = 15)
+	@Column(nullable = false, length = 20, unique = true)
 	private String name;
 
 	public Category(Long parentId, String name) {
