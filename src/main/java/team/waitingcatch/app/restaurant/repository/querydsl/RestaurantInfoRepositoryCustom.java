@@ -7,8 +7,9 @@ import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantsWithinRadiusJp
 import team.waitingcatch.app.restaurant.dto.restaurant.SearchRestaurantJpaResponse;
 
 public interface RestaurantInfoRepositoryCustom {
-	Slice<SearchRestaurantJpaResponse> findRestaurantsBySearchKeywordsContaining(String keyword, Pageable pageable);
+	Slice<SearchRestaurantJpaResponse> findRestaurantsBySearchKeywordsContaining(Long id, String keyword,
+		Pageable pageable);
 
-	Slice<RestaurantsWithinRadiusJpaResponse> findRestaurantsByDistance(double latitude, double longitude,
+	Slice<RestaurantsWithinRadiusJpaResponse> findRestaurantsByDistance(Long id, double latitude, double longitude,
 		int distance, Pageable pageable);
 }

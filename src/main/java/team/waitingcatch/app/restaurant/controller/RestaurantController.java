@@ -43,6 +43,7 @@ import team.waitingcatch.app.user.entitiy.UserDetailsImpl;
 @RequiredArgsConstructor
 public class RestaurantController {
 	private final RestaurantService restaurantService;
+	public static final int BASIC_DISTANCE = 3;
 
 	// Customer
 	@GetMapping("/restaurants/{restaurantId}")
@@ -58,18 +59,25 @@ public class RestaurantController {
 	}
 
 	@GetMapping("/restaurants/search")
-	public GenericResponse<Slice<SearchRestaurantsResponse>> searchRestaurantsByKeyword(@RequestParam String keyword,
-		@RequestParam double latitude, @RequestParam double longitude, Pageable pageable) {
+	public GenericResponse<Slice<SearchRestaurantsResponse>> searchRestaurantsByKeyword(
+		@RequestParam(required = false) Long id,
+		@RequestParam String keyword,
+		@RequestParam double latitude,
+		@RequestParam double longitude,
+		Pageable pageable) {
 		SearchRestaurantServiceRequest request =
-			new SearchRestaurantServiceRequest(keyword, latitude, longitude, pageable);
+			new SearchRestaurantServiceRequest(id, keyword, latitude, longitude, pageable);
 		return new GenericResponse<>(restaurantService.searchRestaurantsByKeyword(request));
 	}
 
 	@GetMapping("/restaurants")
 	public GenericResponse<Slice<RestaurantsWithinRadiusResponse>> getRestaurantsWithinRadius(
-		@RequestParam double latitude, @RequestParam double longitude, Pageable pageable) {
+		@RequestParam(required = false) Long id,
+		@RequestParam double latitude,
+		@RequestParam double longitude,
+		Pageable pageable) {
 		RestaurantsWithinRadiusServiceRequest request =
-			new RestaurantsWithinRadiusServiceRequest(latitude, longitude, 3, pageable);
+			new RestaurantsWithinRadiusServiceRequest(id, latitude, longitude, BASIC_DISTANCE, pageable);
 		return new GenericResponse<>(restaurantService.getRestaurantsWithinRadius(request));
 	}
 

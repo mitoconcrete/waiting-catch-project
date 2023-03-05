@@ -14,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.core.types.dsl.StringTemplate;
@@ -30,7 +31,7 @@ public class RestaurantInfoRepositoryCustomImpl implements RestaurantInfoReposit
 	private final JPAQueryFactory jpaQueryFactory;
 
 	@Override
-	public Slice<SearchRestaurantJpaResponse> findRestaurantsBySearchKeywordsContaining(String keyword,
+	public Slice<SearchRestaurantJpaResponse> findRestaurantsBySearchKeywordsContaining(Long id, String keyword,
 		Pageable pageable) {
 		StringTemplate st = Expressions.stringTemplate("cast({0} as string)", restaurant.searchKeywords);
 		List<SearchRestaurantJpaResponse> fetch = jpaQueryFactory
@@ -47,9 +48,12 @@ public class RestaurantInfoRepositoryCustomImpl implements RestaurantInfoReposit
 				))
 			.from(restaurantInfo)
 			.join(restaurantInfo.restaurant, restaurant)
-			.where(st.contains(keyword)
-				.or(restaurant.name.contains(keyword))
-				.and(restaurant.isDeleted.isFalse()))
+			.where(
+				ltId(id),
+				st.contains(keyword)
+					.or(restaurant.name.contains(keyword))
+					.and(restaurant.isDeleted.isFalse()))
+			.orderBy(restaurant.id.desc())
 			.limit(pageable.getPageSize() + 1)
 			.fetch();
 
@@ -63,7 +67,8 @@ public class RestaurantInfoRepositoryCustomImpl implements RestaurantInfoReposit
 	}
 
 	@Override
-	public Slice<RestaurantsWithinRadiusJpaResponse> findRestaurantsByDistance(double latitude, double longitude,
+	public Slice<RestaurantsWithinRadiusJpaResponse> findRestaurantsByDistance(Long id, double latitude,
+		double longitude,
 		int distance, Pageable pageable) {
 		NumberExpression<Double> radiansCurrentLat = radians(asNumber(latitude));
 		NumberExpression<Double> radiansCurrentLot = radians(asNumber(longitude));
@@ -83,13 +88,16 @@ public class RestaurantInfoRepositoryCustomImpl implements RestaurantInfoReposit
 			))
 			.from(restaurantInfo)
 			.join(restaurantInfo.restaurant, restaurant)
-			.where(acos(cos(radiansCurrentLat)
-				.multiply(cos(radiansLat))
-				.multiply(cos(radiansLot.subtract(radiansCurrentLot)))
-				.add(sin(radiansCurrentLat).multiply(sin(radiansLat))))
-				.multiply(asNumber(6371))
-				.lt(asNumber(distance))
-				.and(restaurant.isDeleted.isFalse()))
+			.where(
+				ltId(id),
+				acos(cos(radiansCurrentLat)
+					.multiply(cos(radiansLat))
+					.multiply(cos(radiansLot.subtract(radiansCurrentLot)))
+					.add(sin(radiansCurrentLat).multiply(sin(radiansLat))))
+					.multiply(asNumber(6371))
+					.lt(asNumber(distance))
+					.and(restaurant.isDeleted.isFalse()))
+			.orderBy(restaurant.id.desc())
 			.limit(pageable.getPageSize() + 1)
 			.fetch();
 
@@ -100,5 +108,12 @@ public class RestaurantInfoRepositoryCustomImpl implements RestaurantInfoReposit
 			hasNext = true;
 		}
 		return new SliceImpl<>(fetch, pageable, hasNext);
+	}
+
+	private BooleanExpression ltId(Long id) {
+		if (id == null) {
+			return null;
+		}
+		return restaurant.id.lt(id);
 	}
 }

@@ -65,18 +65,16 @@ public class RestaurantServiceImpl implements RestaurantService, InternalRestaur
 	@Override
 	@Transactional(readOnly = true)
 	public Slice<SearchRestaurantsResponse> searchRestaurantsByKeyword(SearchRestaurantServiceRequest request) {
-		String keyword = request.getKeyword();
-		double latitude = request.getLatitude();
-		double longitude = request.getLongitude();
-
 		Slice<SearchRestaurantJpaResponse> jpaResponses =
-			restaurantInfoRepository.findRestaurantsBySearchKeywordsContaining(keyword, request.getPageable());
+			restaurantInfoRepository.findRestaurantsBySearchKeywordsContaining(
+				request.getId(), request.getKeyword(), request.getPageable()
+			);
 
 		List<SearchRestaurantsResponse> content = new ArrayList<>();
 		for (SearchRestaurantJpaResponse response : jpaResponses) {
 			double distance = distanceCalculator.distanceInKilometerByHaversine(
-				longitude,
-				latitude,
+				request.getLongitude(),
+				request.getLatitude(),
 				response.getLongitude(),
 				response.getLatitude()
 			);
@@ -99,6 +97,7 @@ public class RestaurantServiceImpl implements RestaurantService, InternalRestaur
 		RestaurantsWithinRadiusServiceRequest request) {
 		Slice<RestaurantsWithinRadiusJpaResponse> jpaResponses =
 			restaurantInfoRepository.findRestaurantsByDistance(
+				request.getId(),
 				request.getLatitude(),
 				request.getLongitude(),
 				request.getDistance(),
