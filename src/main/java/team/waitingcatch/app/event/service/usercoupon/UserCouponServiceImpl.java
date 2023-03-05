@@ -3,6 +3,7 @@ package team.waitingcatch.app.event.service.usercoupon;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
@@ -30,7 +31,7 @@ public class UserCouponServiceImpl implements UserCouponService, InternalUserCou
 
 	//유저 쿠폰을 생성한다
 	@Override
-	@Retryable(maxAttempts = 3, backoff = @Backoff(100), value = IllegalStateException.class, exclude = {
+	@Retryable(maxAttempts = 3, backoff = @Backoff(100), value = OptimisticLockingFailureException.class, exclude = {
 		IllegalArgumentException.class})
 	//0.1초 지연후 3번까지 트라이, IllegalStateException발생시 리트라이, IllegalArgumentException는 익셉션처리
 	public void createUserCoupon(CreateUserCouponServiceRequest createUserCouponserviceRequest) {
@@ -50,11 +51,11 @@ public class UserCouponServiceImpl implements UserCouponService, InternalUserCou
 			couponCreator.useCoupon();
 			userCouponRepository.save(userCoupon);
 		} else {
-			throw new IllegalStateException("요청이 많습니다. 다시 시도해주세요");
+			throw new OptimisticLockingFailureException("요청이 많습니다. 다시 시도해주세요");
 		}
 
 	}
-	
+
 	//유저 쿠폰을 조회한다.
 	@Override
 	public List<GetUserCouponResponse> getUserCoupons(User user) {

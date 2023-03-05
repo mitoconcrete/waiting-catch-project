@@ -1,6 +1,7 @@
 package team.waitingcatch.app.exception;
 
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindingResult;
@@ -52,9 +53,9 @@ public class ApplicationExceptionController {
 		return new BasicExceptionResponse(HttpStatus.UNAUTHORIZED, ex.getMessage());
 	}
 
-	@ExceptionHandler({IllegalStateException.class})
+	@ExceptionHandler({OptimisticLockingFailureException.class})
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	public BasicExceptionResponse handleIllegalStateException(IllegalStateException e) {
+	public BasicExceptionResponse handleIllegalStateException(OptimisticLockingFailureException e) {
 		return new BasicExceptionResponse(HttpStatus.BAD_REQUEST, e.getMessage());
 	}
 
