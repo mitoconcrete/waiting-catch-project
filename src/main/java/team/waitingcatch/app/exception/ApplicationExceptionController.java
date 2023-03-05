@@ -51,4 +51,11 @@ public class ApplicationExceptionController {
 	public BasicExceptionResponse handleTokenNotFoundException(TokenNotFoundException ex) {
 		return new BasicExceptionResponse(HttpStatus.UNAUTHORIZED, ex.getMessage());
 	}
+
+	@ExceptionHandler({IllegalStateException.class})
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	public BasicExceptionResponse handleIllegalStateException(IllegalStateException e) {
+		return new BasicExceptionResponse(HttpStatus.BAD_REQUEST, e.getMessage());
+	}
+
 }

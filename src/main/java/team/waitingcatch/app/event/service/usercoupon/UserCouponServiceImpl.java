@@ -4,10 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.retry.annotation.Backoff;
-import org.springframework.retry.annotation.Recover;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
@@ -56,12 +54,7 @@ public class UserCouponServiceImpl implements UserCouponService, InternalUserCou
 		}
 
 	}
-
-	@Recover
-	String recover(IllegalArgumentException e) {
-		return e.getMessage();
-	}
-
+	
 	//유저 쿠폰을 조회한다.
 	@Override
 	public List<GetUserCouponResponse> getUserCoupons(User user) {
