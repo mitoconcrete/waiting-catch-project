@@ -30,6 +30,7 @@ public class LineupRepositoryCustomImpl implements LineupRepositoryCustom {
 		return queryFactory
 			.select(new QLineupRecordResponse(
 				lineup.id,
+				lineup.user.id,
 				lineup.restaurant.id,
 				restaurant.name,
 				lineup.numOfMembers,
@@ -50,6 +51,7 @@ public class LineupRepositoryCustomImpl implements LineupRepositoryCustom {
 		return queryFactory
 			.select(new QTodayLineupResponse(
 				lineup.id,
+				lineup.user.id,
 				lineup.waitingNumber,
 				user.name,
 				lineup.numOfMembers,

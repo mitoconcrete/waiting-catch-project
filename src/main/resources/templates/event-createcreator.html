@@ -2,10 +2,10 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>쿠폰생성자 추가</title>
+    <title>쿠폰 생성자 추가</title>
 </head>
 <body>
-<h1>쿠폰생성자추가</h1>
+<h1>쿠폰 생성자 추가</h1>
 <form th:action="@{/event/couponcreator/{eventId}(eventId=${eventId})}" method="post" enctype="multipart/form-data">
     <label for="name">name</label>
     <input type="text" id="name" name="name"><br>

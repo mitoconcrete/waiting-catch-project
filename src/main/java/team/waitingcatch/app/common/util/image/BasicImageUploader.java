@@ -22,16 +22,16 @@ public class BasicImageUploader implements ImageUploader {
 	private String imageDir;
 
 	@Override
-	public List<String> uploadList(List<MultipartFile> multipartFiles, String directionName) throws IOException {
+	public List<String> uploadList(List<MultipartFile> multipartFiles, String directory) throws IOException {
 		List<String> imageUrls = new ArrayList<>();
 		for (MultipartFile multipartFile : multipartFiles) {
-			imageUrls.add(upload(multipartFile, directionName));
+			imageUrls.add(upload(multipartFile, directory));
 		}
 		return imageUrls;
 	}
 
 	@Override
-	public String upload(MultipartFile multipartFile, String directionName) throws IOException {
+	public String upload(MultipartFile multipartFile, String directory) throws IOException {
 		String originalName = multipartFile.getOriginalFilename();
 		long size = multipartFile.getSize();
 
@@ -39,7 +39,7 @@ public class BasicImageUploader implements ImageUploader {
 		objectMetadata.setContentType(multipartFile.getContentType());
 		objectMetadata.setContentLength(size);
 
-		String fileName = directionName + "/" + UUID.randomUUID() + originalName;
+		String fileName = directory + "/" + UUID.randomUUID() + originalName;
 
 		String storeFileName = createStoreFileName(fileName);
 

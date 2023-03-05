@@ -215,12 +215,12 @@ public class SellerController {
 		// userService.deleteUser(servicePayload);
 	}
 
-	@GetMapping("/seller/infos")
+	@GetMapping("/seller/info")
 	public String updateSellerInfoSub() {
-		return "seller-infos";
+		return "seller-info";
 	}
 
-	@PutMapping("/seller/infos")
+	@PutMapping("/seller/info")
 	public String updateSellerInfo(@Valid UpdateUserControllerRequest controllerRequest) {
 		String username = "song1";
 		UpdateUserServiceRequest servicePayload = new UpdateUserServiceRequest(controllerRequest.getName(),
@@ -248,10 +248,6 @@ public class SellerController {
 
 		return "redirect:/seller";
 	}
-
-
-
-
 
 	/*     이벤트     */
 

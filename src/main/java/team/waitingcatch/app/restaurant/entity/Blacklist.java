@@ -6,8 +6,10 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Index;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -16,9 +18,13 @@ import team.waitingcatch.app.common.entity.TimeStamped;
 import team.waitingcatch.app.restaurant.dto.blacklist.CreateBlacklistInternalServiceRequest;
 import team.waitingcatch.app.user.entitiy.User;
 
+@Entity
+@Table(indexes = {
+	@Index(name = "ix_blacklist_restaurant_id", columnList = "restaurant_id"),
+	@Index(name = "ix_blacklist_user_id", columnList = "user_id")
+})
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Entity
 public class Blacklist extends TimeStamped {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

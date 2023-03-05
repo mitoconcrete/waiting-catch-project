@@ -1,7 +1,5 @@
 package team.waitingcatch.app.restaurant.entity;
 
-import java.util.ArrayList;
-
 import java.util.List;
 
 import javax.persistence.Column;
@@ -32,52 +30,46 @@ public class SellerManagement extends TimeStamped {
 	@Column(name = "seller_management_id")
 	private Long id;
 
-	@Column(nullable = false)
-	private String username;
-
-	@Column(nullable = false)
-	private String name;
-
-	@Column(nullable = false)
-	private String email;
-
-	@Column(nullable = false)
-	private String phoneNumber;
-
-	@Column(nullable = false)
+	@Column(nullable = false, length = 100)
 	private String restaurantName;
-
-	@Column(nullable = false)
-	private String zipCode;
-
-	@Column(nullable = false)
-	private String address;
-
-	@Column(nullable = false)
-	private String detailAddress;
-
-	// @Embedded
-	// private Address address;
-
-	@Embedded
-	private Position position;
-
-	@Column(nullable = false)
-	private String description;
-
-	@Column(nullable = false)
-	@Enumerated(value = EnumType.STRING)
-	private AcceptedStatusEnum status;
 
 	@Column(nullable = false)
 	@Convert(converter = StringListConverter.class)
 	private List<String> categories;
 
-	// @Column(name = "search_keywords", nullable = false)
-	// private String searchKeyWords;
+	@Column(nullable = false, length = 200)
+	private String description;
+
+	@Column(nullable = false, length = 30)
+	private String name;
+
+	@Column(nullable = false, length = 12)
+	private String businessLicenseNo;
+
+	@Column(nullable = false, length = 20)
+	private String username;
 
 	@Column(nullable = false)
-	private String businessLicenseNo;
+	private String email;
+
+	@Column(nullable = false, length = 13)
+	private String phoneNumber;
+
+	@Column(nullable = false, length = 50)
+	private String address;
+
+	@Column(nullable = false, length = 30)
+	private String detailAddress;
+
+	@Column(nullable = false, length = 5)
+	private String zipCode;
+
+	@Column(nullable = false, length = 20)
+	@Enumerated(value = EnumType.STRING)
+	private AcceptedStatusEnum status;
+
+	@Embedded
+	private Position position;
 
 	public SellerManagement(DemandSignUpSellerServiceRequest demandSignupSellerServiceRequest) {
 		this.username = demandSignupSellerServiceRequest.getUsername();
@@ -87,12 +79,10 @@ public class SellerManagement extends TimeStamped {
 		this.zipCode = demandSignupSellerServiceRequest.getZipCode();
 		this.address = demandSignupSellerServiceRequest.getAddress();
 		this.detailAddress = demandSignupSellerServiceRequest.getDetailAddress();
-		// this.address = demandSignupSellerServiceRequest.getAddress();
 		this.position = demandSignupSellerServiceRequest.getPosition();
 		this.description = demandSignupSellerServiceRequest.getDescription();
 		this.status = AcceptedStatusEnum.WAIT;
 		this.categories = demandSignupSellerServiceRequest.getCategories();
-		// this.searchKeyWords = "";
 		this.businessLicenseNo = demandSignupSellerServiceRequest.getBusinessLicenseNo();
 		this.name = demandSignupSellerServiceRequest.getName();
 	}

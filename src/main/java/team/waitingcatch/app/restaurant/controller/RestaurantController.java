@@ -72,8 +72,7 @@ public class RestaurantController {
 	}
 
 	// Seller
-
-	//판매자가 자신의 레스토랑 정보를 수정한다.
+	// 판매자가 자신의 레스토랑 정보를 수정한다.
 	@PutMapping(value = "/seller/restaurant/info", consumes = {MediaType.APPLICATION_JSON_VALUE,
 		MediaType.MULTIPART_FORM_DATA_VALUE})
 	@ResponseStatus(HttpStatus.CREATED)
@@ -91,7 +90,7 @@ public class RestaurantController {
 	// Admin
 	@GetMapping("/admin/restaurants")
 	public GenericResponse<Page<RestaurantResponse>> getRestaurants(@PageableDefault Pageable pageable) {
-		return new GenericResponse(restaurantService.getRestaurants(pageable));
+		return new GenericResponse<>(restaurantService.getRestaurants(pageable));
 	}
 
 	//관리자가 레스토랑을 삭제 한다
@@ -101,5 +100,4 @@ public class RestaurantController {
 			= new DeleteRestaurantByAdminServiceRequest(restaurant_id);
 		restaurantService.deleteRestaurantByAdmin(deleteRestaurantByAdminServiceRequest);
 	}
-
 }
