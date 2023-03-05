@@ -42,7 +42,7 @@ public class SecurityConfig {
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-		String[] ignoreAuthorizationList = {"/api/general/**", "/general/templates/**"};
+		String[] ignoreAuthorizationList = {"/api/general/**", "/general/templates/**", "/profile"};
 		String[] customerOnlyAllowedList = {"/api/customer/**"};
 		String[] sellerOnlyAllowedList = {"/api/seller/**", "/seller/templates/**"};
 		String[] adminOnlyAllowedList = {"/admin/templates/**"};
