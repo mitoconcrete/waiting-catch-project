@@ -27,7 +27,11 @@ class RestaurantInfoRepositoryTest {
 		when(pageable.getPageSize()).thenReturn(5);
 
 		Slice<SearchRestaurantJpaResponse> jpaResponses =
-			restaurantInfoRepository.findRestaurantsBySearchKeywordsContaining("keywords", pageable);
+			restaurantInfoRepository.findRestaurantsBySearchKeywordsContaining(
+				null,
+				"keywords",
+				pageable
+			);
 
 		// assertEquals(5, jpaResponses.size());
 	}
@@ -39,7 +43,13 @@ class RestaurantInfoRepositoryTest {
 		when(pageable.getPageSize()).thenReturn(5);
 
 		Slice<RestaurantsWithinRadiusJpaResponse> restaurants =
-			restaurantInfoRepository.findRestaurantsByDistance(37.339141, 127.082427, 3, pageable);
+			restaurantInfoRepository.findRestaurantsByDistance(
+				null,
+				37.339141,
+				127.082427,
+				3,
+				pageable
+			);
 
 		// assertEquals(3, restaurants.size());
 	}

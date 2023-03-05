@@ -156,9 +156,11 @@ class RestaurantServiceImplTest {
 		when(jpaResponse.getSearchKeyword()).thenReturn(search);
 		when(jpaResponse.getName()).thenReturn("aaa");
 
-		when(restaurantInfoRepository.findRestaurantsBySearchKeywordsContaining(any(String.class),
-			any())).thenReturn(
-			searchRestaurantJpaResponses);
+		when(restaurantInfoRepository.findRestaurantsBySearchKeywordsContaining(
+			any(Long.class),
+			any(String.class),
+			any()))
+			.thenReturn(searchRestaurantJpaResponses);
 
 		// when
 		Slice<SearchRestaurantsResponse> responses = restaurantService.searchRestaurantsByKeyword(request);
@@ -190,9 +192,13 @@ class RestaurantServiceImplTest {
 		when(jpaResponse.getLatitude()).thenReturn(0.0);
 		when(jpaResponse.getLongitude()).thenReturn(0.0);
 		when(distanceCalculator.distanceInKilometerByHaversine(0.0, 0.0, 0.0, 0.0)).thenReturn(0.0);
-		when(restaurantInfoRepository.findRestaurantsByDistance(any(double.class), any(double.class),
-			any(int.class), any())).thenReturn(
-			restaurantsWithinRadiusJpaResponseSlice);
+		when(restaurantInfoRepository.findRestaurantsByDistance(
+			any(Long.class),
+			any(double.class),
+			any(double.class),
+			any(int.class),
+			any()))
+			.thenReturn(restaurantsWithinRadiusJpaResponseSlice);
 
 		// when
 		Slice<RestaurantsWithinRadiusResponse> responses = restaurantService.getRestaurantsWithinRadius(request);
