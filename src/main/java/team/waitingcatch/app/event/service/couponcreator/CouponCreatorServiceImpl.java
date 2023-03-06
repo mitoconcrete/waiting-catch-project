@@ -82,7 +82,6 @@ public class CouponCreatorServiceImpl implements CouponCreatorService, InternalC
 	@Override
 	public void updateSellerCouponCreator(UpdateSellerCouponCreatorServiceRequest serviceRequest) {
 		Restaurant restaurant = internalRestaurantService._getRestaurantByUserId(serviceRequest.getUserId());
-		System.out.println(serviceRequest.getEventId() + "  " + restaurant + " 검증");
 		eventRepository.findByIdAndRestaurantAndIsDeletedFalse(
 				serviceRequest.getEventId(), restaurant)
 			.orElseThrow(() -> new NoSuchElementException(NOT_FOUND_EVENT.getMessage()));
