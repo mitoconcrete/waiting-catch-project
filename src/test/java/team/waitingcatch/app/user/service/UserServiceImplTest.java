@@ -7,6 +7,7 @@ import static org.mockito.Mockito.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -25,6 +26,7 @@ import team.waitingcatch.app.event.dto.event.CreateEventRequest;
 import team.waitingcatch.app.event.dto.event.CreateEventServiceRequest;
 import team.waitingcatch.app.event.entity.Event;
 import team.waitingcatch.app.event.repository.EventRepository;
+import team.waitingcatch.app.exception.AlreadyExistsException;
 import team.waitingcatch.app.lineup.dto.CreateReviewEntityRequest;
 import team.waitingcatch.app.lineup.dto.StartWaitingServiceRequest;
 import team.waitingcatch.app.lineup.entity.LineupHistory;
@@ -205,10 +207,10 @@ class UserServiceImplTest {
 
 		assertEquals(response.getId(), seller.getId());
 		assertEquals(response.getUsername(), seller.getUsername());
-		assertThrows(IllegalArgumentException.class, () -> userService.getByUserIdAndRole(request));
+		assertThrows(NoSuchElementException.class, () -> userService.getByUserIdAndRole(request));
 
 		when(request.getUserId()).thenReturn(seller.getId() * 10000);
-		assertThrows(IllegalArgumentException.class, () -> userService.getByUserIdAndRole(request));
+		assertThrows(NoSuchElementException.class, () -> userService.getByUserIdAndRole(request));
 	}
 
 	@Test
@@ -238,7 +240,7 @@ class UserServiceImplTest {
 		// when & then
 		userService.createUser(payload1);
 		assertTrue(userRepository.existsByUsername(payload1.getUsername()));
-		assertThrows(IllegalArgumentException.class, () -> userService.createUser(payload2));
+		assertThrows(AlreadyExistsException.class, () -> userService.createUser(payload2));
 	}
 
 	@Test
@@ -259,7 +261,7 @@ class UserServiceImplTest {
 			payload.getNickName());
 		assertEquals(userRepository.findByUsernameAndIsDeletedFalse(username).get().getPhoneNumber(),
 			payload.getPhoneNumber());
-		assertThrows(IllegalArgumentException.class, () -> userService.updateUser(payload2));
+		assertThrows(NoSuchElementException.class, () -> userService.updateUser(payload2));
 	}
 
 	@Test
@@ -279,7 +281,7 @@ class UserServiceImplTest {
 		// then
 		assertEquals(claims.getSubject(), allowedUsername);
 		assertTrue(aliveTokenRepository.existsById(response.getAccessToken().substring(7)));
-		assertThrows(IllegalArgumentException.class, () -> userService.createAccessTokenByEmail(disabledEmail));
+		assertThrows(NoSuchElementException.class, () -> userService.createAccessTokenByEmail(disabledEmail));
 	}
 
 	@Test
@@ -298,7 +300,7 @@ class UserServiceImplTest {
 		assertFalse(userRepository.findByUsernameAndIsDeletedFalse(allowedUsername).isPresent());
 
 		when(request.getUsername()).thenReturn(disablesUsername);
-		assertThrows(IllegalArgumentException.class, () -> userService.deleteCustomer(request));
+		assertThrows(NoSuchElementException.class, () -> userService.deleteCustomer(request));
 	}
 
 	@Test
@@ -385,9 +387,10 @@ class UserServiceImplTest {
 
 		assertEquals(claims.getSubject(), username);
 		assertTrue(aliveTokenRepository.existsById(response.getAccessToken().substring(7)));
-		when(request.getPassword()).thenReturn(beforePW);
-		assertThrows(IllegalArgumentException.class, () -> userService.login(request));
 
-		assertThrows(IllegalArgumentException.class, () -> userService.updatePassword(wrongPayload));
+		when(request.getPassword()).thenReturn(beforePW);
+
+		assertThrows(IllegalArgumentException.class, () -> userService.login(request));
+		assertThrows(NoSuchElementException.class, () -> userService.updatePassword(wrongPayload));
 	}
 }
