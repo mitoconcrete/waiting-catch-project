@@ -83,12 +83,10 @@ class UserCouponServiceImplTest {
 		UserCoupon userCoupon = mock(UserCoupon.class);
 
 		CouponCreator couponCreator1 = mock(CouponCreator.class);
-		when(userCouponServiceResponse.getRestaurants()).thenReturn("레스토랑테스트");
-		when(userCouponServiceResponse.getUserCoupons()).thenReturn(userCoupon);
+		when(userCouponServiceResponse.getRestaurantName()).thenReturn("레스토랑테스트");
 		when(userCouponResponse.getCouponCreator()).thenReturn(couponCreator1);
 		when(couponCreator1.getId()).thenReturn(1L);
 		when(couponCreator1.getName()).thenReturn("테스트");
-		when(userCouponServiceResponse.getUserCoupons()).thenReturn(userCoupon);
 		when(userCouponResponse.getUserCoupon()).thenReturn(userCoupon);
 		when(userCoupon.getCouponCreator()).thenReturn(couponCreator);
 		userCouponServiceResponses.add(userCouponServiceResponse);
