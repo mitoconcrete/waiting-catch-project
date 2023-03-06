@@ -1,7 +1,10 @@
 package team.waitingcatch.app.event.service.event;
 
+import static team.waitingcatch.app.exception.ErrorCode.*;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -24,88 +27,94 @@ import team.waitingcatch.app.event.entity.Event;
 import team.waitingcatch.app.event.repository.CouponCreatorRepository;
 import team.waitingcatch.app.event.repository.EventRepository;
 import team.waitingcatch.app.restaurant.entity.Restaurant;
-import team.waitingcatch.app.restaurant.service.restaurant.InternalRestaurantService;
+import team.waitingcatch.app.restaurant.repository.RestaurantRepository;
 
 @Service
 @RequiredArgsConstructor
 @Transactional
 public class EventServiceImpl implements EventService, InternalEventService {
-
 	private final EventRepository eventRepository;
 	private final CouponCreatorRepository couponCreatorRepository;
-	private final InternalRestaurantService restaurantService;
 
-	//광역 이벤트를 생성한다.
+	private final InternalRestaurantService internalRestaurantService;
+
+	// 광역 이벤트를 생성한다.
 	@Override
 	public void createAdminEvent(CreateEventControllerRequest createEventControllerRequest) {
 		Event event = new Event(createEventControllerRequest);
 		eventRepository.save(event);
 	}
 
-	//레스토랑 이벤트를 생성한다.
+	// 레스토랑 이벤트를 생성한다.
 	@Override
 	public void createSellerEvent(CreateEventServiceRequest createEventServiceRequest) {
-
-		Restaurant restaurant = restaurantService._getRestaurantByUserId(createEventServiceRequest.getId());
+		Restaurant restaurant = internalRestaurantService._getRestaurantById(
+			createEventServiceRequest.getRestaurantId());
 		CreateEventRequest createEventRequest = new CreateEventRequest(createEventServiceRequest, restaurant);
 		Event event = new Event(createEventRequest);
 		eventRepository.save(event);
 	}
 
-	//광역 이벤트를 수정한다.
+	// 광역 이벤트를 수정한다.
 	@Override
 	public void updateAdminEvent(UpdateEventServiceRequest updateEventServiceRequest) {
 		Event event = _getEventById(updateEventServiceRequest.getEventId());
 		event.updateAdminEvent(updateEventServiceRequest);
 	}
 
-	//레스토랑 이벤트를 수정한다.
+	// 레스토랑 이벤트를 수정한다.
 	@Override
 	public void updateSellerEvent(UpdateSellerEventServiceRequest updateSellerEventServiceRequest) {
-		Restaurant restaurant = restaurantService._getRestaurantByUserId(updateSellerEventServiceRequest.getUserId());
+		Restaurant restaurant = internalRestaurantService._getRestaurantByUserId(
+			updateSellerEventServiceRequest.getUserId());
 		Event event = eventRepository.findByIdAndRestaurantAndIsDeletedFalse(
 				updateSellerEventServiceRequest.getEventId(), restaurant)
-			.orElseThrow(() -> new IllegalArgumentException("매장에 해당 이벤트가 존재하지 않습니다."));
+			.orElseThrow(() -> new NoSuchElementException(NOT_FOUND_EVENT.getMessage()));
 		event.updateSellerEvent(updateSellerEventServiceRequest);
 	}
 
-	//광역 이벤트를 삭제한다.
+	// 광역 이벤트를 삭제한다.
 	@Override
 	public void deleteAdminEvent(DeleteEventControllerRequest deleteEventControllerRequest) {
 		Event event = _getEventById(deleteEventControllerRequest.getEventId());
 		event.deleteEvent();
 	}
 
-	//레스토랑 이벤트를 삭제한다.
+	// 레스토랑 이벤트를 삭제한다.
 	@Override
 	public void deleteSellerEvent(DeleteEventServiceRequest deleteEventServiceRequest) {
-		Restaurant restaurant = restaurantService._getRestaurantByUserId(deleteEventServiceRequest.getUserId());
+		Restaurant restaurant = internalRestaurantService._getRestaurantByUserId(deleteEventServiceRequest.getUserId());
 		Event event = eventRepository.findByIdAndRestaurantAndIsDeletedFalse(
 				deleteEventServiceRequest.getEventId(), restaurant)
-			.orElseThrow(() -> new IllegalArgumentException("매장에 해당 이벤트가 존재하지 않습니다."));
+			.orElseThrow(() -> new NoSuchElementException(NOT_FOUND_EVENT.getMessage()));
 		event.deleteEvent();
 	}
 
-	//광역 이벤트를 조회한다.
+	// 광역 이벤트를 조회한다.
 	@Override
 	@Transactional(readOnly = true)
 	public List<GetEventsResponse> getGlobalEvents() {
-		//이벤트중 restaurant이 null인것만 조회
+		// 이벤트 중 restaurant이 null인 것만 조회
 		List<Event> events = eventRepository.findByRestaurantIsNullAndIsDeletedFalse();
-		return _getGlobalEventsResponse(events);
+		return _getEventsResponse(events);
 
 	}
 
-	//레스토랑 이벤트를 조회한다.
+	// 레스토랑 이벤트를 조회한다.
 	@Override
 	@Transactional(readOnly = true)
-	public Page<GetEventsResponse> getRestaurantEvents(Long id, Pageable pageable) {
+	public List<GetEventsResponse> getRestaurantEvents(Long restaurantId) {
+		Restaurant restaurant = internalRestaurantService._getRestaurantById(restaurantId);
+		List<Event> events = eventRepository.findByRestaurantAndIsDeletedFalse(restaurant);
+		return _getEventsResponse(events);
 
-		//레스토랑 아이디로 레스토랑 객체를 찾아야함
-		Restaurant restaurant = restaurantService._getRestaurantByUserId(id);
 
-		Page<Event> events = eventRepository.findByRestaurantAndIsDeletedFalse(restaurant, pageable);
-		return _getEventsResponse(events, restaurant, pageable);
+		// //레스토랑 아이디로 레스토랑 객체를 찾아야함
+		// Restaurant restaurant = restaurantService._getRestaurantByUserId(id);
+		//
+		// Page<Event> events = eventRepository.findByRestaurantAndIsDeletedFalse(restaurant, pageable);
+		// return _getEventsResponse(events, restaurant, pageable);
+		//
 
 	}
 
@@ -113,11 +122,11 @@ public class EventServiceImpl implements EventService, InternalEventService {
 	@Transactional(readOnly = true)
 	public Event _getEventById(Long id) {
 		Event event = eventRepository.findByIdAndIsDeletedFalse(id)
-			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 이벤트 입니다."));
+			.orElseThrow(() -> new NoSuchElementException(NOT_FOUND_EVENT.getMessage()));
 		return event;
 	}
 
-	//이벤트 목록 + 쿠폰생성자를 DTO형태로 리턴
+	// 이벤트 목록 + 쿠폰생성자를 DTO형태로 리턴
 	@Override
 	public Page<GetEventsResponse> _getEventsResponse(Page<Event> events, Restaurant restaurant, Pageable pageable) {
 
@@ -156,5 +165,4 @@ public class EventServiceImpl implements EventService, InternalEventService {
 	public void _bulkSoftDeleteByRestaurantId(Long restaurantId) {
 		eventRepository.softDeleteByRestaurantId(restaurantId);
 	}
-
 }

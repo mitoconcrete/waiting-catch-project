@@ -94,8 +94,8 @@
                         }
                     }
                 },
-                error(error, response) {
-                    console.error(error);
+                error: function (response) {
+                    alert(response.responseJSON.message);
                 }
             })
         }
@@ -132,8 +132,8 @@
                         }
                     }
                 },
-                error(error, response) {
-                    console.error(error);
+                error: function (response) {
+                    alert(response.responseJSON.message);
                 }
             })
         }
@@ -164,8 +164,8 @@
                         }
                     }
                 },
-                error(error, response) {
-                    console.error(error);
+                error: function (response) {
+                    alert(response.responseJSON.message);
                 }
             })
         }
@@ -216,9 +216,8 @@
                     alert("판매자 요청 완료")
                     window.location.reload();
                 },
-                error(error, response) {
-                    console.log(this.data);
-                    console.error(error);
+                error: function (response) {
+                    alert(response.responseJSON.message);
                 }
             })
         }

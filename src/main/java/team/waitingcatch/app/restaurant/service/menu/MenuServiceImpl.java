@@ -46,7 +46,7 @@ public class MenuServiceImpl implements MenuService, InternalMenuService {
 		Restaurant restaurant = restaurantService._getRestaurantByUserId(serviceRequest.getId());
 		String name = serviceRequest.getName();
 		int price = serviceRequest.getPrice();
-		String imageUrl = "기본 메뉴 이미지 URL";
+		String imageUrl = null;
 
 		if (!serviceRequest.getMultipartFile().isEmpty()) {
 			try {
@@ -77,7 +77,7 @@ public class MenuServiceImpl implements MenuService, InternalMenuService {
 		Menu menu = _getMenuById(serviceRequest.getMenuId());
 		String name = serviceRequest.getName();
 		int price = serviceRequest.getPrice();
-		String imageUrl = menu.getImagePaths();
+		String imageUrl = menu.getImagePath();
 
 		if (!serviceRequest.getMultipartFile().isEmpty()) {
 			try {
@@ -95,10 +95,10 @@ public class MenuServiceImpl implements MenuService, InternalMenuService {
 	}
 
 	@Override
-	public void deleteMenu(DeleteMenuServiceRequest request) {
+	public void deleteMenu(Long menuId) {
 		restaurantService._getRestaurantByUserId(request.getSellerId());
 		Menu menu = _getMenuById(request.getMenuId());
-		imageUploader.delete(menu.getImagePaths());
+		imageUploader.delete(menu.getImagePath());
 		menuRepository.delete(menu);
 	}
 

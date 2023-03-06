@@ -24,7 +24,6 @@ import team.waitingcatch.app.user.service.InternalUserService;
 @RequiredArgsConstructor
 @Transactional
 public class UserCouponServiceImpl implements UserCouponService, InternalUserCouponService {
-
 	private final InternalCouponCreatorService internalCouponCreatorService;
 	private final InternalUserService internalUserService;
 	private final UserCouponRepository userCouponRepository;
@@ -73,4 +72,5 @@ public class UserCouponServiceImpl implements UserCouponService, InternalUserCou
 		userCoupon.useCoupon();
 	}
 
+}
 }
