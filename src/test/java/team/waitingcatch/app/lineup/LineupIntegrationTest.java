@@ -233,6 +233,6 @@ class LineupIntegrationTest {
 		restaurantInfo.openLineup();
 		restaurantInfoRepository.save(restaurantInfo);
 
-		waitingNumberRepository.save(WaitingNumber.createWaitingNumber(restaurant));
+		waitingNumberRepository.save(WaitingNumber.of(restaurant));
 	}
 }

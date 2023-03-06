@@ -1,6 +1,9 @@
 package team.waitingcatch.app.restaurant.service.category;
 
+import static team.waitingcatch.app.exception.ErrorCode.*;
+
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -72,7 +75,7 @@ public class CategoryServiceImpl implements CategoryService, InternalCategorySer
 	@Transactional(readOnly = true)
 	public Category _getCategory(Long categoryId) {
 		return categoryRepository.findById(categoryId).orElseThrow(
-			() -> new IllegalArgumentException("존재하지 않는 카테고리입니다.")
+			() -> new NoSuchElementException(NOT_FOUND_CATEGORY.getMessage())
 		);
 	}
 

@@ -91,7 +91,16 @@ public class CouponCreator extends TimeStamped {
 		this.expireDate = serviceRequest.getExpireDate();
 	}
 
-	public void deleteCouponCreator() {
-		this.isDeleted = true;
+	public boolean hasCouponBalance() {
+		if (this.quantity > 0) {
+			return true;
+		}
+		return false;
+
 	}
+
+	public void useCoupon() {
+		this.quantity -= 1;
+	}
+
 }

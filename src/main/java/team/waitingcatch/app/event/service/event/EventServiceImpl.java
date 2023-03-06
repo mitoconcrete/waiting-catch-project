@@ -3,6 +3,9 @@ package team.waitingcatch.app.event.service.event;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,7 +24,7 @@ import team.waitingcatch.app.event.entity.Event;
 import team.waitingcatch.app.event.repository.CouponCreatorRepository;
 import team.waitingcatch.app.event.repository.EventRepository;
 import team.waitingcatch.app.restaurant.entity.Restaurant;
-import team.waitingcatch.app.restaurant.repository.RestaurantRepository;
+import team.waitingcatch.app.restaurant.service.restaurant.InternalRestaurantService;
 
 @Service
 @RequiredArgsConstructor
@@ -29,8 +32,8 @@ import team.waitingcatch.app.restaurant.repository.RestaurantRepository;
 public class EventServiceImpl implements EventService, InternalEventService {
 
 	private final EventRepository eventRepository;
-	private final RestaurantRepository restaurantRepository;
 	private final CouponCreatorRepository couponCreatorRepository;
+	private final InternalRestaurantService restaurantService;
 
 	//광역 이벤트를 생성한다.
 	@Override
@@ -43,7 +46,7 @@ public class EventServiceImpl implements EventService, InternalEventService {
 	@Override
 	public void createSellerEvent(CreateEventServiceRequest createEventServiceRequest) {
 
-		Restaurant restaurant = _getRestaurantById(createEventServiceRequest.getRestaurantId());
+		Restaurant restaurant = restaurantService._getRestaurantByUserId(createEventServiceRequest.getId());
 		CreateEventRequest createEventRequest = new CreateEventRequest(createEventServiceRequest, restaurant);
 		Event event = new Event(createEventRequest);
 		eventRepository.save(event);
@@ -59,7 +62,7 @@ public class EventServiceImpl implements EventService, InternalEventService {
 	//레스토랑 이벤트를 수정한다.
 	@Override
 	public void updateSellerEvent(UpdateSellerEventServiceRequest updateSellerEventServiceRequest) {
-		Restaurant restaurant = _getRestaurantByUserId(updateSellerEventServiceRequest.getUserId());
+		Restaurant restaurant = restaurantService._getRestaurantByUserId(updateSellerEventServiceRequest.getUserId());
 		Event event = eventRepository.findByIdAndRestaurantAndIsDeletedFalse(
 				updateSellerEventServiceRequest.getEventId(), restaurant)
 			.orElseThrow(() -> new IllegalArgumentException("매장에 해당 이벤트가 존재하지 않습니다."));
@@ -76,7 +79,7 @@ public class EventServiceImpl implements EventService, InternalEventService {
 	//레스토랑 이벤트를 삭제한다.
 	@Override
 	public void deleteSellerEvent(DeleteEventServiceRequest deleteEventServiceRequest) {
-		Restaurant restaurant = _getRestaurantByUserId(deleteEventServiceRequest.getUserId());
+		Restaurant restaurant = restaurantService._getRestaurantByUserId(deleteEventServiceRequest.getUserId());
 		Event event = eventRepository.findByIdAndRestaurantAndIsDeletedFalse(
 				deleteEventServiceRequest.getEventId(), restaurant)
 			.orElseThrow(() -> new IllegalArgumentException("매장에 해당 이벤트가 존재하지 않습니다."));
@@ -89,19 +92,20 @@ public class EventServiceImpl implements EventService, InternalEventService {
 	public List<GetEventsResponse> getGlobalEvents() {
 		//이벤트중 restaurant이 null인것만 조회
 		List<Event> events = eventRepository.findByRestaurantIsNullAndIsDeletedFalse();
-		return _getEventsResponse(events);
+		return _getGlobalEventsResponse(events);
 
 	}
 
 	//레스토랑 이벤트를 조회한다.
 	@Override
 	@Transactional(readOnly = true)
-	public List<GetEventsResponse> getRestaurantEvents(Long restaurantId) {
+	public Page<GetEventsResponse> getRestaurantEvents(Long id, Pageable pageable) {
+
 		//레스토랑 아이디로 레스토랑 객체를 찾아야함
-		Restaurant restaurant = _getRestaurantById(restaurantId);
-		//찾은 객체로 이벤트 검색
-		List<Event> events = eventRepository.findByRestaurantAndIsDeletedFalse(restaurant);
-		return _getEventsResponse(events);
+		Restaurant restaurant = restaurantService._getRestaurantByUserId(id);
+
+		Page<Event> events = eventRepository.findByRestaurantAndIsDeletedFalse(restaurant, pageable);
+		return _getEventsResponse(events, restaurant, pageable);
 
 	}
 
@@ -113,25 +117,14 @@ public class EventServiceImpl implements EventService, InternalEventService {
 		return event;
 	}
 
-	@Override
-	public Restaurant _getRestaurantByUserId(Long id) {
-		return restaurantRepository.findByUserId(id)
-			.orElseThrow(() -> new IllegalArgumentException("레스토랑을 찾을수 없습니다."));
-	}
-
-	@Override
-	@Transactional(readOnly = true)
-	public Restaurant _getRestaurantById(Long id) {
-		return restaurantRepository.findById(id)
-			.orElseThrow(() -> new IllegalArgumentException("레스토랑을 찾을수 없습니다."));
-	}
-
 	//이벤트 목록 + 쿠폰생성자를 DTO형태로 리턴
 	@Override
-	public List<GetEventsResponse> _getEventsResponse(List<Event> events) {
+	public Page<GetEventsResponse> _getEventsResponse(Page<Event> events, Restaurant restaurant, Pageable pageable) {
+
 		List<GetEventsResponse> getEventsResponse = new ArrayList<>();
 		for (Event event : events) {
-			List<CouponCreator> couponCreators = couponCreatorRepository.findByEventAndIsDeletedFalse(event);
+			//List<CouponCreator> couponCreators = couponCreatorRepository.findByEventAndIsDeletedFalse(event);
+			List<CouponCreator> couponCreators = couponCreatorRepository.findByEventWithEvent(event);
 			List<GetCouponCreatorResponse> getCouponCreatorResponses = new ArrayList<>();
 			for (CouponCreator couponCreator : couponCreators) {
 				GetCouponCreatorResponse getCouponCreatorResponse = new GetCouponCreatorResponse(couponCreator);
@@ -139,6 +132,23 @@ public class EventServiceImpl implements EventService, InternalEventService {
 			}
 			getEventsResponse.add(new GetEventsResponse(event, getCouponCreatorResponses));
 		}
+
+		return new PageImpl<>(getEventsResponse, pageable, events.getTotalElements());
+	}
+
+	public List<GetEventsResponse> _getGlobalEventsResponse(List<Event> events) {
+
+		List<GetEventsResponse> getEventsResponse = new ArrayList<>();
+		for (Event event : events) {
+			List<CouponCreator> couponCreators = couponCreatorRepository.findByEventWithEvent(event);
+			List<GetCouponCreatorResponse> getCouponCreatorResponses = new ArrayList<>();
+			for (CouponCreator couponCreator : couponCreators) {
+				GetCouponCreatorResponse getCouponCreatorResponse = new GetCouponCreatorResponse(couponCreator);
+				getCouponCreatorResponses.add(getCouponCreatorResponse);
+			}
+			getEventsResponse.add(new GetEventsResponse(event, getCouponCreatorResponses));
+		}
+
 		return getEventsResponse;
 	}
 

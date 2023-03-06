@@ -44,7 +44,7 @@ public class WaitingNumber {
 		nextNumber++;
 	}
 
-	public static WaitingNumber createWaitingNumber(Restaurant restaurant) {
+	public static WaitingNumber of(Restaurant restaurant) {
 		return new WaitingNumber(restaurant);
 	}
 

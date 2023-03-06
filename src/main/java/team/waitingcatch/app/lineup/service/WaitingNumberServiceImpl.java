@@ -1,5 +1,9 @@
 package team.waitingcatch.app.lineup.service;
 
+import static team.waitingcatch.app.exception.ErrorCode.*;
+
+import java.util.NoSuchElementException;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,7 +20,7 @@ public class WaitingNumberServiceImpl implements InternalWaitingNumberService {
 	@Override
 	public int getWaitingNumber(Long restaurantId) {
 		WaitingNumber waitingNumber = waitingNumberRepository.findByRestaurantId(restaurantId)
-			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 대기 번호입니다."));
+			.orElseThrow(() -> new NoSuchElementException(NOT_FOUND_WAITING_NUMBER.getMessage()));
 		waitingNumber.updateNextNumber();
 		return waitingNumber.getNextNumber() - 1;
 	}

@@ -14,12 +14,14 @@ import team.waitingcatch.app.common.util.image.ImageUploader;
 import team.waitingcatch.app.restaurant.dto.menu.CreateMenuEntityRequest;
 import team.waitingcatch.app.restaurant.dto.menu.CreateMenuServiceRequest;
 import team.waitingcatch.app.restaurant.dto.menu.CustomerMenuResponse;
+import team.waitingcatch.app.restaurant.dto.menu.DeleteMenuServiceRequest;
 import team.waitingcatch.app.restaurant.dto.menu.MenuResponse;
 import team.waitingcatch.app.restaurant.dto.menu.UpdateMenuEntityRequest;
 import team.waitingcatch.app.restaurant.dto.menu.UpdateMenuServiceRequest;
 import team.waitingcatch.app.restaurant.entity.Menu;
 import team.waitingcatch.app.restaurant.entity.Restaurant;
 import team.waitingcatch.app.restaurant.repository.MenuRepository;
+import team.waitingcatch.app.restaurant.repository.RestaurantRepository;
 import team.waitingcatch.app.restaurant.service.restaurant.InternalRestaurantService;
 
 @Service
@@ -29,6 +31,7 @@ public class MenuServiceImpl implements MenuService, InternalMenuService {
 	private final MenuRepository menuRepository;
 	private final InternalRestaurantService restaurantService;
 	private final ImageUploader imageUploader;
+	private final RestaurantRepository restaurantRepository;
 
 	@Override
 	@Transactional(readOnly = true)
@@ -40,7 +43,7 @@ public class MenuServiceImpl implements MenuService, InternalMenuService {
 
 	@Override
 	public void createMenu(CreateMenuServiceRequest serviceRequest) {
-		Restaurant restaurant = restaurantService._getRestaurantById(serviceRequest.getRestaurantId());
+		Restaurant restaurant = restaurantService._getRestaurantByUserId(serviceRequest.getId());
 		String name = serviceRequest.getName();
 		int price = serviceRequest.getPrice();
 		String imageUrl = "기본 메뉴 이미지 URL";
@@ -61,14 +64,16 @@ public class MenuServiceImpl implements MenuService, InternalMenuService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public List<MenuResponse> getMyRestaurantMenus(Long restaurantId) {
-		return _getMenusByRestaurantId(restaurantId).stream()
+	public List<MenuResponse> getMyRestaurantMenus(Long id) {
+		Restaurant restaurant = restaurantService._getRestaurantByUserId(id);
+		return _getMenusByRestaurantId(restaurant.getId()).stream()
 			.map(MenuResponse::new)
 			.collect(Collectors.toList());
 	}
 
 	@Override
 	public void updateMenu(UpdateMenuServiceRequest serviceRequest) {
+		restaurantService._getRestaurantByUserId(serviceRequest.getId());
 		Menu menu = _getMenuById(serviceRequest.getMenuId());
 		String name = serviceRequest.getName();
 		int price = serviceRequest.getPrice();
@@ -90,8 +95,9 @@ public class MenuServiceImpl implements MenuService, InternalMenuService {
 	}
 
 	@Override
-	public void deleteMenu(Long menuId) {
-		Menu menu = _getMenuById(menuId);
+	public void deleteMenu(DeleteMenuServiceRequest request) {
+		restaurantService._getRestaurantByUserId(request.getSellerId());
+		Menu menu = _getMenuById(request.getMenuId());
 		imageUploader.delete(menu.getImagePaths());
 		menuRepository.delete(menu);
 	}

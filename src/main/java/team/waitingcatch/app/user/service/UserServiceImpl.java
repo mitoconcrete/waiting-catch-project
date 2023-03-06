@@ -1,5 +1,8 @@
 package team.waitingcatch.app.user.service;
 
+import static team.waitingcatch.app.exception.ErrorCode.*;
+
+import java.util.NoSuchElementException;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -15,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.common.util.JwtUtil;
 import team.waitingcatch.app.event.service.event.InternalEventService;
+import team.waitingcatch.app.exception.AlreadyExistsException;
 import team.waitingcatch.app.lineup.service.InternalLineupHistoryService;
 import team.waitingcatch.app.lineup.service.InternalLineupService;
 import team.waitingcatch.app.lineup.service.InternalReviewService;
@@ -42,8 +46,7 @@ import team.waitingcatch.app.user.repository.UserRepository;
 @Transactional
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService, InternalUserService {
-	private final JwtUtil jwtUtil;
-	private final JavaMailSender emailSender;
+
 	private final UserRepository userRepository;
 	private final AliveTokenService refreshTokenService;
 	private final KilledAccessTokenService accessTokenService;
@@ -52,6 +55,10 @@ public class UserServiceImpl implements UserService, InternalUserService {
 	private final InternalLineupHistoryService internalLineupHistoryService;
 	private final InternalEventService internalEventService;
 	private final InternalReviewService internalReviewService;
+
+	private final JwtUtil jwtUtil;
+	private final JavaMailSender emailSender;
+
 	@Value("${spring.mail.username}")
 	private String smtpSenderEmail;
 
@@ -60,7 +67,7 @@ public class UserServiceImpl implements UserService, InternalUserService {
 		User user = _getUserByUsername(payload.getUsername());
 
 		if (!user.isPasswordMatch(payload.getPassword())) {
-			throw new IllegalArgumentException("패스워드가 일치하지 않습니다.");
+			throw new IllegalArgumentException(INCORRECT_PASSWORD.getMessage());
 		}
 
 		String accessToken = _createAccessTokensByUser(user);
@@ -91,13 +98,12 @@ public class UserServiceImpl implements UserService, InternalUserService {
 	@Transactional(readOnly = true)
 	public UserInfoResponse getByUserIdAndRole(GetCustomerByIdAndRoleServiceRequest payload) {
 		// 유저의 존재여부를 판단한다.
-		User user = userRepository.findById(payload.getUserId()).orElseThrow(
-			() -> new IllegalArgumentException("유저가 존재하지 않습니다.")
-		);
+		User user = userRepository.findById(payload.getUserId())
+			.orElseThrow(() -> new NoSuchElementException(NOT_FOUND_USER.getMessage()));
 
 		// 입력받은 롤과 동일한 롤을 지니고 있는지 확인한다.
 		if (!user.hasSameRole(payload.getRole())) {
-			throw new IllegalArgumentException("유저가 존재하지 않습니다.");
+			throw new NoSuchElementException(NOT_FOUND_USER.getMessage());
 		}
 
 		return new UserInfoResponse(user);
@@ -109,7 +115,7 @@ public class UserServiceImpl implements UserService, InternalUserService {
 		boolean isExistUser = userRepository.existsByUsername(payload.getUsername());
 
 		if (isExistUser) {
-			throw new IllegalArgumentException("이미 존재하는 유저입니다.");
+			throw new AlreadyExistsException(ALREADY_EXISTS_USERNAME);
 		}
 
 		// 새로운 유저를 생성하고 저장합니다.
@@ -138,9 +144,7 @@ public class UserServiceImpl implements UserService, InternalUserService {
 	@Transactional
 	public void findUserAndSendEmail(FindPasswordRequest payload) {
 		User user = userRepository.findByUsernameAndEmailAndIsDeletedFalse(payload.getUsername(), payload.getEmail())
-			.orElseThrow(
-				() -> new IllegalArgumentException("유저가 존재하지 않습니다.")
-			);
+			.orElseThrow(() -> new NoSuchElementException(NOT_FOUND_USER.getMessage()));
 
 		// 유저가 존재하면 임시 비밀번호를 생성하고, 저장한다.
 		String temporaryPassword = UUID.randomUUID().toString().substring(0, 10);
@@ -204,22 +208,20 @@ public class UserServiceImpl implements UserService, InternalUserService {
 	@Transactional(readOnly = true)
 	public User _getUserByUsername(String username) {
 		return userRepository.findByUsernameAndIsDeletedFalse(username).orElseThrow(
-			() -> new IllegalArgumentException("유저가 존재하지 않습니다.")
-		);
+			() -> new NoSuchElementException(NOT_FOUND_USER.getMessage()));
 	}
 
 	@Override
 	@Transactional(readOnly = true)
 	public User _getUserByEmail(String email) {
-		return userRepository.findByEmailAndIsDeletedFalse(email).orElseThrow(
-			() -> new IllegalArgumentException("유저가 존재하지 않습니다.")
-		);
+		return userRepository.findByEmailAndIsDeletedFalse(email)
+			.orElseThrow(() -> new NoSuchElementException(NOT_FOUND_USER.getMessage()));
 	}
 
 	@Override
 	@Transactional(readOnly = true)
 	public User _getUserByUserId(Long id) {
-		return userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("유저가 존재하지 않습니다."));
+		return userRepository.findById(id).orElseThrow(() -> new NoSuchElementException(NOT_FOUND_USER.getMessage()));
 	}
 
 	private String _createAccessTokensByUser(User user) {

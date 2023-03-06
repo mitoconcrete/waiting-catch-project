@@ -9,15 +9,18 @@ import team.waitingcatch.app.event.enums.CouponTypeEnum;
 public class GetUserCouponResponse {
 	private final Long id;
 	private final String name;
+	private final String restaurantName;
 	private final int discountPrice;
 	private final CouponTypeEnum discountType;
 	private final LocalDateTime expireDate;
 
-	public GetUserCouponResponse(UserCouponResponse userCouponResponse) {
-		this.id = userCouponResponse.getUserCoupon().getId();
-		this.name = userCouponResponse.getCouponCreator().getName();
-		this.discountPrice = userCouponResponse.getCouponCreator().getDiscountPrice();
-		this.discountType = userCouponResponse.getCouponCreator().getDiscountType();
-		this.expireDate = userCouponResponse.getCouponCreator().getExpireDate();
+	public GetUserCouponResponse(UserCouponServiceResponse userCouponServiceResponse) {
+		this.id = userCouponServiceResponse.getUserCouponId();
+		this.name = userCouponServiceResponse.getCouponCreatorName();
+		this.restaurantName = userCouponServiceResponse.getRestaurantName();
+		this.discountPrice = userCouponServiceResponse.getDiscountPrice();
+		this.discountType = userCouponServiceResponse.getDiscountType();
+		this.expireDate = userCouponServiceResponse.getExpireDate();
 	}
+
 }

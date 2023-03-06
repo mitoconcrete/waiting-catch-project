@@ -20,7 +20,7 @@
     <nav>
         <ul>
             <a href="/">판매자 님</a>
-            <a href="hello.html" th:href="@{/hello}" th:method="get">
+            <a href="/seller/seller.html" th:href="@{/hello}" th:method="get">
                 <button onclick="sendTokenLogout()" type="button" class="btn">Logout</button>
             </a>
         </ul>
@@ -29,9 +29,9 @@
 <nav class="menus">
     <ul>
         <a href="/seller/templates/lineup">줄서기 현황</a>
-        <a href="/seller">매장 관리</a>
-        <a href="/menu">메뉴</a>
-        <a href="/event" style="color: #8B60C7">이벤트</a>
+        <a href="/seller/templates/seller">매장 관리</a>
+        <a href="/seller/templates/menu">메뉴</a>
+        <a href="/seller/templates/event" style="color: #8B60C7">이벤트</a>
         <a href="/seller/blacklist-demands">블랙리스트</a>
     </ul>
 </nav>
@@ -48,7 +48,7 @@
         <!--<a href="/event-info">-->
         <!--    <button type="text">이벤트 목록 가저오기</button>-->
         <!--</a>-->
-        <a href="/event/new">
+        <a href="/seller/templates/event/new">
             <button type="text" class="btn">새로운 이벤트 생성</button>
         </a>
         <!--<a href="/event/couponcreator">-->
@@ -91,24 +91,25 @@
                                 <span th:text="${couponCreator.discountPrice}"></span>
                                 <span th:text="${couponCreator.discountType}"></span>
                                 <span th:text="${couponCreator.expireDate}"></span>
-                                <a th:href="@{/event/updateCouponCreator/{eventId}/{creatorId}(eventId=${event.eventId},creatorId=${couponCreator.id})}">
+                                <a th:href="@{/seller/templates/event/updateCouponCreator/{eventId}/{creatorId}(eventId=${event.eventId},creatorId=${couponCreator.id})}">
                                     <button type="button" class="btn">수정</button>
                                 </a>
                             </li>
                         </ul>
                     </td>
                     <td>
-                        <a th:href="@{/event/couponcreator/{eventId}(eventId=${event.eventId})}">
+                        <a th:href="@{/seller/templates/event/couponcreator/{eventId}(eventId=${event.eventId})}">
                             <button type="button" class="btn">추가</button>
                         </a>
                     </td>
                     <td>
-                        <a th:href="@{/event/update/{eventId}(eventId=${event.eventId})}">
+                        <a th:href="@{/seller/templates/event/update/{eventId}(eventId=${event.eventId})}">
                             <button type="button" class="btn">수정</button>
                         </a>
                     </td>
                     <td>
-                        <a th:href="@{/event/delete/{eventId}(eventId=${event.eventId})}" th:method="delete">
+                        <a th:href="@{/seller/templates/event/delete/{eventId}(eventId=${event.eventId})}"
+                           th:method="delete">
                             <button type="button" class="btn">삭제</button>
                         </a>
                     </td>
@@ -118,6 +119,53 @@
         </div>
     </div> <!-- /container -->
 
+
+    <!--페이징 시작-->
+    <nav class="pagenav">
+        <!--표에 사용될 변수값 초기화 -->
+        <ul class="pagination"
+            th:with="start=${T(java.lang.Math).floor(events.number/10)*10 },
+                        last=(${start + 9 < events.totalPages -1 ? start + 9 : events.totalPages -1 })">
+            <th:block th:with="
+                    firstAddr=@{/seller/templates/events(page=0)},
+                    prevAddr=@{/seller/templates/events(page=${events.number -1})},
+                    nextAddr=@{/seller/templates/events(page=${events.number + 1})},
+                    lastAddr=@{/seller/templates/events(page=${events.totalPages -1})}">
+                <li>
+                    <a th:href="${firstAddr}" aria-label="First">
+                        <span class="firstpage" aria-hidden="true"><<</span>
+                    </a>
+                </li>
+                <!-- 이전 페이지로 가기 버튼 -->
+                <li th:class="${events.first} ? 'disabled'">
+                    <a th:href="${events.first} ? '#' :${prevAddr}"
+                       aria-label="Previous">
+                        <span class="restaurantPage1" aria-hidden="true">&lt;</span>
+                    </a>
+                </li>
+                <!--1,2,3,4,.. 등 페이지-->
+                <li th:each="page: ${#numbers.sequence(start, last)}"
+                    th:class="${page == events.number + 1} ? 'active'">
+                    <a class="restaurantPage" th:text="${page}"
+                       th:href="@{/seller/templates/event(page=${page})}"></a>
+                </li>
+                <!--다음 페이지로 -->
+                <li th:class="${events.last} ? 'disabled'">
+                    <a th:href="${events.last} ? '#' : ${nextAddr}"
+                       aria-label="Next">
+                        <span class="restaurantPage2" aria-hidden="true">&gt;</span>
+                    </a>
+                </li>
+                <!--맨 마지막 페이지로 이동 -->
+                <li>
+                    <a th:href="${lastAddr}" aria-label="Last">
+                        <span class="lastpage" aria-hidden="true">>></span>
+                    </a>
+                </li>
+            </th:block>
+        </ul>
+    </nav>
+    <!--페이징끝-->
 
     <!--<script>-->
     <!--    $(document).ready(function () {-->

@@ -25,7 +25,7 @@ import team.waitingcatch.app.restaurant.dto.blacklist.CancelBlacklistDemandServi
 import team.waitingcatch.app.restaurant.dto.blacklist.CreateBlacklistDemandServiceRequest;
 import team.waitingcatch.app.restaurant.dto.blacklist.GetBlackListDemandByRestaurantServiceRequest;
 import team.waitingcatch.app.restaurant.dto.blacklist.GetBlacklistDemandResponse;
-import team.waitingcatch.app.restaurant.service.requestblacklist.BlacklistDemandService;
+import team.waitingcatch.app.restaurant.service.blacklistdemand.BlacklistDemandService;
 import team.waitingcatch.app.user.entitiy.UserDetailsImpl;
 
 @RestController

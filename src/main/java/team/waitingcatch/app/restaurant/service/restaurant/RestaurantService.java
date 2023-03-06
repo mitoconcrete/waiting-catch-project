@@ -1,7 +1,6 @@
 package team.waitingcatch.app.restaurant.service.restaurant;
 
 import java.io.IOException;
-import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

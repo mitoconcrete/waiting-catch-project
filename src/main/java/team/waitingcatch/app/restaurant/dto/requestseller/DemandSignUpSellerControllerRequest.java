@@ -3,7 +3,6 @@ package team.waitingcatch.app.restaurant.dto.requestseller;
 import java.util.List;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
@@ -43,21 +42,8 @@ public class DemandSignUpSellerControllerRequest {
 	@NotBlank(message = "레스토랑 설명은 필수 입력값입니다.")
 	private String description;
 
-	// private double latitude;
-
-	// private double longitude;
-
-	// @NotBlank
-	// private String province;
-	//
-	// @NotBlank
-	// private String city;
-	//
-	// @NotBlank
-	// private String street;
-
+	@NotNull(message = "사업자 번호는 필수 입력값입니다.")
 	@Pattern(regexp = "^[0-9]{3}-[0-9]{2}-[0-9]{5}$", message = "사업자번호 형식에 맞게 작성해주세요.")
-	@NotEmpty(message = "사업자번호는 필수 입력값입니다.")
 	private String businessLicenseNo;
 
 	@NotBlank(message = "주소는 필수 입력값입니다.")
@@ -71,7 +57,4 @@ public class DemandSignUpSellerControllerRequest {
 
 	@NotNull(message = "주소는 필수 입력값입니다.")
 	private String query;
-
-	// @NotBlank
-	// private List<String> searchKeyWords;
 }

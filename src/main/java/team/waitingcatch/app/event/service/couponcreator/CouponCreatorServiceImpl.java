@@ -20,6 +20,7 @@ import team.waitingcatch.app.event.repository.CouponCreatorRepository;
 import team.waitingcatch.app.event.repository.EventRepository;
 import team.waitingcatch.app.event.service.event.InternalEventService;
 import team.waitingcatch.app.restaurant.entity.Restaurant;
+import team.waitingcatch.app.restaurant.service.restaurant.InternalRestaurantService;
 
 @Service
 @RequiredArgsConstructor
@@ -29,6 +30,7 @@ public class CouponCreatorServiceImpl implements CouponCreatorService, InternalC
 	private final EventRepository eventRepository;
 	private final CouponCreatorRepository couponCreatorRepository;
 	private final InternalEventService internalEventService;
+	private final InternalRestaurantService restaurantService;
 
 	//광역 이벤트 쿠폰생성자를 생성한다.
 	@Override
@@ -53,7 +55,7 @@ public class CouponCreatorServiceImpl implements CouponCreatorService, InternalC
 	@Override
 	public void createSellerCouponCreator(
 		CreateSellerCouponCreatorServiceRequest createSellerCouponCreatorServiceRequest) {
-		Restaurant restaurant = internalEventService._getRestaurantById(
+		Restaurant restaurant = restaurantService._getRestaurantByUserId(
 			createSellerCouponCreatorServiceRequest.getUserId());
 
 		Event event = eventRepository.findByIdAndRestaurantAndIsDeletedFalse(
@@ -80,7 +82,7 @@ public class CouponCreatorServiceImpl implements CouponCreatorService, InternalC
 	@Override
 	public void updateSellerCouponCreator(
 		UpdateSellerCouponCreatorServiceRequest updateSellerCouponCreatorServiceRequest) {
-		Restaurant restaurant = internalEventService._getRestaurantById(
+		Restaurant restaurant = restaurantService._getRestaurantByUserId(
 			updateSellerCouponCreatorServiceRequest.getUserId());
 
 		eventRepository.findByIdAndRestaurantAndIsDeletedFalse(
