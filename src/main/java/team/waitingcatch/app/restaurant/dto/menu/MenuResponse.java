@@ -14,6 +14,6 @@ public class MenuResponse {
 		this.menuId = menu.getId();
 		this.name = menu.getName();
 		this.price = menu.getPrice();
-		this.imageUrl = menu.getImagePaths();
+		this.imageUrl = menu.getImagePath();
 	}
 }

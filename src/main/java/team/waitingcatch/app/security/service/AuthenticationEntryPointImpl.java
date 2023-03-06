@@ -2,7 +2,6 @@ package team.waitingcatch.app.security.service;
 
 import java.io.IOException;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -17,7 +16,8 @@ import team.waitingcatch.app.security.util.SecurityExceptionUtil;
 public class AuthenticationEntryPointImpl implements AuthenticationEntryPoint {
 	@Override
 	public void commence(HttpServletRequest request, HttpServletResponse response,
-		AuthenticationException authException) throws IOException, ServletException {
+		AuthenticationException authException) throws IOException {
+
 		SecurityExceptionUtil exceptionUtil = new SecurityExceptionUtil();
 		exceptionUtil.active(response, HttpStatus.UNAUTHORIZED, HttpStatus.UNAUTHORIZED.getReasonPhrase());
 	}

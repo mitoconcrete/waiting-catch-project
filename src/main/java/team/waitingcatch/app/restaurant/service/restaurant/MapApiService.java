@@ -49,9 +49,8 @@ public class MapApiService {
 			@SuppressWarnings("unchecked")
 			List<Map<String, String>> docList
 				= (List<Map<String, String>>)jsonMap.get("documents");
-			int i = 0;
-			for (i = 0; i <= docList.size() - 1; i++) {
-				Map<String, String> adList = docList.get(i);
+
+			for (Map<String, String> adList : docList) {
 				String placeName = adList.get("place_name");
 
 				String phone = adList.get("phone");
@@ -132,8 +131,7 @@ public class MapApiService {
 			};
 			Map<String, Object> jsonMap = mapper.readValue(jsonString, typeRef);
 
-			List<Map<String, String>> docList
-				= (List<Map<String, String>>)jsonMap.get("documents");
+			List<Map<String, String>> docList = (List<Map<String, String>>) jsonMap.get("documents");
 			Map<String, String> adList = docList.get(0);
 
 			double latitude = Double.parseDouble(adList.get("y"));

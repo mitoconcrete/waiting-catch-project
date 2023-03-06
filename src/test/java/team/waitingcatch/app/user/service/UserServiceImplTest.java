@@ -318,7 +318,7 @@ class UserServiceImplTest {
 		info.openLineup();
 		restaurantInfoRepository.save(info);
 
-		var waiting = WaitingNumber.createWaitingNumber(createdRestaurant);
+		var waiting = WaitingNumber.of(createdRestaurant);
 		waitingNumberRepository.save(waiting);
 
 		// 줄서기
@@ -332,7 +332,7 @@ class UserServiceImplTest {
 		history = lineupHistoryRepository.save(history);
 
 		// 리뷰
-		var review = Review.craeteReview(
+		var review = Review.of(
 			new CreateReviewEntityRequest(customer, restaurant, 0, " ", new ArrayList<>()));
 		review = reviewRepository.save(review);
 

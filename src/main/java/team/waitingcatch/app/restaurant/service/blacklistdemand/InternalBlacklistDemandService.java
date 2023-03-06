@@ -1,4 +1,4 @@
-package team.waitingcatch.app.restaurant.service.requestblacklist;
+package team.waitingcatch.app.restaurant.service.blacklistdemand;
 
 public interface InternalBlacklistDemandService {
 }
