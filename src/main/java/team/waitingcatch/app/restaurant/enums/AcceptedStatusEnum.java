@@ -5,9 +5,9 @@ import lombok.Getter;
 @Getter
 public enum AcceptedStatusEnum {
 	WAIT("대기"),
-	REJECT("거절"),
+	CANCEL("취소"),
 	APPROVE("승인"),
-	CANCEL("취소");
+	REJECT("거절");
 
 	private final String value;
 

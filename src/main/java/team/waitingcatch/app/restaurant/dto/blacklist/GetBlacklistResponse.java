@@ -14,7 +14,6 @@ public class GetBlacklistResponse {
 	public GetBlacklistResponse(Blacklist blacklist) {
 		this.blacklistId = blacklist.getId();
 		this.customerId = blacklist.getUser().getId();
-		
 		this.restaurantId = blacklist.getRestaurant().getId();
 		this.customerName = blacklist.getUser().getUsername();
 		this.restaurantName = blacklist.getRestaurant().getName();

@@ -55,9 +55,9 @@ public class CategoryController {
 	}
 
 	@GetMapping("/admin/categories/{categoryId}")
-	public ChildCategoryResponse getChildCategories(@PathVariable Long categoryId) {
+	public GenericResponse<ChildCategoryResponse> getChildCategories(@PathVariable Long categoryId) {
 		GetChildCategoryServiceRequest request = new GetChildCategoryServiceRequest(categoryId);
-		return categoryService.getChildCategories(request);
+		return new GenericResponse<>(categoryService.getChildCategories(request));
 	}
 
 	@PutMapping("/admin/categories/{categoryId}")

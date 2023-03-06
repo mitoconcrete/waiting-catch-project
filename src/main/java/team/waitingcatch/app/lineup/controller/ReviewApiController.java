@@ -34,7 +34,7 @@ import team.waitingcatch.app.user.entitiy.UserDetailsImpl;
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
-public class ReviewController {
+public class ReviewApiController {
 	private final ReviewService reviewService;
 
 	@PostMapping(value = "/customer/restaurants/{restaurantId}/reviews", consumes = {MediaType.APPLICATION_JSON_VALUE,
@@ -64,7 +64,7 @@ public class ReviewController {
 		@RequestParam(required = false) Long lastId,
 		@PageableDefault Pageable pageable) {
 
-		return new GenericResponse(reviewService.getReviewsByRestaurantId(lastId, restaurantId, pageable));
+		return new GenericResponse<>(reviewService.getReviewsByRestaurantId(lastId, restaurantId, pageable));
 	}
 
 	@GetMapping("/customer/reviews")
@@ -73,6 +73,6 @@ public class ReviewController {
 		@AuthenticationPrincipal UserDetailsImpl userDetails,
 		@PageableDefault Pageable pageable) {
 
-		return new GenericResponse(reviewService.getReviewsByUserId(lastId, userDetails.getId(), pageable));
+		return new GenericResponse<>(reviewService.getReviewsByUserId(lastId, userDetails.getId(), pageable));
 	}
 }

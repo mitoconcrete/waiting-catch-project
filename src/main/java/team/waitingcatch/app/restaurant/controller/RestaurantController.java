@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -42,38 +43,46 @@ import team.waitingcatch.app.user.entitiy.UserDetailsImpl;
 @RequiredArgsConstructor
 public class RestaurantController {
 	private final RestaurantService restaurantService;
+	public static final int BASIC_DISTANCE = 3;
 
 	// Customer
 	@GetMapping({"/customer/restaurants/{restaurantId}", "/admin/restaurants/{restaurantId}"})
-	public RestaurantBasicInfoResponse getRestaurantBasicInfo(@PathVariable Long restaurantId) {
+	public GenericResponse<RestaurantBasicInfoResponse> getRestaurantBasicInfo(@PathVariable Long restaurantId) {
 		RestaurantBasicInfoServiceRequest request = new RestaurantBasicInfoServiceRequest(restaurantId);
-		return restaurantService.getRestaurantBasicInfo(request);
+		return new GenericResponse<>(restaurantService.getRestaurantBasicInfo(request));
 	}
 
 	@GetMapping({"/customer/restaurants/{restaurantId}/details", "/admin/restaurants/{restaurantId}/details"})
-	public RestaurantDetailedInfoResponse getRestaurantDetailedInfo(@PathVariable Long restaurantId) {
+	public GenericResponse<RestaurantDetailedInfoResponse> getRestaurantDetailedInfo(@PathVariable Long restaurantId) {
 		RestaurantDetailedInfoServiceRequest request = new RestaurantDetailedInfoServiceRequest(restaurantId);
-		return restaurantService.getRestaurantDetailedInfo(request);
+		return new GenericResponse<>(restaurantService.getRestaurantDetailedInfo(request));
 	}
 
 	@GetMapping("/general/restaurants/search")
-	public List<SearchRestaurantsResponse> searchRestaurantsByKeyword(@RequestParam String keyword,
-		@RequestParam double latitude, @RequestParam double longitude) {
-		SearchRestaurantServiceRequest request = new SearchRestaurantServiceRequest(keyword, latitude, longitude);
-		return restaurantService.searchRestaurantsByKeyword(request);
+	public GenericResponse<Slice<SearchRestaurantsResponse>> searchRestaurantsByKeyword(
+		@RequestParam(required = false) Long id,
+		@RequestParam String keyword,
+		@RequestParam double latitude,
+		@RequestParam double longitude,
+		Pageable pageable) {
+		SearchRestaurantServiceRequest request =
+			new SearchRestaurantServiceRequest(id, keyword, latitude, longitude, pageable);
+		return new GenericResponse<>(restaurantService.searchRestaurantsByKeyword(request));
 	}
 
 	@GetMapping("/general/restaurants")
-	public List<RestaurantsWithinRadiusResponse> getRestaurantsWithinRadius(
-		@RequestParam double latitude, @RequestParam double longitude) {
-		RestaurantsWithinRadiusServiceRequest request = new RestaurantsWithinRadiusServiceRequest(latitude,
-			longitude, 3);
-		return restaurantService.getRestaurantsWithinRadius(request);
+	public GenericResponse<Slice<RestaurantsWithinRadiusResponse>> getRestaurantsWithinRadius(
+		@RequestParam(required = false) Long id,
+		@RequestParam double latitude,
+		@RequestParam double longitude,
+		Pageable pageable) {
+		RestaurantsWithinRadiusServiceRequest request =
+			new RestaurantsWithinRadiusServiceRequest(id, latitude, longitude, BASIC_DISTANCE, pageable);
+		return new GenericResponse<>(restaurantService.getRestaurantsWithinRadius(request));
 	}
 
 	// Seller
-
-	//판매자가 자신의 레스토랑 정보를 수정한다.
+	// 판매자가 자신의 레스토랑 정보를 수정한다.
 	@PutMapping(value = "/seller/restaurant/info", consumes = {MediaType.APPLICATION_JSON_VALUE,
 		MediaType.MULTIPART_FORM_DATA_VALUE})
 	@ResponseStatus(HttpStatus.CREATED)
@@ -91,7 +100,7 @@ public class RestaurantController {
 	// Admin
 	@GetMapping("/admin/restaurants")
 	public GenericResponse<Page<RestaurantResponse>> getRestaurants(@PageableDefault Pageable pageable) {
-		return new GenericResponse(restaurantService.getRestaurants(pageable));
+		return new GenericResponse<>(restaurantService.getRestaurants(pageable));
 	}
 
 	//관리자가 레스토랑을 삭제 한다
@@ -101,5 +110,4 @@ public class RestaurantController {
 			= new DeleteRestaurantByAdminServiceRequest(restaurant_id);
 		restaurantService.deleteRestaurantByAdmin(deleteRestaurantByAdminServiceRequest);
 	}
-
 }

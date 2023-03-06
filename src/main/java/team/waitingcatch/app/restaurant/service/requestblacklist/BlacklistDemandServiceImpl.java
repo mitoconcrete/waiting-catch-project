@@ -10,10 +10,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
+import team.waitingcatch.app.lineup.service.InternalLineupService;
 import team.waitingcatch.app.restaurant.dto.blacklist.ApproveBlacklistDemandServiceRequest;
 import team.waitingcatch.app.restaurant.dto.blacklist.CancelBlacklistDemandServiceRequest;
 import team.waitingcatch.app.restaurant.dto.blacklist.CreateBlacklistDemandServiceRequest;
 import team.waitingcatch.app.restaurant.dto.blacklist.GetBlackListDemandByRestaurantServiceRequest;
+import team.waitingcatch.app.restaurant.dto.blacklist.GetBlacklistDemandCustomerInfoResponse;
 import team.waitingcatch.app.restaurant.dto.blacklist.GetBlacklistDemandResponse;
 import team.waitingcatch.app.restaurant.entity.BlacklistDemand;
 import team.waitingcatch.app.restaurant.entity.Restaurant;
@@ -32,7 +34,13 @@ public class BlacklistDemandServiceImpl implements BlacklistDemandService, Inter
 	private final UserRepository userRepository;
 	private final RestaurantRepository restaurantRepository;
 
+	private final InternalLineupService internalLineupService;
 	private final InternalBlacklistService internalBlackListService;
+
+	@Override
+	public GetBlacklistDemandCustomerInfoResponse getCustomerIdByLineupId(long lineupId) {
+		return GetBlacklistDemandCustomerInfoResponse.of(internalLineupService._getByIdWithUser(lineupId).getUser());
+	}
 
 	//판매자가 한명의 고객을 블랙리스트 요청을 한다.
 	@Override
@@ -44,7 +52,7 @@ public class BlacklistDemandServiceImpl implements BlacklistDemandService, Inter
 
 		if (blacklistDemandList.size() >= 1) {
 			for (BlacklistDemand blacklistDemand : blacklistDemandList) {
-				blacklistDemand.checkBlacklistRequest();
+				blacklistDemand.checkStatus();
 			}
 		}
 
@@ -61,25 +69,24 @@ public class BlacklistDemandServiceImpl implements BlacklistDemandService, Inter
 		// serviceRequest.getSellerId() 레스토랑 방문 여부 검증 로직 추가
 		BlacklistDemand blacklistDemand = blacklistDemandRepository.findById(serviceRequest.getBlacklistDemandId())
 			.orElseThrow(() -> new IllegalArgumentException("Not found black list request"));
-		blacklistDemand.checkWaitingStatus();
+		blacklistDemand.checkStatus();
 		blacklistDemand.updateCancelStatus();
 	}
 
 	@Transactional(readOnly = true)
 	@Override
 	public Page<GetBlacklistDemandResponse> getBlacklistDemands(Pageable payload) {
-		Page<BlacklistDemand> result = blacklistDemandRepository.findAllByStatus(AcceptedStatusEnum.WAIT,
-			payload);
+		Page<BlacklistDemand> result = blacklistDemandRepository.findAllByStatus(AcceptedStatusEnum.WAIT, payload);
 		return new PageImpl<>(
-			result.getContent().stream().map(GetBlacklistDemandResponse::new).collect(Collectors.toList()),
-			payload, result.getTotalElements());
+			result.getContent().stream().map(GetBlacklistDemandResponse::new).collect(Collectors.toList()), payload,
+			result.getTotalElements());
 	}
 
 	@Override
 	public void approveBlacklistDemand(ApproveBlacklistDemandServiceRequest serviceRequest) {
 		BlacklistDemand blacklistDemand = blacklistDemandRepository.findById(serviceRequest.getBlacklistDemandId())
 			.orElseThrow(() -> new IllegalArgumentException("Not found black list request"));
-		blacklistDemand.checkWaitingStatus();
+		blacklistDemand.checkStatus();
 		blacklistDemand.updateApprovalStatus();
 		internalBlackListService._createBlackList(blacklistDemand.getRestaurant(), blacklistDemand.getUser());
 	}
@@ -88,7 +95,7 @@ public class BlacklistDemandServiceImpl implements BlacklistDemandService, Inter
 	public void rejectBlacklistDemand(Long blacklistDemandId) {
 		BlacklistDemand blacklistDemand = blacklistDemandRepository.findById(blacklistDemandId)
 			.orElseThrow(() -> new IllegalArgumentException("Not found blacklist request"));
-		blacklistDemand.checkWaitingStatus();
+		blacklistDemand.checkStatus();
 		blacklistDemand.updateRejectionStatus();
 	}
 

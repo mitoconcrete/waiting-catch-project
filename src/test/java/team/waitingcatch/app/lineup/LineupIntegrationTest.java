@@ -3,7 +3,6 @@ package team.waitingcatch.app.lineup;
 import static org.assertj.core.api.Assertions.*;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -73,11 +72,18 @@ class LineupIntegrationTest {
 	@Autowired
 	SellerManagementService sellerManagementService;
 
+	@Test
+	void test() {
+		User customer = userRepository.findByUsernameAndIsDeletedFalse("customerId").get();
+		// lineupHistoryRepository.findUserCouponWithRelations(customer, null);
+		// lineupHistoryRepository.fetchjointest(null);
+		// lineupHistoryRepository.findRestaurantNameByUserCouponId(1L);
+		// lineupHistoryRepository.getRestaurantLineupStatistics(1L);
+	}
+
 	@BeforeEach
 	public void beforeEach() {
-		List<String> searchkeywords = new ArrayList<>();
-		searchkeywords.add("korean");
-		searchkeywords.add("japan");
+		List<String> searchKeywords = List.of("korean", "japan");
 
 		User customer = new User(UserRoleEnum.USER, "유저1", "aaa@gmail.com", "customerId", "pw12", "sj",
 			"01012341234");
@@ -89,7 +95,7 @@ class LineupIntegrationTest {
 
 		Restaurant restaurant = new Restaurant(
 			new SaveDummyRestaurantRequest("레스토랑1", "12345", "서울시 강남구 강남대로", "1", new Position(0.0, 0.0),
-				"01000000000", "일식>스시>오마카세", seller, searchkeywords));
+				"01000000000", "일식>스시>오마카세", seller, searchKeywords));
 		openRestaurant(restaurant);
 	}
 
@@ -197,9 +203,7 @@ class LineupIntegrationTest {
 	@DisplayName("줄서기 히스토리 조회")
 	void getLineupHistories() {
 		User customer = userRepository.findByUsernameAndIsDeletedFalse("customerId").get();
-		List<String> searchkeywords = new ArrayList<>();
-		searchkeywords.add("korean");
-		searchkeywords.add("japan");
+		List<String> searchKeywords = List.of("korean", "japan");
 
 		for (int i = 0; i < 10; i++) {
 			User seller = new User(UserRoleEnum.SELLER, "사장" + i, i + "@naver.com", "sellerId" + i, "pw" + i,
@@ -208,7 +212,7 @@ class LineupIntegrationTest {
 
 			Restaurant restaurant = new Restaurant(
 				new SaveDummyRestaurantRequest("레스토랑" + i, "12345", "서울시 강남구 강남대로", "1", new Position(0.0, 0.0),
-					"0100000000" + i, "일식>스시>오마카세", seller, searchkeywords));
+					"0100000011" + i, "일식>스시>오마카세", seller, searchKeywords));
 
 			openRestaurant(restaurant);
 

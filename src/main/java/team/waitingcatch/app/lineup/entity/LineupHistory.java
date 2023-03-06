@@ -10,8 +10,10 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Index;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -22,6 +24,10 @@ import team.waitingcatch.app.restaurant.entity.Restaurant;
 import team.waitingcatch.app.user.entitiy.User;
 
 @Entity
+@Table(indexes = {
+	@Index(name = "ix_lineup_history_user_id", columnList = "user_Id"),
+	@Index(name = "ix_lineup_history_restaurant_id", columnList = "restaurant_id")
+})
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class LineupHistory extends TimeStamped {

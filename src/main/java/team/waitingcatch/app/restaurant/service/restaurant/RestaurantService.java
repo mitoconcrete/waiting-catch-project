@@ -5,8 +5,8 @@ import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 
-import team.waitingcatch.app.restaurant.dto.requestseller.ApproveSignUpSellerManagementEntityPassToRestaurantEntityRequest;
 import team.waitingcatch.app.restaurant.dto.restaurant.DeleteRestaurantByAdminServiceRequest;
 import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantBasicInfoResponse;
 import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantBasicInfoServiceRequest;
@@ -24,9 +24,9 @@ public interface RestaurantService {
 
 	RestaurantDetailedInfoResponse getRestaurantDetailedInfo(RestaurantDetailedInfoServiceRequest request);
 
-	List<SearchRestaurantsResponse> searchRestaurantsByKeyword(SearchRestaurantServiceRequest request);
+	Slice<SearchRestaurantsResponse> searchRestaurantsByKeyword(SearchRestaurantServiceRequest request);
 
-	List<RestaurantsWithinRadiusResponse> getRestaurantsWithinRadius(
+	Slice<RestaurantsWithinRadiusResponse> getRestaurantsWithinRadius(
 		RestaurantsWithinRadiusServiceRequest request);
 
 	Page<RestaurantResponse> getRestaurants(Pageable pageable);

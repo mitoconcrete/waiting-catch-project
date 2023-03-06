@@ -12,7 +12,6 @@ import team.waitingcatch.app.restaurant.entity.SellerManagement;
 import team.waitingcatch.app.restaurant.enums.AcceptedStatusEnum;
 
 public interface SellerManagementRepository extends JpaRepository<SellerManagement, Long> {
-
 	SellerManagement findTopByUsernameAndEmailOrderByCreatedDateDesc(String requestSellerName, String email);
 
 	@Query(value = "select bd from SellerManagement bd where bd.status = :status")
