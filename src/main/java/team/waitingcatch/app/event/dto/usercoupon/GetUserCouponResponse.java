@@ -14,15 +14,6 @@ public class GetUserCouponResponse {
 	private final CouponTypeEnum discountType;
 	private final LocalDateTime expireDate;
 
-	// public GetUserCouponResponse(UserCouponResponse userCouponResponse, String restaurantName) {
-	// 	this.id = userCouponResponse.getUserCoupon().getId();
-	// 	this.name = userCouponResponse.getCouponCreator().getName();
-	// 	this.restaurantName = restaurantName;
-	// 	this.discountPrice = userCouponResponse.getCouponCreator().getDiscountPrice();
-	// 	this.discountType = userCouponResponse.getCouponCreator().getDiscountType();
-	// 	this.expireDate = userCouponResponse.getCouponCreator().getExpireDate();
-	// }
-
 	public GetUserCouponResponse(UserCouponServiceResponse userCouponServiceResponse) {
 		this.id = userCouponServiceResponse.getUserCoupons().getId();
 		this.name = userCouponServiceResponse.getUserCoupons().getCouponCreator().getName();

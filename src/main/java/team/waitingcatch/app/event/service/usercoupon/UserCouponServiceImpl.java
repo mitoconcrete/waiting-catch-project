@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Recover;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -47,10 +48,13 @@ public class UserCouponServiceImpl implements UserCouponService, InternalUserCou
 		if (isCouponIssued) {
 			couponCreator.useCoupon();
 			userCouponRepository.save(userCoupon);
-		} else {
-			throw new OptimisticLockingFailureException("요청이 많습니다. 다시 시도해주세요");
 		}
 
+	}
+
+	@Recover
+	private void recover(OptimisticLockingFailureException e) {
+		throw new IllegalArgumentException("요청이 많습니다. 다시 시도해주세요");
 	}
 
 	//유저 쿠폰을 조회한다.

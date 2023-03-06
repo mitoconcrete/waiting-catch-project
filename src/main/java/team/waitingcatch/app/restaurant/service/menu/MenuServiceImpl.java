@@ -50,7 +50,7 @@ public class MenuServiceImpl implements MenuService, InternalMenuService {
 
 		if (!serviceRequest.getMultipartFile().isEmpty()) {
 			try {
-				imageUrl = imageUploader.upload(serviceRequest.getMultipartFile(), "menu");
+				imageUrl = imageUploader.upload(serviceRequest.getMultipartFile(), MENU.getValue());
 			} catch (IOException e) {
 				throw new RuntimeException(e);
 			}
