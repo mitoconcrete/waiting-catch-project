@@ -3,12 +3,15 @@ package team.waitingcatch.app.restaurant.service.restaurant;
 import static team.waitingcatch.app.common.enums.ImageDirectoryEnum.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,8 +25,10 @@ import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantBasicInfoServic
 import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantDetailedInfoResponse;
 import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantDetailedInfoServiceRequest;
 import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantResponse;
+import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantsWithinRadiusJpaResponse;
 import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantsWithinRadiusResponse;
 import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantsWithinRadiusServiceRequest;
+import team.waitingcatch.app.restaurant.dto.restaurant.SearchRestaurantJpaResponse;
 import team.waitingcatch.app.restaurant.dto.restaurant.SearchRestaurantServiceRequest;
 import team.waitingcatch.app.restaurant.dto.restaurant.SearchRestaurantsResponse;
 import team.waitingcatch.app.restaurant.dto.restaurant.UpdateRestaurantEntityRequest;
@@ -61,29 +66,65 @@ public class RestaurantServiceImpl implements RestaurantService, InternalRestaur
 
 	@Override
 	@Transactional(readOnly = true)
-	public List<SearchRestaurantsResponse> searchRestaurantsByKeyword(SearchRestaurantServiceRequest request) {
-		String keyword = request.getKeyword();
-		double latitude = request.getLatitude();
-		double longitude = request.getLongitude();
+	public Slice<SearchRestaurantsResponse> searchRestaurantsByKeyword(SearchRestaurantServiceRequest request) {
+		Slice<SearchRestaurantJpaResponse> jpaResponses =
+			restaurantInfoRepository.findRestaurantsBySearchKeywordsContaining(
+				request.getId(), request.getKeyword(), request.getPageable()
+			);
 
-		return restaurantInfoRepository.findRestaurantsBySearchKeywordsContaining(keyword).stream()
-			.map(response -> new SearchRestaurantsResponse(
-				response, distanceCalculator.distanceInKilometerByHaversine(
-				latitude, longitude, response.getLatitude(), response.getLongitude())))
-			.collect(Collectors.toList());
+		List<SearchRestaurantsResponse> content = new ArrayList<>();
+		for (SearchRestaurantJpaResponse response : jpaResponses) {
+			double distance = distanceCalculator.distanceInKilometerByHaversine(
+				request.getLongitude(),
+				request.getLatitude(),
+				response.getLongitude(),
+				response.getLatitude()
+			);
+			content.add(new SearchRestaurantsResponse(response, distance));
+		}
+
+		return new SliceImpl<>(content, jpaResponses.getPageable(), jpaResponses.hasNext());
+
+		// return restaurantInfoRepository.findRestaurantsBySearchKeywordsContaining(keyword, request.getPageable())
+		// 	.stream()
+		// 	.map(response -> new SearchRestaurantsResponse(
+		// 		response, distanceCalculator.distanceInKilometerByHaversine(
+		// 		latitude, longitude, response.getLatitude(), response.getLongitude())))
+		// 	.collect(Collectors.toList());
 	}
 
 	@Override
 	@Transactional(readOnly = true)
-	public List<RestaurantsWithinRadiusResponse> getRestaurantsWithinRadius(
+	public Slice<RestaurantsWithinRadiusResponse> getRestaurantsWithinRadius(
 		RestaurantsWithinRadiusServiceRequest request) {
-		return restaurantInfoRepository.findRestaurantsByDistance(request.getLatitude(), request.getLongitude(),
-				request.getDistance())
-			.stream()
-			.map(response -> new RestaurantsWithinRadiusResponse(
-				response, distanceCalculator.distanceInKilometerByHaversine(
-				request.getLatitude(), request.getLongitude(), response.getLatitude(), response.getLongitude())))
-			.collect(Collectors.toList());
+		Slice<RestaurantsWithinRadiusJpaResponse> jpaResponses =
+			restaurantInfoRepository.findRestaurantsByDistance(
+				request.getId(),
+				request.getLatitude(),
+				request.getLongitude(),
+				request.getDistance(),
+				request.getPageable()
+			);
+		List<RestaurantsWithinRadiusResponse> content = new ArrayList<>();
+		for (RestaurantsWithinRadiusJpaResponse response : jpaResponses) {
+			double distance = distanceCalculator.distanceInKilometerByHaversine(
+				request.getLongitude(),
+				request.getLatitude(),
+				response.getLongitude(),
+				response.getLatitude()
+			);
+			content.add(new RestaurantsWithinRadiusResponse(response, distance));
+		}
+
+		return new SliceImpl<>(content, jpaResponses.getPageable(), jpaResponses.hasNext());
+
+		// return restaurantInfoRepository.findRestaurantsByDistance(request.getLatitude(), request.getLongitude(),
+		// 		request.getDistance(), request.getPageable())
+		// 	.stream()
+		// 	.map(response -> new RestaurantsWithinRadiusResponse(
+		// 		response, distanceCalculator.distanceInKilometerByHaversine(
+		// 		request.getLatitude(), request.getLongitude(), response.getLatitude(), response.getLongitude())))
+		// 	.collect(Collectors.toList());
 	}
 
 	@Override

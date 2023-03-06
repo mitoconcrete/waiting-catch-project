@@ -123,7 +123,7 @@ public class SellerManagementServiceImpl implements SellerManagementService, Int
 		List<String> categoryNames = categoryService._getCategoryNames(categoryIds);
 		List<String> searchKeywords = new ArrayList<>();
 		for (String categoryName : categoryNames) {
-			searchKeywords.add(categoryName + " ");
+			searchKeywords.add(categoryName);
 		}
 
 		ApproveSignUpSellerManagementEntityPassToRestaurantEntityRequest

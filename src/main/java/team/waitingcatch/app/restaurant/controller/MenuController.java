@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import lombok.RequiredArgsConstructor;
+import team.waitingcatch.app.common.dto.GenericResponse;
 import team.waitingcatch.app.restaurant.dto.menu.CreateMenuControllerRequest;
 import team.waitingcatch.app.restaurant.dto.menu.CreateMenuServiceRequest;
 import team.waitingcatch.app.restaurant.dto.menu.CustomerMenuResponse;
@@ -36,8 +37,8 @@ public class MenuController {
 
 	// customer
 	@GetMapping("/customer/restaurants/{restaurantId}/menus")
-	public List<CustomerMenuResponse> getRestaurantMenus(@PathVariable Long restaurantId) {
-		return menuService.getRestaurantMenus(restaurantId);
+	public GenericResponse<List<CustomerMenuResponse>> getRestaurantMenus(@PathVariable Long restaurantId) {
+		return new GenericResponse<>(menuService.getRestaurantMenus(restaurantId));
 	}
 
 	// seller
@@ -52,8 +53,8 @@ public class MenuController {
 	}
 
 	@GetMapping("/seller/restaurants/{restaurantId}/menus")
-	public List<MenuResponse> getMyRestaurantMenus(@PathVariable Long restaurantId) {
-		return menuService.getMyRestaurantMenus(restaurantId);
+	public GenericResponse<List<MenuResponse>> getMyRestaurantMenus(@PathVariable Long restaurantId) {
+		return new GenericResponse<>(menuService.getMyRestaurantMenus(restaurantId));
 	}
 
 	@PutMapping("/seller/restaurants/{restaurantId}/menus/{menuId}")
