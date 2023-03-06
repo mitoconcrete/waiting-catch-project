@@ -36,13 +36,15 @@ public class SecurityConfig {
 
 	@Bean
 	public WebSecurityCustomizer webSecurityCustomizer() {
+		String[] ignoreAuthorizationList = {"/api/general/**", "/general/templates/**", "/profile"};
 		return (web) -> web.ignoring()
+			.antMatchers(ignoreAuthorizationList)
 			.requestMatchers(PathRequest.toStaticResources().atCommonLocations());
 	}
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-		String[] ignoreAuthorizationList = {"/api/general/**", "/general/templates/**", "/profile"};
+
 		String[] customerOnlyAllowedList = {"/api/customer/**"};
 		String[] sellerOnlyAllowedList = {"/api/seller/**", "/seller/templates/**"};
 		String[] adminOnlyAllowedList = {"/admin/templates/**"};
@@ -70,8 +72,7 @@ public class SecurityConfig {
 		http.authorizeRequests()
 			.antMatchers(adminOnlyAllowedList).hasRole(UserRoleEnum.ADMIN.toString())
 			.antMatchers(sellerOnlyAllowedList).hasRole(UserRoleEnum.SELLER.toString())
-			.antMatchers(customerOnlyAllowedList).hasRole(UserRoleEnum.USER.toString())
-			.antMatchers(ignoreAuthorizationList).permitAll();
+			.antMatchers(customerOnlyAllowedList).hasRole(UserRoleEnum.USER.toString());
 
 		// Custom 로그인 페이지 사용하지 않음.
 		http.formLogin().disable();
