@@ -134,19 +134,12 @@ public class EventServiceImpl implements EventService, InternalEventService {
 		}
 
 		return new PageImpl<>(getEventsResponse, pageable, events.getTotalElements());
-		// return new PageImpl<>(eventRepository.findByRestaurantAndIsDeletedFalse(restaurant, pageable)
-		// 	.getContent()
-		// 	.stream()
-		// 	.map(GetEventsResponse::new)
-		// 	.collect(Collectors.toList()),
-		// 	pageable, events.getTotalElements());
 	}
 
 	public List<GetEventsResponse> _getGlobalEventsResponse(List<Event> events) {
 
 		List<GetEventsResponse> getEventsResponse = new ArrayList<>();
 		for (Event event : events) {
-			//List<CouponCreator> couponCreators = couponCreatorRepository.findByEventAndIsDeletedFalse(event);
 			List<CouponCreator> couponCreators = couponCreatorRepository.findByEventWithEvent(event);
 			List<GetCouponCreatorResponse> getCouponCreatorResponses = new ArrayList<>();
 			for (CouponCreator couponCreator : couponCreators) {

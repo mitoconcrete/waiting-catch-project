@@ -116,13 +116,6 @@ public class CouponController {
 		return eventService.getGlobalEvents();
 	}
 
-	// //레스토랑 이벤트 목록 출력 + 해당 이벤트의 쿠폰생성자 출력
-	// @GetMapping("/restaurants/{restaurantId}/events")
-	// public List<GetEventsResponse> getRestaurantEvents(@PathVariable Long restaurantId) {
-	// 	return eventService.getRestaurantEvents(restaurantId);
-	// }
-
-
 	/*  쿠폰 생성자  */
 
 	//광역 이벤트 쿠폰 생성자 생성

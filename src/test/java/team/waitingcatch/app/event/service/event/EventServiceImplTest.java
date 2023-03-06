@@ -193,9 +193,7 @@ class EventServiceImplTest {
 		List<GetEventsResponse> list = eventService.getGlobalEvents();
 
 		// then
-
 		assertThat(list).hasSize(1);
-		//assertEquals("aaa", responses.get(0).getName());
 	}
 
 	@Test
@@ -222,9 +220,7 @@ class EventServiceImplTest {
 		List<GetEventsResponse> list = eventService.getGlobalEvents();
 
 		// then
-
 		assertThat(list).hasSize(1);
-		//assertEquals("aaa", responses.get(0).getName());
 	}
 
 }

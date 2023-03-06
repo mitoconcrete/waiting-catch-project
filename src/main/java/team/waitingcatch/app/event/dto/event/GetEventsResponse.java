@@ -22,11 +22,4 @@ public class GetEventsResponse {
 		this.eventEndDate = event.getEventEndDate();
 		this.couponCreators = getCouponCreatorResponse;
 	}
-
-	public GetEventsResponse(Event event) {
-		this.eventId = event.getId();
-		this.name = event.getName();
-		this.eventStartDate = event.getEventStartDate();
-		this.eventEndDate = event.getEventEndDate();
-	}
 }
