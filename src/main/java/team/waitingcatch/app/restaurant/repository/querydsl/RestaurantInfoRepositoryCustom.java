@@ -1,13 +1,15 @@
 package team.waitingcatch.app.restaurant.repository.querydsl;
 
-import java.util.List;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 
 import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantsWithinRadiusJpaResponse;
 import team.waitingcatch.app.restaurant.dto.restaurant.SearchRestaurantJpaResponse;
 
 public interface RestaurantInfoRepositoryCustom {
-	List<SearchRestaurantJpaResponse> findRestaurantsBySearchKeywordsContaining(String keyword);
+	Slice<SearchRestaurantJpaResponse> findRestaurantsBySearchKeywordsContaining(Long id, String keyword,
+		Pageable pageable);
 
-	List<RestaurantsWithinRadiusJpaResponse> findRestaurantsByDistance(double latitude, double longitude,
-		int distance);
+	Slice<RestaurantsWithinRadiusJpaResponse> findRestaurantsByDistance(Long id, double latitude, double longitude,
+		int distance, Pageable pageable);
 }

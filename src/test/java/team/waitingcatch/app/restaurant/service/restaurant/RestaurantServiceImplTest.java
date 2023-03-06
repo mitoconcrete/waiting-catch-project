@@ -1,8 +1,12 @@
 package team.waitingcatch.app.restaurant.service.restaurant;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -18,6 +22,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
 
 import team.waitingcatch.app.common.Address;
 import team.waitingcatch.app.common.util.DistanceCalculator;
@@ -136,9 +142,12 @@ class RestaurantServiceImplTest {
 	void searchRestaurantsByKeyword() {
 		// given
 		SearchRestaurantServiceRequest request = mock(SearchRestaurantServiceRequest.class);
-		List<SearchRestaurantJpaResponse> jpaResponses = new ArrayList<>();
+		List<SearchRestaurantJpaResponse> contents = new ArrayList<>();
 		SearchRestaurantJpaResponse jpaResponse = mock(SearchRestaurantJpaResponse.class);
-		jpaResponses.add(jpaResponse);
+		contents.add(jpaResponse);
+		Pageable pageable = mock(Pageable.class);
+		Slice<SearchRestaurantJpaResponse> searchRestaurantJpaResponses =
+			new SliceImpl<>(contents, pageable, true);
 		List<String> search = new ArrayList<>();
 		search.add("한식");
 		search.add("중식");
@@ -147,14 +156,18 @@ class RestaurantServiceImplTest {
 		when(jpaResponse.getSearchKeyword()).thenReturn(search);
 		when(jpaResponse.getName()).thenReturn("aaa");
 
-		when(restaurantInfoRepository.findRestaurantsBySearchKeywordsContaining(any(String.class))).thenReturn(
-			jpaResponses);
+		when(restaurantInfoRepository.findRestaurantsBySearchKeywordsContaining(
+			any(Long.class),
+			any(String.class),
+			any()))
+			.thenReturn(searchRestaurantJpaResponses);
 
 		// when
-		List<SearchRestaurantsResponse> responses = restaurantService.searchRestaurantsByKeyword(request);
+		Slice<SearchRestaurantsResponse> responses = restaurantService.searchRestaurantsByKeyword(request);
 
 		// then
-		assertEquals("aaa", responses.get(0).getName());
+		assertEquals("aaa", responses.getContent().get(0).getName());
+		assertTrue(responses.hasNext());
 	}
 
 	@Test
@@ -162,9 +175,12 @@ class RestaurantServiceImplTest {
 	void getRestaurantsWithin3kmRadius() {
 		// given
 		RestaurantsWithinRadiusServiceRequest request = mock(RestaurantsWithinRadiusServiceRequest.class);
-		List<RestaurantsWithinRadiusJpaResponse> jpaResponses = new ArrayList<>();
+		List<RestaurantsWithinRadiusJpaResponse> content = new ArrayList<>();
 		RestaurantsWithinRadiusJpaResponse jpaResponse = mock(RestaurantsWithinRadiusJpaResponse.class);
-		jpaResponses.add(jpaResponse);
+		content.add(jpaResponse);
+		Pageable pageable = mock(Pageable.class);
+		Slice<RestaurantsWithinRadiusJpaResponse> restaurantsWithinRadiusJpaResponseSlice =
+			new SliceImpl<>(content, pageable, true);
 		List<String> search = new ArrayList<>();
 		search.add("한식");
 		search.add("중식");
@@ -176,14 +192,19 @@ class RestaurantServiceImplTest {
 		when(jpaResponse.getLatitude()).thenReturn(0.0);
 		when(jpaResponse.getLongitude()).thenReturn(0.0);
 		when(distanceCalculator.distanceInKilometerByHaversine(0.0, 0.0, 0.0, 0.0)).thenReturn(0.0);
-		when(restaurantInfoRepository.findRestaurantsByDistance(any(double.class), any(double.class),
-			any(int.class))).thenReturn(jpaResponses);
+		when(restaurantInfoRepository.findRestaurantsByDistance(
+			any(Long.class),
+			any(double.class),
+			any(double.class),
+			any(int.class),
+			any()))
+			.thenReturn(restaurantsWithinRadiusJpaResponseSlice);
 
 		// when
-		List<RestaurantsWithinRadiusResponse> responses = restaurantService.getRestaurantsWithinRadius(request);
+		Slice<RestaurantsWithinRadiusResponse> responses = restaurantService.getRestaurantsWithinRadius(request);
 
 		// then
-		assertEquals("aaa", responses.get(0).getName());
+		assertEquals("aaa", responses.getContent().get(0).getName());
 
 	}
 
