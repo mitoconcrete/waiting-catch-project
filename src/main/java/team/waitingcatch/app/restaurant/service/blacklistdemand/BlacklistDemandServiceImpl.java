@@ -37,13 +37,7 @@ public class BlacklistDemandServiceImpl implements BlacklistDemandService, Inter
 	private final UserRepository userRepository;
 	private final RestaurantRepository restaurantRepository;
 
-	private final InternalLineupService internalLineupService;
 	private final InternalBlacklistService internalBlackListService;
-
-	@Override
-	public GetBlacklistDemandCustomerInfoResponse getCustomerIdByLineupId(long lineupId) {
-		return GetBlacklistDemandCustomerInfoResponse.of(internalLineupService._getByIdWithUser(lineupId).getUser());
-	}
 
 	//판매자가 한명의 고객을 블랙리스트 요청을 한다.
 	@Override
