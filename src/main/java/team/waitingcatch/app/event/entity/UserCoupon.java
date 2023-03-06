@@ -8,7 +8,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.Version;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -34,9 +33,6 @@ public class UserCoupon {
 
 	@Column(nullable = false)
 	private boolean isUsed;
-
-	@Version
-	private Long version;
 
 	public UserCoupon(User user, CouponCreator couponCreator) {
 		this.user = user;
