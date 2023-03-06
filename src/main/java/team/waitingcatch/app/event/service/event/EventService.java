@@ -3,9 +3,6 @@ package team.waitingcatch.app.event.service.event;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-
 import team.waitingcatch.app.event.dto.event.CreateEventControllerRequest;
 import team.waitingcatch.app.event.dto.event.CreateEventServiceRequest;
 import team.waitingcatch.app.event.dto.event.DeleteEventControllerRequest;
@@ -35,7 +32,7 @@ public interface EventService {
 	void deleteSellerEvent(DeleteEventServiceRequest deleteEventServiceRequest);
 
 	//모든 광역 이벤트 목록을 가져온다.
-	Page<GetEventsResponse> getGlobalEvents(Long restaurantId, Pageable pageable);
+	Page<GetEventsResponse> getGlobalEvents(Pageable pageable);
 
 	//선택한 매장의 이벤트목록을 가져온다.
 	Page<GetEventsResponse> getRestaurantEvents(Long restaurantId, Pageable pageable);

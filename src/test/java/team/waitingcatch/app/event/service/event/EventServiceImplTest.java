@@ -193,10 +193,10 @@ class EventServiceImplTest {
 		List<Event> eventList = new ArrayList<>();
 		Page<Event> ev = new PageImpl<>(eventList, pageable, eventList.size());
 
-		when(eventRepository.findByRestaurantAndIsDeletedFalse(restaurant, pageable)).thenReturn(ev);
+		when(eventRepository.findByRestaurantIsNull(pageable)).thenReturn(ev);
 
 		// when
-		Page<GetEventsResponse> events = eventService.getGlobalEvents(restaurant.getId(), pageable);
+		Page<GetEventsResponse> events = eventService.getGlobalEvents(pageable);
 
 		// then
 		assertThat(events.getTotalElements()).isInstanceOf(Long.class);
@@ -219,7 +219,7 @@ class EventServiceImplTest {
 		when(eventRepository.findByRestaurantAndIsDeletedFalse(restaurant, pageable)).thenReturn(ev);
 
 		// when
-		Page<GetEventsResponse> events = eventService.getGlobalEvents(restaurant.getId(), pageable);
+		Page<GetEventsResponse> events = eventService.getRestaurantEvents(restaurant.getId(), pageable);
 
 		// then
 		assertThat(events.getTotalElements()).isInstanceOf(Long.class);

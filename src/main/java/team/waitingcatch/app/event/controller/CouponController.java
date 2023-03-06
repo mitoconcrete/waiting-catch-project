@@ -63,7 +63,7 @@ public class CouponController {
 	// 광역 이벤트 목록을 조회한다.
 	@GetMapping("/admin/events")
 	public Page<GetEventsResponse> getAdminEvents(@PageableDefault(size = 10, page = 0) Pageable pageable) {
-		return eventService.getGlobalEvents(0L, pageable);
+		return eventService.getGlobalEvents(pageable);
 	}
 
 	//광역 이벤트를 수정한다.
@@ -116,7 +116,7 @@ public class CouponController {
 	//광역 이벤트 목록 출력 + 해당 이벤트의 쿠폰생성자 출력
 	@GetMapping("/customer/events")
 	public Page<GetEventsResponse> getEvents(@PageableDefault(size = 10, page = 0) Pageable pageable) {
-		return eventService.getGlobalEvents(0L, pageable);
+		return eventService.getGlobalEvents(pageable);
 	}
 	/*  쿠폰 생성자  */
 

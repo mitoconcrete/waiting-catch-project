@@ -5,12 +5,11 @@ import org.springframework.data.domain.Pageable;
 
 import team.waitingcatch.app.event.dto.event.GetEventsResponse;
 import team.waitingcatch.app.event.entity.Event;
-import team.waitingcatch.app.restaurant.entity.Restaurant;
 
 public interface InternalEventService {
 	Event _getEventById(Long id);
 
-	Page<GetEventsResponse> _getEventsResponse(Page<Event> events, Restaurant restaurant, Pageable pageable);
+	Page<GetEventsResponse> _getEventsResponse(Page<Event> events, Pageable pageable);
 
 	void _bulkSoftDeleteByRestaurantId(Long restaurantId);
 }

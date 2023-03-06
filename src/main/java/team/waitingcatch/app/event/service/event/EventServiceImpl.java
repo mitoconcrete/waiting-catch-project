@@ -96,15 +96,15 @@ public class EventServiceImpl implements EventService, InternalEventService {
 	public Page<GetEventsResponse> getRestaurantEvents(Long restaurantId, Pageable pageable) {
 		Restaurant restaurant = internalRestaurantService._getRestaurantById(restaurantId);
 		Page<Event> events = eventRepository.findByRestaurantAndIsDeletedFalse(restaurant, pageable);
-		return _getEventsResponse(events, restaurant, pageable);
+		return _getEventsResponse(events, pageable);
 	}
 
 	@Override
 	@Transactional(readOnly = true)
-	public Page<GetEventsResponse> getGlobalEvents(Long restaurantId, Pageable pageable) {
-		Restaurant restaurant = internalRestaurantService._getRestaurantById(restaurantId);
-		Page<Event> events = eventRepository.findByRestaurantAndIsDeletedFalse(restaurant, pageable);
-		return _getEventsResponse(events, restaurant, pageable);
+	public Page<GetEventsResponse> getGlobalEvents(Pageable pageable) {
+		Restaurant restaurant = null;
+		Page<Event> events = eventRepository.findByRestaurantIsNull(pageable);
+		return _getEventsResponse(events, pageable);
 	}
 
 	@Override
@@ -117,7 +117,7 @@ public class EventServiceImpl implements EventService, InternalEventService {
 
 	// 이벤트 목록 + 쿠폰생성자를 DTO형태로 리턴
 	@Override
-	public Page<GetEventsResponse> _getEventsResponse(Page<Event> events, Restaurant restaurant, Pageable pageable) {
+	public Page<GetEventsResponse> _getEventsResponse(Page<Event> events, Pageable pageable) {
 
 		List<GetEventsResponse> getEventsResponse = new ArrayList<>();
 		for (Event event : events) {

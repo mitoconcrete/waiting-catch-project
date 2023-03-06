@@ -19,6 +19,8 @@ public interface EventRepository extends JpaRepository<Event, Long> {
 
 	Page<Event> findByRestaurantAndIsDeletedFalse(Restaurant restaurant, Pageable pageable);
 
+	Page<Event> findByRestaurantIsNull(Pageable pageable);
+
 	Optional<Event> findByIdAndIsDeletedFalse(Long id);
 
 	Optional<Event> findByIdAndRestaurantAndIsDeletedFalse(Long id, Restaurant restaurant);
