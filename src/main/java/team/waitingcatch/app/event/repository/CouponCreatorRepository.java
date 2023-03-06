@@ -2,7 +2,10 @@ package team.waitingcatch.app.event.repository;
 
 import java.util.List;
 
+import javax.persistence.LockModeType;
+
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
 
 import io.lettuce.core.dynamic.annotation.Param;
@@ -17,4 +20,9 @@ public interface CouponCreatorRepository extends JpaRepository<CouponCreator, Lo
 
 	@Query("select cc from CouponCreator cc join fetch cc.event e where e = :event and cc.isDeleted = false")
 	List<CouponCreator> findByEventWithEvent(@Param("event") Event event);
+
+	@Lock(LockModeType.OPTIMISTIC)
+	@Query("select cc.quantity from CouponCreator cc where cc.id = :id")
+	int getHasCouponBalance(@Param("id") Long id);
+
 }

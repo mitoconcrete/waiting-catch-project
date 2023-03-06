@@ -6,6 +6,7 @@ import static org.mockito.Mockito.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -24,6 +25,7 @@ import team.waitingcatch.app.event.repository.UserCouponRepository;
 import team.waitingcatch.app.event.service.couponcreator.InternalCouponCreatorService;
 import team.waitingcatch.app.restaurant.entity.Restaurant;
 import team.waitingcatch.app.user.entitiy.User;
+import team.waitingcatch.app.user.repository.UserRepository;
 import team.waitingcatch.app.user.service.InternalUserService;
 
 @SpringBootTest
@@ -41,6 +43,9 @@ class UserCouponServiceImplTest {
 	private InternalUserService userService;
 
 	@Mock
+	private UserRepository userRepository;
+
+	@Mock
 	private InternalCouponCreatorService couponCreatorService;
 
 	@Test
@@ -54,11 +59,21 @@ class UserCouponServiceImplTest {
 		when(couponCreator.getName()).thenReturn("테스트");
 		when(couponCreator.getQuantity()).thenReturn(300);
 		when(couponCreator.hasCouponBalance()).thenReturn(true);
+
+		User user = mock(User.class);
+		when(user.getId()).thenReturn(1L);
+		when(user.getUsername()).thenReturn("aaa");
+		when(userRepository.findByUsernameAndIsDeletedFalse("테스트")).thenReturn(Optional.of(user));
 		when(couponCreatorService._getCouponCreatorById(any(Long.class))).thenReturn(couponCreator);
+		when(couponCreatorRepository.getHasCouponBalance(any(Long.class))).thenReturn(300);
+
+		UserCoupon userCoupon = mock(UserCoupon.class);
+		when(userCoupon.getId()).thenReturn(1L);
+
+		when(userCouponRepository.findUserCouponWithRelations(user, couponCreator)).thenReturn(Optional.of(userCoupon));
 
 		userCouponService.createUserCoupon(createUserCouponServiceRequest);
-
-		verify(userCouponRepository, times(1)).save(any(UserCoupon.class));
+		assertThat(couponCreator.getQuantity()).isEqualTo(299);
 
 	}
 

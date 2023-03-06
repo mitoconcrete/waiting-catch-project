@@ -15,6 +15,7 @@ import team.waitingcatch.app.event.dto.usercoupon.CreateUserCouponServiceRequest
 import team.waitingcatch.app.event.dto.usercoupon.GetUserCouponResponse;
 import team.waitingcatch.app.event.entity.CouponCreator;
 import team.waitingcatch.app.event.entity.UserCoupon;
+import team.waitingcatch.app.event.repository.CouponCreatorRepository;
 import team.waitingcatch.app.event.repository.UserCouponRepository;
 import team.waitingcatch.app.event.service.couponcreator.InternalCouponCreatorService;
 import team.waitingcatch.app.user.entitiy.User;
@@ -27,25 +28,30 @@ public class UserCouponServiceImpl implements UserCouponService, InternalUserCou
 	private final InternalCouponCreatorService internalCouponCreatorService;
 	private final InternalUserService internalUserService;
 	private final UserCouponRepository userCouponRepository;
+	private final CouponCreatorRepository couponCreatorRepository;
 
 	//유저 쿠폰을 생성한다
 	@Override
-	@Retryable(maxAttempts = 3, backoff = @Backoff(100), value = OptimisticLockingFailureException.class, exclude = {
+	@Retryable(maxAttempts = 3, backoff = @Backoff(10000), value = OptimisticLockingFailureException.class, exclude = {
 		IllegalArgumentException.class})
 	public void createUserCoupon(CreateUserCouponServiceRequest createUserCouponserviceRequest) {
 		CouponCreator couponCreator = internalCouponCreatorService._getCouponCreatorById(
 			createUserCouponserviceRequest.getCreatorId());
 		User user = internalUserService._getUserByUsername(createUserCouponserviceRequest.getUsername());
-
 		userCouponRepository.findUserCouponWithRelations(user, couponCreator).ifPresent(
 			u -> {
 				throw new IllegalArgumentException("이미 발급받은 쿠폰입니다.");
 			}
 		);
+		System.out.println("1번지점");
+		int isCouponIssued = couponCreatorRepository.getHasCouponBalance(couponCreator.getId());
 		UserCoupon userCoupon = new UserCoupon(user, couponCreator);
-		boolean isCouponIssued = couponCreator.hasCouponBalance();
-		if (isCouponIssued) {
+		System.out.println("2번지점");
+		if (isCouponIssued > 0) {
+			System.out.println("3번지점");
 			couponCreator.useCoupon();
+			System.out.println(couponCreator.getQuantity() + "여기서는 ..");
+			couponCreatorRepository.save(couponCreator);
 			userCouponRepository.save(userCoupon);
 		}
 
