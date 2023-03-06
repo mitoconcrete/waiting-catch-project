@@ -61,7 +61,7 @@ public class CouponCreatorServiceImpl implements CouponCreatorService, InternalC
 		Restaurant restaurant = internalRestaurantService._getRestaurantByUserId(serviceRequest.getUserId());
 
 		Event event = eventRepository.findByIdAndRestaurantAndIsDeletedFalse(serviceRequest.getEventId(), restaurant)
-			.orElseThrow(() -> new IllegalArgumentException("매장에 해당 이벤트가 존재하지 않습니다."));
+			.orElseThrow(() -> new NoSuchElementException(NOT_FOUND_EVENT.getMessage()));
 
 		CreateSellerCouponCreatorRequest createAdminCouponCreatorRequest = new CreateSellerCouponCreatorRequest(
 			serviceRequest, event);
