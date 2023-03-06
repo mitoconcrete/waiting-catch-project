@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
-import team.waitingcatch.app.common.enums.ImageDirectoryEnum;
 import team.waitingcatch.app.common.util.image.ImageUploader;
 import team.waitingcatch.app.lineup.dto.CreateReviewEntityRequest;
 import team.waitingcatch.app.lineup.dto.CreateReviewServiceRequest;
@@ -47,7 +46,7 @@ public class ReviewServiceImpl implements ReviewService, InternalReviewService {
 		CreateReviewEntityRequest entityRequest = new CreateReviewEntityRequest(serviceRequest.getUser(), restaurant,
 			serviceRequest.getRate(), serviceRequest.getContent(), imagePaths);
 
-		reviewRepository.save(Review.craeteReview(entityRequest));
+		reviewRepository.save(Review.of(entityRequest));
 		restaurantInfo.updateAverageRate(entityRequest.getRate());
 
 		if (serviceRequest.getType() == StoredLineupTableNameEnum.LINEUP) {

@@ -1,7 +1,10 @@
 package team.waitingcatch.app.restaurant.service.requestseller;
 
+import static team.waitingcatch.app.exception.ErrorCode.*;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -15,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
+import team.waitingcatch.app.exception.AlreadyExistsException;
 import team.waitingcatch.app.lineup.entity.WaitingNumber;
 import team.waitingcatch.app.lineup.repository.WaitingNumberRepository;
 import team.waitingcatch.app.restaurant.dto.requestseller.ApproveSignUpSellerManagementEntityPassToRestaurantEntityRequest;
@@ -61,10 +65,8 @@ public class SellerManagementServiceImpl implements SellerManagementService, Int
 	public void demandSignUpSeller(DemandSignUpSellerServiceRequest demandSignupSellerServiceRequest) {
 		boolean user = userRepository.existsByUsername(demandSignupSellerServiceRequest.getUsername());
 		if (user) {
-			throw new IllegalArgumentException("해당 사용자가 존재합니다.");
+			throw new AlreadyExistsException(ALREADY_EXISTS_USERNAME);
 		}
-		//internalUserService._getUserByUsername(demandSignupSellerServiceRequest.getUsername());
-		//internalUserService._getUserByEmail(demandSignupSellerServiceRequest.getEmail());
 
 		SellerManagement sellerManagement = new SellerManagement(demandSignupSellerServiceRequest);
 		sellerManagementRepository.save(sellerManagement);
@@ -99,7 +101,7 @@ public class SellerManagementServiceImpl implements SellerManagementService, Int
 		approveSignUpSellerServiceRequest) {
 		SellerManagement sellerManagement = sellerManagementRepository.findById(
 				approveSignUpSellerServiceRequest.getId())
-			.orElseThrow(() -> new IllegalArgumentException("Not found request seller sign-up"));
+			.orElseThrow(() -> new NoSuchElementException(NOT_FOUND_SELLER_REQUEST.getMessage()));
 
 		sellerManagement.checkReject();
 		sellerManagement.checkApprove();
@@ -141,7 +143,7 @@ public class SellerManagementServiceImpl implements SellerManagementService, Int
 		RestaurantInfo restaurantInfo = new RestaurantInfo(restaurant);
 		restaurantInfoRepository.save(restaurantInfo);
 
-		WaitingNumber waitingNumber = WaitingNumber.createWaitingNumber(restaurant);
+		WaitingNumber waitingNumber = WaitingNumber.of(restaurant);
 		waitingNumberRepository.save(waitingNumber);
 
 		// 저장된 번호를 유저에게 메일로 전달한다.

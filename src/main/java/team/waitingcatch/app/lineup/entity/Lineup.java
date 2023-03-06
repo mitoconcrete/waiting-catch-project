@@ -1,5 +1,7 @@
 package team.waitingcatch.app.lineup.entity;
 
+import static team.waitingcatch.app.exception.ErrorCode.*;
+
 import java.time.LocalDateTime;
 
 import javax.persistence.Column;
@@ -14,11 +16,13 @@ import javax.persistence.Index;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import team.waitingcatch.app.common.entity.TimeStamped;
+import team.waitingcatch.app.exception.DuplicateRequestException;
 import team.waitingcatch.app.lineup.dto.StartLineupEntityRequest;
 import team.waitingcatch.app.lineup.enums.ArrivalStatusEnum;
 import team.waitingcatch.app.restaurant.entity.Restaurant;
@@ -66,21 +70,24 @@ public class Lineup extends TimeStamped {
 	@Column(nullable = false)
 	private boolean isDeleted;
 
-	public static Lineup createLineup(StartLineupEntityRequest entityRequest) {
+	@Transient
+	public final static int MAX_CALL_COUNT = 2;
+
+	public static Lineup of(StartLineupEntityRequest entityRequest) {
 		return new Lineup(entityRequest);
 	}
 
 	public ArrivalStatusEnum updateStatus(ArrivalStatusEnum status) {
 		if (this.status == ArrivalStatusEnum.CANCEL) {
-			throw new IllegalArgumentException("이미 취소된 줄서기입니다.");
+			throw new DuplicateRequestException(LINEUP_ALEADY_CANCELED);
 		}
 		if (this.status == ArrivalStatusEnum.ARRIVE) {
-			throw new IllegalArgumentException("이미 완료된 줄서기입니다.");
+			throw new DuplicateRequestException(LINEUP_ALEADY_ARRIVED);
 		}
 
 		if (status == ArrivalStatusEnum.CALL) {
-			if (this.callCount >= 2) {
-				throw new IllegalArgumentException("호출은 최대 2번까지 가능합니다.");
+			if (this.callCount >= MAX_CALL_COUNT) {
+				throw new IllegalArgumentException(EXCEED_MAX_CALL_COUNT.getMessage());
 			}
 			this.callCount++;
 		} else if (status == ArrivalStatusEnum.ARRIVE) {

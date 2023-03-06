@@ -1,10 +1,12 @@
 package team.waitingcatch.app.restaurant.service.restaurant;
 
 import static team.waitingcatch.app.common.enums.ImageDirectoryEnum.*;
+import static team.waitingcatch.app.exception.ErrorCode.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
@@ -59,7 +61,7 @@ public class RestaurantServiceImpl implements RestaurantService, InternalRestaur
 	public RestaurantDetailedInfoResponse getRestaurantDetailedInfo(RestaurantDetailedInfoServiceRequest request) {
 		Restaurant restaurant = _getRestaurantById(request.getRestaurantId());
 		RestaurantInfo restaurantInfo = restaurantInfoRepository.findByRestaurantId(restaurant.getId()).orElseThrow(
-			() -> new IllegalArgumentException("레스토랑이 존재하지 않습니다.")
+			() -> new IllegalArgumentException(NOT_FOUND_RESTAURANT.getMessage())
 		);
 		return new RestaurantDetailedInfoResponse(restaurant, restaurantInfo);
 	}
@@ -84,13 +86,6 @@ public class RestaurantServiceImpl implements RestaurantService, InternalRestaur
 		}
 
 		return new SliceImpl<>(content, jpaResponses.getPageable(), jpaResponses.hasNext());
-
-		// return restaurantInfoRepository.findRestaurantsBySearchKeywordsContaining(keyword, request.getPageable())
-		// 	.stream()
-		// 	.map(response -> new SearchRestaurantsResponse(
-		// 		response, distanceCalculator.distanceInKilometerByHaversine(
-		// 		latitude, longitude, response.getLatitude(), response.getLongitude())))
-		// 	.collect(Collectors.toList());
 	}
 
 	@Override
@@ -117,14 +112,6 @@ public class RestaurantServiceImpl implements RestaurantService, InternalRestaur
 		}
 
 		return new SliceImpl<>(content, jpaResponses.getPageable(), jpaResponses.hasNext());
-
-		// return restaurantInfoRepository.findRestaurantsByDistance(request.getLatitude(), request.getLongitude(),
-		// 		request.getDistance(), request.getPageable())
-		// 	.stream()
-		// 	.map(response -> new RestaurantsWithinRadiusResponse(
-		// 		response, distanceCalculator.distanceInKilometerByHaversine(
-		// 		request.getLatitude(), request.getLongitude(), response.getLatitude(), response.getLongitude())))
-		// 	.collect(Collectors.toList());
 	}
 
 	@Override
@@ -167,9 +154,10 @@ public class RestaurantServiceImpl implements RestaurantService, InternalRestaur
 	@Override
 	public void updateRestaurant(UpdateRestaurantServiceRequest serviceRequest) throws IOException {
 		Restaurant restaurant = restaurantRepository.findByUserId(serviceRequest.getSellerId())
-			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 레스토랑입니다."));
+			.orElseThrow(() -> new NoSuchElementException(NOT_FOUND_RESTAURANT.getMessage()));
+
 		RestaurantInfo restaurantInfo = restaurantInfoRepository.findById(restaurant.getId())
-			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 레스토랑 정보입니다."));
+			.orElseThrow(() -> new NoSuchElementException(NOT_FOUND_RESTAURANT_INFO.getMessage()));
 
 		List<String> imagePaths = imageUploader.uploadList(serviceRequest.getImages(), RESTAURANT.getValue());
 		UpdateRestaurantEntityRequest updateRestaurantEntityRequest = new UpdateRestaurantEntityRequest(
@@ -182,30 +170,30 @@ public class RestaurantServiceImpl implements RestaurantService, InternalRestaur
 	@Override
 	public Restaurant _getRestaurantById(Long restaurantId) {
 		return restaurantRepository.findById(restaurantId)
-			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 레스토랑입니다."));
+			.orElseThrow(() -> new NoSuchElementException(NOT_FOUND_RESTAURANT.getMessage()));
 	}
 
 	@Override
 	public Restaurant _getRestaurantByUserId(Long userId) {
 		return restaurantRepository.findByUserId(userId)
-			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 레스토랑입니다."));
+			.orElseThrow(() -> new NoSuchElementException(NOT_FOUND_RESTAURANT.getMessage()));
 	}
 
 	public RestaurantInfo _getRestaurantInfoByRestaurantId(Long restaurantId) {
 		return restaurantInfoRepository.findByRestaurantId(restaurantId)
-			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 레스토랑입니다."));
+			.orElseThrow(() -> new NoSuchElementException(NOT_FOUND_RESTAURANT.getMessage()));
 	}
 
 	@Override
 	public RestaurantInfo _getRestaurantInfoByUserId(Long userId) {
 		return restaurantInfoRepository.findByUserId(userId)
-			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 레스토랑 정보입니다."));
+			.orElseThrow(() -> new NoSuchElementException(NOT_FOUND_RESTAURANT_INFO.getMessage()));
 	}
 
 	@Override
 	public RestaurantInfo _getRestaurantInfoByRestaurantIdWithRestaurant(Long id) {
 		return restaurantInfoRepository.findByRestaurantId(id)
-			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 레스토랑 정보입니다."));
+			.orElseThrow(() -> new NoSuchElementException(NOT_FOUND_RESTAURANT_INFO.getMessage()));
 	}
 
 	@Override
@@ -218,14 +206,14 @@ public class RestaurantServiceImpl implements RestaurantService, InternalRestaur
 
 	public void _openLineup(Long restaurantId) {
 		RestaurantInfo restaurantInfo = restaurantInfoRepository.findByRestaurantId(restaurantId)
-			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 레스토랑입니다."));
+			.orElseThrow(() -> new NoSuchElementException(NOT_FOUND_RESTAURANT_INFO.getMessage()));
 		restaurantInfo.openLineup();
 	}
 
 	@Override
 	public void _closeLineup(Long restaurantId) {
 		RestaurantInfo restaurantInfo = restaurantInfoRepository.findByRestaurantId(restaurantId)
-			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 레스토랑입니다."));
+			.orElseThrow(() -> new NoSuchElementException(NOT_FOUND_RESTAURANT_INFO.getMessage()));
 		restaurantInfo.closeLineup();
 	}
 

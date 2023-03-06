@@ -1,10 +1,13 @@
 package team.waitingcatch.app.lineup.service;
 
+import static team.waitingcatch.app.exception.ErrorCode.*;
+
 import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 import org.springframework.dao.OptimisticLockingFailureException;
@@ -22,6 +25,7 @@ import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.common.util.DistanceCalculator;
 import team.waitingcatch.app.common.util.sms.SmsService;
 import team.waitingcatch.app.common.util.sms.dto.MessageRequest;
+import team.waitingcatch.app.exception.IllegalRequestException;
 import team.waitingcatch.app.lineup.dto.CallCustomerInfoResponse;
 import team.waitingcatch.app.lineup.dto.CancelWaitingRequest;
 import team.waitingcatch.app.lineup.dto.GetLineupHistoryRecordsServiceRequest;
@@ -45,6 +49,8 @@ import team.waitingcatch.app.restaurant.service.restaurant.InternalRestaurantSer
 @Transactional
 @RequiredArgsConstructor
 public class LineupServiceImpl implements LineupService, InternalLineupService {
+	public static final int MAX_DISTANCE = 2;
+
 	private final LineupRepository lineupRepository;
 
 	private final InternalRestaurantService internalRestaurantService;
@@ -76,14 +82,14 @@ public class LineupServiceImpl implements LineupService, InternalLineupService {
 		Restaurant restaurant = restaurantInfo.getRestaurant();
 
 		if (!restaurantInfo.isLineupActive()) {
-			throw new IllegalArgumentException("줄서기가 마감되었습니다.");
+			throw new IllegalArgumentException(CLOSED_LINEUP.getMessage());
 		}
 
 		boolean isBlacklist = internalBlacklistService._existsByRestaurantIdAndUserId(restaurantId,
 			serviceRequest.getUser().getId());
 
 		if (isBlacklist) {
-			throw new IllegalArgumentException("블랙리스트는 이용할 수 없습니다");
+			throw new IllegalRequestException(ILLEGAL_ACCESS);
 		}
 
 		double userLatitude = serviceRequest.getLatitude();
@@ -92,8 +98,8 @@ public class LineupServiceImpl implements LineupService, InternalLineupService {
 		double restaurantLongitude = restaurant.getLongitude();
 
 		if (distanceCalculator.distanceInKilometerByHaversine(userLatitude, userLongitude, restaurantLatitude,
-			restaurantLongitude) > 2) {
-			throw new IllegalArgumentException("2km 이내의 레스토랑에만 줄서기가 가능합니다");
+			restaurantLongitude) > MAX_DISTANCE) {
+			throw new IllegalArgumentException(DISTANCE_EXCEEDED.getMessage());
 		}
 
 		int waitingNumber = internalWaitingNumberService.getWaitingNumber(restaurantId);
@@ -101,14 +107,14 @@ public class LineupServiceImpl implements LineupService, InternalLineupService {
 		StartLineupEntityRequest entityRequest = new StartLineupEntityRequest(serviceRequest, restaurant,
 			waitingNumber);
 
-		Lineup lineup = Lineup.createLineup(entityRequest);
+		Lineup lineup = Lineup.of(entityRequest);
 		lineupRepository.save(lineup);
 		restaurantInfo.addLineupCount();
 	}
 
 	@Recover
 	private void recover(OptimisticLockingFailureException e) {
-		throw new IllegalArgumentException("이용자가 많아 요청을 처리할 수 없습니다. 잠시 후 다시 시도해 주세요.");
+		throw new IllegalArgumentException(CONNCURRENT_REQUEST_FAILURE.getMessage());
 	}
 
 	@Override
@@ -116,14 +122,15 @@ public class LineupServiceImpl implements LineupService, InternalLineupService {
 		long lineupId = request.getLineupId();
 		Lineup lineup = _getByIdWithUser(lineupId);
 		if (!lineup.isSameUserId(request.getUserId())) {
-			throw new IllegalArgumentException("유저 정보가 일치하지 않습니다.");
+			throw new IllegalRequestException(ILLEGAL_ACCESS);
 		}
 		lineup.updateStatus(ArrivalStatusEnum.CANCEL);
 
 		Long restaurantId = lineupRepository.findRestaurantIdById(lineupId)
-			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 줄서기입니다."));
+			.orElseThrow(() -> new NoSuchElementException(NOT_FOUND_LINEUP.getMessage()));
 
-		RestaurantInfo restaurantInfo = internalRestaurantService._getRestaurantInfoByRestaurantIdWithRestaurant(restaurantId);
+		RestaurantInfo restaurantInfo = internalRestaurantService._getRestaurantInfoByRestaurantIdWithRestaurant(
+			restaurantId);
 		restaurantInfo.subtractLineupCount();
 	}
 
@@ -165,7 +172,7 @@ public class LineupServiceImpl implements LineupService, InternalLineupService {
 		Lineup restaurantInCustomer = _getByIdWithUser(serviceRequest.getLineupId());
 		Restaurant restaurantBySeller = internalRestaurantService._getRestaurantByUserId(serviceRequest.getSellerId());
 		if (!restaurantInCustomer.isSameRestaurant(restaurantBySeller)) {
-			throw new IllegalArgumentException("현재 레스토랑의 손님이 아닙니다.");
+			throw new IllegalRequestException(NOT_IN_RESTAURANT);
 		}
 
 		ArrivalStatusEnum updatedStatus = restaurantInCustomer.updateStatus(serviceRequest.getStatus());
@@ -179,7 +186,7 @@ public class LineupServiceImpl implements LineupService, InternalLineupService {
 				.filter(lineup -> lineup.getStatus() == (ArrivalStatusEnum.WAIT))
 				.forEach(lineup -> lineup.updateStatus(ArrivalStatusEnum.CANCEL));
 		} else {
-			throw new IllegalArgumentException("실행 x");
+			throw new IllegalRequestException(NEVER_REACH);
 		}
 	}
 
@@ -201,14 +208,15 @@ public class LineupServiceImpl implements LineupService, InternalLineupService {
 	@Transactional(readOnly = true)
 	@Override
 	public Lineup _getById(Long id) {
-		return lineupRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 줄서기입니다."));
+		return lineupRepository.findById(id)
+			.orElseThrow(() -> new NoSuchElementException(NOT_FOUND_LINEUP.getMessage()));
 	}
 
 	@Transactional(readOnly = true)
 	@Override
 	public Lineup _getByIdWithUser(Long id) {
 		return lineupRepository.findByIdWithUser(id)
-			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 줄서기입니다."));
+			.orElseThrow(() -> new NoSuchElementException(NOT_FOUND_LINEUP.getMessage()));
 	}
 
 	@Override

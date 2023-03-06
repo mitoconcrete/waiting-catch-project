@@ -1,5 +1,7 @@
 package team.waitingcatch.app.restaurant.entity;
 
+import static team.waitingcatch.app.exception.ErrorCode.*;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -15,6 +17,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import team.waitingcatch.app.common.entity.TimeStamped;
+import team.waitingcatch.app.exception.DuplicateRequestException;
 import team.waitingcatch.app.restaurant.dto.blacklist.CreateBlacklistInternalServiceRequest;
 import team.waitingcatch.app.user.entitiy.User;
 
@@ -47,17 +50,13 @@ public class Blacklist extends TimeStamped {
 		this.user = serviceRequest.getUser();
 	}
 
-	public boolean isSameRequester(Long sellerId) {
-		return restaurant.getUser().getId().equals(sellerId);
-	}
-
 	public void deleteSuccess() {
 		this.isDeleted = true;
 	}
 
 	public void checkDeleteStatus() {
 		if (this.isDeleted) {
-			throw new IllegalArgumentException("blacklist user is already deleted");
+			throw new DuplicateRequestException(ALREADY_DELETED_BLACKLIST);
 		}
 	}
 }

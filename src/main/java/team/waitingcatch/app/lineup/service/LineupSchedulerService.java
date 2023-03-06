@@ -43,7 +43,7 @@ public class LineupSchedulerService {
 	public void transferLineupToLineupHistory() {
 		List<LineupHistory> lineupList = lineupRepository.findAll()
 			.stream()
-			.map(LineupHistory::createLineupHistory)
+			.map(LineupHistory::of)
 			.collect(Collectors.toList());
 		lineupHistoryRepository.saveAll(lineupList);
 		lineupRepository.deleteAll();

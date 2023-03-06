@@ -1,7 +1,10 @@
 package team.waitingcatch.app.restaurant.entity;
 
+import static team.waitingcatch.app.exception.ErrorCode.*;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.UUID;
 
 import javax.persistence.Column;
@@ -34,6 +37,10 @@ public class Restaurant extends TimeStamped {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "restaurant_id")
 	private Long id;
+
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "user_id", nullable = false)
+	private User user;
 
 	@Column(nullable = false, length = 100)
 	private String name;
@@ -70,10 +77,6 @@ public class Restaurant extends TimeStamped {
 
 	@Column(nullable = false, length = 12)
 	private String businessLicenseNo;
-
-	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "user_id", nullable = false)
-	private User user;
 
 	public Restaurant(ApproveSignUpSellerManagementEntityPassToRestaurantEntityRequest entityRequest) {
 		this.name = entityRequest.getRestaurantName();
@@ -115,7 +118,7 @@ public class Restaurant extends TimeStamped {
 
 	public void deleteRestaurant() {
 		if (this.isDeleted) {
-			throw new IllegalArgumentException("해당 유저는 이미 삭제되었습니다.");
+			throw new NoSuchElementException(NOT_FOUND_RESTAURANT.getMessage());
 		} else {
 			this.isDeleted = true;
 		}

@@ -1,5 +1,7 @@
 package team.waitingcatch.app.restaurant.entity;
 
+import static team.waitingcatch.app.exception.ErrorCode.*;
+
 import java.util.List;
 
 import javax.persistence.Column;
@@ -18,6 +20,7 @@ import lombok.NoArgsConstructor;
 import team.waitingcatch.app.common.Position;
 import team.waitingcatch.app.common.entity.TimeStamped;
 import team.waitingcatch.app.common.util.StringListConverter;
+import team.waitingcatch.app.exception.DuplicateRequestException;
 import team.waitingcatch.app.restaurant.dto.requestseller.DemandSignUpSellerServiceRequest;
 import team.waitingcatch.app.restaurant.enums.AcceptedStatusEnum;
 
@@ -97,13 +100,13 @@ public class SellerManagement extends TimeStamped {
 
 	public void checkReject() {
 		if (this.status == AcceptedStatusEnum.REJECT) {
-			throw new IllegalArgumentException("This request already reject please request seller again");
+			throw new DuplicateRequestException(ALREADY_REJECTED);
 		}
 	}
 
 	public void checkApprove() {
 		if (this.status == AcceptedStatusEnum.APPROVE) {
-			throw new IllegalArgumentException("This request already Approve please request seller again");
+			throw new DuplicateRequestException(ALREADY_APPROVED);
 		}
 	}
 }

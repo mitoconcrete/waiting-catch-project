@@ -1,6 +1,9 @@
 package team.waitingcatch.app.restaurant.service.blacklist;
 
+import static team.waitingcatch.app.exception.ErrorCode.*;
+
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
@@ -10,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
+import team.waitingcatch.app.exception.DuplicateRequestException;
 import team.waitingcatch.app.restaurant.dto.blacklist.CreateBlacklistInternalServiceRequest;
 import team.waitingcatch.app.restaurant.dto.blacklist.DeleteBlacklistByRestaurantServiceRequest;
 import team.waitingcatch.app.restaurant.dto.blacklist.GetBlackListByRestaurantServiceRequest;
@@ -38,15 +42,15 @@ public class BlacklistServiceImpl implements BlacklistService, InternalBlacklist
 		Blacklist blacklist = blacklistRepository.findByIdAndRestaurantUserId(
 			serviceRequest.getBlacklistId(),
 			serviceRequest.getSellerId()
-		).orElseThrow(() -> new IllegalArgumentException("Not found blacklist user"));
+		).orElseThrow(() -> new NoSuchElementException(NOT_FOUND_BLACKLIST.getMessage()));
 
 		if (blacklist.isDeleted()) {
-			throw new IllegalArgumentException("이미 블랙리스트에서 삭제된 고객입니다. 블랙리스트를 원하시면 다시 신청해주세요.");
+			throw new DuplicateRequestException(ALREADY_DELETED_BLACKLIST);
 		}
 
 		BlacklistDemand blacklistDemand = blacklistDemandRepository.findByUser_IdAndRestaurant_User_IdAndStatusApproval(
 				blacklist.getUser().getId(), blacklist.getRestaurant().getUser().getId())
-			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 블랙리스트 요청입니다."));
+			.orElseThrow(() -> new NoSuchElementException(NOT_FOUND_BLACKLIST_DEMAND.getMessage()));
 
 		blacklist.checkDeleteStatus();
 		blacklist.deleteSuccess();
@@ -76,7 +80,7 @@ public class BlacklistServiceImpl implements BlacklistService, InternalBlacklist
 	public List<GetBlacklistResponse> getBlackListByRestaurant(
 		GetBlackListByRestaurantServiceRequest getBlackListByRestaurantServiceRequest) {
 		Restaurant restaurant = restaurantRepository.findById(getBlackListByRestaurantServiceRequest.getSellerId())
-			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 레스토랑 요청입니다."));
+			.orElseThrow(() -> new NoSuchElementException(NOT_FOUND_RESTAURANT.getMessage()));
 		List<Blacklist> blackList = blacklistRepository.findAllByRestaurant_Id(restaurant.getId());
 		return blackList.stream().map(GetBlacklistResponse::new).collect(Collectors.toList());
 	}
@@ -89,8 +93,8 @@ public class BlacklistServiceImpl implements BlacklistService, InternalBlacklist
 	@Override
 	public void _createBlackList(Restaurant restaurant, User user) {
 		blacklistRepository.findByUserIdAndRestaurantUserIdAndIsDeletedFalse(user.getId(), restaurant.getUser().getId())
-			.ifPresent(b -> {
-				throw new IllegalArgumentException("이미 차단된 사용자 입니다");
+			.ifPresent(blacklist -> {
+				throw new DuplicateRequestException(ALREADY_BANNED_USER);
 			});
 
 		var serviceRequest = new CreateBlacklistInternalServiceRequest(restaurant, user);

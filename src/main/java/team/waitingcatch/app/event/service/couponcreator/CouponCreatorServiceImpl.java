@@ -1,6 +1,9 @@
 package team.waitingcatch.app.event.service.couponcreator;
 
+import static team.waitingcatch.app.exception.ErrorCode.*;
+
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -20,17 +23,19 @@ import team.waitingcatch.app.event.repository.CouponCreatorRepository;
 import team.waitingcatch.app.event.repository.EventRepository;
 import team.waitingcatch.app.event.service.event.InternalEventService;
 import team.waitingcatch.app.restaurant.entity.Restaurant;
+import team.waitingcatch.app.restaurant.service.restaurant.InternalRestaurantService;
 
 @Service
-@RequiredArgsConstructor
 @Transactional
+@RequiredArgsConstructor
 public class CouponCreatorServiceImpl implements CouponCreatorService, InternalCouponCreatorService {
-
 	private final EventRepository eventRepository;
 	private final CouponCreatorRepository couponCreatorRepository;
+
+	private final InternalRestaurantService internalRestaurantService;
 	private final InternalEventService internalEventService;
 
-	//광역 이벤트 쿠폰생성자를 생성한다.
+	// 광역 이벤트 쿠폰 생성자를 생성한다.
 	@Override
 	public void createAdminCouponCreator(
 		CreateAdminCouponCreatorServiceRequest createAdminCouponCreatorServiceRequest) {
@@ -49,56 +54,49 @@ public class CouponCreatorServiceImpl implements CouponCreatorService, InternalC
 			.collect(Collectors.toList());
 	}
 
-	//레스토랑 이벤트 쿠폰생성자를 생성한다
+	// 레스토랑 이벤트 쿠폰 생성자를 생성한다
 	@Override
 	public void createSellerCouponCreator(
-		CreateSellerCouponCreatorServiceRequest createSellerCouponCreatorServiceRequest) {
-		Restaurant restaurant = internalEventService._getRestaurantById(
-			createSellerCouponCreatorServiceRequest.getUserId());
+		CreateSellerCouponCreatorServiceRequest serviceRequest) {
+		Restaurant restaurant = internalRestaurantService._getRestaurantById(serviceRequest.getUserId());
 
-		Event event = eventRepository.findByIdAndRestaurantAndIsDeletedFalse(
-				createSellerCouponCreatorServiceRequest.getEventId(), restaurant)
+		Event event = eventRepository.findByIdAndRestaurantAndIsDeletedFalse(serviceRequest.getEventId(), restaurant)
 			.orElseThrow(() -> new IllegalArgumentException("매장에 해당 이벤트가 존재하지 않습니다."));
 
 		CreateSellerCouponCreatorRequest createAdminCouponCreatorRequest = new CreateSellerCouponCreatorRequest(
-			createSellerCouponCreatorServiceRequest, event);
+			serviceRequest, event);
 		CouponCreator couponCreator = new CouponCreator(createAdminCouponCreatorRequest);
 		couponCreatorRepository.save(couponCreator);
 	}
 
 	//광역 이벤트 쿠폰생성자를 수정한다.
 	@Override
-	public void updateAdminCouponCreator(
-		UpdateAdminCouponCreatorServiceRequest updateAdminCouponCreatorServiceRequest) {
-		internalEventService._getEventById(updateAdminCouponCreatorServiceRequest.getEventId());
-		CouponCreator couponCreators = _getCouponCreatorById(updateAdminCouponCreatorServiceRequest.getCreatorId());
+	public void updateAdminCouponCreator(UpdateAdminCouponCreatorServiceRequest serviceRequest) {
+		internalEventService._getEventById(serviceRequest.getEventId());
+		CouponCreator couponCreators = _getCouponCreatorById(serviceRequest.getCreatorId());
 
-		couponCreators.updateAdminCouponCreator(updateAdminCouponCreatorServiceRequest);
+		couponCreators.updateAdminCouponCreator(serviceRequest);
 	}
 
 	//레스토랑 이벤트 쿠폰생성자를 수정한다.
 	@Override
-	public void updateSellerCouponCreator(
-		UpdateSellerCouponCreatorServiceRequest updateSellerCouponCreatorServiceRequest) {
-		Restaurant restaurant = internalEventService._getRestaurantById(
-			updateSellerCouponCreatorServiceRequest.getUserId());
+	public void updateSellerCouponCreator(UpdateSellerCouponCreatorServiceRequest serviceRequest) {
+		Restaurant restaurant = internalRestaurantService._getRestaurantById(serviceRequest.getUserId());
 
 		eventRepository.findByIdAndRestaurantAndIsDeletedFalse(
-				updateSellerCouponCreatorServiceRequest.getEventId(), restaurant)
-			.orElseThrow(() -> new IllegalArgumentException("매장에 해당 이벤트가 존재하지 않습니다."));
+				serviceRequest.getEventId(), restaurant)
+			.orElseThrow(() -> new NoSuchElementException(NOT_FOUND_EVENT.getMessage()));
 
 		CouponCreator couponCreators = _getCouponCreatorById(
-			updateSellerCouponCreatorServiceRequest.getCreatorId());
+			serviceRequest.getCreatorId());
 
-		couponCreators.updateSellerCouponCreator(updateSellerCouponCreatorServiceRequest);
+		couponCreators.updateSellerCouponCreator(serviceRequest);
 	}
 
 	@Override
 	@Transactional(readOnly = true)
 	public CouponCreator _getCouponCreatorById(Long id) {
-		CouponCreator couponCreator = couponCreatorRepository.findById(id)
-			.orElseThrow(() -> new IllegalArgumentException("쿠폰 생성자를 찾을수 없습니다."));
-		return couponCreator;
+		return couponCreatorRepository.findById(id)
+			.orElseThrow(() -> new NoSuchElementException(NOT_FOUND_COUPON_CRETOR.getMessage()));
 	}
-
 }
