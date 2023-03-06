@@ -169,6 +169,7 @@ public class RestaurantServiceImpl implements RestaurantService, InternalRestaur
 
 	@Override
 	public Restaurant _getRestaurantById(Long restaurantId) {
+		System.out.println(restaurantId + "검증아이디");
 		return restaurantRepository.findById(restaurantId)
 			.orElseThrow(() -> new NoSuchElementException(NOT_FOUND_RESTAURANT.getMessage()));
 	}

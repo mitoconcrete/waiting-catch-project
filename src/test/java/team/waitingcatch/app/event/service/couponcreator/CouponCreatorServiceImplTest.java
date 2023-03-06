@@ -26,6 +26,7 @@ import team.waitingcatch.app.event.repository.CouponCreatorRepository;
 import team.waitingcatch.app.event.repository.EventRepository;
 import team.waitingcatch.app.event.service.event.InternalEventService;
 import team.waitingcatch.app.restaurant.entity.Restaurant;
+import team.waitingcatch.app.restaurant.repository.RestaurantRepository;
 import team.waitingcatch.app.restaurant.service.restaurant.InternalRestaurantService;
 
 @SpringBootTest
@@ -43,7 +44,10 @@ class CouponCreatorServiceImplTest {
 	private EventRepository eventRepository;
 
 	@Mock
-	private InternalRestaurantService restaurantService;
+	private InternalRestaurantService internalRestaurantService;
+
+	@Mock
+	private RestaurantRepository restaurantRepository;
 
 	@Test
 	void createAdminCouponCreator() {
@@ -97,7 +101,7 @@ class CouponCreatorServiceImplTest {
 		Restaurant restaurant = mock(Restaurant.class);
 		when(restaurant.getName()).thenReturn("TestRes");
 		when(restaurant.getId()).thenReturn(1L);
-		when(restaurantService._getRestaurantByUserId(any(Long.class))).thenReturn(restaurant);
+		when(internalRestaurantService._getRestaurantByUserId(any(Long.class))).thenReturn(restaurant);
 
 		Event event = mock(Event.class);
 		when(event.getId()).thenReturn(1L);
@@ -142,16 +146,21 @@ class CouponCreatorServiceImplTest {
 			UpdateSellerCouponCreatorServiceRequest.class);
 
 		when(updateSellerCouponCreatorServiceRequest.getEventId()).thenReturn(1L);
+		when(updateSellerCouponCreatorServiceRequest.getUserId()).thenReturn(1L);
+		when(updateSellerCouponCreatorServiceRequest.getCreatorId()).thenReturn(1L);
 		when(updateSellerCouponCreatorServiceRequest.getName()).thenReturn("테스터");
 
 		Restaurant restaurant = mock(Restaurant.class);
 		when(restaurant.getName()).thenReturn("TestRes");
 		when(restaurant.getId()).thenReturn(1L);
-		when(restaurantService._getRestaurantByUserId(any(Long.class))).thenReturn(restaurant);
+		when(restaurant.isDeleted()).thenReturn(false);
+		when(restaurantRepository.findById(any(Long.class))).thenReturn(Optional.of(restaurant));
+		when(internalRestaurantService._getRestaurantByUserId(any(Long.class))).thenReturn(restaurant);
 
 		Event event = mock(Event.class);
 		when(event.getId()).thenReturn(1L);
 		when(event.getName()).thenReturn("테스터");
+		when(eventRepository.findById(1L)).thenReturn(Optional.of(event));
 		when(eventRepository.findByIdAndRestaurantAndIsDeletedFalse(1L, restaurant)).thenReturn(
 			Optional.of(event));
 
@@ -160,7 +169,8 @@ class CouponCreatorServiceImplTest {
 		when(couponCreator.getName()).thenReturn("테스터");
 		when(couponCreatorRepository.findById(any(Long.class))).thenReturn(Optional.of(couponCreator));
 
-		couponCreatorService.updateSellerCouponCreator(updateSellerCouponCreatorServiceRequest);
+		assertDoesNotThrow(
+			() -> couponCreatorService.updateSellerCouponCreator(updateSellerCouponCreatorServiceRequest));
 
 		assertEquals("테스터", event.getName());
 
