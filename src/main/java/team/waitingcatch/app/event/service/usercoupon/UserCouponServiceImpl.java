@@ -1,5 +1,7 @@
 package team.waitingcatch.app.event.service.usercoupon;
 
+import static team.waitingcatch.app.exception.ErrorCode.*;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -40,7 +42,7 @@ public class UserCouponServiceImpl implements UserCouponService, InternalUserCou
 		User user = internalUserService._getUserByUsername(createUserCouponserviceRequest.getUsername());
 		userCouponRepository.findUserCouponWithRelations(user, couponCreator).ifPresent(
 			u -> {
-				throw new IllegalArgumentException("이미 발급받은 쿠폰입니다.");
+				throw new IllegalArgumentException(DUPLICATE_COUPON.getMessage());
 			}
 		);
 		int isCouponIssued = couponCreatorRepository.getHasCouponBalance(couponCreator.getId());
@@ -55,7 +57,7 @@ public class UserCouponServiceImpl implements UserCouponService, InternalUserCou
 
 	@Recover
 	private void recover(OptimisticLockingFailureException e) {
-		throw new IllegalArgumentException("요청이 많습니다. 다시 시도해주세요");
+		throw new IllegalArgumentException(CONNCURRENT_REQUEST_FAILURE.getMessage());
 	}
 
 	//유저 쿠폰을 조회한다.
