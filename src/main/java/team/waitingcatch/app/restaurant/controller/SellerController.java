@@ -72,13 +72,11 @@ public class SellerController {
 	private final CouponCreatorService couponCreatorService;
 	private final RestaurantService restaurantService;
 	private final MapApiService mapApiService;
-	/*     로그인 프론트     */
 
-	// @GetMapping("hello")
-	// public String hello(Model model) {
-	// 	model.addAttribute("message", "Hello, World!");
-	// 	return "hello";
-	// }
+	@GetMapping("/")
+	public String index() {
+		return "seller/lineup";
+	}
 
 	@GetMapping("/login")
 	public String login() {
