@@ -41,9 +41,9 @@ import team.waitingcatch.app.event.service.event.EventService;
 import team.waitingcatch.app.event.service.usercoupon.UserCouponService;
 import team.waitingcatch.app.user.entitiy.UserDetailsImpl;
 
+@RequestMapping("/api")
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api")
 public class CouponController {
 
 	private final EventService eventService;

@@ -30,7 +30,7 @@ public class CreateEventServiceRequest {
 
 	private Long restaurantId;
 
-	public CreateEventServiceRequest(CreateEventControllerRequest createEventControllerRequest, Long restaurantId) {
+	public CreateEventServiceRequest(CreateEventControllerRequest createEventControllerRequest, Long id) {
 		this.name = createEventControllerRequest.getName();
 		this.eventStartDate = createEventControllerRequest.getEventStartDate();
 		this.eventEndDate = createEventControllerRequest.getEventEndDate();
