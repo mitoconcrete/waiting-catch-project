@@ -1,4 +1,4 @@
-name: Java CI with Gradle
+name: CD
 
 on:
   push:
@@ -9,7 +9,7 @@ env:
   S3_BUCKET_NAME: waiting-catch-build
   CODE_DEPLOY_APPLICATION_NAME: waiting-catch-deploy-app
   CODE_DEPLOY_DEPLOYMENT_GROUP_NAME: waiting-catch-deploy-group
-  working-directory: ./app/step1/waiting-catch-project/
+  PROJECT_NAME: waiting-catch
 
 permissions:
   contents: read
@@ -32,13 +32,13 @@ jobs:
         run: chmod +x gradlew
 
       - name: Build with Gradle
-        run: ./gradlew build
+        run: ./gradlew clean build
 
       - name: Before Deploy
         run: |
-          zip -r waiting-catch-project * \
+          zip -r ${{ env.PROJECT_NAME }}.zip scripts/*.sh appspec.yml build/libs/*.jar before-deploy/ \
           mkdir -p deploy \
-          mv waiting-catch-project.zip deploy/waiting-catch-project.zip
+          mv ${{ env.PROJECT_NAME }}.zip deploy/${{ env.PROJECT_NAME }}.zip
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -51,7 +51,7 @@ jobs:
         env:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        run: aws s3 cp --region ap-northeast-2 ./waiting-catch-project.zip s3://${{ env.S3_BUCKET_NAME }}/waiting-catch-project.zip
+        run: aws s3 cp --region ap-northeast-2 ./${{ env.PROJECT_NAME }}.zip s3://${{ env.S3_BUCKET_NAME }}/${{ env.PROJECT_NAME }}.zip
 
       - name: Deploy to AWS EC2 from S3
         env:
@@ -62,4 +62,4 @@ jobs:
           --application-name ${{ env.CODE_DEPLOY_APPLICATION_NAME }} \
           --deployment-config-name CodeDeployDefault.AllAtOnce \
           --deployment-group-name ${{ env.CODE_DEPLOY_DEPLOYMENT_GROUP_NAME }} \
-          --s3-location bucket=$S3_BUCKET_NAME,key=waiting-catch-project.zip,bundleType=zip
+          --s3-location bucket=$S3_BUCKET_NAME,key=${{ env.PROJECT_NAME }}.zip,bundleType=zip
