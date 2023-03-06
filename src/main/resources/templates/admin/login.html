@@ -59,7 +59,7 @@
                     let host = window.location.host;
                     let url = host + '/admin/templates/main';
                     let todayDate = new Date();
-                    todayDate.setDate(todayDate.getDate() + 30); // 현재 시각 + 일 단위로 쿠키 만료 날짜
+                    todayDate.setDate(todayDate.getTime() + 30 * 60000); // 현재 시각 + 일 단위로 쿠키 만료 날짜
                     document.cookie =
                         'Authorization' + "=" + xhr.getResponseHeader('Authorization') + "; " +
                         "path=/; expires=" + todayDate.toString() + ";";

@@ -1,5 +1,8 @@
 package team.waitingcatch.app.admin;
 
+import java.util.Collection;
+
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.data.domain.Page;
@@ -53,13 +56,23 @@ public class AdminController {
 	}
 
 	@GetMapping("/general/templates/admin/register")
-	public ModelAndView registerPage(Model model) {
+	public ModelAndView registerPage(Model model, HttpServletResponse response) {
+		Collection<String> headerNames = response.getHeaderNames();
+		if (headerNames.contains("Authorization")) {
+			String token = response.getHeader("Authorization");
+			model.addAttribute("accessToken", token);
+		}
 		model.addAttribute("CreateUserControllerRequest", new CreateUserControllerRequest());
 		return new ModelAndView("/admin/register");
 	}
 
 	@GetMapping("/admin/templates/main")
-	public ModelAndView adminMainPage() {
+	public ModelAndView adminMainPage(Model model, HttpServletResponse response) {
+		Collection<String> headerNames = response.getHeaderNames();
+		if (headerNames.contains("Authorization")) {
+			String token = response.getHeader("Authorization");
+			model.addAttribute("accessToken", token);
+		}
 		return new ModelAndView("/admin/index");
 	}
 
@@ -67,7 +80,12 @@ public class AdminController {
 	@ResponseStatus(HttpStatus.CREATED)
 	public String createAdmin(
 		@ModelAttribute("CreateUserControllerRequest") @Valid CreateUserControllerRequest controllerRequest,
-		RedirectAttributes redirectAttributes) {
+		RedirectAttributes redirectAttributes, HttpServletResponse response, Model model) {
+		Collection<String> headerNames = response.getHeaderNames();
+		if (headerNames.contains("Authorization")) {
+			String token = response.getHeader("Authorization");
+			model.addAttribute("accessToken", token);
+		}
 		_createUserService(UserRoleEnum.ADMIN, controllerRequest);
 		return "redirect:/general/";
 	}
@@ -91,7 +109,7 @@ public class AdminController {
 	//판매자요청
 	@GetMapping("/admin/templates/seller-management")
 	public ModelAndView sellerManagementPage(Model model, @PageableDefault(size = 10, page = 0) Pageable pageable,
-		@RequestParam(value = "searchVal", required = false) String searchVal) {
+		@RequestParam(value = "searchVal", required = false) String searchVal, HttpServletResponse response) {
 		Page<GetDemandSignUpSellerResponse> demandSignUpSellerResponses = null;
 
 		if (searchVal == null) {
@@ -99,6 +117,11 @@ public class AdminController {
 		} else {
 			demandSignUpSellerResponses = sellerManagementService.getDemandSignUpSellersById(searchVal,
 				pageable);
+		}
+		Collection<String> headerNames = response.getHeaderNames();
+		if (headerNames.contains("Authorization")) {
+			String token = response.getHeader("Authorization");
+			model.addAttribute("accessToken", token);
 		}
 
 		model.addAttribute("requestSeller", demandSignUpSellerResponses);
@@ -109,7 +132,7 @@ public class AdminController {
 
 	@GetMapping("/admin/templates/customers")
 	public ModelAndView getCustomers(Model model, @PageableDefault(size = 10, page = 0) Pageable pageable,
-		@RequestParam(value = "searchVal", required = false) String searchVal) {
+		@RequestParam(value = "searchVal", required = false) String searchVal, HttpServletResponse response) {
 		Page<UserInfoResponse> userInfoResponses = null;
 
 		if (searchVal == null) {
@@ -118,18 +141,30 @@ public class AdminController {
 			userInfoResponses = userService.getCustomersByUserName(searchVal, pageable);
 		}
 
+		Collection<String> headerNames = response.getHeaderNames();
+		if (headerNames.contains("Authorization")) {
+			String token = response.getHeader("Authorization");
+			model.addAttribute("accessToken", token);
+		}
+
 		model.addAttribute("customers", userInfoResponses);
 		return new ModelAndView("/admin/user-list");
 	}
 
 	@GetMapping("/admin/templates/customers/{customerId}")
-	public ModelAndView getCustomer(@PathVariable Long customerId, Model model) {
+	public ModelAndView getCustomer(@PathVariable Long customerId, Model model, HttpServletResponse response) {
 
 		GetCustomerByIdAndRoleServiceRequest servicePayload =
 			new GetCustomerByIdAndRoleServiceRequest(
 				customerId,
 				UserRoleEnum.USER
 			);
+
+		Collection<String> headerNames = response.getHeaderNames();
+		if (headerNames.contains("Authorization")) {
+			String token = response.getHeader("Authorization");
+			model.addAttribute("accessToken", token);
+		}
 		model.addAttribute("customer", userService.getByUserIdAndRole(servicePayload));
 		return new ModelAndView("/admin/user-view");
 	}
@@ -137,7 +172,7 @@ public class AdminController {
 	//레스토랑, 셀러
 	@GetMapping("/admin/templates/restaurants")
 	public ModelAndView restaurantListPage(Model model, @PageableDefault(size = 10, page = 0) Pageable pageable,
-		@RequestParam(value = "searchVal", required = false) String searchVal) {
+		@RequestParam(value = "searchVal", required = false) String searchVal, HttpServletResponse response) {
 		Page<RestaurantResponse> restaurants = null;
 
 		if (searchVal == null) {
@@ -147,17 +182,28 @@ public class AdminController {
 				pageable);
 		}
 
+		Collection<String> headerNames = response.getHeaderNames();
+		if (headerNames.contains("Authorization")) {
+			String token = response.getHeader("Authorization");
+			model.addAttribute("accessToken", token);
+		}
 		model.addAttribute("restaurants", restaurants);
 		return new ModelAndView("/admin/restaurant-list");
 	}
 
 	@GetMapping("/admin/templates/sellers/{sellerId}")
-	public ModelAndView getSeller(@PathVariable Long sellerId, Model model) {
+	public ModelAndView getSeller(@PathVariable Long sellerId, Model model, HttpServletResponse response) {
 		GetCustomerByIdAndRoleServiceRequest servicePayload =
 			new GetCustomerByIdAndRoleServiceRequest(
 				sellerId,
 				UserRoleEnum.SELLER
 			);
+
+		Collection<String> headerNames = response.getHeaderNames();
+		if (headerNames.contains("Authorization")) {
+			String token = response.getHeader("Authorization");
+			model.addAttribute("accessToken", token);
+		}
 		model.addAttribute("seller", userService.getByUserIdAndRole(servicePayload));
 		return new ModelAndView("/admin/seller-view");
 	}
@@ -170,23 +216,43 @@ public class AdminController {
 	}
 
 	@GetMapping("/admin/templates/event")
-	public ModelAndView eventPage() {
+	public ModelAndView eventPage(HttpServletResponse response, Model model) {
+		Collection<String> headerNames = response.getHeaderNames();
+		if (headerNames.contains("Authorization")) {
+			String token = response.getHeader("Authorization");
+			model.addAttribute("accessToken", token);
+		}
 		return new ModelAndView("/admin/event");
 	}
 
 	@GetMapping("/admin/templates/blacklist")
-	public ModelAndView blacklistPage() {
+	public ModelAndView blacklistPage(HttpServletResponse response, Model model) {
+		Collection<String> headerNames = response.getHeaderNames();
+		if (headerNames.contains("Authorization")) {
+			String token = response.getHeader("Authorization");
+			model.addAttribute("accessToken", token);
+		}
 		return new ModelAndView("/admin/blacklist");
 	}
 
 	@GetMapping("/admin/templates/review")
-	public ModelAndView censorReview() {
+	public ModelAndView censorReview(HttpServletResponse response, Model model) {
+		Collection<String> headerNames = response.getHeaderNames();
+		if (headerNames.contains("Authorization")) {
+			String token = response.getHeader("Authorization");
+			model.addAttribute("accessToken", token);
+		}
 		return new ModelAndView("/admin/review");
 	}
 
 	//카테고리
 	@GetMapping("/admin/templates/category")
-	public ModelAndView categoryPage(Model model) {
+	public ModelAndView categoryPage(Model model, HttpServletResponse response) {
+		Collection<String> headerNames = response.getHeaderNames();
+		if (headerNames.contains("Authorization")) {
+			String token = response.getHeader("Authorization");
+			model.addAttribute("accessToken", token);
+		}
 		model.addAttribute("categories", categoryService.getParentCategories());
 		model.addAttribute("CreateCategoryRequest", new CreateCategoryRequest());
 		model.addAttribute("DeleteCategoryControllerRequest", new DeleteCategoryControllerRequest());
@@ -222,7 +288,12 @@ public class AdminController {
 	}
 
 	@GetMapping("/admin/templates/categories/{categoryId}")
-	public ModelAndView getChildCategories(@PathVariable Long categoryId, Model model) {
+	public ModelAndView getChildCategories(@PathVariable Long categoryId, Model model, HttpServletResponse response) {
+		Collection<String> headerNames = response.getHeaderNames();
+		if (headerNames.contains("Authorization")) {
+			String token = response.getHeader("Authorization");
+			model.addAttribute("accessToken", token);
+		}
 		GetChildCategoryServiceRequest request = new GetChildCategoryServiceRequest(categoryId);
 		model.addAttribute("abc", categoryService.getChildCategories(request).getChildCategories());
 		model.addAttribute("categoryAll", categoryService.getAllCategories());

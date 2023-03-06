@@ -138,101 +138,109 @@ function getUpdateCouponBox(id, name, discountPrice, discountType, quantity, exp
 }
 
 function createCouponCreator(id) {
-    const auth = getToken();
-
     let name = $('#couponName').val();
     let discountPrice = $('#discountPrice').val();
     let discountType = $('#discountType').val();
     let quantity = $('#quantity').val();
     let expireDate = $('#expireDate').val();
-
-    if (auth !== '') {
-        $.ajax({
-            type: 'POST',
-            url: `/api/admin/events/` + id + `/creator`,
-            contentType: "application/json",
-            data: JSON.stringify({
-                name: name,
-                discountPrice: discountPrice,
-                discountType: discountType,
-                quantity: quantity,
-                expireDate: expireDate
-            }),
-            beforeSend: function (xhr) {
-                xhr.setRequestHeader("Authorization", auth);
-            },
-            success: function (response) {
-                alert("쿠폰 생성 완료")
-                window.location.reload();
-            },
-            error(error, response) {
-                console.error(error);
+    $.ajax({
+        type: 'POST',
+        url: `/api/admin/events/` + id + `/creator`,
+        contentType: "application/json",
+        data: JSON.stringify({
+            name: name,
+            discountPrice: discountPrice,
+            discountType: discountType,
+            quantity: quantity,
+            expireDate: expireDate
+        }),
+        success: function (data, status, response) {
+            if (response.getResponseHeader("Authorization")) {
+                document.cookie =
+                    'Authorization' + "=" + response.getResponseHeader("Authorization") + "; " +
+                    "path=/; expires=" + (new Date().getTime() + 30 * 60000) + ";";
             }
-        })
-    }
+            alert("쿠폰 생성 완료")
+            window.location.reload();
+        },
+        error: function (response, status, error) {
+            if (response.getResponseHeader("Authorization")) {
+                document.cookie =
+                    'Authorization' + "=" + response.getResponseHeader("Authorization") + "; " +
+                    "path=/; expires=" + (new Date().getTime() + 30 * 60000) + ";";
+            }
+            console.error(error);
+        }
+    })
 }
 
 function getCouponCreators(id) {
-    const auth = getToken();
 
-    if (auth !== '') {
-        $.ajax({
-            type: 'GET',
-            url: `/api/admin/events/` + id + `/creator`,
-            beforeSend: function (xhr) {
-                xhr.setRequestHeader("Authorization", auth);
-            },
-            success: function (response, status) {
-                console.log(response)
-                if (status === 'success') {
-                    for (let i = 0; i < response.length; i++) {
-                        let responseDto = response[i];
-                        let eventId = id;
-                        let tempHtml = getCouponCreatorList(responseDto, eventId);
-                        $('#couponCreatorTable').append(tempHtml);
-                    }
-                }
-            },
-            error(error, response) {
-                console.error(error);
+    $.ajax({
+        type: 'GET',
+        url: `/api/admin/events/` + id + `/creator`,
+        success: function (data, status, response) {
+            if (response.getResponseHeader("Authorization")) {
+                document.cookie =
+                    'Authorization' + "=" + response.getResponseHeader("Authorization") + "; " +
+                    "path=/; expires=" + (new Date().getTime() + 30 * 60000) + ";";
             }
-        })
-    }
+            if (status === 'success') {
+                for (let i = 0; i < data.length; i++) {
+                    let responseDto = data[i];
+                    let eventId = id;
+                    let tempHtml = getCouponCreatorList(responseDto, eventId);
+                    $('#couponCreatorTable').append(tempHtml);
+                }
+            }
+        },
+        error: function (response, status, error) {
+            if (response.getResponseHeader("Authorization")) {
+                document.cookie =
+                    'Authorization' + "=" + response.getResponseHeader("Authorization") + "; " +
+                    "path=/; expires=" + (new Date().getTime() + 30 * 60000) + ";";
+            }
+            console.error(error);
+        }
+    })
 }
 
 function updateCouponCreator(id, eventId) {
-    const auth = getToken();
-
     let name = $('#updateCouponName').val();
     let discountPrice = $('#updateDiscountPrice').val();
     let discountType = $('#updateDiscountType').val();
     let quantity = $('#updateQuantity').val();
     let expireDate = $('#updateExpireDate').val();
 
-    if (auth !== '') {
-        $.ajax({
-            type: 'PUT',
-            url: `/api/admin/events/` + eventId + `/creator/` + id,
-            contentType: "application/json",
-            data: JSON.stringify({
-                name: name,
-                discountPrice: discountPrice,
-                discountType: discountType,
-                quantity: quantity,
-                expireDate: expireDate
-            }),
-            beforeSend: function (xhr) {
-                xhr.setRequestHeader("Authorization", auth);
-            },
-            success: function (response) {
-                alert("쿠폰 생성자 수정 성공");
-                window.location.reload();
-            },
-            error(error, response) {
-                console.error(error);
+    $.ajax({
+        type: 'PUT',
+        url: `/api/admin/events/` + eventId + `/creator/` + id,
+        contentType: "application/json",
+        data: JSON.stringify({
+            name: name,
+            discountPrice: discountPrice,
+            discountType: discountType,
+            quantity: quantity,
+            expireDate: expireDate
+        }),
+        success: function (data, status, response) {
+            if (response.getResponseHeader("Authorization")) {
+                document.cookie =
+                    'Authorization' + "=" + response.getResponseHeader("Authorization") + "; " +
+                    "path=/; expires=" + (new Date().getTime() + 30 * 60000) + ";";
             }
-        })
-    }
+            alert("쿠폰 생성자 수정 성공");
+            window.location.reload();
+        },
+        error: function (response, status, error) {
+            if (response.getResponseHeader("Authorization")) {
+                document.cookie =
+                    'Authorization' + "=" + response.getResponseHeader("Authorization") + "; " +
+                    "path=/; expires=" + (new Date().getTime() + 30 * 60000) + ";";
+            }
+            console.error(error);
+        }
+    })
 }
 
 function openUpdateCoupon(id, name, discountPrice, discountType, quantity, expireDate, eventId) {
@@ -250,71 +258,74 @@ function closeUpdateCoupon() {
 }
 
 $(document).ready(function () {
-    const auth = getToken();
     $('.updateEvent').hide();
     $('.coupon').hide();
     $('.couponCreator').hide();
     $('.updateCoupon').hide();
 
-    if (auth !== '') {
-        $.ajax({
-            type: 'GET',
-            url: `/api/admin/events`,
-            beforeSend: function (xhr) {
-                xhr.setRequestHeader("Authorization", auth);
-            },
-            success: function (response, status) {
-                console.log(response)
-                if (status === 'success') {
-                    for (let i = 0; i < response.length; i++) {
-                        let responseDto = response[i];
-                        let tempHtml = getEvents(responseDto);
-                        $('#EventTable').append(tempHtml);
-                    }
-                }
-            },
-            error(error, response) {
-                console.error(error);
-                window.location.href = host + "/admin/templates/login";
+    $.ajax({
+        type: 'GET',
+        url: `/api/admin/events`,
+        success: function (data, status, response) {
+            if (response.getResponseHeader("Authorization")) {
+                document.cookie =
+                    'Authorization' + "=" + response.getResponseHeader("Authorization") + "; " +
+                    "path=/; expires=" + (new Date().getTime() + 30 * 60000) + ";";
             }
-        });
-    }
+            if (status === 'success') {
+                for (let i = 0; i < data.length; i++) {
+                    let responseDto = data[i];
+                    let tempHtml = getEvents(responseDto);
+                    $('#EventTable').append(tempHtml);
+                }
+            }
+        },
+        error: function (response, status, error) {
+            if (response.getResponseHeader("Authorization")) {
+                document.cookie =
+                    'Authorization' + "=" + response.getResponseHeader("Authorization") + "; " +
+                    "path=/; expires=" + (new Date().getTime() + 30 * 60000) + ";";
+            }
+            window.location.href = host + "/admin/templates/login";
+        }
+    });
 });
 
 function createEvents() {
-    const auth = getToken();
-
     let eventName = $('#eventName').val();
     let eventStartDate = $('#eventStartDate').val();
     let eventEndDate = $('#eventEndDate').val();
 
-    if (auth !== '') {
-        $.ajax({
-            type: 'POST',
-            url: `/api/admin/events`,
-            contentType: "application/json",
-            data: JSON.stringify({
-                name: eventName,
-                eventStartDate: eventStartDate,
-                eventEndDate: eventEndDate
-            }),
-            beforeSend: function (xhr) {
-                xhr.setRequestHeader("Authorization", auth);
-            },
-            success: function (response) {
-                alert("이벤트 생성 성공");
-                window.location.reload();
-            },
-            error(error, response) {
-                console.error(error);
+    $.ajax({
+        type: 'POST',
+        url: `/api/admin/events`,
+        contentType: "application/json",
+        data: JSON.stringify({
+            name: eventName,
+            eventStartDate: eventStartDate,
+            eventEndDate: eventEndDate
+        }),
+        success: function (data, status, response) {
+            if (response.getResponseHeader("Authorization")) {
+                document.cookie =
+                    'Authorization' + "=" + response.getResponseHeader("Authorization") + "; " +
+                    "path=/; expires=" + (new Date().getTime() + 30 * 60000) + ";";
             }
-        })
-    }
+            alert("이벤트 생성 성공");
+            window.location.reload();
+        },
+        error: function (response, status, error) {
+            if (response.getResponseHeader("Authorization")) {
+                document.cookie =
+                    'Authorization' + "=" + response.getResponseHeader("Authorization") + "; " +
+                    "path=/; expires=" + (new Date().getTime() + 30 * 60000) + ";";
+            }
+            console.error(error);
+        }
+    })
 }
 
 function updateEvents(eventId) {
-    const auth = getToken();
-
     let name = $('#updateEventName').val();
     let eventStartDate = $('#updateEventStartDate').val();
     let eventEndDate = $('#updateEventEndDate').val();
@@ -324,47 +335,57 @@ function updateEvents(eventId) {
     console.log(eventStartDate);
     console.log(eventEndDate);
 
-    if (auth !== '') {
-        $.ajax({
-            type: 'PUT',
-            url: `/api/admin/events/` + eventId,
-            contentType: "application/json",
-            data: JSON.stringify({
-                name: name,
-                eventStartDate: eventStartDate,
-                eventEndDate: eventEndDate
-            }),
-            beforeSend: function (xhr) {
-                xhr.setRequestHeader("Authorization", auth);
-            },
-            success: function (response) {
-                alert("이벤트 수정 성공");
-                window.location.reload();
-            },
-            error(error, response) {
-                console.error(error);
+    $.ajax({
+        type: 'PUT',
+        url: `/api/admin/events/` + eventId,
+        contentType: "application/json",
+        data: JSON.stringify({
+            name: name,
+            eventStartDate: eventStartDate,
+            eventEndDate: eventEndDate
+        }),
+        success: function (data, status, response) {
+            if (response.getResponseHeader("Authorization")) {
+                document.cookie =
+                    'Authorization' + "=" + response.getResponseHeader("Authorization") + "; " +
+                    "path=/; expires=" + (new Date().getTime() + 30 * 60000) + ";";
             }
-        })
-    }
+            alert("이벤트 수정 성공");
+            window.location.reload();
+        },
+        error: function (response, status, error) {
+            if (response.getResponseHeader("Authorization")) {
+                document.cookie =
+                    'Authorization' + "=" + response.getResponseHeader("Authorization") + "; " +
+                    "path=/; expires=" + (new Date().getTime() + 30 * 60000) + ";";
+            }
+            console.error(error);
+        }
+    })
+
 }
 
 function deleteEvents(id) {
-    const auth = getToken();
+    $.ajax({
+        type: 'DELETE',
+        url: `/api/admin/events/` + id,
 
-    if (auth !== '') {
-        $.ajax({
-            type: 'DELETE',
-            url: `/api/admin/events/` + id,
-            beforeSend: function (xhr) {
-                xhr.setRequestHeader("Authorization", auth);
-            },
-            success: function (response) {
-                alert("이벤트 삭제 성공");
-                window.location.reload();
-            },
-            error(error, response) {
-                console.error(error);
+        success: function (data, status, response) {
+            if (response.getResponseHeader("Authorization")) {
+                document.cookie =
+                    'Authorization' + "=" + response.getResponseHeader("Authorization") + "; " +
+                    "path=/; expires=" + (new Date().getTime() + 30 * 60000) + ";";
             }
-        })
-    }
+            alert("이벤트 삭제 성공");
+            window.location.reload();
+        },
+        error: function (response, status, error) {
+            if (response.getResponseHeader("Authorization")) {
+                document.cookie =
+                    'Authorization' + "=" + response.getResponseHeader("Authorization") + "; " +
+                    "path=/; expires=" + (new Date().getTime() + 30 * 60000) + ";";
+            }
+            console.error(error);
+        }
+    })
 }
