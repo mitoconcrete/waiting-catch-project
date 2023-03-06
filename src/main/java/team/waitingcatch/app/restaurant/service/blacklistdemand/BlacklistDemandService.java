@@ -1,4 +1,4 @@
-package team.waitingcatch.app.restaurant.service.requestblacklist;
+package team.waitingcatch.app.restaurant.service.blacklistdemand;
 
 import java.util.List;
 
@@ -9,12 +9,9 @@ import team.waitingcatch.app.restaurant.dto.blacklist.ApproveBlacklistDemandServ
 import team.waitingcatch.app.restaurant.dto.blacklist.CancelBlacklistDemandServiceRequest;
 import team.waitingcatch.app.restaurant.dto.blacklist.CreateBlacklistDemandServiceRequest;
 import team.waitingcatch.app.restaurant.dto.blacklist.GetBlackListDemandByRestaurantServiceRequest;
-import team.waitingcatch.app.restaurant.dto.blacklist.GetBlacklistDemandCustomerInfoResponse;
 import team.waitingcatch.app.restaurant.dto.blacklist.GetBlacklistDemandResponse;
 
 public interface BlacklistDemandService {
-	GetBlacklistDemandCustomerInfoResponse getCustomerIdByLineupId(long lineupId);
-
 	void submitBlacklistDemand(CreateBlacklistDemandServiceRequest serviceRequest);
 
 	void cancelBlacklistDemand(CancelBlacklistDemandServiceRequest serviceRequest);

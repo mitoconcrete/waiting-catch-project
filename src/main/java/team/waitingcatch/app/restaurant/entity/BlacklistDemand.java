@@ -1,5 +1,7 @@
 package team.waitingcatch.app.restaurant.entity;
 
+import static team.waitingcatch.app.exception.ErrorCode.*;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -17,6 +19,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import team.waitingcatch.app.common.entity.TimeStamped;
+import team.waitingcatch.app.exception.DuplicateRequestException;
 import team.waitingcatch.app.restaurant.enums.AcceptedStatusEnum;
 import team.waitingcatch.app.user.entitiy.User;
 
@@ -69,13 +72,13 @@ public class BlacklistDemand extends TimeStamped {
 
 	public void checkStatus() {
 		if (this.status == AcceptedStatusEnum.CANCEL) {
-			throw new IllegalArgumentException("이미 해당유저의 블랙리스트 취소를 하셨습니다.");
+			throw new DuplicateRequestException(ALREADY_CANCELED);
 		}
 		if (this.status == AcceptedStatusEnum.APPROVE) {
-			throw new IllegalArgumentException("이미 해당유저의 블랙리스트 승인이 되었습니다.");
+			throw new DuplicateRequestException(ALREADY_APPROVED);
 		}
 		if (this.status == AcceptedStatusEnum.REJECT) {
-			throw new IllegalArgumentException("이미 해당유저의 블랙리스트 거절이 되었습니다.");
+			throw new DuplicateRequestException(ALREADY_REJECTED);
 		}
 	}
 }

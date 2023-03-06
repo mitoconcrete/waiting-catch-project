@@ -1,5 +1,9 @@
 package team.waitingcatch.app.lineup.service;
 
+import static team.waitingcatch.app.exception.ErrorCode.*;
+
+import java.util.NoSuchElementException;
+
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
@@ -21,7 +25,7 @@ public class LineupHistoryServiceImpl implements LineupHistoryService, InternalL
 	@Override
 	public LineupHistory _getById(Long id) {
 		return lineupHistoryRepository.findById(id)
-			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 줄서기 히스토리입니다."));
+			.orElseThrow(() -> new NoSuchElementException(NOT_FOUND_LINEUP_HISTORY.getMessage()));
 	}
 
 	@Transactional(readOnly = true)

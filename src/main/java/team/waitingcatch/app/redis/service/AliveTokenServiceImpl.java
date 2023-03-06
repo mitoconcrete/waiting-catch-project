@@ -1,10 +1,13 @@
 package team.waitingcatch.app.redis.service;
 
+import static team.waitingcatch.app.exception.ErrorCode.*;
+
+import java.util.NoSuchElementException;
+
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.dto.service.UpdateTokenRequest;
-import team.waitingcatch.app.exception.TokenNotFoundException;
 import team.waitingcatch.app.redis.dto.CreateRefreshTokenServiceRequest;
 import team.waitingcatch.app.redis.dto.GetRefreshTokenRequest;
 import team.waitingcatch.app.redis.dto.GetRefreshTokenResponse;
@@ -26,7 +29,7 @@ public class AliveTokenServiceImpl implements AliveTokenService, InternalAliveTo
 	@Override
 	public GetRefreshTokenResponse getRefreshToken(GetRefreshTokenRequest payload) {
 		AliveToken aliveToken = aliveTokenRepository.findById(payload.getAccessToken()).orElseThrow(
-			() -> new TokenNotFoundException("토큰이 존재하지 않습니다.")
+			() -> new NoSuchElementException(NOT_FOUND_TOKEN.getMessage())
 		);
 		return new GetRefreshTokenResponse(aliveToken.getRefreshToken());
 	}
@@ -49,7 +52,7 @@ public class AliveTokenServiceImpl implements AliveTokenService, InternalAliveTo
 	@Override
 	public AliveToken _getAliveTokenByAccessToken(String AccessToken) {
 		return aliveTokenRepository.findById(AccessToken).orElseThrow(
-			() -> new TokenNotFoundException("토큰이 존재하지 않습니다.")
+			() -> new NoSuchElementException(NOT_FOUND_TOKEN.getMessage())
 		);
 	}
 }

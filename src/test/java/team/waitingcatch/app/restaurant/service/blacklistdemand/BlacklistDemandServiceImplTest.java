@@ -1,4 +1,4 @@
-package team.waitingcatch.app.restaurant.service.requestblacklist;
+package team.waitingcatch.app.restaurant.service.blacklistdemand;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;

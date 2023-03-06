@@ -158,7 +158,7 @@ public class LineupConcurrencyTest {
 		restaurantInfo.openLineup();
 		restaurantInfoRepository.save(restaurantInfo);
 
-		WaitingNumber waitingNumber2 = WaitingNumber.createWaitingNumber(restaurant);
+		WaitingNumber waitingNumber2 = WaitingNumber.of(restaurant);
 		waitingNumberRepository.save(waitingNumber2);
 	}
 }

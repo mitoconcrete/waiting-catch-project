@@ -12,7 +12,7 @@ import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.common.dto.GenericResponse;
 import team.waitingcatch.app.restaurant.dto.blacklist.ApproveBlacklistDemandServiceRequest;
 import team.waitingcatch.app.restaurant.dto.blacklist.GetBlacklistDemandResponse;
-import team.waitingcatch.app.restaurant.service.requestblacklist.BlacklistDemandService;
+import team.waitingcatch.app.restaurant.service.blacklistdemand.BlacklistDemandService;
 
 @Controller
 @RequiredArgsConstructor

@@ -1,5 +1,7 @@
 package team.waitingcatch.app.exception;
 
+import static team.waitingcatch.app.exception.ErrorCode.*;
+
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -13,7 +15,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import team.waitingcatch.app.exception.dto.BasicExceptionResponse;
 
 @RestControllerAdvice
-public class ApplicationExceptionController {
+public class ApplicationExceptionHandler {
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public BasicExceptionResponse handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
@@ -27,9 +29,10 @@ public class ApplicationExceptionController {
 			builder.deleteCharAt(builder.lastIndexOf("/")).toString());
 	}
 
-	@ExceptionHandler({IllegalArgumentException.class})
+	@ExceptionHandler({IllegalArgumentException.class, AlreadyExistsException.class, DuplicateRequestException.class,
+		IllegalRequestException.class})
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	public BasicExceptionResponse handleIllegalArgumentException(IllegalArgumentException e) {
+	public BasicExceptionResponse handleIllegalArgumentException(RuntimeException e) {
 		return new BasicExceptionResponse(HttpStatus.BAD_REQUEST, e.getMessage());
 	}
 
@@ -42,13 +45,13 @@ public class ApplicationExceptionController {
 
 	@ExceptionHandler({HttpMessageNotReadableException.class})
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	public BasicExceptionResponse httpMessageNotReadableExceptionHandler(HttpMessageNotReadableException ex) {
-		return new BasicExceptionResponse(HttpStatus.BAD_REQUEST, ex.getRootCause().getMessage());
+	public BasicExceptionResponse httpMessageNotReadableExceptionHandler(HttpMessageNotReadableException e) {
+		return new BasicExceptionResponse(HttpStatus.BAD_REQUEST, e.getRootCause().getMessage());
 	}
 
-	@ExceptionHandler({TokenNotFoundException.class})
-	@ResponseStatus(HttpStatus.UNAUTHORIZED)
-	public BasicExceptionResponse handleTokenNotFoundException(TokenNotFoundException ex) {
-		return new BasicExceptionResponse(HttpStatus.UNAUTHORIZED, ex.getMessage());
+	@ExceptionHandler(Exception.class)
+	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+	public BasicExceptionResponse handleTokenNotFoundException() {
+		return new BasicExceptionResponse(HttpStatus.INTERNAL_SERVER_ERROR, INTERNAL_ERROR.getMessage());
 	}
 }
