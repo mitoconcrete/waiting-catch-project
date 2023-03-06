@@ -15,12 +15,12 @@ public class GetUserCouponResponse {
 	private final LocalDateTime expireDate;
 
 	public GetUserCouponResponse(UserCouponServiceResponse userCouponServiceResponse) {
-		this.id = userCouponServiceResponse.getUserCoupons().getId();
-		this.name = userCouponServiceResponse.getUserCoupons().getCouponCreator().getName();
-		this.restaurantName = userCouponServiceResponse.getRestaurants();
-		this.discountPrice = userCouponServiceResponse.getUserCoupons().getCouponCreator().getDiscountPrice();
-		this.discountType = userCouponServiceResponse.getUserCoupons().getCouponCreator().getDiscountType();
-		this.expireDate = userCouponServiceResponse.getUserCoupons().getCouponCreator().getExpireDate();
+		this.id = userCouponServiceResponse.getUserCouponId();
+		this.name = userCouponServiceResponse.getCouponCreatorName();
+		this.restaurantName = userCouponServiceResponse.getRestaurantName();
+		this.discountPrice = userCouponServiceResponse.getDiscountPrice();
+		this.discountType = userCouponServiceResponse.getDiscountType();
+		this.expireDate = userCouponServiceResponse.getExpireDate();
 	}
 
 }
