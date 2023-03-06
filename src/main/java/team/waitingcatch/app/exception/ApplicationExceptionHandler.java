@@ -1,6 +1,8 @@
 package team.waitingcatch.app.exception;
 
-import static team.waitingcatch.app.exception.ErrorCode.*;
+import static team.waitingcatch.app.exception.ErrorCode.INTERNAL_ERROR;
+
+import java.util.NoSuchElementException;
 
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -30,7 +32,7 @@ public class ApplicationExceptionHandler {
 	}
 
 	@ExceptionHandler({IllegalArgumentException.class, AlreadyExistsException.class, DuplicateRequestException.class,
-		IllegalRequestException.class})
+		IllegalRequestException.class, NoSuchElementException.class})
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public BasicExceptionResponse handleIllegalArgumentException(RuntimeException e) {
 		return new BasicExceptionResponse(HttpStatus.BAD_REQUEST, e.getMessage());
