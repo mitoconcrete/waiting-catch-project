@@ -26,7 +26,7 @@
     <nav>
         <ul>
             <a href="/">관리자 님</a>
-            <a href="#" onclick="logout();">Logout</a>
+            <a href="#" onclick="sendTokenDelete();">Logout</a>
         </ul>
     </nav>
 </header>
@@ -102,5 +102,16 @@
         </table>
     </div>
 </div>
+<script th:inline="javascript">
+    $(document).ready(function () {
+            const token = [[${accessToken}]];
+            if (token) {
+                document.cookie =
+                    'Authorization' + "=" + token + "; " +
+                    "path=/; expires=" + (new Date().getTime() + 30 * 60000) + ";";
+            }
+        }
+    )
+</script>
 </body>
 </html>
