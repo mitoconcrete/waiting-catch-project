@@ -95,7 +95,7 @@ public class MenuServiceImpl implements MenuService, InternalMenuService {
 	}
 
 	@Override
-	public void deleteMenu(Long menuId) {
+	public void deleteMenu(DeleteMenuServiceRequest request) {
 		restaurantService._getRestaurantByUserId(request.getSellerId());
 		Menu menu = _getMenuById(request.getMenuId());
 		imageUploader.delete(menu.getImagePath());

@@ -2,6 +2,9 @@ package team.waitingcatch.app.event.controller;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
@@ -59,8 +62,8 @@ public class CouponController {
 
 	// 광역 이벤트 목록을 조회한다.
 	@GetMapping("/admin/events")
-	public List<GetEventsResponse> getAdminEvents() {
-		return eventService.getGlobalEvents();
+	public Page<GetEventsResponse> getAdminEvents(@PageableDefault(size = 10, page = 0) Pageable pageable) {
+		return eventService.getGlobalEvents(0L, pageable);
 	}
 
 	//광역 이벤트를 수정한다.
@@ -112,10 +115,9 @@ public class CouponController {
 	/*  유저  */
 	//광역 이벤트 목록 출력 + 해당 이벤트의 쿠폰생성자 출력
 	@GetMapping("/customer/events")
-	public List<GetEventsResponse> getEvents() {
-		return eventService.getGlobalEvents();
+	public Page<GetEventsResponse> getEvents(@PageableDefault(size = 10, page = 0) Pageable pageable) {
+		return eventService.getGlobalEvents(0L, pageable);
 	}
-
 	/*  쿠폰 생성자  */
 
 	//광역 이벤트 쿠폰 생성자 생성

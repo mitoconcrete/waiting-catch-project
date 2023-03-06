@@ -27,7 +27,7 @@ import team.waitingcatch.app.event.entity.Event;
 import team.waitingcatch.app.event.repository.CouponCreatorRepository;
 import team.waitingcatch.app.event.repository.EventRepository;
 import team.waitingcatch.app.restaurant.entity.Restaurant;
-import team.waitingcatch.app.restaurant.repository.RestaurantRepository;
+import team.waitingcatch.app.restaurant.service.restaurant.InternalRestaurantService;
 
 @Service
 @RequiredArgsConstructor
@@ -90,32 +90,21 @@ public class EventServiceImpl implements EventService, InternalEventService {
 		event.deleteEvent();
 	}
 
-	// 광역 이벤트를 조회한다.
-	@Override
-	@Transactional(readOnly = true)
-	public List<GetEventsResponse> getGlobalEvents() {
-		// 이벤트 중 restaurant이 null인 것만 조회
-		List<Event> events = eventRepository.findByRestaurantIsNullAndIsDeletedFalse();
-		return _getEventsResponse(events);
-
-	}
-
 	// 레스토랑 이벤트를 조회한다.
 	@Override
 	@Transactional(readOnly = true)
-	public List<GetEventsResponse> getRestaurantEvents(Long restaurantId) {
+	public Page<GetEventsResponse> getRestaurantEvents(Long restaurantId, Pageable pageable) {
 		Restaurant restaurant = internalRestaurantService._getRestaurantById(restaurantId);
-		List<Event> events = eventRepository.findByRestaurantAndIsDeletedFalse(restaurant);
-		return _getEventsResponse(events);
+		Page<Event> events = eventRepository.findByRestaurantAndIsDeletedFalse(restaurant, pageable);
+		return _getEventsResponse(events, restaurant, pageable);
+	}
 
-
-		// //레스토랑 아이디로 레스토랑 객체를 찾아야함
-		// Restaurant restaurant = restaurantService._getRestaurantByUserId(id);
-		//
-		// Page<Event> events = eventRepository.findByRestaurantAndIsDeletedFalse(restaurant, pageable);
-		// return _getEventsResponse(events, restaurant, pageable);
-		//
-
+	@Override
+	@Transactional(readOnly = true)
+	public Page<GetEventsResponse> getGlobalEvents(Long restaurantId, Pageable pageable) {
+		Restaurant restaurant = internalRestaurantService._getRestaurantById(restaurantId);
+		Page<Event> events = eventRepository.findByRestaurantAndIsDeletedFalse(restaurant, pageable);
+		return _getEventsResponse(events, restaurant, pageable);
 	}
 
 	@Override
@@ -132,7 +121,6 @@ public class EventServiceImpl implements EventService, InternalEventService {
 
 		List<GetEventsResponse> getEventsResponse = new ArrayList<>();
 		for (Event event : events) {
-			//List<CouponCreator> couponCreators = couponCreatorRepository.findByEventAndIsDeletedFalse(event);
 			List<CouponCreator> couponCreators = couponCreatorRepository.findByEventWithEvent(event);
 			List<GetCouponCreatorResponse> getCouponCreatorResponses = new ArrayList<>();
 			for (CouponCreator couponCreator : couponCreators) {
@@ -143,22 +131,6 @@ public class EventServiceImpl implements EventService, InternalEventService {
 		}
 
 		return new PageImpl<>(getEventsResponse, pageable, events.getTotalElements());
-	}
-
-	public List<GetEventsResponse> _getGlobalEventsResponse(List<Event> events) {
-
-		List<GetEventsResponse> getEventsResponse = new ArrayList<>();
-		for (Event event : events) {
-			List<CouponCreator> couponCreators = couponCreatorRepository.findByEventWithEvent(event);
-			List<GetCouponCreatorResponse> getCouponCreatorResponses = new ArrayList<>();
-			for (CouponCreator couponCreator : couponCreators) {
-				GetCouponCreatorResponse getCouponCreatorResponse = new GetCouponCreatorResponse(couponCreator);
-				getCouponCreatorResponses.add(getCouponCreatorResponse);
-			}
-			getEventsResponse.add(new GetEventsResponse(event, getCouponCreatorResponses));
-		}
-
-		return getEventsResponse;
 	}
 
 	@Override

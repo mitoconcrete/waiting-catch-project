@@ -73,4 +73,3 @@ public class UserCouponServiceImpl implements UserCouponService, InternalUserCou
 	}
 
 }
-}

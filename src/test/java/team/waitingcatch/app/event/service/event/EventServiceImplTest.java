@@ -14,6 +14,10 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import team.waitingcatch.app.event.dto.event.CreateEventControllerRequest;
 import team.waitingcatch.app.event.dto.event.CreateEventServiceRequest;
@@ -22,7 +26,6 @@ import team.waitingcatch.app.event.dto.event.DeleteEventServiceRequest;
 import team.waitingcatch.app.event.dto.event.GetEventsResponse;
 import team.waitingcatch.app.event.dto.event.UpdateEventServiceRequest;
 import team.waitingcatch.app.event.dto.event.UpdateSellerEventServiceRequest;
-import team.waitingcatch.app.event.entity.CouponCreator;
 import team.waitingcatch.app.event.entity.Event;
 import team.waitingcatch.app.event.repository.CouponCreatorRepository;
 import team.waitingcatch.app.event.repository.EventRepository;
@@ -76,7 +79,7 @@ class EventServiceImplTest {
 		when(createEventServiceRequest.getName()).thenReturn("song");
 		when(createEventServiceRequest.getEventStartDate()).thenReturn(localTime.plus(1, ChronoUnit.DAYS));
 		when(createEventServiceRequest.getEventEndDate()).thenReturn(localTime.plus(2, ChronoUnit.DAYS));
-		when(createEventServiceRequest.getId()).thenReturn(1L);
+		when(createEventServiceRequest.getRestaurantId()).thenReturn(1L);
 		when(restaurantService._getRestaurantByUserId(any(Long.class))).thenReturn(restaurant);
 
 		//when
@@ -175,52 +178,52 @@ class EventServiceImplTest {
 
 		verify(event).deleteEvent();
 	}
-
+	
 	@Test
 	void getGlobalEvents() {
-		List<Event> events = new ArrayList<>();
-		Event event = mock(Event.class);
-		events.add(event);
-		when(eventRepository.findByRestaurantIsNullAndIsDeletedFalse()).thenReturn(events);
-		CouponCreator couponCreator = mock(CouponCreator.class);
-		when(couponCreator.getId()).thenReturn(1L);
-		when(couponCreator.getName()).thenReturn("테스트생성자");
-		List<CouponCreator> couponCreators = new ArrayList<>();
-		couponCreators.add(couponCreator);
-		when(couponCreatorRepository.findByEventAndIsDeletedFalse(any(Event.class))).thenReturn(couponCreators);
-		when(eventRepository.findByIdAndIsDeletedFalse(any(Long.class))).thenReturn(Optional.of(event));
+		Restaurant restaurant = mock(Restaurant.class);
+		when(restaurant.getId()).thenReturn(1L);
+		when(restaurantService._getRestaurantById(restaurant.getId())).thenReturn(restaurant);
 
-		List<GetEventsResponse> list = eventService.getGlobalEvents();
+		// 이벤트 생성
+		Event event = mock(Event.class);
+		when(event.getId()).thenReturn(1L);
+		// given
+		Pageable pageable = PageRequest.of(0, 10);
+		List<Event> eventList = new ArrayList<>();
+		Page<Event> ev = new PageImpl<>(eventList, pageable, eventList.size());
+
+		when(eventRepository.findByRestaurantAndIsDeletedFalse(restaurant, pageable)).thenReturn(ev);
+
+		// when
+		Page<GetEventsResponse> events = eventService.getGlobalEvents(restaurant.getId(), pageable);
 
 		// then
-		assertThat(list).hasSize(1);
+		assertThat(events.getTotalElements()).isEqualTo(0);
 	}
 
 	@Test
 	void getRestaurantEvents() {
 		Restaurant restaurant = mock(Restaurant.class);
-		when(restaurant.getName()).thenReturn("TestRes");
 		when(restaurant.getId()).thenReturn(1L);
-		when(restaurantService._getRestaurantByUserId(any(Long.class))).thenReturn(restaurant);
+		when(restaurantService._getRestaurantById(restaurant.getId())).thenReturn(restaurant);
 
-		List<Event> events = new ArrayList<>();
-		List<CouponCreator> couponCreators = new ArrayList<>();
-
+		// 이벤트 생성
 		Event event = mock(Event.class);
-		events.add(event);
-		when(eventRepository.findByRestaurantIsNullAndIsDeletedFalse()).thenReturn(events);
-		CouponCreator couponCreator = mock(CouponCreator.class);
-		when(couponCreator.getId()).thenReturn(1L);
-		when(couponCreator.getName()).thenReturn("테스트생성자");
+		when(event.getId()).thenReturn(1L);
+		// given
+		Pageable pageable = PageRequest.of(0, 10);
+		List<Event> eventList = new ArrayList<>();
+		Page<Event> ev = new PageImpl<>(eventList, pageable, eventList.size());
 
-		couponCreators.add(couponCreator);
-		when(couponCreatorRepository.findByEventWithEvent(any(Event.class))).thenReturn(couponCreators);
-		when(eventRepository.findByIdAndIsDeletedFalse(any(Long.class))).thenReturn(Optional.of(event));
+		when(eventRepository.findByRestaurantAndIsDeletedFalse(restaurant, pageable)).thenReturn(ev);
 
-		List<GetEventsResponse> list = eventService.getGlobalEvents();
+		// when
+		Page<GetEventsResponse> events = eventService.getGlobalEvents(restaurant.getId(), pageable);
 
 		// then
-		assertThat(list).hasSize(1);
+		assertThat(events.getTotalElements()).isEqualTo(any(Long.class));
 	}
 
 }
+
