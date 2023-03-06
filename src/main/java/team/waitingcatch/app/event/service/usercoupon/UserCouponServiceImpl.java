@@ -43,14 +43,10 @@ public class UserCouponServiceImpl implements UserCouponService, InternalUserCou
 				throw new IllegalArgumentException("이미 발급받은 쿠폰입니다.");
 			}
 		);
-		System.out.println("1번지점");
 		int isCouponIssued = couponCreatorRepository.getHasCouponBalance(couponCreator.getId());
 		UserCoupon userCoupon = new UserCoupon(user, couponCreator);
-		System.out.println("2번지점");
 		if (isCouponIssued > 0) {
-			System.out.println("3번지점");
 			couponCreator.useCoupon();
-			System.out.println(couponCreator.getQuantity() + "여기서는 ..");
 			couponCreatorRepository.save(couponCreator);
 			userCouponRepository.save(userCoupon);
 		}
