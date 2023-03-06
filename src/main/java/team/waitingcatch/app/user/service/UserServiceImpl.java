@@ -175,7 +175,6 @@ public class UserServiceImpl implements UserService, InternalUserService {
 	public void deleteSeller(DeleteUserRequest payload) {
 		User user = _getUserByUsername(payload.getUsername());
 		_deleteSellerAndRelatedInformation(user.getId());
-		userRepository.deleteById(user.getId());
 	}
 
 	@Override

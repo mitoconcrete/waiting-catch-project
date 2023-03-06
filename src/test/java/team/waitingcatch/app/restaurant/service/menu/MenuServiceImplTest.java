@@ -1,4 +1,3 @@
-/*
 package team.waitingcatch.app.restaurant.service.menu;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -81,7 +80,7 @@ class MenuServiceImplTest {
 
 			when(serviceRequest.getMultipartFile()).thenReturn(multipartFile);
 			when(serviceRequest.getMultipartFile().isEmpty()).thenReturn(true);
-			when(restaurantService._getRestaurantById(any(Long.class))).thenReturn(restaurant);
+			when(restaurantService._getRestaurantByUserId(any(Long.class))).thenReturn(restaurant);
 
 			// when
 			menuService.createMenu(serviceRequest);
@@ -100,7 +99,7 @@ class MenuServiceImplTest {
 
 			when(serviceRequest.getMultipartFile()).thenReturn(multipartFile);
 			when(serviceRequest.getMultipartFile().isEmpty()).thenReturn(false);
-			when(restaurantService._getRestaurantById(any(Long.class))).thenReturn(restaurant);
+			when(restaurantService._getRestaurantByUserId(any(Long.class))).thenReturn(restaurant);
 
 			// when
 			menuService.createMenu(serviceRequest);
@@ -114,17 +113,18 @@ class MenuServiceImplTest {
 	@DisplayName("자신의 레스토랑 메뉴 조회")
 	void getMyRestaurantMenus() {
 		// given
+		Restaurant restaurant = mock(Restaurant.class);
 		List<Menu> menus = new ArrayList<>();
 		Menu menu = mock(Menu.class);
 		menus.add(menu);
-		Restaurant restaurant = mock(Restaurant.class);
 
+		when(restaurant.getId()).thenReturn(1L);
 		when(menu.getName()).thenReturn("aaa");
-		when(menuRepository.findAllByRestaurantId(any(Long.class))).thenReturn(menus);
-		when(restaurantRepository.findByUserId(any(Long.class))).thenReturn(Optional.of(restaurant));
+		when(restaurantService._getRestaurantByUserId(1L)).thenReturn(restaurant);
+		when(menuRepository.findAllByRestaurantId(1L)).thenReturn(menus);
 
 		// when
-		List<MenuResponse> responses = menuService.getMyRestaurantMenus(any(Long.class));
+		List<MenuResponse> responses = menuService.getMyRestaurantMenus(1L);
 
 		// then
 		assertEquals("aaa", responses.get(0).getName());
@@ -226,4 +226,4 @@ class MenuServiceImplTest {
 		// then
 		assertEquals("aaa", menu1.getName());
 	}
-}*/
+}
