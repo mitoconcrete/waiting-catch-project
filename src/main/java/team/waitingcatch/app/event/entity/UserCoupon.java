@@ -19,7 +19,6 @@ import team.waitingcatch.app.user.entitiy.User;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class UserCoupon {
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "user_coupon_id")

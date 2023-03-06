@@ -63,11 +63,9 @@
                     let host = window.location.host;
                     let url = host + '/seller/templates/seller';
                     let todayDate = new Date().getTime() + 1000 * 60 * 30;
-                    //todayDate.setDate(todayDate.getDate() + 30); // 현재 시각 + 일 단위로 쿠키 만료 날짜
                     document.cookie =
                         'Authorization' + "=" + xhr.getResponseHeader('Authorization') + "; " +
                         "path=/; expires=" + todayDate.toString() + ";";
-                    alert("로그인 성공")
                     window.location.href = 'http://' + url;
                 } else {
                     alert('로그인에 실패하셨습니다. 다시 로그인해 주세요.')

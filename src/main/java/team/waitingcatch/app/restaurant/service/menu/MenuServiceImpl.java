@@ -1,5 +1,7 @@
 package team.waitingcatch.app.restaurant.service.menu;
 
+import static team.waitingcatch.app.common.enums.ImageDirectoryEnum.*;
+
 import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -75,14 +77,14 @@ public class MenuServiceImpl implements MenuService, InternalMenuService {
 		Menu menu = _getMenuById(serviceRequest.getMenuId());
 		String name = serviceRequest.getName();
 		int price = serviceRequest.getPrice();
-		String imageUrl = menu.getImages();
+		String imageUrl = menu.getImagePaths();
 
 		if (!serviceRequest.getMultipartFile().isEmpty()) {
 			try {
 				if (!imageUrl.equals("기본 메뉴 이미지 URL")) {
 					imageUploader.delete(imageUrl);
 				}
-				imageUrl = imageUploader.upload(serviceRequest.getMultipartFile(), "menu");
+				imageUrl = imageUploader.upload(serviceRequest.getMultipartFile(), MENU.getValue());
 			} catch (IOException e) {
 				throw new RuntimeException(e);
 			}
@@ -96,7 +98,7 @@ public class MenuServiceImpl implements MenuService, InternalMenuService {
 	public void deleteMenu(DeleteMenuServiceRequest request) {
 		restaurantService._getRestaurantByUserId(request.getSellerId());
 		Menu menu = _getMenuById(request.getMenuId());
-		imageUploader.delete(menu.getImages());
+		imageUploader.delete(menu.getImagePaths());
 		menuRepository.delete(menu);
 	}
 

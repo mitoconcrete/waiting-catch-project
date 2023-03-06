@@ -25,7 +25,6 @@ import team.waitingcatch.app.restaurant.entity.Restaurant;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Event extends TimeStamped {
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "event_id")
@@ -35,7 +34,7 @@ public class Event extends TimeStamped {
 	@JoinColumn(name = "restaurant_id")
 	private Restaurant restaurant;
 
-	@Column(nullable = false)
+	@Column(nullable = false, length = 30)
 	private String name;
 
 	@Column(nullable = false)

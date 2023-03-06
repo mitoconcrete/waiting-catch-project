@@ -1,5 +1,7 @@
 package team.waitingcatch.app.restaurant.service.restaurant;
 
+import static team.waitingcatch.app.common.enums.ImageDirectoryEnum.*;
+
 import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -122,14 +124,16 @@ public class RestaurantServiceImpl implements RestaurantService, InternalRestaur
 	//업데이트시 -> 현재 있는것은 1.있는것 2. 있는것 3. 새로 4.새로
 	//업데이트시 -> 현재 있는것은 1.새로 2. 새로 3. 새로 4.새로
 	@Override
-	public void updateRestaurant(UpdateRestaurantServiceRequest updateRestaurantServiceRequest) throws IOException {
-		Restaurant restaurant = restaurantRepository.findByUserId(updateRestaurantServiceRequest.getSellerId())
-			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 레스토랑 입니다."));
+	public void updateRestaurant(UpdateRestaurantServiceRequest serviceRequest) throws IOException {
+		Restaurant restaurant = restaurantRepository.findByUserId(serviceRequest.getSellerId())
+			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 레스토랑입니다."));
 		RestaurantInfo restaurantInfo = restaurantInfoRepository.findById(restaurant.getId())
 			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 레스토랑 정보입니다."));
-		List<String> imagePaths = imageUploader.uploadList(updateRestaurantServiceRequest.getImages(), "restaurant");
+
+		List<String> imagePaths = imageUploader.uploadList(serviceRequest.getImages(), RESTAURANT.getValue());
 		UpdateRestaurantEntityRequest updateRestaurantEntityRequest = new UpdateRestaurantEntityRequest(
-			updateRestaurantServiceRequest, imagePaths);
+			serviceRequest, imagePaths);
+
 		restaurant.updateRestaurant(updateRestaurantEntityRequest);
 		restaurantInfo.updateRestaurantInfo(updateRestaurantEntityRequest);
 	}
@@ -141,15 +145,26 @@ public class RestaurantServiceImpl implements RestaurantService, InternalRestaur
 	}
 
 	@Override
-	public RestaurantInfo _getRestaurantInfoByRestaurantIdWithRestaurant(Long id) {
-		return restaurantInfoRepository.findByRestaurantId(id)
+	public Restaurant _getRestaurantByUserId(Long userId) {
+		return restaurantRepository.findByUserId(userId)
+			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 레스토랑입니다."));
+	}
+
+	public RestaurantInfo _getRestaurantInfoByRestaurantId(Long restaurantId) {
+		return restaurantInfoRepository.findByRestaurantId(restaurantId)
+			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 레스토랑입니다."));
+	}
+
+	@Override
+	public RestaurantInfo _getRestaurantInfoByUserId(Long userId) {
+		return restaurantInfoRepository.findByUserId(userId)
 			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 레스토랑 정보입니다."));
 	}
 
 	@Override
-	public Restaurant _getRestaurantByUserId(Long userId) {
-		return restaurantRepository.findByUserId(userId)
-			.orElseThrow(() -> new IllegalArgumentException("레스토랑을 찾을 수 없습니다."));
+	public RestaurantInfo _getRestaurantInfoByRestaurantIdWithRestaurant(Long id) {
+		return restaurantInfoRepository.findByRestaurantId(id)
+			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 레스토랑 정보입니다."));
 	}
 
 	@Override
@@ -176,7 +191,11 @@ public class RestaurantServiceImpl implements RestaurantService, InternalRestaur
 	@Override
 	public Restaurant _deleteRestaurantBySellerId(Long sellerId) {
 		Restaurant restaurant = _getRestaurantByUserId(sellerId);
+		RestaurantInfo restaurantInfo = _getRestaurantInfoByUserId(sellerId);
+
 		restaurant.deleteRestaurant();
+		restaurantInfo.deleteRestaurantInfo();
+
 		return restaurant;
 	}
 }

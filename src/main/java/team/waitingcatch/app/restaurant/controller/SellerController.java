@@ -201,7 +201,7 @@ public class SellerController {
 
 	@GetMapping("/seller/templates/infos")
 	public String updateSellerInfoSub() {
-		return "/seller/seller-infos";
+		return "/seller/seller-info";
 	}
 
 	@PutMapping("/api/seller/infos")
@@ -231,9 +231,6 @@ public class SellerController {
 
 		return "redirect:/seller/templates/seller";
 	}
-
-
-
 
 	/*     이벤트     */
 

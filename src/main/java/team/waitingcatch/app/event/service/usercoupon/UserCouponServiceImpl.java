@@ -32,7 +32,6 @@ public class UserCouponServiceImpl implements UserCouponService, InternalUserCou
 	@Override
 	@Retryable(maxAttempts = 3, backoff = @Backoff(100), value = OptimisticLockingFailureException.class, exclude = {
 		IllegalArgumentException.class})
-	//0.1초 지연후 3번까지 트라이, IllegalStateException발생시 리트라이, IllegalArgumentException는 익셉션처리
 	public void createUserCoupon(CreateUserCouponServiceRequest createUserCouponserviceRequest) {
 		CouponCreator couponCreator = internalCouponCreatorService._getCouponCreatorById(
 			createUserCouponserviceRequest.getCreatorId());

@@ -12,6 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -24,10 +25,10 @@ import team.waitingcatch.app.event.dto.couponcreator.UpdateSellerCouponCreatorSe
 import team.waitingcatch.app.event.enums.CouponTypeEnum;
 
 @Entity
+@Table
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CouponCreator extends TimeStamped {
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "coupon_creator_id")
@@ -37,13 +38,13 @@ public class CouponCreator extends TimeStamped {
 	@JoinColumn(name = "event_id", nullable = false)
 	private Event event;
 
-	@Column(nullable = false)
+	@Column(nullable = false, length = 100)
 	private String name;
 
 	@Column(nullable = false)
 	private int discountPrice;
 
-	@Column(nullable = false)
+	@Column(nullable = false, length = 20)
 	@Enumerated(value = EnumType.STRING)
 	private CouponTypeEnum discountType;
 
@@ -56,44 +57,38 @@ public class CouponCreator extends TimeStamped {
 	@Column(nullable = false)
 	private boolean isDeleted;
 
-	public CouponCreator(CreateAdminCouponCreatorRequest createAdminCouponCreatorRequest) {
-		this.event = createAdminCouponCreatorRequest.getEvent();
-		this.name = createAdminCouponCreatorRequest.getCreateAdminCouponCreatorServiceRequest().getName();
-		this.discountPrice = createAdminCouponCreatorRequest.getCreateAdminCouponCreatorServiceRequest()
-			.getDiscountPrice();
-		this.discountType = createAdminCouponCreatorRequest.getCreateAdminCouponCreatorServiceRequest()
-			.getDiscountType();
-		this.quantity = createAdminCouponCreatorRequest.getCreateAdminCouponCreatorServiceRequest().getQuantity();
-		this.expireDate = createAdminCouponCreatorRequest.getCreateAdminCouponCreatorServiceRequest().getExpireDate();
+	public CouponCreator(CreateAdminCouponCreatorRequest request) {
+		this.event = request.getEvent();
+		this.name = request.getCreateAdminCouponCreatorServiceRequest().getName();
+		this.discountPrice = request.getCreateAdminCouponCreatorServiceRequest().getDiscountPrice();
+		this.discountType = request.getCreateAdminCouponCreatorServiceRequest().getDiscountType();
+		this.quantity = request.getCreateAdminCouponCreatorServiceRequest().getQuantity();
+		this.expireDate = request.getCreateAdminCouponCreatorServiceRequest().getExpireDate();
 	}
 
-	public CouponCreator(CreateSellerCouponCreatorRequest createAdminCouponCreatorRequest) {
-		this.event = createAdminCouponCreatorRequest.getEvent();
-		this.name = createAdminCouponCreatorRequest.getCreateSellerCouponCreatorServiceRequest().getName();
-		this.discountPrice = createAdminCouponCreatorRequest.getCreateSellerCouponCreatorServiceRequest()
-			.getDiscountPrice();
-		this.discountType = createAdminCouponCreatorRequest.getCreateSellerCouponCreatorServiceRequest()
-			.getDiscountType();
-		this.quantity = createAdminCouponCreatorRequest.getCreateSellerCouponCreatorServiceRequest().getQuantity();
-		this.expireDate = createAdminCouponCreatorRequest.getCreateSellerCouponCreatorServiceRequest().getExpireDate();
+	public CouponCreator(CreateSellerCouponCreatorRequest request) {
+		this.event = request.getEvent();
+		this.name = request.getCreateSellerCouponCreatorServiceRequest().getName();
+		this.discountPrice = request.getCreateSellerCouponCreatorServiceRequest().getDiscountPrice();
+		this.discountType = request.getCreateSellerCouponCreatorServiceRequest().getDiscountType();
+		this.quantity = request.getCreateSellerCouponCreatorServiceRequest().getQuantity();
+		this.expireDate = request.getCreateSellerCouponCreatorServiceRequest().getExpireDate();
 	}
 
-	public void updateAdminCouponCreator(
-		UpdateAdminCouponCreatorServiceRequest updateAdminCouponCreatorServiceRequest) {
-		this.name = updateAdminCouponCreatorServiceRequest.getName();
-		this.discountPrice = updateAdminCouponCreatorServiceRequest.getDiscountPrice();
-		this.discountType = updateAdminCouponCreatorServiceRequest.getDiscountType();
-		this.quantity = updateAdminCouponCreatorServiceRequest.getQuantity();
-		this.expireDate = updateAdminCouponCreatorServiceRequest.getExpireDate();
+	public void updateAdminCouponCreator(UpdateAdminCouponCreatorServiceRequest serviceRequest) {
+		this.name = serviceRequest.getName();
+		this.discountPrice = serviceRequest.getDiscountPrice();
+		this.discountType = serviceRequest.getDiscountType();
+		this.quantity = serviceRequest.getQuantity();
+		this.expireDate = serviceRequest.getExpireDate();
 	}
 
-	public void updateSellerCouponCreator(
-		UpdateSellerCouponCreatorServiceRequest updateSellerCouponCreatorServiceRequest) {
-		this.name = updateSellerCouponCreatorServiceRequest.getName();
-		this.discountPrice = updateSellerCouponCreatorServiceRequest.getDiscountPrice();
-		this.discountType = updateSellerCouponCreatorServiceRequest.getDiscountType();
-		this.quantity = updateSellerCouponCreatorServiceRequest.getQuantity();
-		this.expireDate = updateSellerCouponCreatorServiceRequest.getExpireDate();
+	public void updateSellerCouponCreator(UpdateSellerCouponCreatorServiceRequest serviceRequest) {
+		this.name = serviceRequest.getName();
+		this.discountPrice = serviceRequest.getDiscountPrice();
+		this.discountType = serviceRequest.getDiscountType();
+		this.quantity = serviceRequest.getQuantity();
+		this.expireDate = serviceRequest.getExpireDate();
 	}
 
 	public void deleteCouponCreator() {

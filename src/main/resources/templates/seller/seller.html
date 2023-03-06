@@ -16,7 +16,7 @@
 </head>
 <body>
 <header>
-    <a href="/seller/lineup-page">
+    <a href="/seller/templates/lineup">
         <div>WAITING CATCH</div>
     </a>
     <nav>
@@ -30,10 +30,11 @@
 </header>
 <nav class="menus">
     <ul>
-        <a href="/seller/templates/lineup-page">줄서기 현황</a>
+        <a href="/seller/templates/lineup">줄서기 현황</a>
         <a href="/seller/templates/seller" style="color: #8B60C7">매장 관리</a>
         <a href="/seller/templates/menu">메뉴</a>
         <a href="/seller/templates/event">이벤트</a>
+        <a href="/seller/templates/blacklist-demands">블랙리스트</a>
     </ul>
 </nav>
 <div class="body">
@@ -46,108 +47,35 @@
         <button type="button" class="btn">회원탈퇴</button>
     </a>
 
-    <a href="seller-infos.html" th:href="@{/seller/templates/infos}" th:method="get">
+    <a href="seller-info.html" th:href="@{/seller/templates/info}" th:method="get">
         <button type="button" class="btn">판매자 정보 수정</button>
     </a>
     <a th:href="@{/seller/templates/updaterestaurant}" th:method="get" enctype="multipart/form-data">
         <button type="button" class="btn">레스토랑 정보 수정</button>
     </a>
-
-    <!--    <button type="button" onclick="getLineupList()" class="btn">줄서기 관리</button>-->
-
-    <!--        <button type="button" onclick="openLineup()" class="btn">줄서기 오픈</button>-->
-
-    <!--        <button type="button" onclick="closeLineup()" class="btn">줄서기 마감</button>-->
-
-    <button type="button" onclick="createBlacklistDemandList()" class="btn">블랙리스트 요청 목록</button>
-
 </div>
 </body>
 <script>
-
-    // $(document).ready(function () {
-    //     var xhr = new XMLHttpRequest();
-    //     xhr.open('GET', '/api/getTokenHeader', true);
-    //     xhr.onreadystatechange = function () {
-    //         if (xhr.readyState == 4 && xhr.status == 200) {
-    //             var tokenHeader = xhr.getResponseHeader('Authorization');
-    //             console.log(tokenHeader);
-    //             if (tokenHeader === null) {
-    //                 alert("아무일도없음")
-    //             } else {
-    //                 alert("새로운 쿠키를 다시받는다")
-    //                 let host = window.location.host;
-    //                 let url = host + '/seller';
-    //                 let todayDate = new Date();
-    //                 todayDate.setDate(todayDate.getDate() + 30); // 현재 시각 + 일 단위로 쿠키 만료 날짜
-    //                 document.cookie =
-    //                     'Authorization' + "=" + xhr.getResponseHeader('Authorization') + "; " +
-    //                     "path=/; expires=" + todayDate.toString() + ";";
-    //                 alert("로그인 성공")
-    //                 window.location.href = 'http://' + url;
-    //             }
-    //         }
-    //     };
-    //     xhr.send();
-    // });
-
-
-    // function getLineupList() {
-    //     window.location.href = '/seller/lineup-page';
-    // }
-    //
-    // function openLineup() {
-    //     $.ajax({
-    //         url: '/seller/open-lineup',
-    //         type: 'PUT',
-    //         headers: {
-    //             'Authorization': localStorage.getItem('accessToken')
-    //         },
-    //         success: function () {
-    //             alert("줄서기 오픈 완료");
-    //             window.location.reload();
-    //         },
-    //         error: function (response) {
-    //             console.log(response);
-    //         }
-    //     })
-    // }
-    //
-    // function closeLineup() {
-    //     $.ajax({
-    //         url: '/seller/close-lineup',
-    //         type: 'PUT',
-    //         headers: {
-    //             'Authorization': localStorage.getItem('accessToken')
-    //         },
-    //         success: function () {
-    //             alert("줄서기 마감 완료");
-    //             window.location.reload();
-    //         },
-    //         error: function (response) {
-    //             console.log(response);
-    //         }
-    //     })
-    // }
-
-    function createBlacklistDemandList() {
-        window.location.href = '/seller/restaurant/blacklist-demand-page';
-    }
-
-
     function sendTokenLogout() {
-        _fnSetCookie("Authorization", "", "-1");
+        fetch("/seller/logout", {
+            type: 'get',
+            headers: {
+                'content-type': 'application/json',
+                'Authorization': localStorage.getItem("accessToken"),
+            }
+        })
+        localStorage.removeItem('accessToken');
     }
 
-    // function sendTokenDelete() {
-    //     fetch("/seller/delete", {
-    //         type: 'get',
-    //         headers: {
-    //             'content-type': 'application/json',
-    //             'Authorization': localStorage.getItem("accessToken"),
-    //         }
-    //     })
-    //     localStorage.removeItem('accessToken');
-    // }
+    function sendTokenDelete() {
+        fetch("/seller/delete", {
+            type: 'get',
+            headers: {
+                'content-type': 'application/json',
+                'Authorization': localStorage.getItem("accessToken"),
+            }
+        })
+        localStorage.removeItem('accessToken');
+    }
 </script>
 </html>

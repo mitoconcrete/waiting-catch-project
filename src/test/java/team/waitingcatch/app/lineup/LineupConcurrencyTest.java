@@ -3,13 +3,13 @@ package team.waitingcatch.app.lineup;
 import static org.assertj.core.api.Assertions.*;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -65,12 +65,11 @@ public class LineupConcurrencyTest {
 	private final int NUM_OF_TASKS = 10;
 
 	@Test
+	@DisplayName("더미 데이터 저장")
 	@Commit
 	@Order(1)
 	void insertDummyDataBeforeConcurrentWaitingTest() {
-		List<String> searchkeywords = new ArrayList<>();
-		searchkeywords.add("korean");
-		searchkeywords.add("japan");
+		List<String> searchKeywords = List.of("korean", "japan");
 
 		User seller1 = new User(UserRoleEnum.SELLER, "판매자1", "abcdef@gmail.com", "sellerIdA", "pw123", "sjsjA",
 			"01012301230");
@@ -82,13 +81,13 @@ public class LineupConcurrencyTest {
 
 		Restaurant restaurant1 = new Restaurant(
 			new SaveDummyRestaurantRequest("맛집1", "12345", "서울시 강남구 강남대로", "1", new Position(0.0, 0.0),
-				"01000000001", "일식>스시>오마카세", seller1, searchkeywords));
+				"01000000001", "일식>스시>오마카세", seller1, searchKeywords));
 		restaurantRepository.save(restaurant1);
 		openRestaurant(restaurant1);
 
 		Restaurant restaurant2 = new Restaurant(
 			new SaveDummyRestaurantRequest("레스토랑2", "12345", "서울시 강남구 강남대로", "1", new Position(0.0, 0.0),
-				"01000000001", "일식>스시>오마카세", seller2, searchkeywords));
+				"01000000002", "일식>스시>오마카세", seller2, searchKeywords));
 		restaurantRepository.save(restaurant2);
 		openRestaurant(restaurant2);
 
@@ -100,6 +99,7 @@ public class LineupConcurrencyTest {
 	}
 
 	@Test
+	@DisplayName("줄서기 동시성 테스트")
 	@Commit
 	@Order(2)
 	void concurrentWaiting() throws InterruptedException {
@@ -139,6 +139,7 @@ public class LineupConcurrencyTest {
 	}
 
 	@Test
+	@DisplayName("결과 검증")
 	@Order(3)
 	void assertResult() {
 		Long sellerId1 = userRepository.findByUsernameAndIsDeletedFalse("sellerIdA").get().getId();

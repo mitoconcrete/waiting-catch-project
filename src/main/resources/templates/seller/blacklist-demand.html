@@ -2,28 +2,116 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>블랙리스트 요청</title>
+    <title>줄서기 현황</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+            crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
+    <link type="text/css" th:href="@{/css/admin-style.css}" rel="stylesheet">
+    <script type="text/javascript" th:src="@{/js/admin/basic.js}"></script>
 </head>
 <body>
-<button type="button" onclick="createBlacklistDemand()">블랙리스트 요청</button>
-<div id="blacklistDemandList"></div>
+<header>
+    <a href="/seller/templates/lineup">
+        <div>WAITING CATCH</div>
+    </a>
+    <nav>
+        <ul>
+            <a href="/">판매자 님</a>
+            <a href="../hello.html" th:href="@{/hello}" th:method="get">
+                <button onclick="sendTokenLogout()" type="button" class="btn">Logout</button>
+            </a>
+        </ul>
+    </nav>
+</header>
+<nav class="menus">
+    <ul>
+        <a href="/seller/templates/lineup">줄서기 현황</a>
+        <a href="/seller">매장 관리</a>
+        <a href="/menu">메뉴</a>
+        <a href="/event">이벤트</a>
+        <a href="/seller/templates/blacklist-demands" style="color: #8B60C7">블랙리스트</a>
+    </ul>
+</nav>
+<div class="body">
+    <div class="lineup-main">
+        <h1 style="color: #8B60C7">블랙리스트 요청 목록</h1>
+    </div>
+    <div>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>이름</th>
+                <th>사유</th>
+                <th>상태</th>
+                <th>등록 시간</th>
+                <th>수정 시간</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody id="blacklistDemand">
+
+            </tbody>
+        </table>
+    </div>
+</div>
 </body>
 <script>
     $(document).ready(function () {
-        $.ajax({
-            url: '/general/seller/restaurant/blacklist-demands',
-            type: 'GET',
-            headers: {
-                'Authorization': localStorage.getItem('accessToken')
-            }
-        }).done(function (result) {
-            $('#blacklistDemandList').replaceWith(result);
-        })
+        blacklistDemandList();
     });
 
-    function createBlacklistDemand() {
-        window.location.href=
+    function blacklistDemandList() {
+        $.ajax({
+            type: 'GET',
+            url: '/api/seller/blacklist-demands',
+            headers: {
+                'Authorization': localStorage.getItem('accessToken')
+            },
+            success: function (response) {
+                let rows = response['data'];
+                for (let i = 0; i < rows.length; i++) {
+                    let id = rows[i]['id'];
+                    let customerName = rows[i]['customerName'];
+                    let description = rows[i]['description'];
+                    let status = rows[i]['status'];
+                    let createdDate = rows[i]['createdDate'];
+                    let modifiedDate = rows[i]['modifiedDate'];
+
+                    let temp_html = `<tr>
+                                        <td>${customerName}</td>
+                                        <td>${description}</td>
+                                        <td>${status}</td>
+                                        <td>${createdDate}</td>
+                                        <td>${modifiedDate}</td>
+                                        <td>
+                                            <button type="button" class="btn" onclick="cancel('${id}')">취소</button>
+                                        </td>
+                                    </tr>`;
+                    $('#blacklistDemand').prepend(temp_html);
+                }
+            },
+        });
+    }
+
+    function cancel(blacklistDemandId) {
+        $.ajax({
+            url: `/api/seller/blacklist-demands/${blacklistDemandId}`,
+            type: 'DELETE',
+            headers: {
+                'Authorization': localStorage.getItem('accessToken')
+            },
+            success: function () {
+                alert("블랙리스트 신청 취소 처리 완료");
+                window.location.reload();
+            },
+            error: function (response) {
+                alert(response.responseJSON.message);
+            }
+        })
     }
 </script>
 </html>

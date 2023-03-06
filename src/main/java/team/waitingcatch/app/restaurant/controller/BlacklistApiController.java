@@ -44,8 +44,8 @@ public class BlacklistApiController {
 
 	@GetMapping("/admin/blacklists")
 	public GenericResponse<Page<GetBlacklistResponse>> getBlacklist(
-		@PageableDefault(size = 10, page = 0) Pageable pageable) {
-		return new GenericResponse(blacklistService.getBlacklist(pageable));
+		@PageableDefault Pageable pageable) {
+		return new GenericResponse<>(blacklistService.getBlacklist(pageable));
 	}
 
 	@GetMapping("/seller/restaurant/blacklist")
