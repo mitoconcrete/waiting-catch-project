@@ -1,5 +1,7 @@
 package team.waitingcatch.app.exception;
 
+import static team.waitingcatch.app.exception.ErrorCode.*;
+
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -47,9 +49,9 @@ public class ApplicationExceptionHandler {
 		return new BasicExceptionResponse(HttpStatus.BAD_REQUEST, e.getRootCause().getMessage());
 	}
 
-	@ExceptionHandler({TokenNotFoundException.class})
-	@ResponseStatus(HttpStatus.UNAUTHORIZED)
-	public BasicExceptionResponse handleTokenNotFoundException(TokenNotFoundException e) {
-		return new BasicExceptionResponse(HttpStatus.UNAUTHORIZED, e.getMessage());
+	@ExceptionHandler(Exception.class)
+	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+	public BasicExceptionResponse handleTokenNotFoundException() {
+		return new BasicExceptionResponse(HttpStatus.INTERNAL_SERVER_ERROR, INTERNAL_ERROR.getMessage());
 	}
 }

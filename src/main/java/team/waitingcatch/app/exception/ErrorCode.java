@@ -45,8 +45,10 @@ public enum ErrorCode {
 	ALREADY_APPROVED("이미 승인되었습니다."),
 	ALREADY_CANCELED("이미 취소하셨습니다."),
 
+	NOT_FOUND_TOKEN("토큰을 찾을 수 없습니다"),
+
 	ILLEGAL_ACCESS("잘못된 접근입니다"),
-	NEVER_REACH("내부 오류");
+	INTERNAL_ERROR("내부 오류");
 
 	private final String message;
 

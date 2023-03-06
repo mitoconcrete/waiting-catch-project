@@ -186,7 +186,7 @@ public class LineupServiceImpl implements LineupService, InternalLineupService {
 				.filter(lineup -> lineup.getStatus() == (ArrivalStatusEnum.WAIT))
 				.forEach(lineup -> lineup.updateStatus(ArrivalStatusEnum.CANCEL));
 		} else {
-			throw new IllegalRequestException(NEVER_REACH);
+			throw new IllegalRequestException(INTERNAL_ERROR);
 		}
 	}
 
