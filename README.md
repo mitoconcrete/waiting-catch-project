@@ -34,7 +34,7 @@
 
 <br>
 
-![Project Structure](https://user-images.githubusercontent.com/83831110/220520960-4fe34da8-7729-405b-82de-e5594dbfc467.png)
+![Project Architecture](https://user-images.githubusercontent.com/117354616/223562222-be608cc8-ae8d-4cba-9e66-48c14f25c9be.png)
 
 
 <br>
