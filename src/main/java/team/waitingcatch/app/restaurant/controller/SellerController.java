@@ -205,6 +205,7 @@ public class SellerController {
 		UpdateUserServiceRequest servicePayload = new UpdateUserServiceRequest(controllerRequest.getName(),
 			controllerRequest.getEmail(), userDetails.getUsername(), controllerRequest.getNickName(),
 			controllerRequest.getPhoneNumber());
+		System.out.println(servicePayload.getEmail());
 		userService.updateUser(servicePayload);
 		return "redirect:/seller/templates/seller";
 	}
