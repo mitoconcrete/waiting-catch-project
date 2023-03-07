@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 import javax.validation.constraints.Future;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 import org.springframework.format.annotation.DateTimeFormat;
@@ -11,7 +12,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import team.waitingcatch.app.event.enums.CouponTypeEnum;
 
 @Getter
 @Setter
@@ -25,7 +25,8 @@ public class UpdateCouponCreatorControllerRequest {
 	private int discountPrice;
 
 	@NotNull(message = "할인 종류를 선택하세요.")
-	private CouponTypeEnum discountType;
+	@Pattern(regexp = "^(PRICE|PERCENT)$")
+	private String discountType;
 
 	@NotNull(message = "수량을 입력하세요.")
 	private int quantity;

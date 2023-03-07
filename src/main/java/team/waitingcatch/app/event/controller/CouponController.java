@@ -164,12 +164,12 @@ public class CouponController {
 	//레스토랑 이벤트 쿠폰 생성자 수정
 	@PutMapping("/seller/events/{eventId}/creator/{creatorId}")
 	public void updateSellerCouponCreator(
-		@RequestBody UpdateCouponCreatorControllerRequest updateCouponCreatorControllerRequest,
+		@RequestBody UpdateCouponCreatorControllerRequest controllerRequest,
 		@PathVariable Long eventId, @PathVariable Long creatorId,
 		@AuthenticationPrincipal UserDetailsImpl userDetails) {
-		UpdateSellerCouponCreatorServiceRequest updateSellerCouponCreatorServiceRequest = new UpdateSellerCouponCreatorServiceRequest(
-			updateCouponCreatorControllerRequest, eventId, creatorId, userDetails.getId());
-		couponCreatorService.updateSellerCouponCreator(updateSellerCouponCreatorServiceRequest);
+		UpdateSellerCouponCreatorServiceRequest serviceRequest = new UpdateSellerCouponCreatorServiceRequest(
+			controllerRequest, eventId, creatorId, userDetails.getId());
+		couponCreatorService.updateSellerCouponCreator(serviceRequest);
 	}
 
 
