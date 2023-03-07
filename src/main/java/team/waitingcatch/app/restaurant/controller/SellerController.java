@@ -246,6 +246,7 @@ public class SellerController {
 	public String createEvent(
 		@Validated CreateEventControllerRequest createEventControllerRequest,
 		@AuthenticationPrincipal UserDetailsImpl userDetails) {
+		System.out.println(userDetails.getId());
 		CreateEventServiceRequest createEventServiceRequest = new CreateEventServiceRequest(
 			createEventControllerRequest, userDetails.getId());
 		eventService.createSellerEvent(createEventServiceRequest);
