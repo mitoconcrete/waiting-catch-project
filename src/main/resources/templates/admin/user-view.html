@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>게시글</title>
+    <link rel="stylesheet" th:href="@{/css/css.css}">
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/admin-style.css}">
+    <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+            integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+            crossorigin="anonymous"></script>
+    <script type="text/javascript" th:src="@{/js/admin.js}"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+<header>
+    <a href="/admin/templates/main">
+        <div>WAITING CATCH</div>
+    </a>
+    <nav>
+        <ul>
+            <a href="/">관리자 님</a>
+            <a href="#" onclick="sendTokenDelete();">Logout</a>
+        </ul>
+    </nav>
+</header>
+<nav class="menus">
+    <ul>
+        <a href="/admin/templates/seller-management">판매자요청</a>
+        <a href="/admin/templates/customers" style="color: #8B60C7">유저 목록</a>
+        <a href="/admin/templates/restaurants">레스토랑 목록</a>
+        <a href="/admin/templates/event">이벤트</a>
+        <a href="/admin/templates/blacklist">블랙리스트</a>
+        <a href="/admin/templates/category">카테고리</a>
+    </ul>
+</nav>
+<div class="body">
+    <div class="board_wrap">
+        <div class="board_title">
+            <strong>유저 세부정보</strong>
+        </div>
+        <div class="board_view_wrap">
+            <div class="board_view">
+                <div class="title">
+                    <h2 th:text="${customer.username}"></h2>
+                </div>
+                <div class="info">
+                    <dl>
+                        <dt>번호</dt>
+                        <dd th:text="${customer.id}"></dd>
+                    </dl>
+                    <dl>
+                        <dt>사용자아이디</dt>
+                        <dd th:text="${customer.username}"></dd>
+                    </dl>
+
+                    <dl>
+                        <dt>이메일</dt>
+                        <dd th:text="${customer.email}"></dd>
+                    </dl>
+                    <dl>
+                        <dt>닉네임</dt>
+                        <dd th:text="${customer.nickname}"></dd>
+                    </dl>
+                    <dl>
+                        <dt>사용자이름</dt>
+                        <dd th:text="${customer.name}"></dd>
+                    </dl>
+
+                    <dl>
+                        <dt>휴대폰번호</dt>
+                        <dd th:text="${customer.phoneNumber}"></dd>
+                    </dl>
+                    <dl>
+                        <dt>권한</dt>
+                        <dd th:text="${customer.role}"></dd>
+                    </dl>
+                    <dl>
+                        <dt>정지여부</dt>
+                        <dd th:text="${customer.banned}"></dd>
+                    </dl>
+                    <dl>
+                        <dt>삭제여부</dt>
+                        <dd th:text="${customer.deleted}"></dd>
+                    </dl>
+                    <dl>
+                        <dt>생성시간</dt>
+                        <dd th:text="${customer.createdDate}"></dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script th:inline="javascript">
+    $(document).ready(function () {
+            const token = [[${accessToken}]];
+            if (token) {
+                document.cookie =
+                    'Authorization' + "=" + token + "; " +
+                    "path=/; expires=" + (new Date().getTime() + 30 * 60000) + ";";
+            }
+        }
+    )
+</script>
+</body>
+</html>

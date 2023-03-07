@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+            crossorigin="anonymous"></script>
+    <link type="text/css" th:href="@{/css/admin-style.css}" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/css.css}">
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/restaurant-list.css}">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+            integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+            crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script type="text/javascript" th:src="@{/js/admin.js}"></script>
+    <script type="text/javascript" th:src="@{/js/admin/basic.js}"></script>
+    <title>WAITING CATCH 관리자</title>
+</head>
+<body>
+<header>
+    <a href="/admin/templates/main">
+        <div>WAITING CATCH</div>
+    </a>
+    <nav>
+        <ul>
+            <a href="/">관리자 님</a>
+            <a href="#" onclick="sendTokenDelete();">Logout</a>
+        </ul>
+    </nav>
+</header>
+<nav class="menus">
+    <ul>
+        <a href="/admin/templates/seller-management">판매자요청</a>
+        <a href="/admin/templates/customers" style="color: #8B60C7">유저 목록</a>
+        <a href="/admin/templates/restaurants">레스토랑 목록</a>
+        <a href="/admin/templates/event">이벤트</a>
+        <a href="/admin/templates/blacklist">블랙리스트</a>
+        <a href="/admin/templates/category">카테고리</a>
+    </ul>
+</nav>
+
+<div class="body">
+
+    <!--    <div class="board_wrap">-->
+    <!--        <div class="board_title">-->
+    <!--            <strong>유저 목록</strong>-->
+    <!--            <p>유저 목록을 보여드리겠습니다.</p>-->
+    <!--        </div>-->
+
+    <!--        <div class="board_list_wrap">-->
+    <!--            <div class="board_list">-->
+    <!--                <div class="top">-->
+    <!--                    <div class="num">번호</div>-->
+    <!--                    <div class="writer">아이디</div>-->
+    <!--                    <div class="writer">이름</div>-->
+    <!--                    <div class="writer">닉네임</div>-->
+    <!--                    <div class="writer">전화번호</div>-->
+    <!--                    <div class="writer">이메일</div>-->
+    <!--                    <div class="writer">권한</div>-->
+    <!--                    <div class="writer">금지상태</div>-->
+    <!--                    <div class="writer">삭제상태</div>-->
+    <!--                    <div class="writer">상세보기</div>-->
+    <!--                </div>-->
+
+    <!--                <div th:each="customer, iStat : ${customers}">-->
+    <!--                    <div class="num" th:text="${customer.id}">1</div>-->
+    <!--                    <div class="writer" th:text="${customer.username}"></div>-->
+    <!--                    <div div class="writer" th:text="${customer.name}"></div>-->
+    <!--                    <div div class="writer" th:text="${customer.nickname}"></div>-->
+    <!--                    <div div class="writer" th:text="${customer.phoneNumber}"></div>-->
+    <!--                    <div div class="writer" th:text="${customer.email}"></div>-->
+    <!--                    <div div class="writer" th:text="${customer.role}"></div>-->
+    <!--                    <div div class="writer" th:text="${customer.banned}"></div>-->
+    <!--                    <div div class="writer" th:text="${customer.deleted}"></div>-->
+    <!--                    <div class="count" th:if="${customer.role == customer.role.USER}"><a href=""-->
+    <!--                                                                                         th:href="@{/admin/templates/customers/{customerId}(customerId=${customer.id})}"-->
+    <!--                                                                                         class="btn btn-secondary">내용</a>-->
+    <!--                    </div>-->
+    <!--                    <div class="count" th:if="${customer.role == customer.role.SELLER}"><a href=""-->
+    <!--                                                                                           th:href="@{/admin/templates/sellers/{sellersId}(sellersId=${customer.id})}"-->
+    <!--                                                                                           class="btn btn-secondary">내용</a>-->
+    <!--                    </div>-->
+    <!--                </div>-->
+
+
+    <!--            </div>-->
+    <!--        </div>-->
+    <!--    </div>-->
+
+    <h1 style="color: #8B60C7">유저 목록</h1>
+    <form th:action="@{/admin/templates/customers}" method="get">
+        <input type="text" name="searchVal" th:name="searchVal">
+        <button type="submit">검색</button>
+    </form>
+    <div class="customerList">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th scope="col">번호</th>
+                <th scope="col">아이디</th>
+                <th scope="col">이름</th>
+                <th scope="col">닉네임</th>
+                <th scope="col">전화번호</th>
+                <th scope="col">이메일</th>
+                <th scope="col">권한</th>
+                <th scope="col">금지상태</th>
+                <th scope="col">삭제상태</th>
+                <th scope="col">상세보기</th>
+            </tr>
+            </thead>
+            <tbody id="customerListTable">
+            <div th:each="customer, iStat : ${customers}">
+                <tr>
+                    <th scope="row" th:text="${customer.id}">1</th>
+                    <td th:text="${customer.username}"></td>
+                    <td th:text="${customer.name}"></td>
+                    <td th:text="${customer.nickname}"></td>
+                    <td th:text="${customer.phoneNumber}"></td>
+                    <td th:text="${customer.email}"></td>
+                    <td th:text="${customer.role}"></td>
+                    <td th:text="${customer.banned}"></td>
+                    <td th:text="${customer.deleted}"></td>
+                    <td>
+                        <div class="count" th:if="${customer.role == customer.role.USER}"><a href=""
+                                                                                             th:href="@{/admin/templates/customers/{customerId}(customerId=${customer.id})}"
+                                                                                             class="btn">내용</a>
+                        </div>
+                        <div class="count" th:if="${customer.role == customer.role.SELLER}"><a href=""
+                                                                                               th:href="@{/admin/templates/sellers/{sellersId}(sellersId=${customer.id})}"
+                                                                                               class="btn">내용</a>
+                        </div>
+                    </td>
+                </tr>
+            </div>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!--페이징 시작-->
+<nav class="pagenav">
+    <!--표에 사용될 변수값 초기화 -->
+    <ul class="pagination"
+        th:with="start=${T(java.lang.Math).floor(customers.number/10)*10 },
+                    last=(${start + 9 < customers.totalPages -1 ? start + 9 : customers.totalPages -1 })">
+        <th:block th:with="
+                firstAddr=@{/admin/templates/customers(page=0, searchVal=${param.searchVal})},
+                prevAddr=@{/admin/templates/customers(page=${customers.number -1}, searchVal=${param.searchVal})},
+                nextAddr=@{/admin/templates/customers(page=${customers.number + 1}, searchVal=${param.searchVal})},
+                lastAddr=@{/admin/templates/customers(page=${customers.totalPages -1}, searchVal=${param.searchVal})}">
+            <li>
+                <a th:href="${firstAddr}" aria-label="First">
+                    <span class="firstpage" aria-hidden="true"><<</span>
+                </a>
+            </li>
+            <!-- 이전 페이지로 가기 버튼 -->
+            <li th:class="${customers.first} ? 'disabled'">
+                <a th:href="${customers.first} ? '#' :${prevAddr}"
+                   aria-label="Previous">
+                    <span class="restaurantPage1" aria-hidden="true">&lt;</span>
+                </a>
+            </li>
+            <!--1,2,3,4,.. 등 페이지-->
+            <li th:each="page: ${#numbers.sequence(start, last)}"
+                th:class="${page == customers.number + 1} ? 'active'">
+                <a class="restaurantPage" th:text="${page}"
+                   th:href="@{/admin/templates/customers(page=${page}, searchVal=${param.searchVal})}"></a>
+            </li>
+            <!--다음 페이지로 -->
+            <li th:class="${customers.last} ? 'disabled'">
+                <a th:href="${customers.last} ? '#' : ${nextAddr}"
+                   aria-label="Next">
+                    <span class="restaurantPage2" aria-hidden="true">&gt;</span>
+                </a>
+            </li>
+            <!--맨 마지막 페이지로 이동 -->
+            <li>
+                <a th:href="${lastAddr}" aria-label="Last">
+                    <span class="lastpage" aria-hidden="true">>></span>
+                </a>
+            </li>
+        </th:block>
+    </ul>
+</nav>
+<!--페이징끝-->
+
+<script th:inline="javascript">
+    $(document).ready(function () {
+            const token = [[${accessToken}]];
+            if (token) {
+                document.cookie =
+                    'Authorization' + "=" + token + "; " +
+                    "path=/; expires=" + (new Date().getTime() + 30 * 60000) + ";";
+            }
+        }
+    )
+</script>
+</body>
+</html>

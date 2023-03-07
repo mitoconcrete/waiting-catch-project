@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>이벤트 추가</title>
+</head>
+<body>
+<h1>이벤트 추가</h1>
+<form action="/api/seller/event/new" method="post">
+    <label for="name">name</label>
+    <input type="text" id="name" name="name"><br>
+    <label for="eventStartDate">eventStartDate</label>
+    <input type="datetime-local" id="eventStartDate" name="eventStartDate"><br>
+    <label for="eventEndDate">eventEndDate</label>
+    <input type="datetime-local" id="eventEndDate" name="eventEndDate"><br>
+    <button type="submit">등록</button>
+</form>
+</body>
+</html>
