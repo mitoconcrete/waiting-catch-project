@@ -120,7 +120,7 @@ public class CouponController {
 	}
 
 	//레스토랑 이벤트 목록 출력 + 해당 이벤트의 쿠폰생성자 출력
-	@GetMapping("/restaurants/{restaurantId}/events")
+	@GetMapping("/customer/events/{restaurantId}")
 	public Page<GetEventsResponse> getRestaurantEvents(@PageableDefault(size = 10, page = 0) Pageable pageable,
 		@AuthenticationPrincipal UserDetailsImpl userDetails) {
 		return eventService.getRestaurantEvents(userDetails.getId(), pageable);
