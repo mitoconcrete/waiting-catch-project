@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -13,6 +14,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import team.waitingcatch.app.event.dto.couponcreator.CreateAdminCouponCreatorRequest;
+import team.waitingcatch.app.event.dto.couponcreator.CreateAdminCouponCreatorServiceRequest;
+import team.waitingcatch.app.event.dto.couponcreator.CreateCouponCreatorControllerRequest;
 import team.waitingcatch.app.event.dto.usercoupon.CreateUserCouponServiceRequest;
 import team.waitingcatch.app.event.dto.usercoupon.GetUserCouponResponse;
 import team.waitingcatch.app.event.dto.usercoupon.UserCouponResponse;
@@ -20,6 +24,7 @@ import team.waitingcatch.app.event.dto.usercoupon.UserCouponServiceResponse;
 import team.waitingcatch.app.event.entity.CouponCreator;
 import team.waitingcatch.app.event.entity.Event;
 import team.waitingcatch.app.event.entity.UserCoupon;
+import team.waitingcatch.app.event.enums.CouponTypeEnum;
 import team.waitingcatch.app.event.repository.CouponCreatorRepository;
 import team.waitingcatch.app.event.repository.UserCouponRepository;
 import team.waitingcatch.app.event.service.couponcreator.InternalCouponCreatorService;
@@ -49,31 +54,46 @@ class UserCouponServiceImplTest {
 	private InternalCouponCreatorService couponCreatorService;
 
 	@Test
-	void createUserCoupon() {
-		CreateUserCouponServiceRequest createUserCouponServiceRequest = mock(CreateUserCouponServiceRequest.class);
-		when(createUserCouponServiceRequest.getCreatorId()).thenReturn(1L);
-		when(createUserCouponServiceRequest.getUsername()).thenReturn("테스트");
+	public void createUserCoupon() {
 
-		CouponCreator couponCreator = mock(CouponCreator.class);
+		// Given
+		Long id = 1L;
+		Event event = mock(Event.class);
+		String name = "aa";
+		int discountPrice = 1000;
+		CouponTypeEnum discountType = CouponTypeEnum.PRICE;
+		int quantity = 10;
+		LocalDateTime expireDate = LocalDateTime.now().plusDays(1);
+		boolean isDeleted = false;
+		CreateCouponCreatorControllerRequest request2 = new CreateCouponCreatorControllerRequest();
+		request2.setName(name);
+		request2.setDiscountPrice(discountPrice);
+		request2.setDiscountType(discountType);
+		request2.setQuantity(quantity);
+		request2.setExpireDate(expireDate);
+		CreateAdminCouponCreatorServiceRequest request1 = new CreateAdminCouponCreatorServiceRequest(request2, 1L);
+		CreateAdminCouponCreatorRequest request = new CreateAdminCouponCreatorRequest(request1, event);
+
+		CouponCreator couponCreator1 = mock(CouponCreator.class);
+		CouponCreator couponCreator = mock(CouponCreator.class, withSettings().useConstructor(request));
 		when(couponCreator.getId()).thenReturn(1L);
-		when(couponCreator.getName()).thenReturn("테스트");
-		when(couponCreator.getQuantity()).thenReturn(300);
-		when(couponCreator.hasCouponBalance()).thenReturn(true);
-
 		User user = mock(User.class);
-		when(user.getId()).thenReturn(1L);
-		when(user.getUsername()).thenReturn("aaa");
-		when(userRepository.findByUsernameAndIsDeletedFalse("테스트")).thenReturn(Optional.of(user));
-		when(couponCreatorService._getCouponCreatorById(any(Long.class))).thenReturn(couponCreator);
-		when(couponCreatorRepository.getHasCouponBalance(any(Long.class))).thenReturn(300);
-
 		UserCoupon userCoupon = mock(UserCoupon.class);
 		when(userCoupon.getId()).thenReturn(1L);
 
-		when(userCouponRepository.findUserCouponWithRelations(user, couponCreator)).thenReturn(Optional.of(userCoupon));
+		when(couponCreatorRepository.findById(any(Long.class))).thenReturn(Optional.of(couponCreator));
+		when(couponCreatorService._getCouponCreatorById(any(Long.class))).thenReturn(couponCreator);
 
-		userCouponService.createUserCoupon(createUserCouponServiceRequest);
-		assertThat(couponCreator.getQuantity()).isEqualTo(299);
+		when(userService._getUserByUsername(name)).thenReturn(user);
+		when(userCouponRepository.findUserCouponWithRelations(user, couponCreator1)).thenReturn(
+			Optional.of(userCoupon));
+		when(couponCreatorRepository.getHasCouponBalance(any(Long.class))).thenReturn(3);
+		CreateUserCouponServiceRequest request3 = new CreateUserCouponServiceRequest(userCoupon.getId(), "aa");
+
+		// When
+		userCouponService.createUserCoupon(request3);
+
+		verify(couponCreatorRepository, times(1)).save(any(CouponCreator.class));
 
 	}
 

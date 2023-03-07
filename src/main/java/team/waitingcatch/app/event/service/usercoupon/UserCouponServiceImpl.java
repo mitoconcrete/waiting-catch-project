@@ -34,15 +34,14 @@ public class UserCouponServiceImpl implements UserCouponService, InternalUserCou
 
 	//유저 쿠폰을 생성한다
 	@Override
-	@Retryable(maxAttempts = 3, backoff = @Backoff(10000), value = OptimisticLockingFailureException.class, exclude = {
-		IllegalArgumentException.class})
+	@Retryable(maxAttempts = 3, backoff = @Backoff(10000), value = OptimisticLockingFailureException.class)
 	public void createUserCoupon(CreateUserCouponServiceRequest createUserCouponserviceRequest) {
 		CouponCreator couponCreator = internalCouponCreatorService._getCouponCreatorById(
 			createUserCouponserviceRequest.getCreatorId());
 		User user = internalUserService._getUserByUsername(createUserCouponserviceRequest.getUsername());
 		userCouponRepository.findUserCouponWithRelations(user, couponCreator).ifPresent(
 			u -> {
-				throw new IllegalArgumentException(DUPLICATE_COUPON.getMessage());
+				throw new IllegalStateException(DUPLICATE_COUPON.getMessage());
 			}
 		);
 		int isCouponIssued = couponCreatorRepository.getHasCouponBalance(couponCreator.getId());
