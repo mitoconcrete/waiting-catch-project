@@ -22,7 +22,10 @@ public class GetEventsResponse {
 		this.name = event.getName();
 		this.eventStartDate = event.getEventStartDate();
 		this.eventEndDate = event.getEventEndDate();
-		this.couponCreators = couponCreators.stream().map(GetCouponCreatorResponse::new).collect(Collectors.toList());
+		this.couponCreators = couponCreators.stream()
+			.filter(couponCreator -> couponCreator.getEvent().getId().equals(event.getId()))
+			.map(GetCouponCreatorResponse::new)
+			.collect(Collectors.toList());
 	}
 
 	public GetEventsResponse(Long eventId, String name, LocalDateTime eventStartDate, LocalDateTime eventEndDate) {
