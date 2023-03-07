@@ -1,5 +1,6 @@
 package team.waitingcatch.app.admin;
 
+import java.io.IOException;
 import java.util.Collection;
 
 import javax.servlet.http.HttpServletResponse;
@@ -28,7 +29,9 @@ import team.waitingcatch.app.restaurant.dto.category.DeleteCategoryServiceReques
 import team.waitingcatch.app.restaurant.dto.category.GetChildCategoryServiceRequest;
 import team.waitingcatch.app.restaurant.dto.category.UpdateCategoryControllerRequest;
 import team.waitingcatch.app.restaurant.dto.category.UpdateCategoryServiceRequest;
+import team.waitingcatch.app.restaurant.dto.requestseller.ApproveSignUpSellerServiceRequest;
 import team.waitingcatch.app.restaurant.dto.requestseller.GetDemandSignUpSellerResponse;
+import team.waitingcatch.app.restaurant.dto.requestseller.RejectSignUpSellerServiceRequest;
 import team.waitingcatch.app.restaurant.dto.restaurant.DeleteRestaurantByAdminServiceRequest;
 import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantResponse;
 import team.waitingcatch.app.restaurant.service.category.CategoryService;
@@ -301,7 +304,7 @@ public class AdminController {
 			categoryId);
 		categoryService.deleteCategory(request);
 		model.addAttribute("message", "카테고리 삭제가 완료 되었습니다.");
-		model.addAttribute("searchUrl", "/admin/templates/categories/");
+		model.addAttribute("searchUrl", "/admin/templates/category");
 		return "/admin/message";
 	}
 
@@ -319,6 +322,26 @@ public class AdminController {
 		model.addAttribute("DeleteCategoryControllerRequest", new DeleteCategoryControllerRequest());
 		model.addAttribute("UpdateCategoryControllerRequest", new UpdateCategoryControllerRequest());
 		return new ModelAndView("/admin/category-view");
+	}
+
+	@PostMapping("/admin/templates/seller-managements/{sellerManagementId}")
+	public void approveSignUpSeller(@PathVariable Long sellerManagementId,
+		HttpServletResponse response) throws
+		IOException {
+		ApproveSignUpSellerServiceRequest approveSignUpSellerServiceRequest = new ApproveSignUpSellerServiceRequest(
+			sellerManagementId);
+		sellerManagementService.approveSignUpSeller(approveSignUpSellerServiceRequest);
+		response.sendRedirect("/admin/templates/seller-management");
+	}
+
+	@PutMapping("/admin/templates/seller-managements/{sellerManagementId}")
+	public void rejectSignUpSeller(@PathVariable Long sellerManagementId, HttpServletResponse response) throws
+		IOException {
+		RejectSignUpSellerServiceRequest rejectSignUpSellerServiceRequest = new RejectSignUpSellerServiceRequest(
+			sellerManagementId);
+
+		sellerManagementService.rejectSignUpSeller(rejectSignUpSellerServiceRequest);
+		response.sendRedirect("/admin/templates/seller-management");
 	}
 
 }

@@ -214,7 +214,7 @@ public class SellerController {
 		return "/seller/seller-restaurant-update";
 	}
 
-	@PutMapping("/api/seller/update-restaurant")
+	@PutMapping(value = "/api/seller/update-restaurant")
 	public String updateRestaurant(
 		UpdateRestaurantControllerRequest updateRestaurantControllerRequest,
 		@RequestPart(value = "image", required = false) List<MultipartFile> multipartFile,
