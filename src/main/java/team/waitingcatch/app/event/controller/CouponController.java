@@ -118,6 +118,13 @@ public class CouponController {
 	public Page<GetEventsResponse> getEvents(@PageableDefault(size = 10, page = 0) Pageable pageable) {
 		return eventService.getGlobalEvents(pageable);
 	}
+
+	//레스토랑 이벤트 목록 출력 + 해당 이벤트의 쿠폰생성자 출력
+	@GetMapping("/restaurants/{restaurantId}/events")
+	public Page<GetEventsResponse> getRestaurantEvents(@PageableDefault(size = 10, page = 0) Pageable pageable,
+		@AuthenticationPrincipal UserDetailsImpl userDetails) {
+		return eventService.getRestaurantEvents(userDetails.getId(), pageable);
+	}
 	/*  쿠폰 생성자  */
 
 	//광역 이벤트 쿠폰 생성자 생성
