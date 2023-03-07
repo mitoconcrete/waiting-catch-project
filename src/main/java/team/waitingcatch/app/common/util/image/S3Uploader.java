@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.amazonaws.services.s3.AmazonS3Client;
@@ -15,7 +16,7 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 
 import lombok.RequiredArgsConstructor;
 
-// @Service
+@Service
 @RequiredArgsConstructor
 public class S3Uploader implements ImageUploader {
 	private final AmazonS3Client amazonS3Client;
