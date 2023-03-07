@@ -68,9 +68,6 @@
         $.ajax({
             type: 'GET',
             url: '/api/seller/blacklist-demands',
-            headers: {
-                'Authorization': localStorage.getItem('accessToken')
-            },
             success: function (response) {
                 let rows = response['data'];
                 for (let i = 0; i < rows.length; i++) {
@@ -101,9 +98,6 @@
         $.ajax({
             url: `/api/seller/blacklist-demands/${blacklistDemandId}`,
             type: 'DELETE',
-            headers: {
-                'Authorization': localStorage.getItem('accessToken')
-            },
             success: function () {
                 alert("블랙리스트 신청 취소 처리 완료");
                 window.location.reload();
