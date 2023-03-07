@@ -12,6 +12,7 @@
             crossorigin="anonymous"></script>
     <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
     <link type="text/css" th:href="@{/css/admin-style.css}" rel="stylesheet">
+    <script type="text/javascript" th:src="@{/js/seller.js}"></script>
 </head>
 <body>
 <header>
@@ -21,9 +22,7 @@
     <nav>
         <ul>
             <a href="/">판매자 님</a>
-            <a href="/seller/seller.html" th:href="@{/hello}" th:method="get">
-                <button onclick="sendTokenLogout()" type="button" class="btn">Logout</button>
-            </a>
+            <a href="#" onclick="sendTokenDeleteSeller();">Logout</a>
         </ul>
     </nav>
 </header>

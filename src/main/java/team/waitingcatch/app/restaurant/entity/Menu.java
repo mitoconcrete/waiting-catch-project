@@ -48,7 +48,7 @@ public class Menu extends TimeStamped {
 		this.restaurant = restaurant;
 		this.name = name;
 		this.price = price;
-		this.imagePath = imagePath;
+		this.imagePath = imagePath == null ? "기본 메뉴 이미지 URL" : imagePath;
 		this.isDeleted = false;
 	}
 
