@@ -206,7 +206,7 @@ class EventServiceImplTest {
 	void getRestaurantEvents() {
 		Restaurant restaurant = mock(Restaurant.class);
 		when(restaurant.getId()).thenReturn(1L);
-		when(restaurantService._getRestaurantById(restaurant.getId())).thenReturn(restaurant);
+		when(restaurantService._getRestaurantByUserId(restaurant.getId())).thenReturn(restaurant);
 
 		// 이벤트 생성
 		Event event = mock(Event.class);
