@@ -1,6 +1,6 @@
 package team.waitingcatch.app.event.service.event;
 
-import static team.waitingcatch.app.exception.ErrorCode.*;
+import static team.waitingcatch.app.exception.ErrorCode.NOT_FOUND_EVENT;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -47,8 +47,8 @@ public class EventServiceImpl implements EventService, InternalEventService {
 	// 레스토랑 이벤트를 생성한다.
 	@Override
 	public void createSellerEvent(CreateEventServiceRequest createEventServiceRequest) {
-		Restaurant restaurant = internalRestaurantService._getRestaurantById(
-			createEventServiceRequest.getRestaurantId());
+		Restaurant restaurant = internalRestaurantService._getRestaurantByUserId(
+			createEventServiceRequest.getSellerId());
 		CreateEventRequest createEventRequest = new CreateEventRequest(createEventServiceRequest, restaurant);
 		Event event = new Event(createEventRequest);
 		eventRepository.save(event);

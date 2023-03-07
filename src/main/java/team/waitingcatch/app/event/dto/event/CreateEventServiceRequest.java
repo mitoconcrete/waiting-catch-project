@@ -28,12 +28,12 @@ public class CreateEventServiceRequest {
 	@DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
 	private LocalDateTime eventEndDate;
 
-	private Long restaurantId;
+	private Long sellerId;
 
-	public CreateEventServiceRequest(CreateEventControllerRequest createEventControllerRequest, Long id) {
+	public CreateEventServiceRequest(CreateEventControllerRequest createEventControllerRequest, Long sellerId) {
 		this.name = createEventControllerRequest.getName();
 		this.eventStartDate = createEventControllerRequest.getEventStartDate();
 		this.eventEndDate = createEventControllerRequest.getEventEndDate();
-		this.restaurantId = restaurantId;
+		this.sellerId = sellerId;
 	}
 }
