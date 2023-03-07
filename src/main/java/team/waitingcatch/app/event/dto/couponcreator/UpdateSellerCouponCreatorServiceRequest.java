@@ -46,7 +46,7 @@ public class UpdateSellerCouponCreatorServiceRequest {
 		Long eventId, Long creatorId, Long userId) {
 		this.name = updateCouponCreatorControllerRequest.getName();
 		this.discountPrice = updateCouponCreatorControllerRequest.getDiscountPrice();
-		this.discountType = updateCouponCreatorControllerRequest.getDiscountType();
+		this.discountType = CouponTypeEnum.valueOf(updateCouponCreatorControllerRequest.getDiscountType());
 		this.quantity = updateCouponCreatorControllerRequest.getQuantity();
 		this.expireDate = updateCouponCreatorControllerRequest.getExpireDate();
 		this.eventId = eventId;

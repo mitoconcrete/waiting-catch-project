@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,9 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.restaurant.dto.category.CreateCategoryRequest;
@@ -42,7 +41,7 @@ import team.waitingcatch.app.user.dto.UserInfoResponse;
 import team.waitingcatch.app.user.enums.UserRoleEnum;
 import team.waitingcatch.app.user.service.UserService;
 
-@RestController
+@Controller
 @RequiredArgsConstructor
 public class AdminController {
 	private final UserService userService;
@@ -79,15 +78,17 @@ public class AdminController {
 	@PostMapping("/general/templates/admin/register")
 	@ResponseStatus(HttpStatus.CREATED)
 	public String createAdmin(
-		@ModelAttribute("CreateUserControllerRequest") @Valid CreateUserControllerRequest controllerRequest,
-		RedirectAttributes redirectAttributes, HttpServletResponse response, Model model) {
+		@ModelAttribute("CreateUserControllerRequest") @Valid CreateUserControllerRequest controllerRequest
+		, HttpServletResponse response, Model model) {
 		Collection<String> headerNames = response.getHeaderNames();
 		if (headerNames.contains("Authorization")) {
 			String token = response.getHeader("Authorization");
 			model.addAttribute("accessToken", token);
 		}
 		_createUserService(UserRoleEnum.ADMIN, controllerRequest);
-		return "redirect:/general/";
+		model.addAttribute("message", "회원가입이 완료되었습니다.");
+		model.addAttribute("searchUrl", "/general/templates/admin/login");
+		return "/admin/message";
 	}
 
 	private void _createUserService(UserRoleEnum role, CreateUserControllerRequest controllerRequest) {
@@ -209,10 +210,13 @@ public class AdminController {
 	}
 
 	@DeleteMapping("/admin/templates/restaurants/{restaurant_id}")
-	public void deleteRestaurantByAdmin(@PathVariable Long restaurant_id) {
+	public String deleteRestaurantByAdmin(@PathVariable Long restaurant_id, Model model) {
 		DeleteRestaurantByAdminServiceRequest deleteRestaurantByAdminServiceRequest
 			= new DeleteRestaurantByAdminServiceRequest(restaurant_id);
 		restaurantService.deleteRestaurantByAdmin(deleteRestaurantByAdminServiceRequest);
+		model.addAttribute("message", "레스토랑 삭제가 완료되었습니다.");
+		model.addAttribute("searchUrl", "/admin/templates/restaurants");
+		return "/admin/message";
 	}
 
 	@GetMapping("/admin/templates/event")
@@ -262,29 +266,43 @@ public class AdminController {
 
 	@PostMapping("/admin/templates/category")
 	@ResponseStatus(value = HttpStatus.CREATED)
-	public void createCategory(@ModelAttribute @Valid CreateCategoryRequest request) {
+	public String createCategory(@ModelAttribute @Valid CreateCategoryRequest request, Model model) {
 		categoryService.createCategory(request);
+		model.addAttribute("message", "카테고리 작성이 완료되었습니다.");
+		model.addAttribute("searchUrl", "/admin/templates/category");
+		return "/admin/message";
 	}
 
 	@PutMapping("/admin/templates/categories-update")
-	public void updateCategory(@ModelAttribute @Valid UpdateCategoryControllerRequest controllerRequest) {
+	public String updateCategory(@ModelAttribute @Valid UpdateCategoryControllerRequest controllerRequest,
+		Model model) {
 		UpdateCategoryServiceRequest serviceRequest =
 			new UpdateCategoryServiceRequest(controllerRequest.getCategoryId(), controllerRequest.getName());
 		categoryService.updateCategory(serviceRequest);
+		model.addAttribute("message", "카테고리 수정이 완료 되었습니다.");
+		model.addAttribute("searchUrl", "/admin/templates/category");
+		return "/admin/message";
 	}
 
 	@DeleteMapping("/admin/templates/categories-form-delete")
-	public void deleteCategory(@ModelAttribute DeleteCategoryControllerRequest deleteCategoryControllerRequest) {
+	public String deleteCategory(@ModelAttribute DeleteCategoryControllerRequest deleteCategoryControllerRequest,
+		Model model) {
 		DeleteCategoryServiceRequest request = new DeleteCategoryServiceRequest(
 			deleteCategoryControllerRequest.getCategoryId());
 		categoryService.deleteCategory(request);
+		model.addAttribute("message", "카테고리 삭제가 완료 되었습니다.");
+		model.addAttribute("searchUrl", "/admin/templates/category");
+		return "/admin/message";
 	}
 
 	@DeleteMapping("/admin/templates/categories-direct-delete/{categoryId}")
-	public void deleteCategory(@PathVariable Long categoryId) {
+	public String deleteCategory(@PathVariable Long categoryId, Model model) {
 		DeleteCategoryServiceRequest request = new DeleteCategoryServiceRequest(
 			categoryId);
 		categoryService.deleteCategory(request);
+		model.addAttribute("message", "카테고리 삭제가 완료 되었습니다.");
+		model.addAttribute("searchUrl", "/admin/templates/categories/");
+		return "/admin/message";
 	}
 
 	@GetMapping("/admin/templates/categories/{categoryId}")

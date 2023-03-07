@@ -27,7 +27,6 @@ import team.waitingcatch.app.event.dto.couponcreator.UpdateAdminCouponCreatorSer
 import team.waitingcatch.app.event.dto.couponcreator.UpdateCouponCreatorControllerRequest;
 import team.waitingcatch.app.event.dto.couponcreator.UpdateSellerCouponCreatorServiceRequest;
 import team.waitingcatch.app.event.dto.event.CreateEventControllerRequest;
-import team.waitingcatch.app.event.dto.event.CreateEventServiceRequest;
 import team.waitingcatch.app.event.dto.event.DeleteEventControllerRequest;
 import team.waitingcatch.app.event.dto.event.DeleteEventServiceRequest;
 import team.waitingcatch.app.event.dto.event.GetCouponCreatorResponse;
@@ -70,7 +69,7 @@ public class CouponController {
 
 	//광역 이벤트를 수정한다.
 	@PutMapping("/admin/events/{eventId}")
-	public void updateAdminEvent(@RequestBody UpdateEventControllerRequest updateEventControllerRequest,
+	public void updateAdminEvent(@Validated @RequestBody UpdateEventControllerRequest updateEventControllerRequest,
 		@PathVariable Long eventId) {
 		UpdateEventServiceRequest updateEventServiceRequest = new UpdateEventServiceRequest(
 			updateEventControllerRequest, eventId);
@@ -87,14 +86,14 @@ public class CouponController {
 	/*  레스토랑  */
 
 	//새로운 레스토랑 이벤트를 생성한다.
-	@PostMapping("/seller/restaurants/{restaurant_id}/events")
-	@ResponseStatus(value = HttpStatus.CREATED)
-	public void createSellerEvent(@Validated @RequestBody CreateEventControllerRequest createEventControllerRequest,
-		@PathVariable Long restaurant_id) {
-		CreateEventServiceRequest createEventServiceRequest = new CreateEventServiceRequest(
-			createEventControllerRequest, restaurant_id);
-		eventService.createSellerEvent(createEventServiceRequest);
-	}
+	// @PostMapping("/seller/restaurants/{restaurant_id}/events")
+	// @ResponseStatus(value = HttpStatus.CREATED)
+	// public void createSellerEvent(@Validated @RequestBody CreateEventControllerRequest createEventControllerRequest,
+	// 	@PathVariable Long restaurant_id) {
+	// 	CreateEventServiceRequest createEventServiceRequest = new CreateEventServiceRequest(
+	// 		createEventControllerRequest, restaurant_id);
+	// 	eventService.createSellerEvent(createEventServiceRequest);
+	// }
 
 	//레스토랑 이벤트를 수정한다.
 	@PutMapping("/seller/events/{eventId}")
@@ -164,7 +163,7 @@ public class CouponController {
 	//광역 이벤트 쿠폰 생성자 수정
 	@PutMapping("/admin/events/{eventId}/creator/{creatorId}")
 	public void updateAdminCouponCreator(
-		@RequestBody UpdateCouponCreatorControllerRequest updateCouponCreatorControllerRequest,
+		@Validated @RequestBody UpdateCouponCreatorControllerRequest updateCouponCreatorControllerRequest,
 		@PathVariable Long eventId, @PathVariable Long creatorId) {
 		UpdateAdminCouponCreatorServiceRequest updateAdminCouponCreatorServiceRequest = new UpdateAdminCouponCreatorServiceRequest(
 			updateCouponCreatorControllerRequest, eventId, creatorId);
@@ -174,12 +173,12 @@ public class CouponController {
 	//레스토랑 이벤트 쿠폰 생성자 수정
 	@PutMapping("/seller/events/{eventId}/creator/{creatorId}")
 	public void updateSellerCouponCreator(
-		@RequestBody UpdateCouponCreatorControllerRequest updateCouponCreatorControllerRequest,
+		@RequestBody UpdateCouponCreatorControllerRequest controllerRequest,
 		@PathVariable Long eventId, @PathVariable Long creatorId,
 		@AuthenticationPrincipal UserDetailsImpl userDetails) {
-		UpdateSellerCouponCreatorServiceRequest updateSellerCouponCreatorServiceRequest = new UpdateSellerCouponCreatorServiceRequest(
-			updateCouponCreatorControllerRequest, eventId, creatorId, userDetails.getId());
-		couponCreatorService.updateSellerCouponCreator(updateSellerCouponCreatorServiceRequest);
+		UpdateSellerCouponCreatorServiceRequest serviceRequest = new UpdateSellerCouponCreatorServiceRequest(
+			controllerRequest, eventId, creatorId, userDetails.getId());
+		couponCreatorService.updateSellerCouponCreator(serviceRequest);
 	}
 
 

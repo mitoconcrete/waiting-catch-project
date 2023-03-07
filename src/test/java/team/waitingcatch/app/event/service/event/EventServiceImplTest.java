@@ -79,7 +79,7 @@ class EventServiceImplTest {
 		when(createEventServiceRequest.getName()).thenReturn("song");
 		when(createEventServiceRequest.getEventStartDate()).thenReturn(localTime.plus(1, ChronoUnit.DAYS));
 		when(createEventServiceRequest.getEventEndDate()).thenReturn(localTime.plus(2, ChronoUnit.DAYS));
-		when(createEventServiceRequest.getRestaurantId()).thenReturn(1L);
+		when(createEventServiceRequest.getSellerId()).thenReturn(1L);
 		when(restaurantService._getRestaurantByUserId(any(Long.class))).thenReturn(restaurant);
 
 		//when
@@ -226,4 +226,3 @@ class EventServiceImplTest {
 	}
 
 }
-

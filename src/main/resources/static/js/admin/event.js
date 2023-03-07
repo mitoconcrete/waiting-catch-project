@@ -170,6 +170,7 @@ function createCouponCreator(id) {
                     "path=/; expires=" + (new Date().getTime() + 30 * 60000) + ";";
             }
             console.error(error);
+            alert(response.responseJSON.message);
         }
     })
 }
@@ -186,12 +187,19 @@ function getCouponCreators(id) {
                     "path=/; expires=" + (new Date().getTime() + 30 * 60000) + ";";
             }
             if (status === 'success') {
+                // console.log(data);
+                // let totalPage = data.totalPages;
                 for (let i = 0; i < data.length; i++) {
                     let responseDto = data[i];
                     let eventId = id;
                     let tempHtml = getCouponCreatorList(responseDto, eventId);
                     $('#couponCreatorTable').append(tempHtml);
                 }
+                // for (let i = 0; i < totalPage; i++) {
+                //     let page = i + 1;
+                //     let tempHtml = getCouponCreatorPagination(page, id);
+                //     $('#couponCreatorPagination').append(tempHtml);
+                // }
             }
         },
         error: function (response, status, error) {
@@ -239,6 +247,7 @@ function updateCouponCreator(id, eventId) {
                     "path=/; expires=" + (new Date().getTime() + 30 * 60000) + ";";
             }
             console.error(error);
+            alert(response.responseJSON.message);
         }
     })
 }
@@ -273,10 +282,17 @@ $(document).ready(function () {
                     "path=/; expires=" + (new Date().getTime() + 30 * 60000) + ";";
             }
             if (status === 'success') {
-                for (let i = 0; i < data.length; i++) {
-                    let responseDto = data[i];
+                console.log(data.content);
+                let totalPage = data.totalPages;
+                for (let i = 0; i < data.content.length; i++) {
+                    let responseDto = data.content[i];
                     let tempHtml = getEvents(responseDto);
                     $('#EventTable').append(tempHtml);
+                }
+                for (let i = 0; i < totalPage; i++) {
+                    let page = i + 1;
+                    let tempHtml = getEventPagination(page);
+                    $('#eventPagination').append(tempHtml);
                 }
             }
         },
@@ -321,6 +337,7 @@ function createEvents() {
                     "path=/; expires=" + (new Date().getTime() + 30 * 60000) + ";";
             }
             console.error(error);
+            alert(response.responseJSON.message);
         }
     })
 }
@@ -360,6 +377,7 @@ function updateEvents(eventId) {
                     "path=/; expires=" + (new Date().getTime() + 30 * 60000) + ";";
             }
             console.error(error);
+            alert(response.responseJSON.message);
         }
     })
 
@@ -386,6 +404,96 @@ function deleteEvents(id) {
                     "path=/; expires=" + (new Date().getTime() + 30 * 60000) + ";";
             }
             console.error(error);
+            alert(response.responseJSON.message);
         }
     })
 }
+
+function getEventPagination(page) {
+    return `<li class="page-item"><a onclick="getEventPage(${page})" style="color: #8B60C7" class="page-link" href="#">${page}</a></li>`
+}
+
+// function getCouponCreatorPagination(page, eventId) {
+//     return `<li class="page-item"><a onclick="getCouponCreatorPage('${page}', '${eventId}')" style="color: #8B60C7" class="page-link" href="#">${page}</a></li>`
+// }
+
+function getEventPage(page) {
+    $('#EventTable').empty();
+    $('#eventPagination').empty();
+
+    let pageNumber = page - 1;
+
+    $.ajax({
+        type: 'GET',
+        url: `/api/admin/events?page=` + pageNumber,
+        success: function (data, status, response) {
+            if (response.getResponseHeader("Authorization")) {
+                document.cookie =
+                    'Authorization' + "=" + response.getResponseHeader("Authorization") + "; " +
+                    "path=/; expires=" + (new Date().getTime() + 30 * 60000) + ";";
+            }
+            if (status === 'success') {
+                let totalPage = data.totalPages;
+                for (let i = 0; i < data.content.length; i++) {
+                    let responseDto = data.content[i];
+                    let tempHtml = getEvents(responseDto);
+                    $('#EventTable').append(tempHtml);
+                }
+                for (let i = 0; i < totalPage; i++) {
+                    let page = i + 1;
+                    let tempHtml = getEventPagination(page);
+                    $('#eventPagination').append(tempHtml);
+                }
+            }
+        },
+        error: function (response, status, error) {
+            if (response.getResponseHeader("Authorization")) {
+                document.cookie =
+                    'Authorization' + "=" + response.getResponseHeader("Authorization") + "; " +
+                    "path=/; expires=" + (new Date().getTime() + 30 * 60000) + ";";
+            }
+            window.location.href = host + "/admin/templates/login";
+        }
+    });
+}
+
+// function getCouponCreatorPage(page, eventId) {
+//     $('#couponCreatorTable').empty();
+//     $('#couponCreatorPagination').empty();
+//
+//     let pageNumber = page - 1;
+//
+//     $.ajax({
+//         type: 'GET',
+//         url: `/api/admin/events/` + eventId + `/creator?page=` + pageNumber,
+//         success: function (data, status, response) {
+//             if (response.getResponseHeader("Authorization")) {
+//                 document.cookie =
+//                     'Authorization' + "=" + response.getResponseHeader("Authorization") + "; " +
+//                     "path=/; expires=" + (new Date().getTime() + 30 * 60000) + ";";
+//             }
+//             if (status === 'success') {
+//                 let totalPage = data.totalPages;
+//                 for (let i = 0; i < data.content.length; i++) {
+//                     let responseDto = data.content[i];
+//                     let eventId = id;
+//                     let tempHtml = getCouponCreatorList(responseDto, eventId);
+//                     $('#couponCreatorTable').append(tempHtml);
+//                 }
+//                 for (let i = 0; i < totalPage; i++) {
+//                     let page = i + 1;
+//                     let tempHtml = getCouponCreatorPagination(page, id);
+//                     $('#couponCreatorPagination').append(tempHtml);
+//                 }
+//             }
+//         },
+//         error: function (response, status, error) {
+//             if (response.getResponseHeader("Authorization")) {
+//                 document.cookie =
+//                     'Authorization' + "=" + response.getResponseHeader("Authorization") + "; " +
+//                     "path=/; expires=" + (new Date().getTime() + 30 * 60000) + ";";
+//             }
+//             console.error(error);
+//         }
+//     })
+// }

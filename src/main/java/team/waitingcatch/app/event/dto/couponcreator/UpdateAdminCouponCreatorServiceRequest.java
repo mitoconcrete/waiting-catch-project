@@ -42,7 +42,7 @@ public class UpdateAdminCouponCreatorServiceRequest {
 		Long eventId, Long creatorId) {
 		this.name = updateCouponCreatorControllerRequest.getName();
 		this.discountPrice = updateCouponCreatorControllerRequest.getDiscountPrice();
-		this.discountType = updateCouponCreatorControllerRequest.getDiscountType();
+		this.discountType = CouponTypeEnum.valueOf(updateCouponCreatorControllerRequest.getDiscountType());
 		this.quantity = updateCouponCreatorControllerRequest.getQuantity();
 		this.expireDate = updateCouponCreatorControllerRequest.getExpireDate();
 		this.eventId = eventId;
