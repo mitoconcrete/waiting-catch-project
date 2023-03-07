@@ -1,6 +1,5 @@
 package team.waitingcatch.app.admin;
 
-import java.io.IOException;
 import java.util.Collection;
 
 import javax.servlet.http.HttpServletResponse;
@@ -325,23 +324,23 @@ public class AdminController {
 	}
 
 	@PostMapping("/admin/templates/seller-managements/{sellerManagementId}")
-	public void approveSignUpSeller(@PathVariable Long sellerManagementId,
-		HttpServletResponse response) throws
-		IOException {
+	public String approveSignUpSeller(@PathVariable Long sellerManagementId, Model model) {
 		ApproveSignUpSellerServiceRequest approveSignUpSellerServiceRequest = new ApproveSignUpSellerServiceRequest(
 			sellerManagementId);
 		sellerManagementService.approveSignUpSeller(approveSignUpSellerServiceRequest);
-		response.sendRedirect("/admin/templates/seller-management");
+		model.addAttribute("message", "판매자 요청이 승인 되었습니다.");
+		model.addAttribute("searchUrl", "/admin/templates/seller-management");
+		return "/admin/message";
 	}
 
 	@PutMapping("/admin/templates/seller-managements/{sellerManagementId}")
-	public void rejectSignUpSeller(@PathVariable Long sellerManagementId, HttpServletResponse response) throws
-		IOException {
+	public String rejectSignUpSeller(@PathVariable Long sellerManagementId, Model model) {
 		RejectSignUpSellerServiceRequest rejectSignUpSellerServiceRequest = new RejectSignUpSellerServiceRequest(
 			sellerManagementId);
-
 		sellerManagementService.rejectSignUpSeller(rejectSignUpSellerServiceRequest);
-		response.sendRedirect("/admin/templates/seller-management");
+		model.addAttribute("message", "판매자 요청이 거절 되었습니다.");
+		model.addAttribute("searchUrl", "/admin/templates/seller-management");
+		return "/admin/message";
 	}
-
 }
+
