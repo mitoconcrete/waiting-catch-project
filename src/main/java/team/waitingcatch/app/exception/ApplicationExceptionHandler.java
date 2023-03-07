@@ -1,7 +1,5 @@
 package team.waitingcatch.app.exception;
 
-import static team.waitingcatch.app.exception.ErrorCode.INTERNAL_ERROR;
-
 import java.util.NoSuchElementException;
 
 import org.springframework.dao.DataIntegrityViolationException;
@@ -51,9 +49,9 @@ public class ApplicationExceptionHandler {
 		return new BasicExceptionResponse(HttpStatus.BAD_REQUEST, e.getRootCause().getMessage());
 	}
 
-	@ExceptionHandler(Exception.class)
-	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-	public BasicExceptionResponse handleTokenNotFoundException() {
-		return new BasicExceptionResponse(HttpStatus.INTERNAL_SERVER_ERROR, INTERNAL_ERROR.getMessage());
-	}
+	// @ExceptionHandler(Exception.class)
+	// @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+	// public BasicExceptionResponse handleTokenNotFoundException() {
+	// 	return new BasicExceptionResponse(HttpStatus.INTERNAL_SERVER_ERROR, INTERNAL_ERROR.getMessage());
+	// }
 }

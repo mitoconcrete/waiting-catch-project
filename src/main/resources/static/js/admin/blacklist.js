@@ -210,7 +210,7 @@ function getBlacklistPage(page) {
 
     $.ajax({
         type: 'GET',
-        url: `api/admin/blacklists?page=` + pageNumber,
+        url: `/api/admin/blacklists?page=` + pageNumber,
         success: function (data, status, response) {
             if (response.getResponseHeader("Authorization")) {
                 document.cookie =
@@ -218,17 +218,17 @@ function getBlacklistPage(page) {
                     "path=/; expires=" + (new Date().getTime() + 30 * 60000) + ";";
             }
             let responseData = data.data.content;
-            let totalpage = data.data.totalPages;
+            let totalPage = data.data.totalPages;
             console.log(responseData);
             console.log(data.data);
-            console.log(totalpage);
+            console.log(totalPage);
             if (status === 'success') {
                 for (let i = 0; i < responseData.length; i++) {
                     let responseDto = responseData[i];
                     let tempHtml = getBlacklist(responseDto);
                     $('#blacklist').append(tempHtml);
                 }
-                for (let i = 0; i < totalpage; i++) {
+                for (let i = 0; i < totalPage; i++) {
                     let page = i + 1;
                     let tempHtml = getBlacklistPagination(page);
                     $('#blacklistPagination').append(tempHtml);

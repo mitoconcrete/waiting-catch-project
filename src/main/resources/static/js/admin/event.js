@@ -170,6 +170,7 @@ function createCouponCreator(id) {
                     "path=/; expires=" + (new Date().getTime() + 30 * 60000) + ";";
             }
             console.error(error);
+            alert(response.responseJSON.message);
         }
     })
 }
@@ -239,6 +240,7 @@ function updateCouponCreator(id, eventId) {
                     "path=/; expires=" + (new Date().getTime() + 30 * 60000) + ";";
             }
             console.error(error);
+            alert(response.responseJSON.message);
         }
     })
 }
@@ -321,6 +323,7 @@ function createEvents() {
                     "path=/; expires=" + (new Date().getTime() + 30 * 60000) + ";";
             }
             console.error(error);
+            alert(response.responseJSON.message);
         }
     })
 }
@@ -360,6 +363,7 @@ function updateEvents(eventId) {
                     "path=/; expires=" + (new Date().getTime() + 30 * 60000) + ";";
             }
             console.error(error);
+            alert(response.responseJSON.message);
         }
     })
 
@@ -386,6 +390,7 @@ function deleteEvents(id) {
                     "path=/; expires=" + (new Date().getTime() + 30 * 60000) + ";";
             }
             console.error(error);
+            alert(response.responseJSON.message);
         }
     })
 }
