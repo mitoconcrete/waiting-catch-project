@@ -14,10 +14,9 @@ import com.amazonaws.services.s3.model.ObjectMetadata;
 
 import lombok.RequiredArgsConstructor;
 
-@Service
+// @Service
 @RequiredArgsConstructor
 public class BasicImageUploader implements ImageUploader {
-
 	@Value("${profile.image.dir}")
 	private String imageDir;
 

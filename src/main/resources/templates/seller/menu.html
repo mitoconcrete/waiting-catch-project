@@ -15,7 +15,7 @@
 </head>
 <body>
 <header>
-    <a href="/seller/lineup-page">
+    <a href="/seller/templates/lineup">
         <div>WAITING CATCH</div>
     </a>
     <nav>
@@ -30,8 +30,8 @@
 <nav class="menus">
     <ul>
         <a href="/seller/templates/lineup">줄서기 현황</a>
-        <a href="/seller/templates/seller" style="color: #8B60C7">매장 관리</a>
-        <a href="/seller/templates/menu">메뉴</a>
+        <a href="/seller/templates/seller">매장 관리</a>
+        <a href="/seller/templates/menu" style="color: #8B60C7">메뉴</a>
         <a href="/seller/templates/event">이벤트</a>
         <a href="/seller/templates/blacklist-demands">블랙리스트</a>
     </ul>
@@ -39,7 +39,7 @@
 <div class="body">
     <div class="menu">
         <h1 style="color: #8B60C7">메뉴</h1>
-        <a href="/menu/new">
+        <a href="/seller/templates/menu/new">
             <button type="button" class="btn">메뉴추가</button>
         </a>
     </div>
@@ -64,12 +64,12 @@
                     <td th:text="${item.price}"></td>
                     <td th:text="${item.imageUrl}"></td>
                     <td>
-                        <a th:href="@{/seller/templates/menu/update/{menuId}(menuId=${item.menuId})}">
+                        <a th:href="@{/seller/templates/menus/{menuId}/menu-form(menuId=${item.menuId})}">
                             <button type="button" class="btn">수정</button>
                         </a>
                     </td>
                     <td>
-                        <a th:href="@{/seller/templates/menu/delete/{menuId}(menuId=${item.menuId})}"
+                        <a th:href="@{/seller/templates/menus/{menuId}(menuId=${item.menuId})}"
                            th:method="delete">
                             <button type="button" class="btn">삭제</button>
                         </a>

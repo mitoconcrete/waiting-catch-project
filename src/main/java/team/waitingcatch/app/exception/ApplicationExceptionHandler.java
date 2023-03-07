@@ -1,5 +1,7 @@
 package team.waitingcatch.app.exception;
 
+import static team.waitingcatch.app.exception.ErrorCode.*;
+
 import java.util.NoSuchElementException;
 
 import org.springframework.dao.DataIntegrityViolationException;
@@ -12,9 +14,11 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import lombok.extern.slf4j.Slf4j;
 import team.waitingcatch.app.exception.dto.BasicExceptionResponse;
 
 @RestControllerAdvice
+@Slf4j
 public class ApplicationExceptionHandler {
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -49,9 +53,12 @@ public class ApplicationExceptionHandler {
 		return new BasicExceptionResponse(HttpStatus.BAD_REQUEST, e.getRootCause().getMessage());
 	}
 
-	// @ExceptionHandler(Exception.class)
-	// @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-	// public BasicExceptionResponse handleTokenNotFoundException() {
-	// 	return new BasicExceptionResponse(HttpStatus.INTERNAL_SERVER_ERROR, INTERNAL_ERROR.getMessage());
-	// }
+	@ExceptionHandler(Exception.class)
+	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+	public BasicExceptionResponse handleTokenNotFoundException(Exception e) {
+		for (StackTraceElement element : e.getStackTrace()) {
+			log.error(element.toString());
+		}
+		return new BasicExceptionResponse(HttpStatus.INTERNAL_SERVER_ERROR, INTERNAL_ERROR.getMessage());
+	}
 }

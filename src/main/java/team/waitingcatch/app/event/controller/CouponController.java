@@ -26,7 +26,6 @@ import team.waitingcatch.app.event.dto.couponcreator.UpdateAdminCouponCreatorSer
 import team.waitingcatch.app.event.dto.couponcreator.UpdateCouponCreatorControllerRequest;
 import team.waitingcatch.app.event.dto.couponcreator.UpdateSellerCouponCreatorServiceRequest;
 import team.waitingcatch.app.event.dto.event.CreateEventControllerRequest;
-import team.waitingcatch.app.event.dto.event.CreateEventServiceRequest;
 import team.waitingcatch.app.event.dto.event.DeleteEventControllerRequest;
 import team.waitingcatch.app.event.dto.event.DeleteEventServiceRequest;
 import team.waitingcatch.app.event.dto.event.GetCouponCreatorResponse;
@@ -85,14 +84,14 @@ public class CouponController {
 	/*  레스토랑  */
 
 	//새로운 레스토랑 이벤트를 생성한다.
-	@PostMapping("/seller/restaurants/{restaurant_id}/events")
-	@ResponseStatus(value = HttpStatus.CREATED)
-	public void createSellerEvent(@Validated @RequestBody CreateEventControllerRequest createEventControllerRequest,
-		@PathVariable Long restaurant_id) {
-		CreateEventServiceRequest createEventServiceRequest = new CreateEventServiceRequest(
-			createEventControllerRequest, restaurant_id);
-		eventService.createSellerEvent(createEventServiceRequest);
-	}
+	// @PostMapping("/seller/restaurants/{restaurant_id}/events")
+	// @ResponseStatus(value = HttpStatus.CREATED)
+	// public void createSellerEvent(@Validated @RequestBody CreateEventControllerRequest createEventControllerRequest,
+	// 	@PathVariable Long restaurant_id) {
+	// 	CreateEventServiceRequest createEventServiceRequest = new CreateEventServiceRequest(
+	// 		createEventControllerRequest, restaurant_id);
+	// 	eventService.createSellerEvent(createEventServiceRequest);
+	// }
 
 	//레스토랑 이벤트를 수정한다.
 	@PutMapping("/seller/events/{eventId}")
@@ -117,6 +116,13 @@ public class CouponController {
 	@GetMapping("/customer/events")
 	public Page<GetEventsResponse> getEvents(@PageableDefault(size = 10, page = 0) Pageable pageable) {
 		return eventService.getGlobalEvents(pageable);
+	}
+
+	//레스토랑 이벤트 목록 출력 + 해당 이벤트의 쿠폰생성자 출력
+	@GetMapping("/customer/events/{restaurantId}")
+	public Page<GetEventsResponse> getRestaurantEvents(@PageableDefault(size = 10, page = 0) Pageable pageable,
+		@AuthenticationPrincipal UserDetailsImpl userDetails) {
+		return eventService.getRestaurantEvents(userDetails.getId(), pageable);
 	}
 	/*  쿠폰 생성자  */
 
