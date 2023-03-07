@@ -75,8 +75,8 @@
                     let customerName = rows[i]['customerName'];
                     let description = rows[i]['description'];
                     let status = rows[i]['status'];
-                    let createdDate = rows[i]['createdDate'];
-                    let modifiedDate = rows[i]['modifiedDate'];
+                    let createdDate = new Date(rows[i]['createdDate']).toLocaleString();
+                    let modifiedDate = new Date(rows[i]['modifiedDate']).toLocaleString();
 
                     let temp_html = `<tr>
                                         <td>${customerName}</td>

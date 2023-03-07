@@ -88,8 +88,8 @@
                     let numOfMembers = rows[i]['numOfMembers'];
                     let status = rows[i]['status'];
                     let callCount = rows[i]['callCount'];
-                    let startedAt = rows[i]['startedAt'];
-                    let arrivedAt = rows[i]['arrivedAt'];
+                    let startedAt = new Date(rows[i]['startedAt']).toLocaleString();
+                    let arrivedAt = rows[i]['arrivedAt'] !== null ? new Date(rows[i]['arrivedAt']).toLocaleString() : '-';
 
                     let temp_html = `<tr>
                                         <td>${waitingNumber}</td>
