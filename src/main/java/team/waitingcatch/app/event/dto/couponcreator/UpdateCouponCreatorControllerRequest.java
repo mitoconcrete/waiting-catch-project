@@ -1,7 +1,11 @@
 package team.waitingcatch.app.event.dto.couponcreator;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+
+import javax.validation.constraints.Future;
+import javax.validation.constraints.NotNull;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,18 +20,9 @@ public class UpdateCouponCreatorControllerRequest {
 	private int discountPrice;
 	private CouponTypeEnum discountType;
 	private int quantity;
-	private String expireDate;
+	@NotNull
+	@Future
+	@DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
+	private LocalDateTime expireDate;
 
-	public LocalDateTime getExpireDate() {
-		return LocalDateTime.parse(expireDate, DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm"));
-	}
-
-	public String getExpireDateString() {
-		return expireDate;
-	}
-
-	public void setExpireDate(String expireDate) {
-		this.expireDate = expireDate;
-	}
 }
-

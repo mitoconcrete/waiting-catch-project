@@ -38,4 +38,9 @@ public class UserCoupon {
 		this.user = user;
 		this.couponCreator = couponCreator;
 	}
+
+	public void useCoupon() {
+		this.isUsed = true;
+	}
+
 }

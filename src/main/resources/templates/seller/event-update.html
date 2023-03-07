@@ -2,11 +2,12 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>이벤트 추가</title>
+    <title>이벤트 수정</title>
 </head>
 <body>
-<h1>이벤트 추가</h1>
-<form action="/event/new" method="post">
+<h1>이벤트 수정</h1>
+<form th:action="@{/api/seller/event/update/{eventId}(eventId=${eventId})}" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="_method" value="PUT"/>
     <label for="name">name</label>
     <input type="text" id="name" name="name"><br>
     <label for="eventStartDate">eventStartDate</label>

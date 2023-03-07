@@ -34,10 +34,11 @@ public enum ErrorCode {
 	EXCEED_MAX_CALL_COUNT("호출은 최대" + Lineup.MAX_CALL_COUNT + "번까지 가능합니다."),
 
 	NOT_FOUND_WAITING_NUMBER("존재하지 않는 대기 번호입니다."),
-	DISTANCE_EXCEEDED( LineupServiceImpl.MAX_DISTANCE + "km 이내의 레스토랑에만 줄서기가 가능합니다."),
+	DISTANCE_EXCEEDED(LineupServiceImpl.MAX_DISTANCE + "km 이내의 레스토랑에만 줄서기가 가능합니다."),
 
 	NOT_FOUND_EVENT("존재하지 않는 이벤트입니다."),
 	NOT_FOUND_COUPON_CRETOR("존재하지 않는 쿠폰 생성자입니다."),
+	DUPLICATE_COUPON("이미 발급받은 쿠폰입니다."),
 
 	CONNCURRENT_REQUEST_FAILURE("이용자가 많아 요청을 처리할 수 없습니다. 잠시 후 다시 시도해 주세요."),
 

@@ -1,5 +1,8 @@
 package team.waitingcatch.app.restaurant.controller;
 
+import java.io.IOException;
+
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.data.domain.Page;
@@ -17,7 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.common.Position;
 import team.waitingcatch.app.common.dto.GenericResponse;
-import team.waitingcatch.app.restaurant.dto.requestseller.ApproveSignUpSellerResponse;
 import team.waitingcatch.app.restaurant.dto.requestseller.ApproveSignUpSellerServiceRequest;
 import team.waitingcatch.app.restaurant.dto.requestseller.DemandSignUpSellerControllerRequest;
 import team.waitingcatch.app.restaurant.dto.requestseller.DemandSignUpSellerServiceRequest;
@@ -76,17 +78,21 @@ public class SellerManagementController {
 	}
 
 	@PostMapping("/admin/seller-managements/{sellerManagementId}")
-	public ApproveSignUpSellerResponse approveSignUpSeller(@PathVariable Long sellerManagementId) {
+	public void approveSignUpSeller(@PathVariable Long sellerManagementId,
+		HttpServletResponse response) throws
+		IOException {
 		ApproveSignUpSellerServiceRequest approveSignUpSellerServiceRequest = new ApproveSignUpSellerServiceRequest(
 			sellerManagementId);
-
-		return sellerManagementService.approveSignUpSeller(approveSignUpSellerServiceRequest);
+		response.sendRedirect("/admin/templates/seller-management");
 	}
 
 	@PutMapping("/admin/seller-managements/{sellerManagementId}")
-	public void rejectSignUpSeller(@PathVariable Long sellerManagementId) {
+	public void rejectSignUpSeller(@PathVariable Long sellerManagementId, HttpServletResponse response) throws
+		IOException {
 		RejectSignUpSellerServiceRequest rejectSignUpSellerServiceRequest = new RejectSignUpSellerServiceRequest(
 			sellerManagementId);
+
 		sellerManagementService.rejectSignUpSeller(rejectSignUpSellerServiceRequest);
+		response.sendRedirect("/admin/templates/seller-management");
 	}
 }

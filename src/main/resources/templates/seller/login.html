@@ -27,7 +27,7 @@
     <input class="password-input" id="password" type="password" name="password" placeholder="비밀번호">
 
     <button id="login-id-submit" class="btn login-btn" onclick="login()">로그인</button>
-    <button class="btn login-btn" onclick="location.href='/signup'">판매자 신청</button>
+    <button class="btn login-btn" onclick="location.href='/general/templates/seller/signup'">판매자 신청</button>
 
     <div id="login-failed" style="display:none" class="alert alert-danger" role="alert">로그인에 실패하였습니다.</div>
 </div>
@@ -55,13 +55,18 @@
 
         $.ajax({
             type: "POST",
-            url: `/login`,
+            url: `/api/general/seller/login`,
             contentType: "application/json",
             data: JSON.stringify({username: username, password: password}),
             success: function (response, status, xhr) {
                 if (response === 'success') {
-                    window.location.href = '/seller';
-                    localStorage.setItem('accessToken', xhr.getResponseHeader('Authorization'))
+                    let host = window.location.host;
+                    let url = host + '/seller/templates/seller';
+                    let todayDate = new Date().getTime() + 1000 * 60 * 30;
+                    document.cookie =
+                        'Authorization' + "=" + xhr.getResponseHeader('Authorization') + "; " +
+                        "path=/; expires=" + todayDate.toString() + ";";
+                    window.location.href = 'http://' + url;
                 } else {
                     alert('로그인에 실패하셨습니다. 다시 로그인해 주세요.')
                     window.location.reload();
@@ -69,5 +74,6 @@
             }
         })
     }
+
 </script>
 </html>

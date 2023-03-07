@@ -14,6 +14,15 @@ public class GetCouponCreatorResponse {
 	private CouponTypeEnum discountType;
 	private LocalDateTime expireDate;
 
+	public GetCouponCreatorResponse(Long id, String name, int discountPrice,
+		CouponTypeEnum discountType, LocalDateTime expireDate) {
+		this.id = id;
+		this.name = name;
+		this.discountPrice = discountPrice;
+		this.discountType = discountType;
+		this.expireDate = expireDate;
+	}
+
 	public GetCouponCreatorResponse(CouponCreator couponCreator) {
 		this.id = couponCreator.getId();
 		this.name = couponCreator.getName();
