@@ -167,7 +167,7 @@ public class SellerController {
 		DeleteMenuServiceRequest deleteMenuServiceRequest = new DeleteMenuServiceRequest(userDetails.getId(), menuId);
 		menuService.deleteMenu(deleteMenuServiceRequest);
 	}
-	
+
 	/*     판매자 정보 프론트   */
 	@GetMapping("/seller/templates/seller")
 	public String seller() {

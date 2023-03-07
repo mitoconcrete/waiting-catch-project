@@ -218,4 +218,12 @@ public class CouponController {
 	public void useCoupon(@PathVariable Long couponId) {
 		userCouponService.useCoupon(couponId);
 	}
+
+	//유저 쿠폰 다운로드
+	@PostMapping("/api/customer/coupons/creators/{creatorid}")
+	public void downloadCoupon(@PathVariable Long creatorid, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+		CreateUserCouponServiceRequest createUserCouponserviceRequest = new CreateUserCouponServiceRequest(creatorid,
+			userDetails.getUsername());
+		userCouponService.createUserCoupon(createUserCouponserviceRequest);
+	}
 }
