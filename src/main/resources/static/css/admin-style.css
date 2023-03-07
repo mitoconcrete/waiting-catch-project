@@ -385,7 +385,7 @@ button {
     border-radius: 10px;
 }
 
-#blacklistRequestPagination, #blacklistPagination {
+#blacklistRequestPagination, #blacklistPagination, #eventPagination, #couponCreatorPagination {
     max-width: 500px;
     margin: 5px auto 5px auto;
 
