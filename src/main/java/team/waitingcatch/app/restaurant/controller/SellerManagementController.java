@@ -83,6 +83,7 @@ public class SellerManagementController {
 		IOException {
 		ApproveSignUpSellerServiceRequest approveSignUpSellerServiceRequest = new ApproveSignUpSellerServiceRequest(
 			sellerManagementId);
+		sellerManagementService.approveSignUpSeller(approveSignUpSellerServiceRequest);
 		response.sendRedirect("/admin/templates/seller-management");
 	}
 

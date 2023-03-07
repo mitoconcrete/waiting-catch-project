@@ -68,7 +68,7 @@ public class CouponController {
 
 	//광역 이벤트를 수정한다.
 	@PutMapping("/admin/events/{eventId}")
-	public void updateAdminEvent(@RequestBody UpdateEventControllerRequest updateEventControllerRequest,
+	public void updateAdminEvent(@Validated @RequestBody UpdateEventControllerRequest updateEventControllerRequest,
 		@PathVariable Long eventId) {
 		UpdateEventServiceRequest updateEventServiceRequest = new UpdateEventServiceRequest(
 			updateEventControllerRequest, eventId);
@@ -154,7 +154,7 @@ public class CouponController {
 	//광역 이벤트 쿠폰 생성자 수정
 	@PutMapping("/admin/events/{eventId}/creator/{creatorId}")
 	public void updateAdminCouponCreator(
-		@RequestBody UpdateCouponCreatorControllerRequest updateCouponCreatorControllerRequest,
+		@Validated @RequestBody UpdateCouponCreatorControllerRequest updateCouponCreatorControllerRequest,
 		@PathVariable Long eventId, @PathVariable Long creatorId) {
 		UpdateAdminCouponCreatorServiceRequest updateAdminCouponCreatorServiceRequest = new UpdateAdminCouponCreatorServiceRequest(
 			updateCouponCreatorControllerRequest, eventId, creatorId);
