@@ -66,9 +66,6 @@
         $.ajax({
             type: 'GET',
             url: '/api/seller/blacklist-demands',
-            headers: {
-                'Authorization': localStorage.getItem('accessToken')
-            },
             success: function (response) {
                 let rows = response['data'];
                 for (let i = 0; i < rows.length; i++) {
@@ -76,8 +73,8 @@
                     let customerName = rows[i]['customerName'];
                     let description = rows[i]['description'];
                     let status = rows[i]['status'];
-                    let createdDate = rows[i]['createdDate'];
-                    let modifiedDate = rows[i]['modifiedDate'];
+                    let createdDate = new Date(rows[i]['createdDate']).toLocaleString();
+                    let modifiedDate = new Date(rows[i]['modifiedDate']).toLocaleString();
 
                     let temp_html = `<tr>
                                         <td>${customerName}</td>
@@ -99,9 +96,6 @@
         $.ajax({
             url: `/api/seller/blacklist-demands/${blacklistDemandId}`,
             type: 'DELETE',
-            headers: {
-                'Authorization': localStorage.getItem('accessToken')
-            },
             success: function () {
                 alert("블랙리스트 신청 취소 처리 완료");
                 window.location.reload();

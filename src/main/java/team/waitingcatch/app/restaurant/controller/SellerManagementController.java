@@ -38,16 +38,6 @@ public class SellerManagementController {
 	@PostMapping("/general/demand")
 	public void demandSignUpSeller(
 		@Valid @RequestBody DemandSignUpSellerControllerRequest demandSignUpControllerRequest) {
-		// Address address = new Address(
-		// 	demandSignUpControllerRequest.getProvince(),
-		// 	demandSignUpControllerRequest.getCity(),
-		// 	demandSignUpControllerRequest.getStreet()
-		// );
-		// Position position = new Position(
-		// 	demandSignUpControllerRequest.getLatitude(),
-		// 	demandSignUpControllerRequest.getLongitude()
-		// );
-
 		Position position = mapApiService.getPosition(demandSignUpControllerRequest.getQuery());
 
 		DemandSignUpSellerServiceRequest demandSignupSellerServiceRequest = new DemandSignUpSellerServiceRequest(
@@ -60,7 +50,7 @@ public class SellerManagementController {
 		@RequestBody GetRequestSellerControllerRequest getRequestSellerControllerRequest) {
 		GetRequestSellerByRestaurantRequest getRequestSellerByRestaurantRequest = new GetRequestSellerByRestaurantRequest(
 			getRequestSellerControllerRequest.getRequestSellerName(), getRequestSellerControllerRequest.getEmail());
-		return new GenericResponse(
+		return new GenericResponse<>(
 			sellerManagementService.getRequestSellerByRestaurant(getRequestSellerByRestaurantRequest));
 	}
 
@@ -74,6 +64,7 @@ public class SellerManagementController {
 
 	@PostMapping("/admin/seller-managements/{sellerManagementId}")
 	public void approveSignUpSeller(@PathVariable Long sellerManagementId) {
+
 		ApproveSignUpSellerServiceRequest approveSignUpSellerServiceRequest = new ApproveSignUpSellerServiceRequest(
 			sellerManagementId);
 		sellerManagementService.approveSignUpSeller(approveSignUpSellerServiceRequest);

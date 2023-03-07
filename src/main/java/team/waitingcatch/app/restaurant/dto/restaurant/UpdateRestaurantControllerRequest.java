@@ -29,4 +29,5 @@ public class UpdateRestaurantControllerRequest {
 	@NotNull
 	@Pattern(regexp = "^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$")
 	private String closeTime;
+
 }
