@@ -156,7 +156,7 @@ public class RestaurantServiceImpl implements RestaurantService, InternalRestaur
 		Restaurant restaurant = restaurantRepository.findByUserId(serviceRequest.getSellerId())
 			.orElseThrow(() -> new NoSuchElementException(NOT_FOUND_RESTAURANT.getMessage()));
 
-		RestaurantInfo restaurantInfo = restaurantInfoRepository.findById(restaurant.getId())
+		RestaurantInfo restaurantInfo = restaurantInfoRepository.findByRestaurantId(restaurant.getId())
 			.orElseThrow(() -> new NoSuchElementException(NOT_FOUND_RESTAURANT_INFO.getMessage()));
 
 		List<String> imagePaths = imageUploader.uploadList(serviceRequest.getImages(), RESTAURANT.getValue());

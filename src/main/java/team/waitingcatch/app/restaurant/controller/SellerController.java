@@ -156,7 +156,7 @@ public class SellerController {
 		return "redirect:/seller/templates/menu";
 	}
 
-	@DeleteMapping("/seller/templates/menus/{menuId}")
+	@GetMapping("/seller/templates/menus/{menuId}")
 	public String deleteMenuSub(@PathVariable Long menuId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
 		deleteMenu(menuId, userDetails);
 		return "redirect:/seller/templates/menu";
@@ -205,6 +205,7 @@ public class SellerController {
 		UpdateUserServiceRequest servicePayload = new UpdateUserServiceRequest(controllerRequest.getName(),
 			controllerRequest.getEmail(), userDetails.getUsername(), controllerRequest.getNickName(),
 			controllerRequest.getPhoneNumber());
+		System.out.println(servicePayload.getEmail());
 		userService.updateUser(servicePayload);
 		return "redirect:/seller/templates/seller";
 	}
@@ -287,7 +288,8 @@ public class SellerController {
 	}
 
 	@GetMapping("/seller/templates/events/{eventId}/coupon-creators/{creatorId}")
-	public String updateCouponCreator(Model model, @PathVariable Long eventId, @PathVariable Long creatorId) {
+	public String updateCouponCreator(Model model, @PathVariable Long eventId,
+		@PathVariable Long creatorId) {
 		model.addAttribute("eventId", eventId);
 		model.addAttribute("creatorId", creatorId);
 		return "/seller/event-update-creator";
@@ -305,7 +307,8 @@ public class SellerController {
 	}
 
 	@GetMapping("/seller/templates/events/{eventId}")
-	public String deleteEventSub(@PathVariable Long eventId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+	public String deleteEventSub(@PathVariable Long eventId,
+		@AuthenticationPrincipal UserDetailsImpl userDetails) {
 		deleteEvent(eventId, userDetails);
 		return "redirect:/seller/templates/event";
 	}

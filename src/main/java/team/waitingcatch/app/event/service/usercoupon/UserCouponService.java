@@ -12,5 +12,4 @@ public interface UserCouponService {
 	List<GetUserCouponResponse> getUserCoupons(User user);
 
 	void useCoupon(Long couponId);
-
 }

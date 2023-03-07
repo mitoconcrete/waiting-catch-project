@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
+import team.waitingcatch.app.common.dto.GenericResponse;
 import team.waitingcatch.app.event.dto.couponcreator.CreateAdminCouponCreatorServiceRequest;
 import team.waitingcatch.app.event.dto.couponcreator.CreateCouponCreatorControllerRequest;
 import team.waitingcatch.app.event.dto.couponcreator.CreateSellerCouponCreatorServiceRequest;
@@ -61,8 +62,9 @@ public class CouponController {
 
 	// 광역 이벤트 목록을 조회한다.
 	@GetMapping("/admin/events")
-	public Page<GetEventsResponse> getAdminEvents(@PageableDefault(size = 10, page = 0) Pageable pageable) {
-		return eventService.getGlobalEvents(pageable);
+	public GenericResponse<Page<GetEventsResponse>> getAdminEvents(
+		@PageableDefault(size = 10, page = 0) Pageable pageable) {
+		return new GenericResponse<>(eventService.getGlobalEvents(pageable));
 	}
 
 	//광역 이벤트를 수정한다.
@@ -114,15 +116,16 @@ public class CouponController {
 	/*  유저  */
 	//광역 이벤트 목록 출력 + 해당 이벤트의 쿠폰생성자 출력
 	@GetMapping("/customer/events")
-	public Page<GetEventsResponse> getEvents(@PageableDefault(size = 10, page = 0) Pageable pageable) {
-		return eventService.getGlobalEvents(pageable);
+	public GenericResponse<Page<GetEventsResponse>> getEvents(@PageableDefault(size = 10, page = 0) Pageable pageable) {
+		return new GenericResponse<>(eventService.getGlobalEvents(pageable));
 	}
 
 	//레스토랑 이벤트 목록 출력 + 해당 이벤트의 쿠폰생성자 출력
-	@GetMapping("/customer/events/{restaurantId}")
-	public Page<GetEventsResponse> getRestaurantEvents(@PageableDefault(size = 10, page = 0) Pageable pageable,
+	@GetMapping("/api/customer/restaurants/{restaurantId}/events")
+	public GenericResponse<Page<GetEventsResponse>> getRestaurantEvents(
+		@PageableDefault(size = 10, page = 0) Pageable pageable,
 		@AuthenticationPrincipal UserDetailsImpl userDetails) {
-		return eventService.getRestaurantEvents(userDetails.getId(), pageable);
+		return new GenericResponse<>(eventService.getRestaurantEvents(userDetails.getId(), pageable));
 	}
 	/*  쿠폰 생성자  */
 
@@ -153,8 +156,8 @@ public class CouponController {
 
 	// 광역 이벤트 쿠폰 생성자 조회
 	@GetMapping("/admin/events/{eventId}/creator")
-	public List<GetCouponCreatorResponse> getAdminCouponCreator(@PathVariable Long eventId) {
-		return couponCreatorService.getAdminCouponCreator(eventId);
+	public GenericResponse<List<GetCouponCreatorResponse>> getAdminCouponCreator(@PathVariable Long eventId) {
+		return new GenericResponse<>(couponCreatorService.getAdminCouponCreator(eventId));
 	}
 
 	//광역 이벤트 쿠폰 생성자 수정
@@ -205,13 +208,22 @@ public class CouponController {
 
 	//유저 쿠폰 조회
 	@GetMapping("/customer/coupons")
-	public List<GetUserCouponResponse> getUserCoupon(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-		return userCouponService.getUserCoupons(userDetails.getUser());
+	public GenericResponse<List<GetUserCouponResponse>> getUserCoupon(
+		@AuthenticationPrincipal UserDetailsImpl userDetails) {
+		return new GenericResponse<>(userCouponService.getUserCoupons(userDetails.getUser()));
 	}
 
 	//유저 쿠폰 사용
 	@PutMapping("/customer/coupons/{couponId}")
 	public void useCoupon(@PathVariable Long couponId) {
 		userCouponService.useCoupon(couponId);
+	}
+
+	//유저 쿠폰 다운로드
+	@PostMapping("/api/customer/coupons/creators/{creatorid}")
+	public void downloadCoupon(@PathVariable Long creatorid, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+		CreateUserCouponServiceRequest createUserCouponserviceRequest = new CreateUserCouponServiceRequest(creatorid,
+			userDetails.getUsername());
+		userCouponService.createUserCoupon(createUserCouponserviceRequest);
 	}
 }

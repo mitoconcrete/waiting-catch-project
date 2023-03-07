@@ -18,8 +18,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import lombok.extern.slf4j.Slf4j;
 import team.waitingcatch.app.exception.dto.BasicExceptionResponse;
 
-@RestControllerAdvice
 @Slf4j
+@RestControllerAdvice
 public class ApplicationExceptionHandler {
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
