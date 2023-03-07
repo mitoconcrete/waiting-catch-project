@@ -86,7 +86,6 @@ public class SellerManagementController {
 		Collection<String> headerNames = response.getHeaderNames();
 		if (headerNames.contains("Authorization")) {
 			String token = response.getHeader("Authorization");
-			System.out.println(token);
 			model.addAttribute("accessToken", token);
 		}
 		sellerManagementService.approveSignUpSeller(approveSignUpSellerServiceRequest);
@@ -103,7 +102,6 @@ public class SellerManagementController {
 		Collection<String> headerNames = response.getHeaderNames();
 		if (headerNames.contains("Authorization")) {
 			String token = response.getHeader("Authorization");
-			System.out.println(token);
 			model.addAttribute("accessToken", token);
 		}
 		sellerManagementService.rejectSignUpSeller(rejectSignUpSellerServiceRequest);

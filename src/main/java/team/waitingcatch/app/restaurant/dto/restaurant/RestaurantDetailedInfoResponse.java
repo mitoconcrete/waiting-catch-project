@@ -28,7 +28,6 @@ public class RestaurantDetailedInfoResponse {
 		this.description = restaurant.getDescription();
 		this.openTime = restaurantInfo.getOpenTime();
 		this.closeTime = restaurantInfo.getCloseTime();
-		System.out.println(restaurantInfo.getOpenTime());
 		this.rate = restaurantInfo.getRate();
 	}
 }

@@ -24,7 +24,6 @@ public class LineupHistoryRepositoryCustomImpl implements LineupHistoryRepositor
 	@Override
 	public Slice<LineupRecordResponse> findLineupRecordsByUserIdAndStatus(Long id, long userId,
 		ArrivalStatusEnum statusCond, Pageable pageable) {
-		System.out.println(id);
 		List<LineupRecordResponse> content = queryFactory
 			.select(new QLineupRecordResponse(
 				lineupHistory.id,

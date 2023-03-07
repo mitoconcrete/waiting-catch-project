@@ -29,7 +29,6 @@ public class BlacklistDemandController {
 		Collection<String> headerNames = response.getHeaderNames();
 		if (headerNames.contains("Authorization")) {
 			String token = response.getHeader("Authorization");
-			System.out.println(token);
 			model.addAttribute("accessToken", token);
 		}
 		return "seller/blacklist-demand";

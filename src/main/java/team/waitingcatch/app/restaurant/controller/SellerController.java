@@ -105,7 +105,6 @@ public class SellerController {
 	@PostMapping("/api/general/seller/signup")
 	public String demandSignUpSeller(
 		@Valid DemandSignUpSellerControllerRequest demandSignUpControllerRequest) {
-		System.out.println(demandSignUpControllerRequest.getPhoneNumber());
 		Position position = mapApiService.getPosition(demandSignUpControllerRequest.getQuery());
 
 		DemandSignUpSellerServiceRequest demandSignupSellerServiceRequest = new DemandSignUpSellerServiceRequest(
@@ -122,7 +121,6 @@ public class SellerController {
 		Collection<String> headerNames = response.getHeaderNames();
 		if (headerNames.contains("Authorization")) {
 			String token = response.getHeader("Authorization");
-			System.out.println(token);
 			model.addAttribute("accessToken", token);
 		}
 		List<MenuResponse> menus = menuService.getMyRestaurantMenus(userDetails.getId());
@@ -135,7 +133,6 @@ public class SellerController {
 		Collection<String> headerNames = response.getHeaderNames();
 		if (headerNames.contains("Authorization")) {
 			String token = response.getHeader("Authorization");
-			System.out.println(token);
 			model.addAttribute("accessToken", token);
 		}
 		return "/seller/menu-new";
@@ -150,7 +147,6 @@ public class SellerController {
 		Collection<String> headerNames = response.getHeaderNames();
 		if (headerNames.contains("Authorization")) {
 			String token = response.getHeader("Authorization");
-			System.out.println(token);
 			model.addAttribute("accessToken", token);
 		}
 		CreateMenuServiceRequest serviceRequest = new CreateMenuServiceRequest(userDetails.getId(), multipartFile,
@@ -164,7 +160,6 @@ public class SellerController {
 		Collection<String> headerNames = response.getHeaderNames();
 		if (headerNames.contains("Authorization")) {
 			String token = response.getHeader("Authorization");
-			System.out.println(token);
 			model.addAttribute("accessToken", token);
 		}
 		model.addAttribute("menuId", menuId);
@@ -180,7 +175,6 @@ public class SellerController {
 		Collection<String> headerNames = response.getHeaderNames();
 		if (headerNames.contains("Authorization")) {
 			String token = response.getHeader("Authorization");
-			System.out.println(token);
 			model.addAttribute("accessToken", token);
 		}
 		UpdateMenuServiceRequest serviceRequest = new UpdateMenuServiceRequest(menuId, request, multipartFile,
@@ -195,7 +189,6 @@ public class SellerController {
 		Collection<String> headerNames = response.getHeaderNames();
 		if (headerNames.contains("Authorization")) {
 			String token = response.getHeader("Authorization");
-			System.out.println(token);
 			model.addAttribute("accessToken", token);
 		}
 		deleteMenu(menuId, userDetails);
@@ -214,7 +207,6 @@ public class SellerController {
 		Collection<String> headerNames = response.getHeaderNames();
 		if (headerNames.contains("Authorization")) {
 			String token = response.getHeader("Authorization");
-			System.out.println(token);
 			model.addAttribute("accessToken", token);
 		}
 		return "/seller/seller";
@@ -225,7 +217,6 @@ public class SellerController {
 		Collection<String> headerNames = response.getHeaderNames();
 		if (headerNames.contains("Authorization")) {
 			String token = response.getHeader("Authorization");
-			System.out.println(token);
 			model.addAttribute("accessToken", token);
 		}
 		String token = jwtUtil.resolveToken(request);
@@ -240,7 +231,6 @@ public class SellerController {
 		Collection<String> headerNames = response.getHeaderNames();
 		if (headerNames.contains("Authorization")) {
 			String token = response.getHeader("Authorization");
-			System.out.println(token);
 			model.addAttribute("accessToken", token);
 		}
 		withdrawSeller(userDetails);
@@ -258,7 +248,6 @@ public class SellerController {
 		Collection<String> headerNames = response.getHeaderNames();
 		if (headerNames.contains("Authorization")) {
 			String token = response.getHeader("Authorization");
-			System.out.println(token);
 			model.addAttribute("accessToken", token);
 		}
 		return "/seller/seller-info";
@@ -270,7 +259,6 @@ public class SellerController {
 		Collection<String> headerNames = response.getHeaderNames();
 		if (headerNames.contains("Authorization")) {
 			String token = response.getHeader("Authorization");
-			System.out.println(token);
 			model.addAttribute("accessToken", token);
 		}
 		UpdateUserServiceRequest servicePayload = new UpdateUserServiceRequest(controllerRequest.getName(),
@@ -285,7 +273,6 @@ public class SellerController {
 		Collection<String> headerNames = response.getHeaderNames();
 		if (headerNames.contains("Authorization")) {
 			String token = response.getHeader("Authorization");
-			System.out.println(token);
 			model.addAttribute("accessToken", token);
 		}
 		return "/seller/seller-restaurant-update";
@@ -301,7 +288,6 @@ public class SellerController {
 		Collection<String> headerNames = response.getHeaderNames();
 		if (headerNames.contains("Authorization")) {
 			String token = response.getHeader("Authorization");
-			System.out.println(token);
 			model.addAttribute("accessToken", token);
 		}
 
@@ -321,7 +307,6 @@ public class SellerController {
 		Collection<String> headerNames = response.getHeaderNames();
 		if (headerNames.contains("Authorization")) {
 			String token = response.getHeader("Authorization");
-			System.out.println(token);
 			model.addAttribute("accessToken", token);
 		}
 		Page<GetEventsResponse> events = eventService.getRestaurantEvents(userDetails.getId(), pageable);
@@ -334,7 +319,6 @@ public class SellerController {
 		Collection<String> headerNames = response.getHeaderNames();
 		if (headerNames.contains("Authorization")) {
 			String token = response.getHeader("Authorization");
-			System.out.println(token);
 			model.addAttribute("accessToken", token);
 		}
 		return "/seller/event-create";
@@ -347,7 +331,6 @@ public class SellerController {
 		Collection<String> headerNames = response.getHeaderNames();
 		if (headerNames.contains("Authorization")) {
 			String token = response.getHeader("Authorization");
-			System.out.println(token);
 			model.addAttribute("accessToken", token);
 			Cookie cookie = new Cookie("Authorization", "#@!#!@#!#@!#!");
 			// Cookie cookie2 = new Cookie("Test12", "@@@@");
@@ -365,7 +348,6 @@ public class SellerController {
 		Collection<String> headerNames = response.getHeaderNames();
 		if (headerNames.contains("Authorization")) {
 			String token = response.getHeader("Authorization");
-			System.out.println(token);
 			model.addAttribute("accessToken", token);
 		}
 		model.addAttribute("eventId", eventId);
@@ -379,7 +361,6 @@ public class SellerController {
 		Collection<String> headerNames = response.getHeaderNames();
 		if (headerNames.contains("Authorization")) {
 			String token = response.getHeader("Authorization");
-			System.out.println(token);
 			model.addAttribute("accessToken", token);
 		}
 		CreateSellerCouponCreatorServiceRequest createSellerCouponCreatorServiceRequest = new CreateSellerCouponCreatorServiceRequest(
@@ -394,7 +375,6 @@ public class SellerController {
 		Collection<String> headerNames = response.getHeaderNames();
 		if (headerNames.contains("Authorization")) {
 			String token = response.getHeader("Authorization");
-			System.out.println(token);
 			model.addAttribute("accessToken", token);
 		}
 		model.addAttribute("eventId", eventId);
@@ -408,7 +388,6 @@ public class SellerController {
 		Collection<String> headerNames = response.getHeaderNames();
 		if (headerNames.contains("Authorization")) {
 			String token = response.getHeader("Authorization");
-			System.out.println(token);
 			model.addAttribute("accessToken", token);
 		}
 		UpdateSellerEventServiceRequest updateSellerEventServiceRequest = new UpdateSellerEventServiceRequest(
@@ -423,7 +402,6 @@ public class SellerController {
 		Collection<String> headerNames = response.getHeaderNames();
 		if (headerNames.contains("Authorization")) {
 			String token = response.getHeader("Authorization");
-			System.out.println(token);
 			model.addAttribute("accessToken", token);
 		}
 		model.addAttribute("eventId", eventId);
@@ -439,7 +417,6 @@ public class SellerController {
 		Collection<String> headerNames = response.getHeaderNames();
 		if (headerNames.contains("Authorization")) {
 			String token = response.getHeader("Authorization");
-			System.out.println(token);
 			model.addAttribute("accessToken", token);
 		}
 		UpdateSellerCouponCreatorServiceRequest updateSellerCouponCreatorServiceRequest = new UpdateSellerCouponCreatorServiceRequest(
@@ -454,7 +431,6 @@ public class SellerController {
 		Collection<String> headerNames = response.getHeaderNames();
 		if (headerNames.contains("Authorization")) {
 			String token = response.getHeader("Authorization");
-			System.out.println(token);
 			model.addAttribute("accessToken", token);
 		}
 		deleteEvent(eventId, userDetails);
