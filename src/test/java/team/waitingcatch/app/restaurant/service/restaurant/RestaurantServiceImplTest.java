@@ -234,7 +234,7 @@ class RestaurantServiceImplTest {
 		imageUrls.add(imageUrl2);
 
 		when(restaurantRepository.findByUserId(any(Long.class))).thenReturn(Optional.of(restaurant));
-		when(restaurantInfoRepository.findById(any(Long.class))).thenReturn(Optional.of(restaurantInfo));
+		when(restaurantInfoRepository.findByRestaurantId(any(Long.class))).thenReturn(Optional.of(restaurantInfo));
 		when(imageUploader.uploadList(any(List.class), any(String.class))).thenReturn(imageUrls);
 
 		// when
