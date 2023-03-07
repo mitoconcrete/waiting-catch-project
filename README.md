@@ -193,7 +193,7 @@
 
 ## DB ERD<br>
 
-![DB ERD](https://user-images.githubusercontent.com/117354616/222920274-4e402cbc-0a37-4dfb-9570-5f733eec9bcf.png)
+![DB ERD](https://user-images.githubusercontent.com/117354616/223431460-64a5a3b8-771e-4cf5-ba02-46cfa75eb8a0.png)
 
 <br>
 <br>
