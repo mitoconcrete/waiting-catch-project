@@ -30,11 +30,11 @@ public interface RestaurantService {
 
 	Page<RestaurantResponse> getRestaurants(Pageable pageable);
 
-	void deleteRestaurantByAdmin(DeleteRestaurantByAdminServiceRequest deleteRestaurantByAdminServiceRequest);
+	boolean deleteRestaurantByAdmin(DeleteRestaurantByAdminServiceRequest deleteRestaurantByAdminServiceRequest);
 
 	void updateRestaurant(UpdateRestaurantServiceRequest updateRestaurantServiceRequest) throws IOException;
 
-//	void createRestaurant(ApproveSignUpSellerManagementEntityPassToRestaurantEntityRequest request);
+	//	void createRestaurant(ApproveSignUpSellerManagementEntityPassToRestaurantEntityRequest request);
 
 	Page<RestaurantResponse> getRestaurantsByRestaurantName(String searchVal, Pageable pageable);
 }

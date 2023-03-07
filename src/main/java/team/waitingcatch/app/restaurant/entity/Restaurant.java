@@ -1,10 +1,7 @@
 package team.waitingcatch.app.restaurant.entity;
 
-import static team.waitingcatch.app.exception.ErrorCode.*;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.UUID;
 
 import javax.persistence.Column;
@@ -116,11 +113,12 @@ public class Restaurant extends TimeStamped {
 		return this.getPosition().getLongitude();
 	}
 
-	public void deleteRestaurant() {
+	public boolean deleteRestaurant() {
 		if (this.isDeleted) {
-			throw new NoSuchElementException(NOT_FOUND_RESTAURANT.getMessage());
+			return false;
 		} else {
 			this.isDeleted = true;
+			return true;
 		}
 	}
 
