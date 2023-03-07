@@ -26,6 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.common.Position;
+import team.waitingcatch.app.common.dto.GenericResponse;
 import team.waitingcatch.app.common.util.JwtUtil;
 import team.waitingcatch.app.event.dto.couponcreator.CreateCouponCreatorControllerRequest;
 import team.waitingcatch.app.event.dto.couponcreator.CreateSellerCouponCreatorServiceRequest;
@@ -77,31 +78,31 @@ public class SellerController {
 	/*     로그인 프론트     */
 
 	@GetMapping("/")
-	public String index() {
-		return "seller/lineup";
+	public GenericResponse<String> index() {
+		return new GenericResponse<>("seller/lineup");
 	}
 
 	@GetMapping("/general/templates/seller/login")
-	public String login() {
-		return "/seller/login";
+	public GenericResponse<String> login() {
+		return new GenericResponse<>("/seller/login");
 	}
 
 	@ResponseBody
 	@PostMapping("/api/general/seller/login")
-	public String login(@RequestBody LoginRequest loginRequest, HttpServletResponse response) {
+	public GenericResponse<String> login(@RequestBody LoginRequest loginRequest, HttpServletResponse response) {
 		LoginServiceResponse loginServiceResponse = userService.login(loginRequest);
 		// 엑세스 토큰을 서비스로 부터 반환 받아 헤더에 넣어준다.
 		response.setHeader(JwtUtil.AUTHORIZATION_HEADER, loginServiceResponse.getAccessToken());
-		return "success";
+		return new GenericResponse<>("success");
 	}
 
 	@GetMapping("/general/templates/seller/signup")
-	public String signup() {
-		return "/seller/register";
+	public GenericResponse<String> signup() {
+		return new GenericResponse<>("/seller/register");
 	}
 
 	@PostMapping("/api/general/seller/signup")
-	public String demandSignUpSeller(
+	public GenericResponse<String> demandSignUpSeller(
 		@Valid DemandSignUpSellerControllerRequest demandSignUpControllerRequest) {
 		System.out.println(demandSignUpControllerRequest.getPhoneNumber());
 		Position position = mapApiService.getPosition(demandSignUpControllerRequest.getQuery());
@@ -109,57 +110,58 @@ public class SellerController {
 		DemandSignUpSellerServiceRequest demandSignupSellerServiceRequest = new DemandSignUpSellerServiceRequest(
 			demandSignUpControllerRequest, position);
 		sellerManagementService.demandSignUpSeller(demandSignupSellerServiceRequest);
-		return "/seller/login";
+		return new GenericResponse<>("/seller/login");
 	}
 
 	/*     메뉴 프론트     */
 
 	@GetMapping("/seller/templates/menu")
-	public String menu(Model model,
+	public GenericResponse<String> menu(Model model,
 		@AuthenticationPrincipal UserDetailsImpl userDetails) {
 		List<MenuResponse> menus = menuService.getMyRestaurantMenus(userDetails.getId());
 		model.addAttribute("menus", menus);
-		return "/seller/menu";
+		return new GenericResponse<>("/seller/menu");
 	}
 
 	@GetMapping("/seller/templates/menu/new")
-	public String createMenu() {
-		return "/seller/menu-new";
+	public GenericResponse<String> createMenu() {
+		return new GenericResponse<>("/seller/menu-new");
 	}
 
 	//@PostMapping("/seller/restaurants/{restaurantId}/menus")
 	@PostMapping("/api/seller/menu/new")
-	public String createMenu(
+	public GenericResponse<String> createMenu(
 		@RequestPart(value = "image", required = false) MultipartFile multipartFile,
 		@Valid CreateMenuControllerRequest request,
 		@AuthenticationPrincipal UserDetailsImpl userDetails) {
 		CreateMenuServiceRequest serviceRequest = new CreateMenuServiceRequest(userDetails.getId(), multipartFile,
 			request);
 		menuService.createMenu(serviceRequest);
-		return "redirect:/seller/templates/menu";
+		return new GenericResponse<>("redirect:/seller/templates/menu");
 	}
 
 	@GetMapping("/seller/templates/menus/{menuId}/menu-form")
-	public String updateMenu(Model model, @PathVariable Long menuId) {
+	public GenericResponse<String> updateMenu(Model model, @PathVariable Long menuId) {
 		model.addAttribute("menuId", menuId);
-		return "/seller/menu-update";
+		return new GenericResponse<>("/seller/menu-update");
 	}
 
 	@PutMapping("/api/seller/menus/{menuId}/menu-form")
-	public String updateMenu(@PathVariable Long menuId,
+	public GenericResponse<String> updateMenu(@PathVariable Long menuId,
 		@RequestPart(value = "image", required = false) MultipartFile multipartFile,
 		@Valid UpdateMenuControllerRequest request, @AuthenticationPrincipal UserDetailsImpl userDetails
 	) {
 		UpdateMenuServiceRequest serviceRequest = new UpdateMenuServiceRequest(menuId, request, multipartFile,
 			userDetails.getId());
 		menuService.updateMenu(serviceRequest);
-		return "redirect:/seller/templates/menu";
+		return new GenericResponse<>("redirect:/seller/templates/menu");
 	}
 
 	@DeleteMapping("/seller/templates/menus/{menuId}")
-	public String deleteMenuSub(@PathVariable Long menuId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+	public GenericResponse<String> deleteMenuSub(@PathVariable Long menuId,
+		@AuthenticationPrincipal UserDetailsImpl userDetails) {
 		deleteMenu(menuId, userDetails);
-		return "redirect:/seller/templates/menu";
+		return new GenericResponse<>("redirect:/seller/templates/menu");
 	}
 
 	@DeleteMapping("/api/seller/menus/{menuId}")
@@ -170,22 +172,22 @@ public class SellerController {
 
 	/*     판매자 정보 프론트   */
 	@GetMapping("/seller/templates/seller")
-	public String seller() {
-		return "/seller/seller";
+	public GenericResponse<String> seller() {
+		return new GenericResponse<>("/seller/seller");
 	}
 
 	@GetMapping("/api/seller/logout")
-	public String logoutSub(HttpServletRequest request) {
+	public GenericResponse<String> logoutSub(HttpServletRequest request) {
 		String token = jwtUtil.resolveToken(request);
 		LogoutRequest servicePayload = new LogoutRequest(token);
 		userService.logout(servicePayload);
-		return "redirect:/general/templates/seller/login";
+		return new GenericResponse<>("redirect:/general/templates/seller/login");
 	}
 
 	@DeleteMapping("/seller/templates/withdraw")
-	public String withdrawSellerSub(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+	public GenericResponse<String> withdrawSellerSub(@AuthenticationPrincipal UserDetailsImpl userDetails) {
 		withdrawSeller(userDetails);
-		return "redirect:/general/templates/seller/login";
+		return new GenericResponse<>("redirect:/general/templates/seller/login");
 	}
 
 	@DeleteMapping("/api/seller/withdraws")
@@ -195,27 +197,27 @@ public class SellerController {
 	}
 
 	@GetMapping("/seller/templates/info")
-	public String updateSellerInfoSub() {
-		return "/seller/seller-info";
+	public GenericResponse<String> updateSellerInfoSub() {
+		return new GenericResponse<>("/seller/seller-info");
 	}
 
 	@PutMapping("/api/seller/info/view")
-	public String updateSellerInfo(@Valid UpdateUserControllerRequest controllerRequest,
+	public GenericResponse<String> updateSellerInfo(@Valid UpdateUserControllerRequest controllerRequest,
 		@AuthenticationPrincipal UserDetailsImpl userDetails) {
 		UpdateUserServiceRequest servicePayload = new UpdateUserServiceRequest(controllerRequest.getName(),
 			controllerRequest.getEmail(), userDetails.getUsername(), controllerRequest.getNickName(),
 			controllerRequest.getPhoneNumber());
 		userService.updateUser(servicePayload);
-		return "redirect:/seller/templates/seller";
+		return new GenericResponse<>("redirect:/seller/templates/seller");
 	}
 
 	@GetMapping("/seller/templates/update-restaurant")
-	public String updateRestaurantSub() {
-		return "/seller/seller-restaurant-update";
+	public GenericResponse<String> updateRestaurantSub() {
+		return new GenericResponse<>("/seller/seller-restaurant-update");
 	}
 
 	@PutMapping("/api/seller/update-restaurant")
-	public String updateRestaurant(
+	public GenericResponse<String> updateRestaurant(
 		UpdateRestaurantControllerRequest updateRestaurantControllerRequest,
 		@RequestPart(value = "image", required = false) List<MultipartFile> multipartFile,
 		@AuthenticationPrincipal UserDetailsImpl userDetails) throws IOException {
@@ -224,42 +226,42 @@ public class SellerController {
 				userDetails.getId());
 		restaurantService.updateRestaurant(updateRestaurantServiceRequest);
 
-		return "redirect:/seller/templates/seller";
+		return new GenericResponse<>("redirect:/seller/templates/seller");
 	}
 
 	/*     이벤트     */
 
 	@GetMapping("/seller/templates/event")
-	public String event(Model model, @AuthenticationPrincipal UserDetailsImpl userDetails,
+	public GenericResponse<String> event(Model model, @AuthenticationPrincipal UserDetailsImpl userDetails,
 		@PageableDefault(size = 10, page = 0) Pageable pageable) {
 		Page<GetEventsResponse> events = eventService.getRestaurantEvents(userDetails.getId(), pageable);
 		model.addAttribute("events", events);
-		return "/seller/event";
+		return new GenericResponse<>("/seller/event");
 	}
 
 	@GetMapping("/seller/templates/event/creator")
-	public String createEvent() {
-		return "/seller/event-create";
+	public GenericResponse<String> createEvent() {
+		return new GenericResponse<>("/seller/event-create");
 	}
 
 	@PostMapping("/api/seller/event")
-	public String createEvent(
+	public GenericResponse<String> createEvent(
 		@Validated CreateEventControllerRequest createEventControllerRequest,
 		@AuthenticationPrincipal UserDetailsImpl userDetails) {
 		CreateEventServiceRequest createEventServiceRequest = new CreateEventServiceRequest(
 			createEventControllerRequest, userDetails.getId());
 		eventService.createSellerEvent(createEventServiceRequest);
-		return "redirect:/seller/templates/event";
+		return new GenericResponse<>("redirect:/seller/templates/event");
 	}
 
 	@GetMapping("/seller/templates/events/{eventId}/coupon-creators")
-	public String createCouponCreator(Model model, @PathVariable Long eventId) {
+	public GenericResponse<String> createCouponCreator(Model model, @PathVariable Long eventId) {
 		model.addAttribute("eventId", eventId);
-		return "/seller/event-create-creator";
+		return new GenericResponse<>("/seller/event-create-creator");
 	}
 
 	@PostMapping("/api/seller/events/{eventId}/coupon-creators")
-	public String createCouponCreator(@PathVariable Long eventId,
+	public GenericResponse<String> createCouponCreator(@PathVariable Long eventId,
 		@Validated CreateCouponCreatorControllerRequest createCouponCreatorControllerRequest,
 		@AuthenticationPrincipal UserDetailsImpl userDetails) {
 
@@ -267,46 +269,48 @@ public class SellerController {
 			createCouponCreatorControllerRequest, eventId, userDetails.getId());
 
 		couponCreatorService.createSellerCouponCreator(createSellerCouponCreatorServiceRequest);
-		return "redirect:/seller/templates/event";
+		return new GenericResponse<>("redirect:/seller/templates/event");
 	}
 
 	@GetMapping("/seller/templates/events/{eventId}/update")
-	public String updateEvent(Model model, @PathVariable Long eventId) {
+	public GenericResponse<String> updateEvent(Model model, @PathVariable Long eventId) {
 		model.addAttribute("eventId", eventId);
-		return "/seller/event-update";
+		return new GenericResponse<>("/seller/event-update");
 	}
 
 	@PutMapping("/api/seller/events/{eventId}/update")
-	public String updateEvent(UpdateEventControllerRequest updateEventControllerRequest,
+	public GenericResponse<String> updateEvent(UpdateEventControllerRequest updateEventControllerRequest,
 		@PathVariable Long eventId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
 		UpdateSellerEventServiceRequest updateSellerEventServiceRequest = new UpdateSellerEventServiceRequest(
 			updateEventControllerRequest, eventId, userDetails.getId());
 		eventService.updateSellerEvent(updateSellerEventServiceRequest);
-		return "redirect:/seller/templates/event";
+		return new GenericResponse<>("redirect:/seller/templates/event");
 	}
 
 	@GetMapping("/seller/templates/events/{eventId}/coupon-creators/{creatorId}")
-	public String updateCouponCreator(Model model, @PathVariable Long eventId, @PathVariable Long creatorId) {
+	public GenericResponse<String> updateCouponCreator(Model model, @PathVariable Long eventId,
+		@PathVariable Long creatorId) {
 		model.addAttribute("eventId", eventId);
 		model.addAttribute("creatorId", creatorId);
-		return "/seller/event-update-creator";
+		return new GenericResponse<>("/seller/event-update-creator");
 	}
 
 	@PutMapping("/api/seller/events/{eventId}/coupon-creators/{creatorId}")
-	public String updateCouponCreator(
+	public GenericResponse<String> updateCouponCreator(
 		UpdateCouponCreatorControllerRequest updateCouponCreatorControllerRequest,
 		@PathVariable Long eventId, @PathVariable Long creatorId,
 		@AuthenticationPrincipal UserDetailsImpl userDetails) {
 		UpdateSellerCouponCreatorServiceRequest updateSellerCouponCreatorServiceRequest = new UpdateSellerCouponCreatorServiceRequest(
 			updateCouponCreatorControllerRequest, eventId, creatorId, userDetails.getId());
 		couponCreatorService.updateSellerCouponCreator(updateSellerCouponCreatorServiceRequest);
-		return "redirect:/seller/templates/event";
+		return new GenericResponse<>("redirect:/seller/templates/event");
 	}
 
 	@GetMapping("/seller/templates/events/{eventId}")
-	public String deleteEventSub(@PathVariable Long eventId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+	public GenericResponse<String> deleteEventSub(@PathVariable Long eventId,
+		@AuthenticationPrincipal UserDetailsImpl userDetails) {
 		deleteEvent(eventId, userDetails);
-		return "redirect:/seller/templates/event";
+		return new GenericResponse<>("redirect:/seller/templates/event");
 	}
 
 	@DeleteMapping("/api/seller/events/{eventId}/delete")
