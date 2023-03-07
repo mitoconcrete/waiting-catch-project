@@ -215,8 +215,12 @@ public class AdminController {
 	public String deleteRestaurantByAdmin(@PathVariable Long restaurant_id, Model model) {
 		DeleteRestaurantByAdminServiceRequest deleteRestaurantByAdminServiceRequest
 			= new DeleteRestaurantByAdminServiceRequest(restaurant_id);
-		restaurantService.deleteRestaurantByAdmin(deleteRestaurantByAdminServiceRequest);
-		model.addAttribute("message", "레스토랑 삭제가 완료되었습니다.");
+		boolean deleteRestaurant = restaurantService.deleteRestaurantByAdmin(deleteRestaurantByAdminServiceRequest);
+		if (!deleteRestaurant) {
+			model.addAttribute("message", "레스토랑이 이미 삭제 되어 있습니다.");
+		} else {
+			model.addAttribute("message", "레스토랑 삭제가 완료되었습니다.");
+		}
 		model.addAttribute("searchUrl", "/admin/templates/restaurants");
 		return "/admin/message";
 	}
@@ -327,8 +331,12 @@ public class AdminController {
 	public String approveSignUpSeller(@PathVariable Long sellerManagementId, Model model) {
 		ApproveSignUpSellerServiceRequest approveSignUpSellerServiceRequest = new ApproveSignUpSellerServiceRequest(
 			sellerManagementId);
-		sellerManagementService.approveSignUpSeller(approveSignUpSellerServiceRequest);
-		model.addAttribute("message", "판매자 요청이 승인 되었습니다.");
+		boolean approveSignUpSeller = sellerManagementService.approveSignUpSeller(approveSignUpSellerServiceRequest);
+		if (!approveSignUpSeller) {
+			model.addAttribute("message", "판매자 요청이 이미 승인되었거나 이미 거절 되어있습니다.");
+		} else {
+			model.addAttribute("message", "판매자 요청이 승인 되었습니다.");
+		}
 		model.addAttribute("searchUrl", "/admin/templates/seller-management");
 		return "/admin/message";
 	}
@@ -337,8 +345,12 @@ public class AdminController {
 	public String rejectSignUpSeller(@PathVariable Long sellerManagementId, Model model) {
 		RejectSignUpSellerServiceRequest rejectSignUpSellerServiceRequest = new RejectSignUpSellerServiceRequest(
 			sellerManagementId);
-		sellerManagementService.rejectSignUpSeller(rejectSignUpSellerServiceRequest);
-		model.addAttribute("message", "판매자 요청이 거절 되었습니다.");
+		boolean rejectSignUpSeller = sellerManagementService.rejectSignUpSeller(rejectSignUpSellerServiceRequest);
+		if (!rejectSignUpSeller) {
+			model.addAttribute("message", "판매자 요청이 이미 승인되었거나 이미 거절 되어있습니다.");
+		} else {
+			model.addAttribute("message", "판매자 요청이 거절 되었습니다.");
+		}
 		model.addAttribute("searchUrl", "/admin/templates/seller-management");
 		return "/admin/message";
 	}
