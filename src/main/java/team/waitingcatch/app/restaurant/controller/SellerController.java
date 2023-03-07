@@ -1,8 +1,10 @@
 package team.waitingcatch.app.restaurant.controller;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.List;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -116,14 +118,26 @@ public class SellerController {
 
 	@GetMapping("/seller/templates/menu")
 	public String menu(Model model,
-		@AuthenticationPrincipal UserDetailsImpl userDetails) {
+		@AuthenticationPrincipal UserDetailsImpl userDetails, HttpServletResponse response) {
+		Collection<String> headerNames = response.getHeaderNames();
+		if (headerNames.contains("Authorization")) {
+			String token = response.getHeader("Authorization");
+			System.out.println(token);
+			model.addAttribute("accessToken", token);
+		}
 		List<MenuResponse> menus = menuService.getMyRestaurantMenus(userDetails.getId());
 		model.addAttribute("menus", menus);
 		return "/seller/menu";
 	}
 
 	@GetMapping("/seller/templates/menu/new")
-	public String createMenu() {
+	public String createMenu(Model model, HttpServletResponse response) {
+		Collection<String> headerNames = response.getHeaderNames();
+		if (headerNames.contains("Authorization")) {
+			String token = response.getHeader("Authorization");
+			System.out.println(token);
+			model.addAttribute("accessToken", token);
+		}
 		return "/seller/menu-new";
 	}
 
@@ -132,7 +146,13 @@ public class SellerController {
 	public String createMenu(
 		@RequestPart(value = "image", required = false) MultipartFile multipartFile,
 		@Valid CreateMenuControllerRequest request,
-		@AuthenticationPrincipal UserDetailsImpl userDetails) {
+		@AuthenticationPrincipal UserDetailsImpl userDetails, HttpServletResponse response, Model model) {
+		Collection<String> headerNames = response.getHeaderNames();
+		if (headerNames.contains("Authorization")) {
+			String token = response.getHeader("Authorization");
+			System.out.println(token);
+			model.addAttribute("accessToken", token);
+		}
 		CreateMenuServiceRequest serviceRequest = new CreateMenuServiceRequest(userDetails.getId(), multipartFile,
 			request);
 		menuService.createMenu(serviceRequest);
@@ -140,7 +160,13 @@ public class SellerController {
 	}
 
 	@GetMapping("/seller/templates/menus/{menuId}/menu-form")
-	public String updateMenu(Model model, @PathVariable Long menuId) {
+	public String updateMenu(Model model, @PathVariable Long menuId, HttpServletResponse response) {
+		Collection<String> headerNames = response.getHeaderNames();
+		if (headerNames.contains("Authorization")) {
+			String token = response.getHeader("Authorization");
+			System.out.println(token);
+			model.addAttribute("accessToken", token);
+		}
 		model.addAttribute("menuId", menuId);
 		return "/seller/menu-update";
 	}
@@ -148,8 +174,15 @@ public class SellerController {
 	@PutMapping("/api/seller/menus/{menuId}/menu-form")
 	public String updateMenu(@PathVariable Long menuId,
 		@RequestPart(value = "image", required = false) MultipartFile multipartFile,
-		@Valid UpdateMenuControllerRequest request, @AuthenticationPrincipal UserDetailsImpl userDetails
+		@Valid UpdateMenuControllerRequest request, @AuthenticationPrincipal UserDetailsImpl userDetails,
+		Model model, HttpServletResponse response
 	) {
+		Collection<String> headerNames = response.getHeaderNames();
+		if (headerNames.contains("Authorization")) {
+			String token = response.getHeader("Authorization");
+			System.out.println(token);
+			model.addAttribute("accessToken", token);
+		}
 		UpdateMenuServiceRequest serviceRequest = new UpdateMenuServiceRequest(menuId, request, multipartFile,
 			userDetails.getId());
 		menuService.updateMenu(serviceRequest);
@@ -157,7 +190,14 @@ public class SellerController {
 	}
 
 	@GetMapping("/seller/templates/menus/{menuId}")
-	public String deleteMenuSub(@PathVariable Long menuId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+	public String deleteMenuSub(@PathVariable Long menuId, @AuthenticationPrincipal UserDetailsImpl userDetails,
+		HttpServletResponse response, Model model) {
+		Collection<String> headerNames = response.getHeaderNames();
+		if (headerNames.contains("Authorization")) {
+			String token = response.getHeader("Authorization");
+			System.out.println(token);
+			model.addAttribute("accessToken", token);
+		}
 		deleteMenu(menuId, userDetails);
 		return "redirect:/seller/templates/menu";
 	}
@@ -170,12 +210,24 @@ public class SellerController {
 
 	/*     판매자 정보 프론트   */
 	@GetMapping("/seller/templates/seller")
-	public String seller() {
+	public String seller(HttpServletResponse response, Model model) {
+		Collection<String> headerNames = response.getHeaderNames();
+		if (headerNames.contains("Authorization")) {
+			String token = response.getHeader("Authorization");
+			System.out.println(token);
+			model.addAttribute("accessToken", token);
+		}
 		return "/seller/seller";
 	}
 
 	@GetMapping("/api/seller/logout")
-	public String logoutSub(HttpServletRequest request) {
+	public String logoutSub(HttpServletRequest request, HttpServletResponse response, Model model) {
+		Collection<String> headerNames = response.getHeaderNames();
+		if (headerNames.contains("Authorization")) {
+			String token = response.getHeader("Authorization");
+			System.out.println(token);
+			model.addAttribute("accessToken", token);
+		}
 		String token = jwtUtil.resolveToken(request);
 		LogoutRequest servicePayload = new LogoutRequest(token);
 		userService.logout(servicePayload);
@@ -183,7 +235,14 @@ public class SellerController {
 	}
 
 	@DeleteMapping("/seller/templates/withdraw")
-	public String withdrawSellerSub(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+	public String withdrawSellerSub(@AuthenticationPrincipal UserDetailsImpl userDetails, HttpServletResponse response,
+		Model model) {
+		Collection<String> headerNames = response.getHeaderNames();
+		if (headerNames.contains("Authorization")) {
+			String token = response.getHeader("Authorization");
+			System.out.println(token);
+			model.addAttribute("accessToken", token);
+		}
 		withdrawSeller(userDetails);
 		return "redirect:/general/templates/seller/login";
 	}
@@ -195,23 +254,40 @@ public class SellerController {
 	}
 
 	@GetMapping("/seller/templates/info")
-	public String updateSellerInfoSub() {
+	public String updateSellerInfoSub(HttpServletResponse response, Model model) {
+		Collection<String> headerNames = response.getHeaderNames();
+		if (headerNames.contains("Authorization")) {
+			String token = response.getHeader("Authorization");
+			System.out.println(token);
+			model.addAttribute("accessToken", token);
+		}
 		return "/seller/seller-info";
 	}
 
 	@PutMapping("/api/seller/info/view")
 	public String updateSellerInfo(@Valid UpdateUserControllerRequest controllerRequest,
-		@AuthenticationPrincipal UserDetailsImpl userDetails) {
+		@AuthenticationPrincipal UserDetailsImpl userDetails, HttpServletResponse response, Model model) {
+		Collection<String> headerNames = response.getHeaderNames();
+		if (headerNames.contains("Authorization")) {
+			String token = response.getHeader("Authorization");
+			System.out.println(token);
+			model.addAttribute("accessToken", token);
+		}
 		UpdateUserServiceRequest servicePayload = new UpdateUserServiceRequest(controllerRequest.getName(),
 			controllerRequest.getEmail(), userDetails.getUsername(), controllerRequest.getNickName(),
 			controllerRequest.getPhoneNumber());
-		System.out.println(servicePayload.getEmail());
 		userService.updateUser(servicePayload);
 		return "redirect:/seller/templates/seller";
 	}
 
 	@GetMapping("/seller/templates/update-restaurant")
-	public String updateRestaurantSub() {
+	public String updateRestaurantSub(HttpServletResponse response, Model model) {
+		Collection<String> headerNames = response.getHeaderNames();
+		if (headerNames.contains("Authorization")) {
+			String token = response.getHeader("Authorization");
+			System.out.println(token);
+			model.addAttribute("accessToken", token);
+		}
 		return "/seller/seller-restaurant-update";
 	}
 
@@ -219,7 +295,16 @@ public class SellerController {
 	public String updateRestaurant(
 		UpdateRestaurantControllerRequest updateRestaurantControllerRequest,
 		@RequestPart(value = "image", required = false) List<MultipartFile> multipartFile,
-		@AuthenticationPrincipal UserDetailsImpl userDetails) throws IOException {
+		@AuthenticationPrincipal UserDetailsImpl userDetails, HttpServletResponse response, Model model) throws
+		IOException {
+
+		Collection<String> headerNames = response.getHeaderNames();
+		if (headerNames.contains("Authorization")) {
+			String token = response.getHeader("Authorization");
+			System.out.println(token);
+			model.addAttribute("accessToken", token);
+		}
+
 		UpdateRestaurantServiceRequest updateRestaurantServiceRequest =
 			new UpdateRestaurantServiceRequest(updateRestaurantControllerRequest, multipartFile,
 				userDetails.getId());
@@ -232,22 +317,43 @@ public class SellerController {
 
 	@GetMapping("/seller/templates/event")
 	public String event(Model model, @AuthenticationPrincipal UserDetailsImpl userDetails,
-		@PageableDefault(size = 10, page = 0) Pageable pageable) {
+		@PageableDefault(size = 10, page = 0) Pageable pageable, HttpServletResponse response) {
+		Collection<String> headerNames = response.getHeaderNames();
+		if (headerNames.contains("Authorization")) {
+			String token = response.getHeader("Authorization");
+			System.out.println(token);
+			model.addAttribute("accessToken", token);
+		}
 		Page<GetEventsResponse> events = eventService.getRestaurantEvents(userDetails.getId(), pageable);
 		model.addAttribute("events", events);
 		return "/seller/event";
 	}
 
 	@GetMapping("/seller/templates/event/creator")
-	public String createEvent() {
+	public String createEvent(HttpServletResponse response, Model model) {
+		Collection<String> headerNames = response.getHeaderNames();
+		if (headerNames.contains("Authorization")) {
+			String token = response.getHeader("Authorization");
+			System.out.println(token);
+			model.addAttribute("accessToken", token);
+		}
 		return "/seller/event-create";
 	}
 
 	@PostMapping("/api/seller/event")
 	public String createEvent(
 		@Validated CreateEventControllerRequest createEventControllerRequest,
-		@AuthenticationPrincipal UserDetailsImpl userDetails) {
-		System.out.println(userDetails.getId());
+		@AuthenticationPrincipal UserDetailsImpl userDetails, HttpServletResponse response, Model model) {
+		Collection<String> headerNames = response.getHeaderNames();
+		if (headerNames.contains("Authorization")) {
+			String token = response.getHeader("Authorization");
+			System.out.println(token);
+			model.addAttribute("accessToken", token);
+			Cookie cookie = new Cookie("Authorization", "#@!#!@#!#@!#!");
+			// Cookie cookie2 = new Cookie("Test12", "@@@@");
+			response.addCookie(cookie);
+			// response.addCookie(cookie2);
+		}
 		CreateEventServiceRequest createEventServiceRequest = new CreateEventServiceRequest(
 			createEventControllerRequest, userDetails.getId());
 		eventService.createSellerEvent(createEventServiceRequest);
@@ -255,7 +361,13 @@ public class SellerController {
 	}
 
 	@GetMapping("/seller/templates/events/{eventId}/coupon-creators")
-	public String createCouponCreator(Model model, @PathVariable Long eventId) {
+	public String createCouponCreator(Model model, @PathVariable Long eventId, HttpServletResponse response) {
+		Collection<String> headerNames = response.getHeaderNames();
+		if (headerNames.contains("Authorization")) {
+			String token = response.getHeader("Authorization");
+			System.out.println(token);
+			model.addAttribute("accessToken", token);
+		}
 		model.addAttribute("eventId", eventId);
 		return "/seller/event-create-creator";
 	}
@@ -263,8 +375,13 @@ public class SellerController {
 	@PostMapping("/api/seller/events/{eventId}/coupon-creators")
 	public String createCouponCreator(@PathVariable Long eventId,
 		@Validated CreateCouponCreatorControllerRequest createCouponCreatorControllerRequest,
-		@AuthenticationPrincipal UserDetailsImpl userDetails) {
-
+		@AuthenticationPrincipal UserDetailsImpl userDetails, HttpServletResponse response, Model model) {
+		Collection<String> headerNames = response.getHeaderNames();
+		if (headerNames.contains("Authorization")) {
+			String token = response.getHeader("Authorization");
+			System.out.println(token);
+			model.addAttribute("accessToken", token);
+		}
 		CreateSellerCouponCreatorServiceRequest createSellerCouponCreatorServiceRequest = new CreateSellerCouponCreatorServiceRequest(
 			createCouponCreatorControllerRequest, eventId, userDetails.getId());
 
@@ -273,14 +390,27 @@ public class SellerController {
 	}
 
 	@GetMapping("/seller/templates/events/{eventId}/update")
-	public String updateEvent(Model model, @PathVariable Long eventId) {
+	public String updateEvent(Model model, @PathVariable Long eventId, HttpServletResponse response) {
+		Collection<String> headerNames = response.getHeaderNames();
+		if (headerNames.contains("Authorization")) {
+			String token = response.getHeader("Authorization");
+			System.out.println(token);
+			model.addAttribute("accessToken", token);
+		}
 		model.addAttribute("eventId", eventId);
 		return "/seller/event-update";
 	}
 
 	@PutMapping("/api/seller/events/{eventId}/update")
 	public String updateEvent(UpdateEventControllerRequest updateEventControllerRequest,
-		@PathVariable Long eventId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+		@PathVariable Long eventId, @AuthenticationPrincipal UserDetailsImpl userDetails, HttpServletResponse response,
+		Model model) {
+		Collection<String> headerNames = response.getHeaderNames();
+		if (headerNames.contains("Authorization")) {
+			String token = response.getHeader("Authorization");
+			System.out.println(token);
+			model.addAttribute("accessToken", token);
+		}
 		UpdateSellerEventServiceRequest updateSellerEventServiceRequest = new UpdateSellerEventServiceRequest(
 			updateEventControllerRequest, eventId, userDetails.getId());
 		eventService.updateSellerEvent(updateSellerEventServiceRequest);
@@ -289,7 +419,13 @@ public class SellerController {
 
 	@GetMapping("/seller/templates/events/{eventId}/coupon-creators/{creatorId}")
 	public String updateCouponCreator(Model model, @PathVariable Long eventId,
-		@PathVariable Long creatorId) {
+		@PathVariable Long creatorId, HttpServletResponse response) {
+		Collection<String> headerNames = response.getHeaderNames();
+		if (headerNames.contains("Authorization")) {
+			String token = response.getHeader("Authorization");
+			System.out.println(token);
+			model.addAttribute("accessToken", token);
+		}
 		model.addAttribute("eventId", eventId);
 		model.addAttribute("creatorId", creatorId);
 		return "/seller/event-update-creator";
@@ -299,7 +435,13 @@ public class SellerController {
 	public String updateCouponCreator(
 		UpdateCouponCreatorControllerRequest updateCouponCreatorControllerRequest,
 		@PathVariable Long eventId, @PathVariable Long creatorId,
-		@AuthenticationPrincipal UserDetailsImpl userDetails) {
+		@AuthenticationPrincipal UserDetailsImpl userDetails, HttpServletResponse response, Model model) {
+		Collection<String> headerNames = response.getHeaderNames();
+		if (headerNames.contains("Authorization")) {
+			String token = response.getHeader("Authorization");
+			System.out.println(token);
+			model.addAttribute("accessToken", token);
+		}
 		UpdateSellerCouponCreatorServiceRequest updateSellerCouponCreatorServiceRequest = new UpdateSellerCouponCreatorServiceRequest(
 			updateCouponCreatorControllerRequest, eventId, creatorId, userDetails.getId());
 		couponCreatorService.updateSellerCouponCreator(updateSellerCouponCreatorServiceRequest);
@@ -308,7 +450,13 @@ public class SellerController {
 
 	@GetMapping("/seller/templates/events/{eventId}")
 	public String deleteEventSub(@PathVariable Long eventId,
-		@AuthenticationPrincipal UserDetailsImpl userDetails) {
+		@AuthenticationPrincipal UserDetailsImpl userDetails, HttpServletResponse response, Model model) {
+		Collection<String> headerNames = response.getHeaderNames();
+		if (headerNames.contains("Authorization")) {
+			String token = response.getHeader("Authorization");
+			System.out.println(token);
+			model.addAttribute("accessToken", token);
+		}
 		deleteEvent(eventId, userDetails);
 		return "redirect:/seller/templates/event";
 	}

@@ -36,7 +36,7 @@ public class SecurityConfig {
 
 	@Bean
 	public WebSecurityCustomizer webSecurityCustomizer() {
-		String[] ignoreAuthorizationList = {"/api/general/**", "/general/templates/**", "/profile"};
+		String[] ignoreAuthorizationList = {"/general/templates/**", "/profile"};
 		return (web) -> web.ignoring()
 			.antMatchers(ignoreAuthorizationList)
 			.requestMatchers(PathRequest.toStaticResources().atCommonLocations());
@@ -44,7 +44,7 @@ public class SecurityConfig {
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-
+		String[] ignoreAuthorizationList = {"/api/general/**", "/general/templates/**", "/profile"};
 		String[] customerOnlyAllowedList = {"/api/customer/**"};
 		String[] sellerOnlyAllowedList = {"/api/seller/**", "/seller/templates/**"};
 		String[] adminOnlyAllowedList = {"/admin/templates/**"};
@@ -60,7 +60,7 @@ public class SecurityConfig {
 
 			var cors = new CorsConfiguration();
 			// CORS 를 허용할 주소를 아래에 리스트 형태로 넣어주세요.
-			cors.setAllowedOrigins(List.of("*"));
+			cors.setAllowedOrigins(List.of("http://localhost:5173"));
 			cors.setAllowedMethods(List.of("*"));
 			cors.setAllowedHeaders(List.of("*"));
 			cors.setAllowCredentials(true);
@@ -72,7 +72,8 @@ public class SecurityConfig {
 		http.authorizeRequests()
 			.antMatchers(adminOnlyAllowedList).hasRole(UserRoleEnum.ADMIN.toString())
 			.antMatchers(sellerOnlyAllowedList).hasRole(UserRoleEnum.SELLER.toString())
-			.antMatchers(customerOnlyAllowedList).hasRole(UserRoleEnum.USER.toString());
+			.antMatchers(customerOnlyAllowedList).hasRole(UserRoleEnum.USER.toString())
+			.antMatchers(ignoreAuthorizationList).permitAll();
 
 		// Custom 로그인 페이지 사용하지 않음.
 		http.formLogin().disable();

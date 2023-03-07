@@ -1,6 +1,7 @@
 package team.waitingcatch.app.restaurant.controller;
 
 import java.io.IOException;
+import java.util.Collection;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -72,27 +73,39 @@ public class SellerManagementController {
 	// 판매자 요청 조회
 	@GetMapping("/admin/seller-management")
 	public GenericResponse<Page<GetDemandSignUpSellerResponse>> sellerManagementPage(
-		Model model,
 		@PageableDefault Pageable pageable) {
 		return new GenericResponse<>(sellerManagementService.getDemandSignUpSellers(pageable));
 	}
 
 	@PostMapping("/admin/seller-managements/{sellerManagementId}")
 	public void approveSignUpSeller(@PathVariable Long sellerManagementId,
-		HttpServletResponse response) throws
+		HttpServletResponse response, Model model) throws
 		IOException {
 		ApproveSignUpSellerServiceRequest approveSignUpSellerServiceRequest = new ApproveSignUpSellerServiceRequest(
 			sellerManagementId);
+		Collection<String> headerNames = response.getHeaderNames();
+		if (headerNames.contains("Authorization")) {
+			String token = response.getHeader("Authorization");
+			System.out.println(token);
+			model.addAttribute("accessToken", token);
+		}
 		sellerManagementService.approveSignUpSeller(approveSignUpSellerServiceRequest);
 		response.sendRedirect("/admin/templates/seller-management");
 	}
 
 	@PutMapping("/admin/seller-managements/{sellerManagementId}")
-	public void rejectSignUpSeller(@PathVariable Long sellerManagementId, HttpServletResponse response) throws
+	public void rejectSignUpSeller(@PathVariable Long sellerManagementId, HttpServletResponse response,
+		Model model) throws
 		IOException {
 		RejectSignUpSellerServiceRequest rejectSignUpSellerServiceRequest = new RejectSignUpSellerServiceRequest(
 			sellerManagementId);
 
+		Collection<String> headerNames = response.getHeaderNames();
+		if (headerNames.contains("Authorization")) {
+			String token = response.getHeader("Authorization");
+			System.out.println(token);
+			model.addAttribute("accessToken", token);
+		}
 		sellerManagementService.rejectSignUpSeller(rejectSignUpSellerServiceRequest);
 		response.sendRedirect("/admin/templates/seller-management");
 	}

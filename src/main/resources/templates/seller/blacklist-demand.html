@@ -20,7 +20,7 @@
     </a>
     <nav>
         <ul>
-            <a href="/">판매자 님</a>
+            <a href="/seller/templates/seller">판매자 님</a>
             <a href="#" onclick="sendTokenDeleteSeller();">Logout</a>
         </ul>
     </nav>
@@ -57,7 +57,16 @@
     </div>
 </div>
 </body>
+<script th:inline="javascript">
+    const token = [[${accessToken}]];
+    if (token) {
+        document.cookie =
+            'Authorization' + "=" + token + "; " +
+            "path=/; expires=" + (new Date().getTime() + 30 * 60000) + ";";
+    }
+</script>
 <script>
+
     $(document).ready(function () {
         blacklistDemandList();
     });
@@ -66,11 +75,13 @@
         $.ajax({
             type: 'GET',
             url: '/api/seller/blacklist-demands',
-            headers: {
-                'Authorization': localStorage.getItem('accessToken')
-            },
-            success: function (response) {
-                let rows = response['data'];
+            success: function (data, status, response) {
+                if (response.getResponseHeader("Authorization")) {
+                    document.cookie =
+                        'Authorization' + "=" + response.getResponseHeader("Authorization") + "; " +
+                        "path=/; expires=" + (new Date().getTime() + 30 * 60000) + ";";
+                }
+                let rows = data['data'];
                 for (let i = 0; i < rows.length; i++) {
                     let id = rows[i]['id'];
                     let customerName = rows[i]['customerName'];
@@ -91,7 +102,13 @@
                                     </tr>`;
                     $('#blacklistDemand').prepend(temp_html);
                 }
-            },
+            }, error: function (response, status, error) {
+                if (response.getResponseHeader("Authorization")) {
+                    document.cookie =
+                        'Authorization' + "=" + response.getResponseHeader("Authorization") + "; " +
+                        "path=/; expires=" + (new Date().getTime() + 30 * 60000) + ";";
+                }
+            }
         });
     }
 
@@ -99,14 +116,21 @@
         $.ajax({
             url: `/api/seller/blacklist-demands/${blacklistDemandId}`,
             type: 'DELETE',
-            headers: {
-                'Authorization': localStorage.getItem('accessToken')
-            },
-            success: function () {
+            success: function (data, status, response) {
+                if (response.getResponseHeader("Authorization")) {
+                    document.cookie =
+                        'Authorization' + "=" + response.getResponseHeader("Authorization") + "; " +
+                        "path=/; expires=" + (new Date().getTime() + 30 * 60000) + ";";
+                }
                 alert("블랙리스트 신청 취소 처리 완료");
                 window.location.reload();
             },
-            error: function (response) {
+            error: function (response, status, error) {
+                if (response.getResponseHeader("Authorization")) {
+                    document.cookie =
+                        'Authorization' + "=" + response.getResponseHeader("Authorization") + "; " +
+                        "path=/; expires=" + (new Date().getTime() + 30 * 60000) + ";";
+                }
                 alert(response.responseJSON.message);
             }
         })
