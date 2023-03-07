@@ -8,7 +8,6 @@ import javax.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -42,16 +41,6 @@ public class SellerManagementController {
 	@PostMapping("/general/demand")
 	public void demandSignUpSeller(
 		@Valid @RequestBody DemandSignUpSellerControllerRequest demandSignUpControllerRequest) {
-		// Address address = new Address(
-		// 	demandSignUpControllerRequest.getProvince(),
-		// 	demandSignUpControllerRequest.getCity(),
-		// 	demandSignUpControllerRequest.getStreet()
-		// );
-		// Position position = new Position(
-		// 	demandSignUpControllerRequest.getLatitude(),
-		// 	demandSignUpControllerRequest.getLongitude()
-		// );
-
 		Position position = mapApiService.getPosition(demandSignUpControllerRequest.getQuery());
 
 		DemandSignUpSellerServiceRequest demandSignupSellerServiceRequest = new DemandSignUpSellerServiceRequest(
@@ -64,7 +53,7 @@ public class SellerManagementController {
 		@RequestBody GetRequestSellerControllerRequest getRequestSellerControllerRequest) {
 		GetRequestSellerByRestaurantRequest getRequestSellerByRestaurantRequest = new GetRequestSellerByRestaurantRequest(
 			getRequestSellerControllerRequest.getRequestSellerName(), getRequestSellerControllerRequest.getEmail());
-		return new GenericResponse(
+		return new GenericResponse<>(
 			sellerManagementService.getRequestSellerByRestaurant(getRequestSellerByRestaurantRequest));
 	}
 
@@ -72,15 +61,15 @@ public class SellerManagementController {
 	// 판매자 요청 조회
 	@GetMapping("/admin/seller-management")
 	public GenericResponse<Page<GetDemandSignUpSellerResponse>> sellerManagementPage(
-		Model model,
 		@PageableDefault Pageable pageable) {
 		return new GenericResponse<>(sellerManagementService.getDemandSignUpSellers(pageable));
 	}
 
 	@PostMapping("/admin/seller-managements/{sellerManagementId}")
-	public void approveSignUpSeller(@PathVariable Long sellerManagementId,
-		HttpServletResponse response) throws
-		IOException {
+	public void approveSignUpSeller(
+		@PathVariable Long sellerManagementId,
+		HttpServletResponse response) throws IOException {
+
 		ApproveSignUpSellerServiceRequest approveSignUpSellerServiceRequest = new ApproveSignUpSellerServiceRequest(
 			sellerManagementId);
 		sellerManagementService.approveSignUpSeller(approveSignUpSellerServiceRequest);
@@ -90,6 +79,7 @@ public class SellerManagementController {
 	@PutMapping("/admin/seller-managements/{sellerManagementId}")
 	public void rejectSignUpSeller(@PathVariable Long sellerManagementId, HttpServletResponse response) throws
 		IOException {
+
 		RejectSignUpSellerServiceRequest rejectSignUpSellerServiceRequest = new RejectSignUpSellerServiceRequest(
 			sellerManagementId);
 
