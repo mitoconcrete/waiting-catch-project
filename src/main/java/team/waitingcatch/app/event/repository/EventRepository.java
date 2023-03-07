@@ -1,6 +1,5 @@
 package team.waitingcatch.app.event.repository;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -14,12 +13,10 @@ import team.waitingcatch.app.event.entity.Event;
 import team.waitingcatch.app.restaurant.entity.Restaurant;
 
 public interface EventRepository extends JpaRepository<Event, Long> {
-
-	List<Event> findByRestaurantIsNullAndIsDeletedFalse();
-
+	
 	Page<Event> findByRestaurantAndIsDeletedFalse(Restaurant restaurant, Pageable pageable);
 
-	Page<Event> findByRestaurantIsNull(Pageable pageable);
+	Page<Event> findByRestaurantIsNullIsDeletedFalse(Pageable pageable);
 
 	Optional<Event> findByIdAndIsDeletedFalse(Long id);
 

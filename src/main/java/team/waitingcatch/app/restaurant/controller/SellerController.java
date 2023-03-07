@@ -104,15 +104,6 @@ public class SellerController {
 	public String demandSignUpSeller(
 		@Valid DemandSignUpSellerControllerRequest demandSignUpControllerRequest) {
 		System.out.println(demandSignUpControllerRequest.getPhoneNumber());
-		// Address address = new Address(
-		// 	demandSignUpControllerRequest.getProvince(),
-		// 	demandSignUpControllerRequest.getCity(),
-		// 	demandSignUpControllerRequest.getStreet()
-		// );
-		// Position position = new Position(
-		// 	demandSignUpControllerRequest.getLatitude(),
-		// 	demandSignUpControllerRequest.getLongitude()
-		// );
 		Position position = mapApiService.getPosition(demandSignUpControllerRequest.getQuery());
 
 		DemandSignUpSellerServiceRequest demandSignupSellerServiceRequest = new DemandSignUpSellerServiceRequest(

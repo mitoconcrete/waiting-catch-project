@@ -59,9 +59,20 @@ public class CouponCreator extends TimeStamped {
 	private boolean isDeleted;
 
 	@Version
+	@Column(nullable = false)
 	private Long version;
 
 	public CouponCreator(CreateAdminCouponCreatorRequest request) {
+		this.event = request.getEvent();
+		this.name = request.getCreateAdminCouponCreatorServiceRequest().getName();
+		this.discountPrice = request.getCreateAdminCouponCreatorServiceRequest().getDiscountPrice();
+		this.discountType = request.getCreateAdminCouponCreatorServiceRequest().getDiscountType();
+		this.quantity = request.getCreateAdminCouponCreatorServiceRequest().getQuantity();
+		this.expireDate = request.getCreateAdminCouponCreatorServiceRequest().getExpireDate();
+	}
+
+	public CouponCreator(CreateAdminCouponCreatorRequest request, Long id) {
+		this.id = id;
 		this.event = request.getEvent();
 		this.name = request.getCreateAdminCouponCreatorServiceRequest().getName();
 		this.discountPrice = request.getCreateAdminCouponCreatorServiceRequest().getDiscountPrice();
@@ -93,14 +104,6 @@ public class CouponCreator extends TimeStamped {
 		this.discountType = serviceRequest.getDiscountType();
 		this.quantity = serviceRequest.getQuantity();
 		this.expireDate = serviceRequest.getExpireDate();
-	}
-
-	public boolean hasCouponBalance() {
-		if (this.quantity > 0) {
-			return true;
-		}
-		return false;
-
 	}
 
 	public void useCoupon() {

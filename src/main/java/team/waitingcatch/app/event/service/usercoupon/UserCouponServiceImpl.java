@@ -20,6 +20,7 @@ import team.waitingcatch.app.event.entity.UserCoupon;
 import team.waitingcatch.app.event.repository.CouponCreatorRepository;
 import team.waitingcatch.app.event.repository.UserCouponRepository;
 import team.waitingcatch.app.event.service.couponcreator.InternalCouponCreatorService;
+import team.waitingcatch.app.exception.DuplicateRequestException;
 import team.waitingcatch.app.user.entitiy.User;
 import team.waitingcatch.app.user.service.InternalUserService;
 
@@ -34,19 +35,20 @@ public class UserCouponServiceImpl implements UserCouponService, InternalUserCou
 
 	//유저 쿠폰을 생성한다
 	@Override
-	@Retryable(maxAttempts = 3, backoff = @Backoff(10000), value = OptimisticLockingFailureException.class)
+	@Retryable(maxAttempts = 3, backoff = @Backoff(100), value = OptimisticLockingFailureException.class)
 	public void createUserCoupon(CreateUserCouponServiceRequest createUserCouponserviceRequest) {
 		CouponCreator couponCreator = internalCouponCreatorService._getCouponCreatorById(
 			createUserCouponserviceRequest.getCreatorId());
 		User user = internalUserService._getUserByUsername(createUserCouponserviceRequest.getUsername());
 		userCouponRepository.findUserCouponWithRelations(user, couponCreator).ifPresent(
 			u -> {
-				throw new IllegalStateException(DUPLICATE_COUPON.getMessage());
+				throw new DuplicateRequestException(DUPLICATE_COUPON);
 			}
 		);
-		int isCouponIssued = couponCreatorRepository.getHasCouponBalance(couponCreator.getId());
+		int couponQuantity = couponCreatorRepository.getHasCouponBalance(couponCreator.getId()).getQuantity();
 		UserCoupon userCoupon = new UserCoupon(user, couponCreator);
-		if (isCouponIssued > 0) {
+
+		if (couponQuantity > 0) {
 			couponCreator.useCoupon();
 			couponCreatorRepository.save(couponCreator);
 			userCouponRepository.save(userCoupon);

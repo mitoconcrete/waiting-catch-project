@@ -2,7 +2,6 @@ package team.waitingcatch.app.event.service.event;
 
 import static team.waitingcatch.app.exception.ErrorCode.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -13,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
-import team.waitingcatch.app.event.dto.couponcreator.GetCouponCreatorResponse;
 import team.waitingcatch.app.event.dto.event.CreateEventControllerRequest;
 import team.waitingcatch.app.event.dto.event.CreateEventRequest;
 import team.waitingcatch.app.event.dto.event.CreateEventServiceRequest;
@@ -22,7 +20,6 @@ import team.waitingcatch.app.event.dto.event.DeleteEventServiceRequest;
 import team.waitingcatch.app.event.dto.event.GetEventsResponse;
 import team.waitingcatch.app.event.dto.event.UpdateEventServiceRequest;
 import team.waitingcatch.app.event.dto.event.UpdateSellerEventServiceRequest;
-import team.waitingcatch.app.event.entity.CouponCreator;
 import team.waitingcatch.app.event.entity.Event;
 import team.waitingcatch.app.event.repository.CouponCreatorRepository;
 import team.waitingcatch.app.event.repository.EventRepository;
@@ -102,34 +99,21 @@ public class EventServiceImpl implements EventService, InternalEventService {
 	@Override
 	@Transactional(readOnly = true)
 	public Page<GetEventsResponse> getGlobalEvents(Pageable pageable) {
-		Restaurant restaurant = null;
-		Page<Event> events = eventRepository.findByRestaurantIsNull(pageable);
+		Page<Event> events = eventRepository.findByRestaurantIsNullIsDeletedFalse(pageable);
 		return _getEventsResponse(events, pageable);
 	}
 
 	@Override
 	@Transactional(readOnly = true)
 	public Event _getEventById(Long id) {
-		Event event = eventRepository.findByIdAndIsDeletedFalse(id)
+		return eventRepository.findByIdAndIsDeletedFalse(id)
 			.orElseThrow(() -> new NoSuchElementException(NOT_FOUND_EVENT.getMessage()));
-		return event;
 	}
 
 	// 이벤트 목록 + 쿠폰생성자를 DTO형태로 리턴
 	@Override
 	public Page<GetEventsResponse> _getEventsResponse(Page<Event> events, Pageable pageable) {
-
-		List<GetEventsResponse> getEventsResponse = new ArrayList<>();
-		for (Event event : events) {
-			List<CouponCreator> couponCreators = couponCreatorRepository.findByEventWithEvent(event);
-			List<GetCouponCreatorResponse> getCouponCreatorResponses = new ArrayList<>();
-			for (CouponCreator couponCreator : couponCreators) {
-				GetCouponCreatorResponse getCouponCreatorResponse = new GetCouponCreatorResponse(couponCreator);
-				getCouponCreatorResponses.add(getCouponCreatorResponse);
-			}
-			getEventsResponse.add(new GetEventsResponse(event, getCouponCreatorResponses));
-		}
-
+		List<GetEventsResponse> getEventsResponse = couponCreatorRepository.findByEventWithEvent(events.getContent());
 		return new PageImpl<>(getEventsResponse, pageable, events.getTotalElements());
 	}
 
