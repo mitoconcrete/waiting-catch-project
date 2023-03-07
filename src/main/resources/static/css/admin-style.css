@@ -384,3 +384,13 @@ button {
     border: 1px solid dimgray;
     border-radius: 10px;
 }
+
+#blacklistRequestPagination, #blacklistPagination {
+    max-width: 500px;
+    margin: 5px auto 5px auto;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}

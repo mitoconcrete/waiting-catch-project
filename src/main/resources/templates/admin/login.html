@@ -69,6 +69,9 @@
                     alert('로그인에 실패하셨습니다. 다시 로그인해 주세요.')
                     window.location.reload();
                 }
+            },
+            error: function (response) {
+                alert(response.responseJSON.message);
             }
         })
     }

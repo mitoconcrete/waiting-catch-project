@@ -1,6 +1,6 @@
 package team.waitingcatch.app.exception;
 
-import static team.waitingcatch.app.exception.ErrorCode.*;
+import java.util.NoSuchElementException;
 
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -30,7 +30,7 @@ public class ApplicationExceptionHandler {
 	}
 
 	@ExceptionHandler({IllegalArgumentException.class, AlreadyExistsException.class, DuplicateRequestException.class,
-		IllegalRequestException.class})
+		IllegalRequestException.class, NoSuchElementException.class})
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public BasicExceptionResponse handleIllegalArgumentException(RuntimeException e) {
 		return new BasicExceptionResponse(HttpStatus.BAD_REQUEST, e.getMessage());
@@ -49,9 +49,9 @@ public class ApplicationExceptionHandler {
 		return new BasicExceptionResponse(HttpStatus.BAD_REQUEST, e.getRootCause().getMessage());
 	}
 
-	@ExceptionHandler(Exception.class)
-	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-	public BasicExceptionResponse handleTokenNotFoundException() {
-		return new BasicExceptionResponse(HttpStatus.INTERNAL_SERVER_ERROR, INTERNAL_ERROR.getMessage());
-	}
+	// @ExceptionHandler(Exception.class)
+	// @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+	// public BasicExceptionResponse handleTokenNotFoundException() {
+	// 	return new BasicExceptionResponse(HttpStatus.INTERNAL_SERVER_ERROR, INTERNAL_ERROR.getMessage());
+	// }
 }
