@@ -7,6 +7,11 @@ import static team.waitingcatch.app.user.entitiy.QUser.*;
 
 import java.util.List;
 
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
+
+import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
@@ -19,6 +24,7 @@ import team.waitingcatch.app.lineup.dto.QCustomerLineupInfoResponse;
 import team.waitingcatch.app.lineup.dto.QLineupRecordResponse;
 import team.waitingcatch.app.lineup.dto.QTodayLineupResponse;
 import team.waitingcatch.app.lineup.dto.TodayLineupResponse;
+import team.waitingcatch.app.lineup.entity.Lineup;
 import team.waitingcatch.app.lineup.enums.ArrivalStatusEnum;
 
 @RequiredArgsConstructor
@@ -97,6 +103,39 @@ public class LineupRepositoryCustomImpl implements LineupRepositoryCustom {
 			.join(lineup.restaurant, restaurant)
 			.where(lineup.isReviewed.isFalse(), lineup.isDeleted.isFalse())
 			.fetch();
+	}
+
+	@Override
+	public Slice<Lineup> findAll(Long id, Pageable pageable) {
+		List<Lineup> content = queryFactory
+			.select(Projections.fields(Lineup.class,
+				lineup.user.id,
+				lineup.restaurant.id,
+				lineup.waitingNumber,
+				lineup.numOfMembers,
+				lineup.status,
+				lineup.callCount,
+				lineup.arrivedAt,
+				lineup.isReviewed,
+				lineup.isDeleted,
+				lineup.createdDate
+			))
+			.from(lineup)
+			.where(idGt(id))
+			.limit(pageable.getPageSize() + 1)
+			.fetch();
+
+		boolean hasNext = false;
+		if (content.size() > pageable.getPageSize()) {
+			content.remove(pageable.getPageSize());
+			hasNext = true;
+		}
+
+		return new SliceImpl<>(content, pageable, hasNext);
+	}
+
+	private BooleanExpression idGt(Long id) {
+		return id != null ? lineup.id.gt(id) : null;
 	}
 
 	private BooleanExpression statusEq(ArrivalStatusEnum statusCond) {

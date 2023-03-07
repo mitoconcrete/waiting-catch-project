@@ -7,6 +7,9 @@ import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -18,6 +21,7 @@ import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.common.util.sms.SmsService;
 import team.waitingcatch.app.common.util.sms.dto.MessageRequest;
 import team.waitingcatch.app.lineup.dto.CustomerLineupInfoResponse;
+import team.waitingcatch.app.lineup.entity.Lineup;
 import team.waitingcatch.app.lineup.entity.LineupHistory;
 import team.waitingcatch.app.lineup.repository.LineupHistoryRepository;
 import team.waitingcatch.app.lineup.repository.LineupRepository;
@@ -41,11 +45,20 @@ public class LineupSchedulerService {
 
 	@Scheduled(cron = "0 0 5 * * *")
 	public void transferLineupToLineupHistory() {
-		List<LineupHistory> lineupList = lineupRepository.findAll()
-			.stream()
-			.map(LineupHistory::of)
-			.collect(Collectors.toList());
-		lineupHistoryRepository.saveAll(lineupList);
+		final int size = 1000;
+		int page = 0;
+
+		Slice<Lineup> slice = lineupRepository.findAll(PageRequest.of(page, size));
+
+		while (slice.hasNext()) {
+			List<LineupHistory> lineupList = slice.getContent()
+				.stream()
+				.map(LineupHistory::of)
+				.collect(Collectors.toList());
+
+			lineupHistoryRepository.saveAll(lineupList);
+			slice = lineupRepository.findAll(PageRequest.of(++page, size));
+		}
 		lineupRepository.deleteAll();
 	}
 
