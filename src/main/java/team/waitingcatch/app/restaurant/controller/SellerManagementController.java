@@ -1,8 +1,5 @@
 package team.waitingcatch.app.restaurant.controller;
 
-import java.io.IOException;
-
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.data.domain.Page;
@@ -66,24 +63,17 @@ public class SellerManagementController {
 	}
 
 	@PostMapping("/admin/seller-managements/{sellerManagementId}")
-	public void approveSignUpSeller(
-		@PathVariable Long sellerManagementId,
-		HttpServletResponse response) throws IOException {
+	public void approveSignUpSeller(@PathVariable Long sellerManagementId) {
 
 		ApproveSignUpSellerServiceRequest approveSignUpSellerServiceRequest = new ApproveSignUpSellerServiceRequest(
 			sellerManagementId);
 		sellerManagementService.approveSignUpSeller(approveSignUpSellerServiceRequest);
-		response.sendRedirect("/admin/templates/seller-management");
 	}
 
 	@PutMapping("/admin/seller-managements/{sellerManagementId}")
-	public void rejectSignUpSeller(@PathVariable Long sellerManagementId, HttpServletResponse response) throws
-		IOException {
-
+	public void rejectSignUpSeller(@PathVariable Long sellerManagementId) {
 		RejectSignUpSellerServiceRequest rejectSignUpSellerServiceRequest = new RejectSignUpSellerServiceRequest(
 			sellerManagementId);
-
 		sellerManagementService.rejectSignUpSeller(rejectSignUpSellerServiceRequest);
-		response.sendRedirect("/admin/templates/seller-management");
 	}
 }
