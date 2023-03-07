@@ -16,7 +16,7 @@ public interface CouponCreatorRepository extends JpaRepository<CouponCreator, Lo
 	@Query(value = "select c from CouponCreator c where c.event.id = :eventId and c.isDeleted = false")
 	List<CouponCreator> findAllByEventId(@Param("eventId") Long eventId);
 
-	@Query("select cc from CouponCreator cc where cc.event.id in :events")
+	@Query("select cc from CouponCreator cc where cc.event in :events")
 	List<CouponCreator> findByEvent(@Param("events") List<Event> event);
 
 	@Lock(LockModeType.OPTIMISTIC)

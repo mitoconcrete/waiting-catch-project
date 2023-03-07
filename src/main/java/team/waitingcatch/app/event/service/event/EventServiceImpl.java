@@ -92,8 +92,8 @@ public class EventServiceImpl implements EventService, InternalEventService {
 	// 레스토랑 이벤트를 조회한다.
 	@Override
 	@Transactional(readOnly = true)
-	public Page<GetEventsResponse> getRestaurantEvents(Long restaurantId, Pageable pageable) {
-		Restaurant restaurant = internalRestaurantService._getRestaurantById(restaurantId);
+	public Page<GetEventsResponse> getRestaurantEvents(Long userId, Pageable pageable) {
+		Restaurant restaurant = internalRestaurantService._getRestaurantByUserId(userId);
 		Page<Event> events = eventRepository.findByRestaurantAndIsDeletedFalse(restaurant, pageable);
 		return _getEventsResponse(events, pageable);
 	}
@@ -116,12 +116,10 @@ public class EventServiceImpl implements EventService, InternalEventService {
 	@Override
 	public Page<GetEventsResponse> _getEventsResponse(Page<Event> events, Pageable pageable) {
 		List<CouponCreator> couponCreators = couponCreatorRepository.findByEvent(events.getContent());
-
 		List<GetEventsResponse> getEventsResponses = events.get()
 			.map(event -> new GetEventsResponse(event, couponCreators))
 			.collect(
 				Collectors.toList());
-
 		return new PageImpl<>(getEventsResponses, pageable, events.getTotalElements());
 	}
 
