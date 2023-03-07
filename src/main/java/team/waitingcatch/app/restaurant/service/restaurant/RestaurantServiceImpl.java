@@ -153,17 +153,20 @@ public class RestaurantServiceImpl implements RestaurantService, InternalRestaur
 	//업데이트시 -> 현재 있는것은 1.새로 2. 새로 3. 새로 4.새로
 	@Override
 	public void updateRestaurant(UpdateRestaurantServiceRequest serviceRequest) throws IOException {
+		System.out.println("일번");
 		Restaurant restaurant = restaurantRepository.findByUserId(serviceRequest.getSellerId())
 			.orElseThrow(() -> new NoSuchElementException(NOT_FOUND_RESTAURANT.getMessage()));
-
+		System.out.println("2번");
 		RestaurantInfo restaurantInfo = restaurantInfoRepository.findById(restaurant.getId())
 			.orElseThrow(() -> new NoSuchElementException(NOT_FOUND_RESTAURANT_INFO.getMessage()));
-
+		System.out.println("3번");
 		List<String> imagePaths = imageUploader.uploadList(serviceRequest.getImages(), RESTAURANT.getValue());
+		System.out.println("4번");
 		UpdateRestaurantEntityRequest updateRestaurantEntityRequest = new UpdateRestaurantEntityRequest(
 			serviceRequest, imagePaths);
-
+		System.out.println("5번");
 		restaurant.updateRestaurant(updateRestaurantEntityRequest);
+		System.out.println("6번");
 		restaurantInfo.updateRestaurantInfo(updateRestaurantEntityRequest);
 	}
 
