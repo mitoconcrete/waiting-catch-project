@@ -7,7 +7,7 @@
 </head>
 <body>
 <h1>메뉴수정</h1>
-<form th:action="@{/menu/update/{menuId}(menuId=${menuId})}" method="post" enctype="multipart/form-data">
+<form th:action="@{/api/seller/menu/update/{menuId}(menuId=${menuId})}" method="post" enctype="multipart/form-data">
     <input type="hidden" name="_method" value="PUT"/>
     <label for="name">name</label>
     <input type="text" id="name" name="name"><br>

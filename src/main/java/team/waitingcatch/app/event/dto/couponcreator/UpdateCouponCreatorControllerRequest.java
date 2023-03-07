@@ -1,8 +1,8 @@
 package team.waitingcatch.app.event.dto.couponcreator;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
+import javax.validation.constraints.Future;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -31,20 +31,8 @@ public class UpdateCouponCreatorControllerRequest {
 	private int quantity;
 
 	@NotNull(message = "만료일을 입력하세요.")
-	// @Future
-	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-	private String expireDate;
+	@Future
+	@DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
+	private LocalDateTime expireDate;
 
-	public LocalDateTime getExpireDate() {
-		return LocalDateTime.parse(expireDate, DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm"));
-	}
-
-	public String getExpireDateString() {
-		return expireDate;
-	}
-
-	public void setExpireDate(String expireDate) {
-		this.expireDate = expireDate;
-	}
 }
-

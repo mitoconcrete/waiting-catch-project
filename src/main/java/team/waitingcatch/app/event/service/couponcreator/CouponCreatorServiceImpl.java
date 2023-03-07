@@ -58,10 +58,10 @@ public class CouponCreatorServiceImpl implements CouponCreatorService, InternalC
 	@Override
 	public void createSellerCouponCreator(
 		CreateSellerCouponCreatorServiceRequest serviceRequest) {
-		Restaurant restaurant = internalRestaurantService._getRestaurantById(serviceRequest.getUserId());
+		Restaurant restaurant = internalRestaurantService._getRestaurantByUserId(serviceRequest.getUserId());
 
 		Event event = eventRepository.findByIdAndRestaurantAndIsDeletedFalse(serviceRequest.getEventId(), restaurant)
-			.orElseThrow(() -> new IllegalArgumentException("매장에 해당 이벤트가 존재하지 않습니다."));
+			.orElseThrow(() -> new NoSuchElementException(NOT_FOUND_EVENT.getMessage()));
 
 		CreateSellerCouponCreatorRequest createAdminCouponCreatorRequest = new CreateSellerCouponCreatorRequest(
 			serviceRequest, event);
@@ -81,8 +81,7 @@ public class CouponCreatorServiceImpl implements CouponCreatorService, InternalC
 	//레스토랑 이벤트 쿠폰생성자를 수정한다.
 	@Override
 	public void updateSellerCouponCreator(UpdateSellerCouponCreatorServiceRequest serviceRequest) {
-		Restaurant restaurant = internalRestaurantService._getRestaurantById(serviceRequest.getUserId());
-
+		Restaurant restaurant = internalRestaurantService._getRestaurantByUserId(serviceRequest.getUserId());
 		eventRepository.findByIdAndRestaurantAndIsDeletedFalse(
 				serviceRequest.getEventId(), restaurant)
 			.orElseThrow(() -> new NoSuchElementException(NOT_FOUND_EVENT.getMessage()));

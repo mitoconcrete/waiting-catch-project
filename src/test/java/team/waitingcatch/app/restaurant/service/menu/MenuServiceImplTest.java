@@ -21,11 +21,13 @@ import org.springframework.web.multipart.MultipartFile;
 import team.waitingcatch.app.common.util.image.S3Uploader;
 import team.waitingcatch.app.restaurant.dto.menu.CreateMenuServiceRequest;
 import team.waitingcatch.app.restaurant.dto.menu.CustomerMenuResponse;
+import team.waitingcatch.app.restaurant.dto.menu.DeleteMenuServiceRequest;
 import team.waitingcatch.app.restaurant.dto.menu.MenuResponse;
 import team.waitingcatch.app.restaurant.dto.menu.UpdateMenuServiceRequest;
 import team.waitingcatch.app.restaurant.entity.Menu;
 import team.waitingcatch.app.restaurant.entity.Restaurant;
 import team.waitingcatch.app.restaurant.repository.MenuRepository;
+import team.waitingcatch.app.restaurant.repository.RestaurantRepository;
 import team.waitingcatch.app.restaurant.service.restaurant.InternalRestaurantService;
 
 @ExtendWith(MockitoExtension.class)
@@ -33,6 +35,9 @@ class MenuServiceImplTest {
 
 	@Mock
 	private MenuRepository menuRepository;
+
+	@Mock
+	private RestaurantRepository restaurantRepository;
 
 	@Mock
 	private InternalRestaurantService restaurantService;
@@ -75,7 +80,7 @@ class MenuServiceImplTest {
 
 			when(serviceRequest.getMultipartFile()).thenReturn(multipartFile);
 			when(serviceRequest.getMultipartFile().isEmpty()).thenReturn(true);
-			when(restaurantService._getRestaurantById(any(Long.class))).thenReturn(restaurant);
+			when(restaurantService._getRestaurantByUserId(any(Long.class))).thenReturn(restaurant);
 
 			// when
 			menuService.createMenu(serviceRequest);
@@ -94,7 +99,7 @@ class MenuServiceImplTest {
 
 			when(serviceRequest.getMultipartFile()).thenReturn(multipartFile);
 			when(serviceRequest.getMultipartFile().isEmpty()).thenReturn(false);
-			when(restaurantService._getRestaurantById(any(Long.class))).thenReturn(restaurant);
+			when(restaurantService._getRestaurantByUserId(any(Long.class))).thenReturn(restaurant);
 
 			// when
 			menuService.createMenu(serviceRequest);
@@ -108,15 +113,18 @@ class MenuServiceImplTest {
 	@DisplayName("자신의 레스토랑 메뉴 조회")
 	void getMyRestaurantMenus() {
 		// given
+		Restaurant restaurant = mock(Restaurant.class);
 		List<Menu> menus = new ArrayList<>();
 		Menu menu = mock(Menu.class);
 		menus.add(menu);
 
+		when(restaurant.getId()).thenReturn(1L);
 		when(menu.getName()).thenReturn("aaa");
-		when(menuRepository.findAllByRestaurantId(any(Long.class))).thenReturn(menus);
+		when(restaurantService._getRestaurantByUserId(1L)).thenReturn(restaurant);
+		when(menuRepository.findAllByRestaurantId(1L)).thenReturn(menus);
 
 		// when
-		List<MenuResponse> responses = menuService.getMyRestaurantMenus(any(Long.class));
+		List<MenuResponse> responses = menuService.getMyRestaurantMenus(1L);
 
 		// then
 		assertEquals("aaa", responses.get(0).getName());
@@ -174,11 +182,12 @@ class MenuServiceImplTest {
 	void deleteMenu() {
 		// given
 		Menu menu = mock(Menu.class);
+		DeleteMenuServiceRequest deleteMenuServiceRequest = mock(DeleteMenuServiceRequest.class);
 
 		when(menuRepository.findById(any(Long.class))).thenReturn(Optional.of(menu));
 
 		// when
-		menuService.deleteMenu(any(Long.class));
+		menuService.deleteMenu(deleteMenuServiceRequest);
 
 		// then
 		verify(menuRepository, times(1)).delete(menu);

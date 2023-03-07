@@ -10,4 +10,7 @@ public interface UserCouponService {
 	void createUserCoupon(CreateUserCouponServiceRequest createUserCouponserviceRequest);
 
 	List<GetUserCouponResponse> getUserCoupons(User user);
+
+	void useCoupon(Long couponId);
+
 }

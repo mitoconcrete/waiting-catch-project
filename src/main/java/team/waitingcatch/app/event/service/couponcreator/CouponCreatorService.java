@@ -27,4 +27,5 @@ public interface CouponCreatorService {
 	//레스토랑 쿠폰생성자를 수정한다.
 	void updateSellerCouponCreator(
 		UpdateSellerCouponCreatorServiceRequest updateSellerCouponCreatorServiceRequest);
+
 }
