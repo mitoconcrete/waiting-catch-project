@@ -156,7 +156,7 @@ public class SellerController {
 		return "redirect:/seller/templates/menu";
 	}
 
-	@DeleteMapping("/seller/templates/menus/{menuId}")
+	@GetMapping("/seller/templates/menus/{menuId}")
 	public String deleteMenuSub(@PathVariable Long menuId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
 		deleteMenu(menuId, userDetails);
 		return "redirect:/seller/templates/menu";
