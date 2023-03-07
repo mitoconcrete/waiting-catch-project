@@ -60,7 +60,7 @@ public class SecurityConfig {
 
 			var cors = new CorsConfiguration();
 			// CORS 를 허용할 주소를 아래에 리스트 형태로 넣어주세요.
-			cors.setAllowedOrigins(List.of("http://localhost:5173"));
+			cors.setAllowedOrigins(List.of("https://waitingcatch.com", "https://www.waitingcatch.com"));
 			cors.setAllowedMethods(List.of("*"));
 			cors.setAllowedHeaders(List.of("*"));
 			cors.setAllowCredentials(true);
