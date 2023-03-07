@@ -20,7 +20,7 @@
     </a>
     <nav>
         <ul>
-            <a href="/">판매자 님</a>
+            <a href="/seller/templates/seller">판매자 님</a>
             <a href="#" onclick="sendTokenDeleteSeller();">Logout</a>
         </ul>
     </nav>
@@ -145,5 +145,13 @@
 
 
 </div>
+<script th:inline="javascript">
+    const token = [[${accessToken}]];
+    if (token) {
+        document.cookie =
+            'Authorization' + "=" + token + "; " +
+            "path=/; expires=" + (new Date().getTime() + 30 * 60000) + ";";
+    }
+</script>
 </body>
 </html>

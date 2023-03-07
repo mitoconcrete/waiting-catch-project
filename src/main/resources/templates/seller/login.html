@@ -33,6 +33,10 @@
 </div>
 </body>
 <script>
+    document.cookie =
+        'Authorization' + "=" + "" + "; " +
+        "path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+
     const href = location.href;
     const queryString = href.substring(href.indexOf("?") + 1)
     if (queryString === 'error') {
@@ -59,7 +63,7 @@
             contentType: "application/json",
             data: JSON.stringify({username: username, password: password}),
             success: function (response, status, xhr) {
-                if (response === 'success') {
+                if (status === 'success') {
                     let host = window.location.host;
                     let url = host + '/seller/templates/seller';
                     let todayDate = new Date().getTime() + 1000 * 60 * 30;

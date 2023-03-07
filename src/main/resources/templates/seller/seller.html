@@ -22,7 +22,7 @@
     </a>
     <nav>
         <ul>
-            <a href="/">판매자 님</a>
+            <a href="/seller/templates/seller">판매자 님</a>
             <a href="#" onclick="sendTokenDeleteSeller();">Logout</a>
         </ul>
     </nav>
@@ -51,25 +51,23 @@
     </a>
 </div>
 </body>
+<script th:inline="javascript">
+    const token = [[${accessToken}]];
+    if (token) {
+        document.cookie =
+            'Authorization' + "=" + token + "; " +
+            "path=/; expires=" + (new Date().getTime() + 30 * 60000) + ";";
+    }
+</script>
 <script>
-    function sendTokenLogout() {
-        $.ajax({
-            url: `/seller/logout`,
-            type: 'GET',
-            headers: {
-                'content-type': 'application/json'
-            }
-        })
-    }
-
-    function sendTokenDelete() {
-        $.ajax({
-            url: `/seller/delete`,
-            type: 'GET',
-            headers: {
-                'content-type': 'application/json'
-            }
-        })
-    }
+    // function sendTokenDelete() {
+    //     fetch("/api/seller/withdraws", {
+    //         type: 'delete'
+    //     })
+    //     document.cookie =
+    //         'Authorization' + "=" + "" + "; " +
+    //         "path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+    //     window.location.href = host + "/general/templates/seller/login";
+    // }
 </script>
 </html>
