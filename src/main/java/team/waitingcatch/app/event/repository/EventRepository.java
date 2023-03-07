@@ -13,10 +13,10 @@ import team.waitingcatch.app.event.entity.Event;
 import team.waitingcatch.app.restaurant.entity.Restaurant;
 
 public interface EventRepository extends JpaRepository<Event, Long> {
-	
+
 	Page<Event> findByRestaurantAndIsDeletedFalse(Restaurant restaurant, Pageable pageable);
 
-	Page<Event> findByRestaurantIsNullIsDeletedFalse(Pageable pageable);
+	Page<Event> findByRestaurantIsNullAndIsDeletedFalse(Pageable pageable);
 
 	Optional<Event> findByIdAndIsDeletedFalse(Long id);
 

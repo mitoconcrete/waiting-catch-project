@@ -18,9 +18,7 @@ import team.waitingcatch.app.event.dto.usercoupon.UserCouponServiceResponse;
 import team.waitingcatch.app.event.entity.CouponCreator;
 import team.waitingcatch.app.event.entity.Event;
 import team.waitingcatch.app.event.entity.UserCoupon;
-import team.waitingcatch.app.event.repository.CouponCreatorRepository;
 import team.waitingcatch.app.event.repository.UserCouponRepository;
-import team.waitingcatch.app.event.service.couponcreator.InternalCouponCreatorService;
 import team.waitingcatch.app.restaurant.entity.Restaurant;
 import team.waitingcatch.app.user.entitiy.User;
 import team.waitingcatch.app.user.service.InternalUserService;
@@ -35,11 +33,7 @@ class UserCouponServiceImplTest {
 	private UserCouponRepository userCouponRepository;
 
 	@Mock
-	private CouponCreatorRepository couponCreatorRepository;
-	@Mock
 	private InternalUserService userService;
-	@Mock
-	private InternalCouponCreatorService couponCreatorService;
 
 	@Test
 	void getUserCoupons() {

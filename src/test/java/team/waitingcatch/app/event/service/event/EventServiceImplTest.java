@@ -193,7 +193,7 @@ class EventServiceImplTest {
 		List<Event> eventList = new ArrayList<>();
 		Page<Event> ev = new PageImpl<>(eventList, pageable, eventList.size());
 
-		when(eventRepository.findByRestaurantIsNullIsDeletedFalse(pageable)).thenReturn(ev);
+		when(eventRepository.findByRestaurantIsNullAndIsDeletedFalse(pageable)).thenReturn(ev);
 
 		// when
 		Page<GetEventsResponse> events = eventService.getGlobalEvents(pageable);
