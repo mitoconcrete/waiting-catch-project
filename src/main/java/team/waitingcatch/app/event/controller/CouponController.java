@@ -2,6 +2,9 @@ package team.waitingcatch.app.event.controller;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
@@ -59,8 +62,8 @@ public class CouponController {
 
 	// 광역 이벤트 목록을 조회한다.
 	@GetMapping("/admin/events")
-	public List<GetEventsResponse> getAdminEvents() {
-		return eventService.getGlobalEvents();
+	public Page<GetEventsResponse> getAdminEvents(@PageableDefault(size = 10, page = 0) Pageable pageable) {
+		return eventService.getGlobalEvents(pageable);
 	}
 
 	//광역 이벤트를 수정한다.
@@ -111,18 +114,10 @@ public class CouponController {
 
 	/*  유저  */
 	//광역 이벤트 목록 출력 + 해당 이벤트의 쿠폰생성자 출력
-	@GetMapping("/events")
-	public List<GetEventsResponse> getEvents() {
-		return eventService.getGlobalEvents();
+	@GetMapping("/customer/events")
+	public Page<GetEventsResponse> getEvents(@PageableDefault(size = 10, page = 0) Pageable pageable) {
+		return eventService.getGlobalEvents(pageable);
 	}
-
-	//레스토랑 이벤트 목록 출력 + 해당 이벤트의 쿠폰생성자 출력
-	@GetMapping("/restaurants/{restaurantId}/events")
-	public List<GetEventsResponse> getRestaurantEvents(@PathVariable Long restaurantId) {
-		return eventService.getRestaurantEvents(restaurantId);
-	}
-
-
 	/*  쿠폰 생성자  */
 
 	//광역 이벤트 쿠폰 생성자 생성
@@ -180,10 +175,21 @@ public class CouponController {
 
 	/*  유저 쿠폰  */
 
-	//유저 쿠폰 생성
-	@PostMapping("/coupons/creators/{creatorId}")
+	//광역 쿠폰 생성
+	@PostMapping("/admin/coupons/creators/{creatorId}")
 	@ResponseStatus(value = HttpStatus.CREATED)
-	public void createUserCoupon(@Validated @PathVariable Long creatorId,
+	public void createAdminCoupon(@Validated @PathVariable Long creatorId,
+		@AuthenticationPrincipal UserDetailsImpl userDetails) {
+		CreateUserCouponServiceRequest createUserCouponserviceRequest = new CreateUserCouponServiceRequest(creatorId,
+			userDetails.getUsername());
+
+		userCouponService.createUserCoupon(createUserCouponserviceRequest);
+	}
+
+	//셀러 쿠폰 생성
+	@PostMapping("/seller/coupons/creators/{creatorId}")
+	@ResponseStatus(value = HttpStatus.CREATED)
+	public void createSellerCoupon(@Validated @PathVariable Long creatorId,
 		@AuthenticationPrincipal UserDetailsImpl userDetails) {
 		CreateUserCouponServiceRequest createUserCouponserviceRequest = new CreateUserCouponServiceRequest(creatorId,
 			userDetails.getUsername());
@@ -195,5 +201,11 @@ public class CouponController {
 	@GetMapping("/customer/coupons")
 	public List<GetUserCouponResponse> getUserCoupon(@AuthenticationPrincipal UserDetailsImpl userDetails) {
 		return userCouponService.getUserCoupons(userDetails.getUser());
+	}
+
+	//유저 쿠폰 사용
+	@PutMapping("/customer/coupons/{couponId}")
+	public void useCoupon(@PathVariable Long couponId) {
+		userCouponService.useCoupon(couponId);
 	}
 }

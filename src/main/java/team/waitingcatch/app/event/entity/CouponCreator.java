@@ -13,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Version;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -57,7 +58,21 @@ public class CouponCreator extends TimeStamped {
 	@Column(nullable = false)
 	private boolean isDeleted;
 
+	@Version
+	@Column(nullable = false)
+	private Long version;
+
 	public CouponCreator(CreateAdminCouponCreatorRequest request) {
+		this.event = request.getEvent();
+		this.name = request.getCreateAdminCouponCreatorServiceRequest().getName();
+		this.discountPrice = request.getCreateAdminCouponCreatorServiceRequest().getDiscountPrice();
+		this.discountType = request.getCreateAdminCouponCreatorServiceRequest().getDiscountType();
+		this.quantity = request.getCreateAdminCouponCreatorServiceRequest().getQuantity();
+		this.expireDate = request.getCreateAdminCouponCreatorServiceRequest().getExpireDate();
+	}
+
+	public CouponCreator(CreateAdminCouponCreatorRequest request, Long id) {
+		this.id = id;
 		this.event = request.getEvent();
 		this.name = request.getCreateAdminCouponCreatorServiceRequest().getName();
 		this.discountPrice = request.getCreateAdminCouponCreatorServiceRequest().getDiscountPrice();
@@ -91,7 +106,8 @@ public class CouponCreator extends TimeStamped {
 		this.expireDate = serviceRequest.getExpireDate();
 	}
 
-	public void deleteCouponCreator() {
-		this.isDeleted = true;
+	public void useCoupon() {
+		this.quantity -= 1;
 	}
+
 }
