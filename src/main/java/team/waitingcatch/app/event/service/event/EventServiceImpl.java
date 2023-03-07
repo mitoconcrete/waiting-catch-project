@@ -4,6 +4,7 @@ import static team.waitingcatch.app.exception.ErrorCode.*;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -20,6 +21,7 @@ import team.waitingcatch.app.event.dto.event.DeleteEventServiceRequest;
 import team.waitingcatch.app.event.dto.event.GetEventsResponse;
 import team.waitingcatch.app.event.dto.event.UpdateEventServiceRequest;
 import team.waitingcatch.app.event.dto.event.UpdateSellerEventServiceRequest;
+import team.waitingcatch.app.event.entity.CouponCreator;
 import team.waitingcatch.app.event.entity.Event;
 import team.waitingcatch.app.event.repository.CouponCreatorRepository;
 import team.waitingcatch.app.event.repository.EventRepository;
@@ -113,8 +115,14 @@ public class EventServiceImpl implements EventService, InternalEventService {
 	// 이벤트 목록 + 쿠폰생성자를 DTO형태로 리턴
 	@Override
 	public Page<GetEventsResponse> _getEventsResponse(Page<Event> events, Pageable pageable) {
-		List<GetEventsResponse> getEventsResponse = couponCreatorRepository.findByEventWithEvent(events.getContent());
-		return new PageImpl<>(getEventsResponse, pageable, events.getTotalElements());
+		List<CouponCreator> couponCreators = couponCreatorRepository.findByEvent(events.getContent());
+
+		List<GetEventsResponse> getEventsResponses = events.get()
+			.map(event -> new GetEventsResponse(event, couponCreators))
+			.collect(
+				Collectors.toList());
+
+		return new PageImpl<>(getEventsResponses, pageable, events.getTotalElements());
 	}
 
 	@Override

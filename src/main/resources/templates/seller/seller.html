@@ -40,14 +40,14 @@
 <div class="body">
     <h1 style="color: #8B60C7">매장 관리</h1>
 
-    <a th:href="@{/seller/templates/delete}" th:method="delete" enctype="multipart/form-data">
+    <a th:href="@{/seller/templates/withdraw}" th:method="delete" enctype="multipart/form-data">
         <button type="button" class="btn">회원탈퇴</button>
     </a>
 
     <a href="seller-info.html" th:href="@{/seller/templates/info}" th:method="get">
         <button type="button" class="btn">판매자 정보 수정</button>
     </a>
-    <a th:href="@{/seller/templates/updaterestaurant}" th:method="get" enctype="multipart/form-data">
+    <a th:href="@{/seller/templates/update-restaurant}" th:method="get" enctype="multipart/form-data">
         <button type="button" class="btn">레스토랑 정보 수정</button>
     </a>
 </div>
