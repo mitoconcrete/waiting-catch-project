@@ -1,6 +1,5 @@
 package team.waitingcatch.app.lineup.repository;
 
-import static team.waitingcatch.app.lineup.entity.QLineup.*;
 import static team.waitingcatch.app.lineup.entity.QLineupHistory.*;
 import static team.waitingcatch.app.restaurant.entity.QRestaurant.*;
 
@@ -25,7 +24,6 @@ public class LineupHistoryRepositoryCustomImpl implements LineupHistoryRepositor
 	@Override
 	public Slice<LineupRecordResponse> findLineupRecordsByUserIdAndStatus(Long id, long userId,
 		ArrivalStatusEnum statusCond, Pageable pageable) {
-
 		List<LineupRecordResponse> content = queryFactory
 			.select(new QLineupRecordResponse(
 				lineupHistory.id,
@@ -40,7 +38,7 @@ public class LineupHistoryRepositoryCustomImpl implements LineupHistoryRepositor
 			))
 			.from(lineupHistory)
 			.join(lineupHistory.restaurant, restaurant)
-			.where(idLt(id), lineupHistory.user.id.eq(userId), statusEq(statusCond), lineup.isDeleted.isFalse())
+			.where(idLt(id), lineupHistory.user.id.eq(userId), statusEq(statusCond), lineupHistory.isDeleted.isFalse())
 			.orderBy(lineupHistory.id.desc())
 			.limit(pageable.getPageSize() + 1)
 			.fetch();

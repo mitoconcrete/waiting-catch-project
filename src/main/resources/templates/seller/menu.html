@@ -21,7 +21,7 @@
     </a>
     <nav>
         <ul>
-            <a href="/">판매자 님</a>
+            <a href="/seller/templates/seller">판매자 님</a>
             <a href="#" onclick="sendTokenDeleteSeller();">Logout</a>
         </ul>
     </nav>
@@ -43,42 +43,47 @@
         </a>
     </div>
 
-    <div class="container">
-        <div>
-            <table class="table table-striped">
-                <thead>
-                <tr>
-                    <th>메뉴 아이디</th>
-                    <th>메뉴 이름</th>
-                    <th>메뉴 가격</th>
-                    <th>메뉴 이미지URL</th>
-                    <th>메뉴 수정</th>
-                    <th>메뉴 삭제</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="item : ${menus}">
-                    <td th:text="${item.menuId}"></td>
-                    <td th:text="${item.name}"></td>
-                    <td th:text="${item.price}"></td>
-                    <td th:text="${item.imageUrl}"></td>
-                    <td>
-                        <a th:href="@{/seller/templates/menus/{menuId}/menu-form(menuId=${item.menuId})}">
-                            <button type="button" class="btn">수정</button>
-                        </a>
-                    </td>
-                    <td>
-                        <a th:href="@{/seller/templates/menus/{menuId}(menuId=${item.menuId})}"
-                           th:method="delete">
-                            <button type="button" class="btn">삭제</button>
-                        </a>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-    </div> <!-- /container -->
+    <div>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>메뉴 아이디</th>
+                <th>메뉴 이름</th>
+                <th>메뉴 가격</th>
+                <th>메뉴 이미지URL</th>
+                <th>메뉴 수정</th>
+                <th>메뉴 삭제</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="item : ${menus}">
+                <td th:text="${item.menuId}"></td>
+                <td th:text="${item.name}"></td>
+                <td th:text="${item.price}"></td>
+                <td th:text="${item.imageUrl}"></td>
+                <td>
+                    <a th:href="@{/seller/templates/menus/{menuId}/menu-form(menuId=${item.menuId})}">
+                        <button type="button" class="btn">수정</button>
+                    </a>
+                </td>
+                <td>
+                    <a th:href="@{/seller/templates/menus/{menuId}(menuId=${item.menuId})}"
+                       th:method="delete">
+                        <button type="button" class="btn">삭제</button>
+                    </a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
-
+<script th:inline="javascript">
+    const token = [[${accessToken}]];
+    if (token) {
+        document.cookie =
+            'Authorization' + "=" + token + "; " +
+            "path=/; expires=" + (new Date().getTime() + 30 * 60000) + ";";
+    }
+</script>
 </body>
 </html>

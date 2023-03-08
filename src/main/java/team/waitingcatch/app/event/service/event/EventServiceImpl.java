@@ -1,6 +1,6 @@
 package team.waitingcatch.app.event.service.event;
 
-import static team.waitingcatch.app.exception.ErrorCode.NOT_FOUND_EVENT;
+import static team.waitingcatch.app.exception.ErrorCode.*;
 
 import java.util.List;
 import java.util.NoSuchElementException;
