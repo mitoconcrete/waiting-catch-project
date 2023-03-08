@@ -20,7 +20,7 @@
     </a>
     <nav>
         <ul>
-            <a href="/">판매자 님</a>
+            <a href="/seller/templates/seller">판매자 님</a>
             <a href="#" onclick="sendTokenDeleteSeller();">Logout</a>
         </ul>
     </nav>
@@ -28,9 +28,9 @@
 <nav class="menus">
     <ul>
         <a href="/seller/templates/lineup">줄서기 현황</a>
-        <a href="/seller/templates/seller" style="color: #8B60C7">매장 관리</a>
+        <a href="/seller/templates/seller">매장 관리</a>
         <a href="/seller/templates/menu">메뉴</a>
-        <a href="/seller/templates/event">이벤트</a>
+        <a href="/seller/templates/event" style="color: #8B60C7">이벤트</a>
         <a href="/seller/templates/blacklist-demands">블랙리스트</a>
     </ul>
 </nav>
@@ -145,5 +145,13 @@
 
 
 </div>
+<script th:inline="javascript">
+    const token = [[${accessToken}]];
+    if (token) {
+        document.cookie =
+            'Authorization' + "=" + token + "; " +
+            "path=/; expires=" + (new Date().getTime() + 30 * 60000) + ";";
+    }
+</script>
 </body>
 </html>

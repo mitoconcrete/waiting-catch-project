@@ -16,7 +16,7 @@ public interface UserCouponRepository extends JpaRepository<UserCoupon, Long> {
 
 	Optional<UserCoupon> findByIdAndIsUsedFalse(Long id);
 
-	@Query("select new team.waitingcatch.app.event.dto.usercoupon.UserCouponServiceResponse(uc.id,cc.name,r.name,cc.discountPrice,cc.discountType,cc.expireDate) from UserCoupon uc join uc.user u join uc.couponCreator cc join cc.event e join e.restaurant r where uc.user = :user and uc.isUsed=false")
+	@Query("select new team.waitingcatch.app.event.dto.usercoupon.UserCouponServiceResponse(uc.id,cc.name,r.name,cc.discountPrice,cc.discountType,cc.expireDate) from UserCoupon uc left join uc.user u left join uc.couponCreator cc left join cc.event e left join e.restaurant r where uc.user = :user and uc.isUsed=false")
 	List<UserCouponServiceResponse> findRestaurantNameAndUserAll(@Param("user") User user);
 
 	@Query("select uc from UserCoupon uc join uc.user join uc.couponCreator cc join cc.event e join e.restaurant r where uc.user = :user and uc.couponCreator = :couponCreator")

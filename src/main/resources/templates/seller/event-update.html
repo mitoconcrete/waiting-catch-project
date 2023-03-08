@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <meta charset="UTF-8">
     <title>이벤트 수정</title>
 </head>
@@ -17,5 +19,14 @@
     <input type="datetime-local" id="eventEndDate" name="eventEndDate"><br>
     <button type="submit">등록</button>
 </form>
+</body>
+<script th:inline="javascript">
+    const token = [[${accessToken}]];
+    if (token) {
+        document.cookie =
+            'Authorization' + "=" + token + "; " +
+            "path=/; expires=" + (new Date().getTime() + 30 * 60000) + ";";
+    }
+</script>
 </body>
 </html>

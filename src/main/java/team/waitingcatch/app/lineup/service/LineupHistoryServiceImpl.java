@@ -32,7 +32,6 @@ public class LineupHistoryServiceImpl implements LineupHistoryService, InternalL
 	@Override
 	public Slice<LineupRecordResponse> _getRecordsByUserId(Long id, long userId, ArrivalStatusEnum statusCond,
 		Pageable pageable) {
-
 		return lineupHistoryRepository.findLineupRecordsByUserIdAndStatus(id, userId, statusCond, pageable);
 	}
 
