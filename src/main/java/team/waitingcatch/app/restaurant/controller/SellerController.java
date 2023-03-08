@@ -69,7 +69,6 @@ import team.waitingcatch.app.user.service.UserService;
 @Controller
 @RequiredArgsConstructor
 public class SellerController {
-
 	private final SellerManagementService sellerManagementService;
 	private final JwtUtil jwtUtil;
 	private final UserService userService;
@@ -87,7 +86,7 @@ public class SellerController {
 
 	@GetMapping("/general/templates/seller/login")
 	public String login() {
-		return "/seller/login";
+		return "seller/login";
 	}
 
 	@ResponseBody
@@ -101,7 +100,7 @@ public class SellerController {
 
 	@GetMapping("/general/templates/seller/signup")
 	public String signup() {
-		return "/seller/register";
+		return "seller/register";
 	}
 
 	@PostMapping("/api/general/seller/signup")
@@ -112,7 +111,7 @@ public class SellerController {
 		DemandSignUpSellerServiceRequest demandSignupSellerServiceRequest = new DemandSignUpSellerServiceRequest(
 			demandSignUpControllerRequest, position);
 		sellerManagementService.demandSignUpSeller(demandSignupSellerServiceRequest);
-		return "/seller/login";
+		return "seller/login";
 	}
 
 	/*     메뉴 프론트     */
@@ -127,7 +126,7 @@ public class SellerController {
 		}
 		List<MenuResponse> menus = menuService.getMyRestaurantMenus(userDetails.getId());
 		model.addAttribute("menus", menus);
-		return "/seller/menu";
+		return "seller/menu";
 	}
 
 	@GetMapping("/seller/templates/menu/new")
@@ -137,7 +136,7 @@ public class SellerController {
 			String token = response.getHeader("Authorization");
 			model.addAttribute("accessToken", token);
 		}
-		return "/seller/menu-new";
+		return "seller/menu-new";
 	}
 
 	//@PostMapping("/seller/restaurants/{restaurantId}/menus")
@@ -173,7 +172,7 @@ public class SellerController {
 			model.addAttribute("accessToken", token);
 		}
 		model.addAttribute("menuId", menuId);
-		return "/seller/menu-update";
+		return "seller/menu-update";
 	}
 
 	@PutMapping("/api/seller/menus/{menuId}/menu-form")
@@ -227,6 +226,10 @@ public class SellerController {
 
 	/*     판매자 정보 프론트   */
 	@GetMapping("/seller/templates/seller")
+<<<<<<< HEAD
+	public String seller() {
+		return "seller/seller";
+=======
 	public String seller(HttpServletResponse response, Model model) {
 		Collection<String> headerNames = response.getHeaderNames();
 		if (headerNames.contains("Authorization")) {
@@ -234,6 +237,7 @@ public class SellerController {
 			model.addAttribute("accessToken", token);
 		}
 		return "/seller/seller";
+>>>>>>> c9d22ae50d04f351b59fe65647d2117da5cfc076
 	}
 
 	@GetMapping("/api/seller/logout")
@@ -282,6 +286,10 @@ public class SellerController {
 	}
 
 	@GetMapping("/seller/templates/info")
+<<<<<<< HEAD
+	public String updateSellerInfoSub() {
+		return "seller/seller-info";
+=======
 	public String updateSellerInfoSub(HttpServletResponse response, Model model) {
 		Collection<String> headerNames = response.getHeaderNames();
 		if (headerNames.contains("Authorization")) {
@@ -289,6 +297,7 @@ public class SellerController {
 			model.addAttribute("accessToken", token);
 		}
 		return "/seller/seller-info";
+>>>>>>> c9d22ae50d04f351b59fe65647d2117da5cfc076
 	}
 
 	@PutMapping("/api/seller/info/view")
@@ -314,6 +323,10 @@ public class SellerController {
 	}
 
 	@GetMapping("/seller/templates/update-restaurant")
+<<<<<<< HEAD
+	public String updateRestaurantSub() {
+		return "seller/seller-restaurant-update";
+=======
 	public String updateRestaurantSub(HttpServletResponse response, Model model) {
 		Collection<String> headerNames = response.getHeaderNames();
 		if (headerNames.contains("Authorization")) {
@@ -321,6 +334,7 @@ public class SellerController {
 			model.addAttribute("accessToken", token);
 		}
 		return "/seller/seller-restaurant-update";
+>>>>>>> c9d22ae50d04f351b59fe65647d2117da5cfc076
 	}
 
 	@PutMapping(value = "/api/seller/update-restaurant")
@@ -362,10 +376,14 @@ public class SellerController {
 		}
 		Page<GetEventsResponse> events = eventService.getRestaurantEvents(userDetails.getId(), pageable);
 		model.addAttribute("events", events);
-		return "/seller/event";
+		return "seller/event";
 	}
 
 	@GetMapping("/seller/templates/event/creator")
+<<<<<<< HEAD
+	public String createEvent() {
+		return "seller/event-create";
+=======
 	public String createEvent(HttpServletResponse response, Model model) {
 		Collection<String> headerNames = response.getHeaderNames();
 		if (headerNames.contains("Authorization")) {
@@ -373,6 +391,7 @@ public class SellerController {
 			model.addAttribute("accessToken", token);
 		}
 		return "/seller/event-create";
+>>>>>>> c9d22ae50d04f351b59fe65647d2117da5cfc076
 	}
 
 	@PostMapping("/api/seller/event")
@@ -405,7 +424,7 @@ public class SellerController {
 			model.addAttribute("accessToken", token);
 		}
 		model.addAttribute("eventId", eventId);
-		return "/seller/event-create-creator";
+		return "seller/event-create-creator";
 	}
 
 	@PostMapping("/api/seller/events/{eventId}/coupon-creators")
@@ -439,7 +458,7 @@ public class SellerController {
 			model.addAttribute("accessToken", token);
 		}
 		model.addAttribute("eventId", eventId);
-		return "/seller/event-update";
+		return "seller/event-update";
 	}
 
 	@PutMapping("/api/seller/events/{eventId}/update")
@@ -474,7 +493,7 @@ public class SellerController {
 		}
 		model.addAttribute("eventId", eventId);
 		model.addAttribute("creatorId", creatorId);
-		return "/seller/event-update-creator";
+		return "seller/event-update-creator";
 	}
 
 	@PutMapping("/api/seller/events/{eventId}/coupon-creators/{creatorId}")
@@ -525,5 +544,4 @@ public class SellerController {
 			userDetails.getId());
 		eventService.deleteSellerEvent(deleteEventServiceRequest);
 	}
-
 }
