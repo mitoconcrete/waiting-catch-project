@@ -12,4 +12,7 @@ public interface RestaurantInfoRepositoryCustom {
 
 	Slice<RestaurantsWithinRadiusJpaResponse> findRestaurantsByDistance(Long id, double latitude, double longitude,
 		int distance, Pageable pageable);
+
+	Slice<RestaurantsWithinRadiusJpaResponse> findRestaurantsByLatitudeAndLongitude(
+		Long id, double maxLatitude, double maxLongitude, double minLatitude, double minLongitude, Pageable pageable);
 }
