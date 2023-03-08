@@ -49,7 +49,7 @@ import team.waitingcatch.app.restaurant.service.restaurant.InternalRestaurantSer
 @Transactional
 @RequiredArgsConstructor
 public class LineupServiceImpl implements LineupService, InternalLineupService {
-	public static final int MAX_DISTANCE = 2;
+	public static final int MAX_DISTANCE = 3;
 
 	private final LineupRepository lineupRepository;
 
