@@ -55,6 +55,7 @@ create table coupon_creator
     quantity          integer      not null,
     expire_date       datetime(6)  not null,
     is_deleted        bit(1)       not null,
+    version           bigint       not null,
     created_date      datetime(6)  not null,
     modified_date     datetime(6)  not null,
     primary key (coupon_creator_id)
