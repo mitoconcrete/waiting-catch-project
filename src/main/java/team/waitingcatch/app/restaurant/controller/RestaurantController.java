@@ -65,7 +65,7 @@ public class RestaurantController {
 	@GetMapping("/general/restaurants/search")
 	public GenericResponse<Slice<SearchRestaurantsResponse>> searchRestaurantsByKeyword(
 		@RequestParam(required = false) Long id,
-		@RequestParam @NotBlank String keyword,
+		@RequestParam @NotBlank(message = "키워드를 입력하세요.") String keyword,
 		@RequestParam double latitude,
 		@RequestParam double longitude,
 		Pageable pageable) {
