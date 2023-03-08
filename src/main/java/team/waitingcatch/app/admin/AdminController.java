@@ -53,7 +53,7 @@ public class AdminController {
 
 	@GetMapping("/general/templates/admin/login")
 	public ModelAndView loginPage() {
-		return new ModelAndView("/admin/login");
+		return new ModelAndView("admin/login");
 	}
 
 	@GetMapping("/general/templates/admin/register")
@@ -64,7 +64,7 @@ public class AdminController {
 			model.addAttribute("accessToken", token);
 		}
 		model.addAttribute("CreateUserControllerRequest", new CreateUserControllerRequest());
-		return new ModelAndView("/admin/register");
+		return new ModelAndView("admin/register");
 	}
 
 	@GetMapping("/admin/templates/main")
@@ -74,7 +74,7 @@ public class AdminController {
 			String token = response.getHeader("Authorization");
 			model.addAttribute("accessToken", token);
 		}
-		return new ModelAndView("/admin/index");
+		return new ModelAndView("admin/index");
 	}
 
 	@PostMapping("/general/templates/admin/register")
@@ -90,7 +90,7 @@ public class AdminController {
 		_createUserService(UserRoleEnum.ADMIN, controllerRequest);
 		model.addAttribute("message", "회원가입이 완료되었습니다.");
 		model.addAttribute("searchUrl", "/general/templates/admin/login");
-		return "/admin/message";
+		return "admin/message";
 	}
 
 	private void _createUserService(UserRoleEnum role, CreateUserControllerRequest controllerRequest) {
@@ -129,7 +129,7 @@ public class AdminController {
 
 		model.addAttribute("requestSeller", demandSignUpSellerResponses);
 
-		return new ModelAndView("/admin/seller-management");
+		return new ModelAndView("admin/seller-management");
 	}
 	//유저
 
@@ -151,7 +151,7 @@ public class AdminController {
 		}
 
 		model.addAttribute("customers", userInfoResponses);
-		return new ModelAndView("/admin/user-list");
+		return new ModelAndView("admin/user-list");
 	}
 
 	@GetMapping("/admin/templates/customers/{customerId}")
@@ -169,7 +169,7 @@ public class AdminController {
 			model.addAttribute("accessToken", token);
 		}
 		model.addAttribute("customer", userService.getByUserIdAndRole(servicePayload));
-		return new ModelAndView("/admin/user-view");
+		return new ModelAndView("admin/user-view");
 	}
 
 	//레스토랑, 셀러
@@ -191,7 +191,7 @@ public class AdminController {
 			model.addAttribute("accessToken", token);
 		}
 		model.addAttribute("restaurants", restaurants);
-		return new ModelAndView("/admin/restaurant-list");
+		return new ModelAndView("admin/restaurant-list");
 	}
 
 	@GetMapping("/admin/templates/sellers/{sellerId}")
@@ -208,7 +208,7 @@ public class AdminController {
 			model.addAttribute("accessToken", token);
 		}
 		model.addAttribute("seller", userService.getByUserIdAndRole(servicePayload));
-		return new ModelAndView("/admin/seller-view");
+		return new ModelAndView("admin/seller-view");
 	}
 
 	@DeleteMapping("/admin/templates/restaurants/{restaurant_id}")
@@ -222,7 +222,7 @@ public class AdminController {
 			model.addAttribute("message", "레스토랑 삭제가 완료되었습니다.");
 		}
 		model.addAttribute("searchUrl", "/admin/templates/restaurants");
-		return "/admin/message";
+		return "admin/message";
 	}
 
 	@GetMapping("/admin/templates/event")
@@ -232,7 +232,7 @@ public class AdminController {
 			String token = response.getHeader("Authorization");
 			model.addAttribute("accessToken", token);
 		}
-		return new ModelAndView("/admin/event");
+		return new ModelAndView("admin/event");
 	}
 
 	@GetMapping("/admin/templates/blacklist")
@@ -242,7 +242,7 @@ public class AdminController {
 			String token = response.getHeader("Authorization");
 			model.addAttribute("accessToken", token);
 		}
-		return new ModelAndView("/admin/blacklist");
+		return new ModelAndView("admin/blacklist");
 	}
 
 	@GetMapping("/admin/templates/review")
@@ -252,7 +252,7 @@ public class AdminController {
 			String token = response.getHeader("Authorization");
 			model.addAttribute("accessToken", token);
 		}
-		return new ModelAndView("/admin/review");
+		return new ModelAndView("admin/review");
 	}
 
 	//카테고리
@@ -267,7 +267,7 @@ public class AdminController {
 		model.addAttribute("CreateCategoryRequest", new CreateCategoryRequest());
 		model.addAttribute("DeleteCategoryControllerRequest", new DeleteCategoryControllerRequest());
 		model.addAttribute("UpdateCategoryControllerRequest", new UpdateCategoryControllerRequest());
-		return new ModelAndView("/admin/category");
+		return new ModelAndView("admin/category");
 	}
 
 	@PostMapping("/admin/templates/category")
@@ -276,7 +276,7 @@ public class AdminController {
 		categoryService.createCategory(request);
 		model.addAttribute("message", "카테고리 작성이 완료되었습니다.");
 		model.addAttribute("searchUrl", "/admin/templates/category");
-		return "/admin/message";
+		return "admin/message";
 	}
 
 	@PutMapping("/admin/templates/categories-update")
@@ -287,7 +287,7 @@ public class AdminController {
 		categoryService.updateCategory(serviceRequest);
 		model.addAttribute("message", "카테고리 수정이 완료 되었습니다.");
 		model.addAttribute("searchUrl", "/admin/templates/category");
-		return "/admin/message";
+		return "admin/message";
 	}
 
 	@DeleteMapping("/admin/templates/categories-form-delete")
@@ -298,7 +298,7 @@ public class AdminController {
 		categoryService.deleteCategory(request);
 		model.addAttribute("message", "카테고리 삭제가 완료 되었습니다.");
 		model.addAttribute("searchUrl", "/admin/templates/category");
-		return "/admin/message";
+		return "admin/message";
 	}
 
 	@DeleteMapping("/admin/templates/categories-direct-delete/{categoryId}")
@@ -308,7 +308,7 @@ public class AdminController {
 		categoryService.deleteCategory(request);
 		model.addAttribute("message", "카테고리 삭제가 완료 되었습니다.");
 		model.addAttribute("searchUrl", "/admin/templates/category");
-		return "/admin/message";
+		return "admin/message";
 	}
 
 	@GetMapping("/admin/templates/categories/{categoryId}")
@@ -324,7 +324,7 @@ public class AdminController {
 		model.addAttribute("category", categoryService.getChildCategories(request));
 		model.addAttribute("DeleteCategoryControllerRequest", new DeleteCategoryControllerRequest());
 		model.addAttribute("UpdateCategoryControllerRequest", new UpdateCategoryControllerRequest());
-		return new ModelAndView("/admin/category-view");
+		return new ModelAndView("admin/category-view");
 	}
 
 	@PostMapping("/admin/templates/seller-managements/{sellerManagementId}")
@@ -338,7 +338,7 @@ public class AdminController {
 			model.addAttribute("message", "판매자 요청이 승인 되었습니다.");
 		}
 		model.addAttribute("searchUrl", "/admin/templates/seller-management");
-		return "/admin/message";
+		return "admin/message";
 	}
 
 	@PutMapping("/admin/templates/seller-managements/{sellerManagementId}")
@@ -352,7 +352,6 @@ public class AdminController {
 			model.addAttribute("message", "판매자 요청이 거절 되었습니다.");
 		}
 		model.addAttribute("searchUrl", "/admin/templates/seller-management");
-		return "/admin/message";
+		return "admin/message";
 	}
 }
-
