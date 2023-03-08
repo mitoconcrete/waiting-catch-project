@@ -34,7 +34,7 @@
 
 <br>
 
-![Project Architecture](https://user-images.githubusercontent.com/117354616/223562222-be608cc8-ae8d-4cba-9e66-48c14f25c9be.png)
+![architecture](https://user-images.githubusercontent.com/117354616/223635129-335aeed8-3ecf-4350-b3fb-fe70b554229a.png)
 
 
 <br>
@@ -44,15 +44,23 @@
 
 화면 설계에 대한 Figma 프로토타입 디자인과 Usecase를 보실 수 있습니다. 기술적인 문제에 부딪혀 해결한 이야기에 대한 개인 테크 블로그의 주소도 포함되어 있습니다.
 
-- click! :arrow_forward: [Team notion](https://www.notion.so/S-A-e0603e170f0f4a9da949ad475682a2d9)
-- click! :arrow_forward: [중간 점검](https://www.notion.so/cde90590bd314d06ab48bcee39b53d19)
-- click! :arrow_forward: [Usecase](https://github.com/mitoconcrete/waiting-catch-project/wiki/Use-Case)
-- click! :arrow_forward: [WIKI Home](https://github.com/mitoconcrete/waiting-catch-project/wiki)
-- click! :arrow_forward: [박정훈-기술블로그](https://velog.io/@dudaksdk3214)
-- click! :arrow_forward: [김태훈-기술블로그](https://mitoconcrete.github.io)
-- click! :arrow_forward: [한정규-기술블로그](https://jk891113.tistory.com/)
-- click! :arrow_forward: [송경헌-기술블로그](https://velog.io/@rianbowgift)
-- click! :arrow_forward: [조성제-기술블로그](https://velog.io/@sj_)
+:arrow_forward: [Team notion](https://www.notion.so/S-A-e0603e170f0f4a9da949ad475682a2d9)
+
+:arrow_forward: [중간 점검](https://www.notion.so/cde90590bd314d06ab48bcee39b53d19)
+
+:arrow_forward: [Usecase](https://github.com/mitoconcrete/waiting-catch-project/wiki/Use-Case)
+
+:arrow_forward: [WIKI Home](https://github.com/mitoconcrete/waiting-catch-project/wiki)
+
+:arrow_forward: [박정훈-기술블로그](https://velog.io/@dudaksdk3214)
+
+:arrow_forward: [김태훈-기술블로그](https://mitoconcrete.github.io)
+
+:arrow_forward: [한정규-기술블로그](https://jk891113.tistory.com/)
+
+:arrow_forward: [송경헌-기술블로그](https://velog.io/@rianbowgift)
+
+:arrow_forward: [조성제-기술블로그](https://velog.io/@sj_)
 
 <br>
 
@@ -79,7 +87,7 @@
 ### :diamond_shape_with_a_dot_inside: Git-Flow 브랜치 전략
 
 **Git-Flow 브랜치 전략**에 따라 기능별로 브랜치를 나누어 작업하고 있고
-모든 브랜치에 대해 pull request를 통한 리뷰 완료 후 Merge를 하고 있습니다.
+모든 브랜치에 대해 pull request를 통한 리뷰 완료 후 merge를 하고 있습니다.
 
 <br>
 
@@ -136,12 +144,12 @@
 </div>
 </details>
 
-### :diamond_shape_with_a_dot_inside: 코드 컨벤션
+### :diamond_shape_with_a_dot_inside: 코딩 컨벤션
 
 <details>
-<summary>코드 컨벤션 내용</summary>
+<summary>코딩 컨벤션 내용</summary>
 <div markdown="1">    
- <h2>코드 컨벤션</h2>
+<h2>코딩 컨벤션</h2>
 - 카멜 케이스를 사용한다.<br>
 - 패키지명은 소문자를 사용한다.<br>
 - 주석은 한 줄로 정리 가능하다면 `//`를 사용하고, 엔터를 통해 줄이 넘어가야 하는 경우, `/**/`를 사용합니다.<br>
@@ -149,17 +157,17 @@
 - Service 인자로 받는 것은 Dto 여야하고, 때려죽어도 바뀔 일이 없는 값은 컨트롤러 Dto를 그대로 가져와서 사용한다.<br>
 - ~~dto는 매개변수의 숫자와 관계없이 생성하여 전달합니다.~~dto는 매개변수 2개 이상일 경우에만 생성하여 사용한다.<br>
 - 단, InternalService는 dto를 사용하지 않는다.<br>
-**- 메소드 명은 `동사 + 명사`의 조합으로 사용한다.** <br>
+- **메소드 명은 `동사 + 명사`의 조합으로 사용한다.** <br>
 - DTO 네이밍은 메서드 네이밍 + 레이어네임(Service, Controller) + Response/Request 로 한다.(DTO 뺀다)
 `~~ControllerRequest, ~~ServiceResponse, ~~ServiceRequest`<br>
 
 - 본인이 생각했을 때 때려죽어도 바뀔 일이 없는 것은 레이어 네임을 제외한다.
-  `~~Request, ~~Response`<br>
+  - `~~Request, ~~Response`<br>
 - 서비스 레이어 내부에서 사용할 엔티티를 return 하는 메서드를 서비스 내에 _로 정의하여 사용한다.<br>
-  ㄴ _getUser, _getReservation → Entity를 반환<br>
-  ㄴ getUser, getReservation → Dto를 반환 getUserB<br>
+  - _getUser, _getReservation → Entity를 반환<br>
+  - getUser, getReservation → Dto를 반환 getUserB<br>
 - 하나의 매개변수가 선언되어 있는 경우 : get, create, update, delete + by + 매개변수 명<br>
-- 2개 이상 복수의 매개변수가 선언되어 있는 경우 :  get, create, update, delete + 전달되는 매개변수를 한 단어로 축약하여 사용<br>
+- 2개 이상 복수의 매개변수가 선언되어 있는 경우 :  get, create, update, delete + 전달되는 매개변수를 한 단어로 축약하여 사용한다.<br>
 - 복수 변수명 : ~s(o), ~List(x)<br>
 
 -슬랙 연결 방법 /github subscribe mitoconcrete/waiting-catch-project<br>
@@ -193,7 +201,7 @@
 
 ## DB ERD<br>
 
-![DB ERD](https://user-images.githubusercontent.com/117354616/223431689-3293724f-d500-48b2-840a-1065c68aff3c.png)
+![DB ERD](https://user-images.githubusercontent.com/117354616/223636822-17929aa3-822a-4e49-aef2-846eef6625c0.png)
 
 <br>
 <br>
