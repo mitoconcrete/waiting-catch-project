@@ -49,7 +49,7 @@ import team.waitingcatch.app.restaurant.service.restaurant.InternalRestaurantSer
 @Transactional
 @RequiredArgsConstructor
 public class LineupServiceImpl implements LineupService, InternalLineupService {
-	public static final int MAX_DISTANCE = 2;
+	public static final int MAX_DISTANCE = 3;
 
 	private final LineupRepository lineupRepository;
 
@@ -115,6 +115,11 @@ public class LineupServiceImpl implements LineupService, InternalLineupService {
 	@Recover
 	private void recover(OptimisticLockingFailureException e) {
 		throw new IllegalArgumentException(CONNCURRENT_REQUEST_FAILURE.getMessage());
+	}
+
+	@Recover
+	private void recover(RuntimeException e) {
+		throw new IllegalArgumentException(e.getMessage());
 	}
 
 	@Override
