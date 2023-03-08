@@ -152,7 +152,7 @@ public class SellerController {
 		menuService.createMenu(serviceRequest);
 		model.addAttribute("message", "메뉴 등록에 성공하였습니다.");
 		model.addAttribute("searchUrl", "/seller/templates/menu");
-		return "/admin/message";
+		return "admin/message";
 	}
 
 	@GetMapping("/seller/templates/menus/{menuId}/menu-form")
@@ -178,7 +178,7 @@ public class SellerController {
 		menuService.updateMenu(serviceRequest);
 		model.addAttribute("message", "메뉴 수정에 성공하였습니다.");
 		model.addAttribute("searchUrl", "/seller/templates/menu");
-		return "/admin/message";
+		return "admin/message";
 	}
 
 	@GetMapping("/seller/templates/menus/{menuId}")
@@ -188,7 +188,7 @@ public class SellerController {
 		deleteMenu(menuId, userDetails);
 		model.addAttribute("message", "메뉴 삭제에 성공하였습니다.");
 		model.addAttribute("searchUrl", "/seller/templates/menu");
-		return "/admin/message";
+		return "admin/message";
 	}
 
 	@DeleteMapping("/api/seller/menus/{menuId}")
@@ -205,7 +205,7 @@ public class SellerController {
 			String token = response.getHeader("Authorization");
 			model.addAttribute("accessToken", token);
 		}
-		return "/seller/seller";
+		return "seller/seller";
 	}
 
 	@GetMapping("/api/seller/logout")
@@ -216,7 +216,7 @@ public class SellerController {
 		userService.logout(servicePayload);
 		model.addAttribute("message", "로그아웃에 성공했습니다.");
 		model.addAttribute("searchUrl", "/general/templates/seller/login");
-		return "/admin/message";
+		return "admin/message";
 	}
 
 	@DeleteMapping("/seller/templates/withdraw")
@@ -226,7 +226,7 @@ public class SellerController {
 		withdrawSeller(userDetails);
 		model.addAttribute("message", "회원탈퇴에 성공했습니다.");
 		model.addAttribute("searchUrl", "/general/templates/seller/login");
-		return "/admin/message";
+		return "admin/message";
 	}
 
 	@DeleteMapping("/api/seller/withdraws")
@@ -242,7 +242,7 @@ public class SellerController {
 			String token = response.getHeader("Authorization");
 			model.addAttribute("accessToken", token);
 		}
-		return "/seller/seller-info";
+		return "seller/seller-info";
 	}
 
 	@PutMapping("/api/seller/info/view")
@@ -255,7 +255,7 @@ public class SellerController {
 		userService.updateUser(servicePayload);
 		model.addAttribute("message", "정보 수정에 성공했습니다.");
 		model.addAttribute("searchUrl", "/seller/templates/seller");
-		return "/admin/message";
+		return "admin/message";
 	}
 
 	@GetMapping("/seller/templates/update-restaurant")
@@ -265,7 +265,7 @@ public class SellerController {
 			String token = response.getHeader("Authorization");
 			model.addAttribute("accessToken", token);
 		}
-		return "/seller/seller-restaurant-update";
+		return "seller/seller-restaurant-update";
 	}
 
 	@PutMapping(value = "/api/seller/update-restaurant")
@@ -283,7 +283,7 @@ public class SellerController {
 		restaurantService.updateRestaurant(updateRestaurantServiceRequest);
 		model.addAttribute("message", "정보 수정에 성공했습니다.");
 		model.addAttribute("searchUrl", "/seller/templates/seller");
-		return "/admin/message";
+		return "admin/message";
 	}
 
 	/*     이벤트     */
@@ -308,7 +308,7 @@ public class SellerController {
 			String token = response.getHeader("Authorization");
 			model.addAttribute("accessToken", token);
 		}
-		return "/seller/event-create";
+		return "seller/event-create";
 	}
 
 	@PostMapping("/api/seller/event")
@@ -321,7 +321,7 @@ public class SellerController {
 		eventService.createSellerEvent(createEventServiceRequest);
 		model.addAttribute("message", "이벤트 생성에 성공했습니다.");
 		model.addAttribute("searchUrl", "/seller/templates/event");
-		return "/admin/message";
+		return "admin/message";
 	}
 
 	@GetMapping("/seller/templates/events/{eventId}/coupon-creators")
@@ -346,7 +346,7 @@ public class SellerController {
 		couponCreatorService.createSellerCouponCreator(createSellerCouponCreatorServiceRequest);
 		model.addAttribute("message", "쿠폰 생성자 생성에 성공했습니다.");
 		model.addAttribute("searchUrl", "/seller/templates/event");
-		return "/admin/message";
+		return "admin/message";
 	}
 
 	@GetMapping("/seller/templates/events/{eventId}/update")
@@ -370,7 +370,7 @@ public class SellerController {
 		eventService.updateSellerEvent(updateSellerEventServiceRequest);
 		model.addAttribute("message", "이벤트 수정에 성공했습니다.");
 		model.addAttribute("searchUrl", "/seller/templates/event");
-		return "/admin/message";
+		return "admin/message";
 	}
 
 	@GetMapping("/seller/templates/events/{eventId}/coupon-creators/{creatorId}")
@@ -397,7 +397,7 @@ public class SellerController {
 		couponCreatorService.updateSellerCouponCreator(updateSellerCouponCreatorServiceRequest);
 		model.addAttribute("message", "쿠폰생성자 수정에 성공했습니다.");
 		model.addAttribute("searchUrl", "/seller/templates/event");
-		return "/admin/message";
+		return "admin/message";
 	}
 
 	@GetMapping("/seller/templates/events/{eventId}")
@@ -407,7 +407,7 @@ public class SellerController {
 		deleteEvent(eventId, userDetails);
 		model.addAttribute("message", "쿠폰생성자 삭제에 성공했습니다.");
 		model.addAttribute("searchUrl", "/seller/templates/event");
-		return "/admin/message";
+		return "admin/message";
 	}
 
 	@DeleteMapping("/api/seller/events/{eventId}/delete")
