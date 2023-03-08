@@ -3,7 +3,6 @@ package team.waitingcatch.app.restaurant.service.requestseller;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import team.waitingcatch.app.restaurant.dto.requestseller.ApproveSignUpSellerResponse;
 import team.waitingcatch.app.restaurant.dto.requestseller.ApproveSignUpSellerServiceRequest;
 import team.waitingcatch.app.restaurant.dto.requestseller.DemandSignUpSellerServiceRequest;
 import team.waitingcatch.app.restaurant.dto.requestseller.GetDemandSignUpSellerResponse;
@@ -15,10 +14,10 @@ public interface SellerManagementService {
 
 	Page<GetDemandSignUpSellerResponse> getDemandSignUpSellers(Pageable pageable);
 
-	ApproveSignUpSellerResponse approveSignUpSeller(
+	boolean approveSignUpSeller(
 		ApproveSignUpSellerServiceRequest approveSignUpSellerServiceRequest);
 
-	void rejectSignUpSeller(RejectSignUpSellerServiceRequest rejectSignUpSellerServiceRequest);
+	boolean rejectSignUpSeller(RejectSignUpSellerServiceRequest rejectSignUpSellerServiceRequest);
 
 	GetDemandSignUpSellerResponse getRequestSellerByRestaurant(
 		GetRequestSellerByRestaurantRequest getRequestSellerByRestaurantRequest);
