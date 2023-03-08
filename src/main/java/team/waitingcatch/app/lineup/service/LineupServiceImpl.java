@@ -182,9 +182,9 @@ public class LineupServiceImpl implements LineupService, InternalLineupService {
 
 		ArrivalStatusEnum updatedStatus = restaurantInCustomer.updateStatus(serviceRequest.getStatus());
 		if (updatedStatus == ArrivalStatusEnum.CALL) {
-			sendSmsToCustomer(restaurantInCustomer.getId(), "호출");
+			sendSmsToCustomer(restaurantInCustomer.getId(), updatedStatus);
 		} else if (updatedStatus == ArrivalStatusEnum.CANCEL) {
-			sendSmsToCustomer(restaurantInCustomer.getId(), "취소");
+			sendSmsToCustomer(restaurantInCustomer.getId(), updatedStatus);
 		} else if (updatedStatus == ArrivalStatusEnum.ARRIVE) {
 			lineupRepository.findAllByUserId(restaurantInCustomer.getUserId())
 				.stream()
@@ -195,11 +195,13 @@ public class LineupServiceImpl implements LineupService, InternalLineupService {
 		}
 	}
 
-	private void sendSmsToCustomer(Long lineupId, String message) {
+	private void sendSmsToCustomer(Long lineupId, ArrivalStatusEnum status) {
 		CallCustomerInfoResponse customerInfo = lineupRepository.findCallCustomerInfoById(lineupId);
-		String content = "[" + message + "]" + System.lineSeparator() + "레스토랑: " + customerInfo.getRestaurantName()
-			+ System.lineSeparator() + "대기번호: " + customerInfo.getWaitingNumber();
-		MessageRequest messageRequest = new MessageRequest(customerInfo.getPhoneNumber(), "Waiting Catch",
+		String content = "[WAITING CATCH]" + System.lineSeparator()
+				+ customerInfo.getRestaurantName() + "에서 대기번호 " + customerInfo.getWaitingNumber() + "번 고객님을 "
+				+ status.getValue() + "하셨어요.";
+
+		MessageRequest messageRequest = new MessageRequest(customerInfo.getPhoneNumber(), "WAITING CATCH",
 			content);
 
 		try {
