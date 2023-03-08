@@ -204,9 +204,6 @@
             data: JSON.stringify(data),
             contentType: 'application/json',
             type: 'PUT',
-            headers: {
-                'Authorization': localStorage.getItem('accessToken')
-            },
             success: function (data, status, response) {
                 if (response.getResponseHeader("Authorization")) {
                     document.cookie =
