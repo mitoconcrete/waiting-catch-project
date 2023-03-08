@@ -1,6 +1,8 @@
 package team.waitingcatch.app.restaurant.controller;
 
 import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.List;
 
@@ -143,16 +145,24 @@ public class SellerController {
 	public String createMenu(
 		@RequestPart(value = "image", required = false) MultipartFile multipartFile,
 		@Valid CreateMenuControllerRequest request,
-		@AuthenticationPrincipal UserDetailsImpl userDetails, HttpServletResponse response, Model model) {
+		@AuthenticationPrincipal UserDetailsImpl userDetails, HttpServletResponse response,
+		Model model) {
 		Collection<String> headerNames = response.getHeaderNames();
 		if (headerNames.contains("Authorization")) {
 			String token = response.getHeader("Authorization");
-			model.addAttribute("accessToken", token);
+			Cookie cookie = new Cookie("Authorization",
+				URLEncoder.encode(token, StandardCharsets.UTF_8));
+			cookie.setSecure(false);
+			cookie.setMaxAge(7 * 24 * 60 * 60);
+			cookie.setPath("/");
+			response.addCookie(cookie);
 		}
 		CreateMenuServiceRequest serviceRequest = new CreateMenuServiceRequest(userDetails.getId(), multipartFile,
 			request);
 		menuService.createMenu(serviceRequest);
-		return "redirect:/seller/templates/menu";
+		model.addAttribute("message", "메뉴 등록에 성공하였습니다.");
+		model.addAttribute("searchUrl", "/seller/templates/menu");
+		return "/admin/message";
 	}
 
 	@GetMapping("/seller/templates/menus/{menuId}/menu-form")
@@ -175,12 +185,19 @@ public class SellerController {
 		Collection<String> headerNames = response.getHeaderNames();
 		if (headerNames.contains("Authorization")) {
 			String token = response.getHeader("Authorization");
-			model.addAttribute("accessToken", token);
+			Cookie cookie = new Cookie("Authorization",
+				URLEncoder.encode(token, StandardCharsets.UTF_8));
+			cookie.setSecure(false);
+			cookie.setMaxAge(7 * 24 * 60 * 60);
+			cookie.setPath("/");
+			response.addCookie(cookie);
 		}
 		UpdateMenuServiceRequest serviceRequest = new UpdateMenuServiceRequest(menuId, request, multipartFile,
 			userDetails.getId());
 		menuService.updateMenu(serviceRequest);
-		return "redirect:/seller/templates/menu";
+		model.addAttribute("message", "메뉴 수정에 성공하였습니다.");
+		model.addAttribute("searchUrl", "/seller/templates/menu");
+		return "/admin/message";
 	}
 
 	@GetMapping("/seller/templates/menus/{menuId}")
@@ -189,10 +206,17 @@ public class SellerController {
 		Collection<String> headerNames = response.getHeaderNames();
 		if (headerNames.contains("Authorization")) {
 			String token = response.getHeader("Authorization");
-			model.addAttribute("accessToken", token);
+			Cookie cookie = new Cookie("Authorization",
+				URLEncoder.encode(token, StandardCharsets.UTF_8));
+			cookie.setSecure(false);
+			cookie.setMaxAge(7 * 24 * 60 * 60);
+			cookie.setPath("/");
+			response.addCookie(cookie);
 		}
 		deleteMenu(menuId, userDetails);
-		return "redirect:/seller/templates/menu";
+		model.addAttribute("message", "메뉴 삭제에 성공하였습니다.");
+		model.addAttribute("searchUrl", "/seller/templates/menu");
+		return "/admin/message";
 	}
 
 	@DeleteMapping("/api/seller/menus/{menuId}")
@@ -217,12 +241,19 @@ public class SellerController {
 		Collection<String> headerNames = response.getHeaderNames();
 		if (headerNames.contains("Authorization")) {
 			String token = response.getHeader("Authorization");
-			model.addAttribute("accessToken", token);
+			Cookie cookie = new Cookie("Authorization",
+				URLEncoder.encode(token, StandardCharsets.UTF_8));
+			cookie.setSecure(false);
+			cookie.setMaxAge(7 * 24 * 60 * 60);
+			cookie.setPath("/");
+			response.addCookie(cookie);
 		}
 		String token = jwtUtil.resolveToken(request);
 		LogoutRequest servicePayload = new LogoutRequest(token);
 		userService.logout(servicePayload);
-		return "redirect:/general/templates/seller/login";
+		model.addAttribute("message", "로그아웃에 성공했습니다.");
+		model.addAttribute("searchUrl", "/general/templates/seller/login");
+		return "/admin/message";
 	}
 
 	@DeleteMapping("/seller/templates/withdraw")
@@ -231,10 +262,17 @@ public class SellerController {
 		Collection<String> headerNames = response.getHeaderNames();
 		if (headerNames.contains("Authorization")) {
 			String token = response.getHeader("Authorization");
-			model.addAttribute("accessToken", token);
+			Cookie cookie = new Cookie("Authorization",
+				URLEncoder.encode(token, StandardCharsets.UTF_8));
+			cookie.setSecure(false);
+			cookie.setMaxAge(7 * 24 * 60 * 60);
+			cookie.setPath("/");
+			response.addCookie(cookie);
 		}
 		withdrawSeller(userDetails);
-		return "redirect:/general/templates/seller/login";
+		model.addAttribute("message", "회원탈퇴에 성공했습니다.");
+		model.addAttribute("searchUrl", "/general/templates/seller/login");
+		return "/admin/message";
 	}
 
 	@DeleteMapping("/api/seller/withdraws")
@@ -259,13 +297,20 @@ public class SellerController {
 		Collection<String> headerNames = response.getHeaderNames();
 		if (headerNames.contains("Authorization")) {
 			String token = response.getHeader("Authorization");
-			model.addAttribute("accessToken", token);
+			Cookie cookie = new Cookie("Authorization",
+				URLEncoder.encode(token, StandardCharsets.UTF_8));
+			cookie.setSecure(false);
+			cookie.setMaxAge(7 * 24 * 60 * 60);
+			cookie.setPath("/");
+			response.addCookie(cookie);
 		}
 		UpdateUserServiceRequest servicePayload = new UpdateUserServiceRequest(controllerRequest.getName(),
 			controllerRequest.getEmail(), userDetails.getUsername(), controllerRequest.getNickName(),
 			controllerRequest.getPhoneNumber());
 		userService.updateUser(servicePayload);
-		return "redirect:/seller/templates/seller";
+		model.addAttribute("message", "정보 수정에 성공했습니다.");
+		model.addAttribute("searchUrl", "/seller/templates/seller");
+		return "/admin/message";
 	}
 
 	@GetMapping("/seller/templates/update-restaurant")
@@ -288,15 +333,21 @@ public class SellerController {
 		Collection<String> headerNames = response.getHeaderNames();
 		if (headerNames.contains("Authorization")) {
 			String token = response.getHeader("Authorization");
-			model.addAttribute("accessToken", token);
+			Cookie cookie = new Cookie("Authorization",
+				URLEncoder.encode(token, StandardCharsets.UTF_8));
+			cookie.setSecure(false);
+			cookie.setMaxAge(7 * 24 * 60 * 60);
+			cookie.setPath("/");
+			response.addCookie(cookie);
 		}
 
 		UpdateRestaurantServiceRequest updateRestaurantServiceRequest =
 			new UpdateRestaurantServiceRequest(updateRestaurantControllerRequest, multipartFile,
 				userDetails.getId());
 		restaurantService.updateRestaurant(updateRestaurantServiceRequest);
-
-		return "redirect:/seller/templates/seller";
+		model.addAttribute("message", "정보 수정에 성공했습니다.");
+		model.addAttribute("searchUrl", "/seller/templates/seller");
+		return "/admin/message";
 	}
 
 	/*     이벤트     */
@@ -331,16 +382,19 @@ public class SellerController {
 		Collection<String> headerNames = response.getHeaderNames();
 		if (headerNames.contains("Authorization")) {
 			String token = response.getHeader("Authorization");
-			model.addAttribute("accessToken", token);
-			Cookie cookie = new Cookie("Authorization", "#@!#!@#!#@!#!");
-			// Cookie cookie2 = new Cookie("Test12", "@@@@");
+			Cookie cookie = new Cookie("Authorization",
+				URLEncoder.encode(token, StandardCharsets.UTF_8));
+			cookie.setSecure(false);
+			cookie.setMaxAge(7 * 24 * 60 * 60);
+			cookie.setPath("/");
 			response.addCookie(cookie);
-			// response.addCookie(cookie2);
 		}
 		CreateEventServiceRequest createEventServiceRequest = new CreateEventServiceRequest(
 			createEventControllerRequest, userDetails.getId());
 		eventService.createSellerEvent(createEventServiceRequest);
-		return "redirect:/seller/templates/event";
+		model.addAttribute("message", "이벤트 생성에 성공했습니다.");
+		model.addAttribute("searchUrl", "/seller/templates/event");
+		return "/admin/message";
 	}
 
 	@GetMapping("/seller/templates/events/{eventId}/coupon-creators")
@@ -361,13 +415,20 @@ public class SellerController {
 		Collection<String> headerNames = response.getHeaderNames();
 		if (headerNames.contains("Authorization")) {
 			String token = response.getHeader("Authorization");
-			model.addAttribute("accessToken", token);
+			Cookie cookie = new Cookie("Authorization",
+				URLEncoder.encode(token, StandardCharsets.UTF_8));
+			cookie.setSecure(false);
+			cookie.setMaxAge(7 * 24 * 60 * 60);
+			cookie.setPath("/");
+			response.addCookie(cookie);
 		}
 		CreateSellerCouponCreatorServiceRequest createSellerCouponCreatorServiceRequest = new CreateSellerCouponCreatorServiceRequest(
 			createCouponCreatorControllerRequest, eventId, userDetails.getId());
 
 		couponCreatorService.createSellerCouponCreator(createSellerCouponCreatorServiceRequest);
-		return "redirect:/seller/templates/event";
+		model.addAttribute("message", "쿠폰 생성자 생성에 성공했습니다.");
+		model.addAttribute("searchUrl", "/seller/templates/event");
+		return "/admin/message";
 	}
 
 	@GetMapping("/seller/templates/events/{eventId}/update")
@@ -388,12 +449,19 @@ public class SellerController {
 		Collection<String> headerNames = response.getHeaderNames();
 		if (headerNames.contains("Authorization")) {
 			String token = response.getHeader("Authorization");
-			model.addAttribute("accessToken", token);
+			Cookie cookie = new Cookie("Authorization",
+				URLEncoder.encode(token, StandardCharsets.UTF_8));
+			cookie.setSecure(false);
+			cookie.setMaxAge(7 * 24 * 60 * 60);
+			cookie.setPath("/");
+			response.addCookie(cookie);
 		}
 		UpdateSellerEventServiceRequest updateSellerEventServiceRequest = new UpdateSellerEventServiceRequest(
 			updateEventControllerRequest, eventId, userDetails.getId());
 		eventService.updateSellerEvent(updateSellerEventServiceRequest);
-		return "redirect:/seller/templates/event";
+		model.addAttribute("message", "이벤트 수정에 성공했습니다.");
+		model.addAttribute("searchUrl", "/seller/templates/event");
+		return "/admin/message";
 	}
 
 	@GetMapping("/seller/templates/events/{eventId}/coupon-creators/{creatorId}")
@@ -417,12 +485,19 @@ public class SellerController {
 		Collection<String> headerNames = response.getHeaderNames();
 		if (headerNames.contains("Authorization")) {
 			String token = response.getHeader("Authorization");
-			model.addAttribute("accessToken", token);
+			Cookie cookie = new Cookie("Authorization",
+				URLEncoder.encode(token, StandardCharsets.UTF_8));
+			cookie.setSecure(false);
+			cookie.setMaxAge(7 * 24 * 60 * 60);
+			cookie.setPath("/");
+			response.addCookie(cookie);
 		}
 		UpdateSellerCouponCreatorServiceRequest updateSellerCouponCreatorServiceRequest = new UpdateSellerCouponCreatorServiceRequest(
 			updateCouponCreatorControllerRequest, eventId, creatorId, userDetails.getId());
 		couponCreatorService.updateSellerCouponCreator(updateSellerCouponCreatorServiceRequest);
-		return "redirect:/seller/templates/event";
+		model.addAttribute("message", "쿠폰생성자 수정에 성공했습니다.");
+		model.addAttribute("searchUrl", "/seller/templates/event");
+		return "/admin/message";
 	}
 
 	@GetMapping("/seller/templates/events/{eventId}")
@@ -431,10 +506,17 @@ public class SellerController {
 		Collection<String> headerNames = response.getHeaderNames();
 		if (headerNames.contains("Authorization")) {
 			String token = response.getHeader("Authorization");
-			model.addAttribute("accessToken", token);
+			Cookie cookie = new Cookie("Authorization",
+				URLEncoder.encode(token, StandardCharsets.UTF_8));
+			cookie.setSecure(false);
+			cookie.setMaxAge(7 * 24 * 60 * 60);
+			cookie.setPath("/");
+			response.addCookie(cookie);
 		}
 		deleteEvent(eventId, userDetails);
-		return "redirect:/seller/templates/event";
+		model.addAttribute("message", "쿠폰생성자 삭제에 성공했습니다.");
+		model.addAttribute("searchUrl", "/seller/templates/event");
+		return "/admin/message";
 	}
 
 	@DeleteMapping("/api/seller/events/{eventId}/delete")
