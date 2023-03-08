@@ -154,10 +154,9 @@ public class SellerManagementServiceImpl implements SellerManagementService, Int
 			SimpleMailMessage message = new SimpleMailMessage();
 			message.setFrom(smtpSenderEmail);
 			message.setTo(sellerManagement.getEmail());
-			message.setSubject("WaitingCatching 판매자 동록 승인 메일");
-			message.setText("안녕하세요. WaitingCatching 판매자 동록 승인 메일 입니다. 회원님의 아이디 및 임시 비밀번호는 " +
-				"ID: " + sellerManagement.getUsername() + "," + uuidPassword + "입니다."
-				+ "\n로그인 후에 비밀번호를 변경을 해주세요.");
+			message.setSubject("[WAITING CATCH] 판매자 동록 승인");
+			message.setText("안녕하세요 WAITING CATCH 입니다.\n 회원님의 아이디 및 임시 비밀번호를 안내드립니다.\n" +
+				"ID: " + sellerManagement.getUsername() + "\nPW:" + uuidPassword + "\n로그인 후 비밀번호를 꼭 변경해 주세요.");
 			emailSender.send(message);
 			return true;
 		}
@@ -179,9 +178,9 @@ public class SellerManagementServiceImpl implements SellerManagementService, Int
 			SimpleMailMessage message = new SimpleMailMessage();
 			message.setFrom(smtpSenderEmail);
 			message.setTo(sellerManagement.getEmail());
-			message.setSubject("WaitingCatching 판매자 동록 거절 메일");
-			message.setText("안녕하세요. WaitingCatching 판매자 동록 거절 메일 입니다. 회원님의 정보에 오류가"
-				+ "있는것으로 판단되므로 확인하고 다시 재신청 부탁드리겠습니다. 감사합니다.");
+			message.setSubject("[WAITING CATCH] 판매자 등록 반려");
+			message.setText("안녕하세요 WAITING CATCH 입니다.\n 회원님의 정보에 오류가 있는 것으로 판단되어 요청이 반려되었습니다."
+				+ "\n확인 후 재신청 부탁드립니다. 감사합니다.");
 			emailSender.send(message);
 			return true;
 		}
