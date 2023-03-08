@@ -10,7 +10,6 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -21,17 +20,6 @@ import team.waitingcatch.app.exception.dto.BasicExceptionResponse;
 @Slf4j
 @RestControllerAdvice
 public class ApplicationExceptionHandler {
-	@ExceptionHandler(MethodArgumentNotValidException.class)
-	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	public BasicExceptionResponse handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
-		BindingResult bindingResult = e.getBindingResult();
-		StringBuilder stringBuilder = new StringBuilder();
-		for (FieldError fieldError : bindingResult.getFieldErrors()) {
-			stringBuilder.append(fieldError.getDefaultMessage());
-		}
-		return new BasicExceptionResponse(HttpStatus.BAD_REQUEST, stringBuilder.toString());
-	}
-
 	@ExceptionHandler(BindException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public BasicExceptionResponse handleBindException(BindException e) {

@@ -117,6 +117,11 @@ public class LineupServiceImpl implements LineupService, InternalLineupService {
 		throw new IllegalArgumentException(CONNCURRENT_REQUEST_FAILURE.getMessage());
 	}
 
+	@Recover
+	private void recover(RuntimeException e) {
+		throw new IllegalArgumentException(e.getMessage());
+	}
+
 	@Override
 	public void cancelWaiting(CancelWaitingRequest request) {
 		long lineupId = request.getLineupId();
