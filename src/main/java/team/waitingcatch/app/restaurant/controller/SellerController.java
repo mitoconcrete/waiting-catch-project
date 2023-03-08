@@ -65,7 +65,6 @@ import team.waitingcatch.app.user.service.UserService;
 @Controller
 @RequiredArgsConstructor
 public class SellerController {
-
 	private final SellerManagementService sellerManagementService;
 	private final JwtUtil jwtUtil;
 	private final UserService userService;
@@ -83,7 +82,7 @@ public class SellerController {
 
 	@GetMapping("/general/templates/seller/login")
 	public String login() {
-		return "/seller/login";
+		return "seller/login";
 	}
 
 	@ResponseBody
@@ -97,7 +96,7 @@ public class SellerController {
 
 	@GetMapping("/general/templates/seller/signup")
 	public String signup() {
-		return "/seller/register";
+		return "seller/register";
 	}
 
 	@PostMapping("/api/general/seller/signup")
@@ -109,7 +108,7 @@ public class SellerController {
 		DemandSignUpSellerServiceRequest demandSignupSellerServiceRequest = new DemandSignUpSellerServiceRequest(
 			demandSignUpControllerRequest, position);
 		sellerManagementService.demandSignUpSeller(demandSignupSellerServiceRequest);
-		return "/seller/login";
+		return "seller/login";
 	}
 
 	/*     메뉴 프론트     */
@@ -119,12 +118,12 @@ public class SellerController {
 		@AuthenticationPrincipal UserDetailsImpl userDetails) {
 		List<MenuResponse> menus = menuService.getMyRestaurantMenus(userDetails.getId());
 		model.addAttribute("menus", menus);
-		return "/seller/menu";
+		return "seller/menu";
 	}
 
 	@GetMapping("/seller/templates/menu/new")
 	public String createMenu() {
-		return "/seller/menu-new";
+		return "seller/menu-new";
 	}
 
 	//@PostMapping("/seller/restaurants/{restaurantId}/menus")
@@ -142,7 +141,7 @@ public class SellerController {
 	@GetMapping("/seller/templates/menus/{menuId}/menu-form")
 	public String updateMenu(Model model, @PathVariable Long menuId) {
 		model.addAttribute("menuId", menuId);
-		return "/seller/menu-update";
+		return "seller/menu-update";
 	}
 
 	@PutMapping("/api/seller/menus/{menuId}/menu-form")
@@ -171,7 +170,7 @@ public class SellerController {
 	/*     판매자 정보 프론트   */
 	@GetMapping("/seller/templates/seller")
 	public String seller() {
-		return "/seller/seller";
+		return "seller/seller";
 	}
 
 	@GetMapping("/api/seller/logout")
@@ -196,7 +195,7 @@ public class SellerController {
 
 	@GetMapping("/seller/templates/info")
 	public String updateSellerInfoSub() {
-		return "/seller/seller-info";
+		return "seller/seller-info";
 	}
 
 	@PutMapping("/api/seller/info/view")
@@ -212,7 +211,7 @@ public class SellerController {
 
 	@GetMapping("/seller/templates/update-restaurant")
 	public String updateRestaurantSub() {
-		return "/seller/seller-restaurant-update";
+		return "seller/seller-restaurant-update";
 	}
 
 	@PutMapping(value = "/api/seller/update-restaurant")
@@ -235,12 +234,12 @@ public class SellerController {
 		@PageableDefault(size = 10, page = 0) Pageable pageable) {
 		Page<GetEventsResponse> events = eventService.getRestaurantEvents(userDetails.getId(), pageable);
 		model.addAttribute("events", events);
-		return "/seller/event";
+		return "seller/event";
 	}
 
 	@GetMapping("/seller/templates/event/creator")
 	public String createEvent() {
-		return "/seller/event-create";
+		return "seller/event-create";
 	}
 
 	@PostMapping("/api/seller/event")
@@ -257,7 +256,7 @@ public class SellerController {
 	@GetMapping("/seller/templates/events/{eventId}/coupon-creators")
 	public String createCouponCreator(Model model, @PathVariable Long eventId) {
 		model.addAttribute("eventId", eventId);
-		return "/seller/event-create-creator";
+		return "seller/event-create-creator";
 	}
 
 	@PostMapping("/api/seller/events/{eventId}/coupon-creators")
@@ -275,7 +274,7 @@ public class SellerController {
 	@GetMapping("/seller/templates/events/{eventId}/update")
 	public String updateEvent(Model model, @PathVariable Long eventId) {
 		model.addAttribute("eventId", eventId);
-		return "/seller/event-update";
+		return "seller/event-update";
 	}
 
 	@PutMapping("/api/seller/events/{eventId}/update")
@@ -292,7 +291,7 @@ public class SellerController {
 		@PathVariable Long creatorId) {
 		model.addAttribute("eventId", eventId);
 		model.addAttribute("creatorId", creatorId);
-		return "/seller/event-update-creator";
+		return "seller/event-update-creator";
 	}
 
 	@PutMapping("/api/seller/events/{eventId}/coupon-creators/{creatorId}")
@@ -319,5 +318,4 @@ public class SellerController {
 			userDetails.getId());
 		eventService.deleteSellerEvent(deleteEventServiceRequest);
 	}
-
 }
