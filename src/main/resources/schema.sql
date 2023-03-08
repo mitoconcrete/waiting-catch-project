@@ -123,7 +123,7 @@ create table menu
     restaurant_id bigint      not null,
     name          varchar(50) not null,
     price         integer     not null,
-    images        varchar(255),
+    image_path        varchar(255),
     is_deleted    bit(1)      not null,
     created_date  datetime(6) not null,
     modified_date datetime(6) not null,
