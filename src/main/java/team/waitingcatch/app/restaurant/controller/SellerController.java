@@ -226,10 +226,6 @@ public class SellerController {
 
 	/*     판매자 정보 프론트   */
 	@GetMapping("/seller/templates/seller")
-<<<<<<< HEAD
-	public String seller() {
-		return "seller/seller";
-=======
 	public String seller(HttpServletResponse response, Model model) {
 		Collection<String> headerNames = response.getHeaderNames();
 		if (headerNames.contains("Authorization")) {
@@ -237,7 +233,6 @@ public class SellerController {
 			model.addAttribute("accessToken", token);
 		}
 		return "/seller/seller";
->>>>>>> c9d22ae50d04f351b59fe65647d2117da5cfc076
 	}
 
 	@GetMapping("/api/seller/logout")
@@ -286,10 +281,6 @@ public class SellerController {
 	}
 
 	@GetMapping("/seller/templates/info")
-<<<<<<< HEAD
-	public String updateSellerInfoSub() {
-		return "seller/seller-info";
-=======
 	public String updateSellerInfoSub(HttpServletResponse response, Model model) {
 		Collection<String> headerNames = response.getHeaderNames();
 		if (headerNames.contains("Authorization")) {
@@ -297,7 +288,6 @@ public class SellerController {
 			model.addAttribute("accessToken", token);
 		}
 		return "/seller/seller-info";
->>>>>>> c9d22ae50d04f351b59fe65647d2117da5cfc076
 	}
 
 	@PutMapping("/api/seller/info/view")
@@ -323,10 +313,6 @@ public class SellerController {
 	}
 
 	@GetMapping("/seller/templates/update-restaurant")
-<<<<<<< HEAD
-	public String updateRestaurantSub() {
-		return "seller/seller-restaurant-update";
-=======
 	public String updateRestaurantSub(HttpServletResponse response, Model model) {
 		Collection<String> headerNames = response.getHeaderNames();
 		if (headerNames.contains("Authorization")) {
@@ -334,7 +320,6 @@ public class SellerController {
 			model.addAttribute("accessToken", token);
 		}
 		return "/seller/seller-restaurant-update";
->>>>>>> c9d22ae50d04f351b59fe65647d2117da5cfc076
 	}
 
 	@PutMapping(value = "/api/seller/update-restaurant")
@@ -380,10 +365,6 @@ public class SellerController {
 	}
 
 	@GetMapping("/seller/templates/event/creator")
-<<<<<<< HEAD
-	public String createEvent() {
-		return "seller/event-create";
-=======
 	public String createEvent(HttpServletResponse response, Model model) {
 		Collection<String> headerNames = response.getHeaderNames();
 		if (headerNames.contains("Authorization")) {
@@ -391,7 +372,6 @@ public class SellerController {
 			model.addAttribute("accessToken", token);
 		}
 		return "/seller/event-create";
->>>>>>> c9d22ae50d04f351b59fe65647d2117da5cfc076
 	}
 
 	@PostMapping("/api/seller/event")
