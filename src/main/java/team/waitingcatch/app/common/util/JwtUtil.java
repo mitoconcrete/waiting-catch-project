@@ -30,7 +30,7 @@ import team.waitingcatch.app.user.enums.UserRoleEnum;
 public class JwtUtil {
 	public static final String AUTHORIZATION_HEADER = "Authorization";
 	public static final String AUTHORIZATION_KEY = "auth";
-	public static final String BEARER_PREFIX = "Bearer ";
+	public static final String BEARER_PREFIX = "Bearer";
 
 	public static final long ACCESS_TOKEN_TIME = 1000 * 60 * 30L;
 	public static final long REFRESH_TOKEN_TIME = 1000 * 60 * 60 * 24 * 14L;
@@ -56,7 +56,7 @@ public class JwtUtil {
 	// 토큰 생성
 	public String createToken(String username, UserRoleEnum role, long token_time) {
 		Date date = new Date();
-		return BEARER_PREFIX +
+		return BEARER_PREFIX + " " +
 			Jwts.builder()
 				.setSubject(username) // 토큰 정보 안에 username을 넣어줌
 				.claim(AUTHORIZATION_KEY, role) // 권한 가져오기

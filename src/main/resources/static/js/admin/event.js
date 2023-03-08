@@ -189,8 +189,8 @@ function getCouponCreators(id) {
             if (status === 'success') {
                 // console.log(data);
                 // let totalPage = data.totalPages;
-                for (let i = 0; i < data.length; i++) {
-                    let responseDto = data[i];
+                for (let i = 0; i < data.data.length; i++) {
+                    let responseDto = data.data[i];
                     let eventId = id;
                     let tempHtml = getCouponCreatorList(responseDto, eventId);
                     $('#couponCreatorTable').append(tempHtml);
@@ -282,10 +282,10 @@ $(document).ready(function () {
                     "path=/; expires=" + (new Date().getTime() + 30 * 60000) + ";";
             }
             if (status === 'success') {
-                console.log(data.content);
-                let totalPage = data.totalPages;
-                for (let i = 0; i < data.content.length; i++) {
-                    let responseDto = data.content[i];
+                console.log(data.data.content);
+                let totalPage = data.data.totalPages;
+                for (let i = 0; i < data.data.content.length; i++) {
+                    let responseDto = data.data.content[i];
                     let tempHtml = getEvents(responseDto);
                     $('#EventTable').append(tempHtml);
                 }
@@ -433,9 +433,9 @@ function getEventPage(page) {
                     "path=/; expires=" + (new Date().getTime() + 30 * 60000) + ";";
             }
             if (status === 'success') {
-                let totalPage = data.totalPages;
-                for (let i = 0; i < data.content.length; i++) {
-                    let responseDto = data.content[i];
+                let totalPage = data.data.totalPages;
+                for (let i = 0; i < data.data.content.length; i++) {
+                    let responseDto = data.data.content[i];
                     let tempHtml = getEvents(responseDto);
                     $('#EventTable').append(tempHtml);
                 }

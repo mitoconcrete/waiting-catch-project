@@ -58,6 +58,11 @@ dependencies {
     testAnnotationProcessor 'org.projectlombok:lombok'
 
     testRuntimeOnly 'com.h2database:h2:1.4.200'
+
+    //hikaricp connection pool
+    implementation group: 'com.zaxxer', name: 'HikariCP', version: '5.0.1'
+
+    implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
 }
 
 tasks.named('test') {

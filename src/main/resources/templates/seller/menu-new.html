@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <meta charset="UTF-8">
     <title>메뉴추가</title>
 </head>
@@ -15,5 +17,13 @@
     <input type="file" id="image" name="image"><br>
     <button type="submit">등록</button>
 </form>
+<script th:inline="javascript">
+    const token = [[${accessToken}]];
+    if (token) {
+        document.cookie =
+            'Authorization' + "=" + token + "; " +
+            "path=/; expires=" + (new Date().getTime() + 30 * 60000) + ";";
+    }
+</script>
 </body>
 </html>

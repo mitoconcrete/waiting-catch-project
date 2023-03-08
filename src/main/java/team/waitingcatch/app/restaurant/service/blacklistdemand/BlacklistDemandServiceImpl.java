@@ -13,12 +13,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
-import team.waitingcatch.app.lineup.service.InternalLineupService;
 import team.waitingcatch.app.restaurant.dto.blacklist.ApproveBlacklistDemandServiceRequest;
 import team.waitingcatch.app.restaurant.dto.blacklist.CancelBlacklistDemandServiceRequest;
 import team.waitingcatch.app.restaurant.dto.blacklist.CreateBlacklistDemandServiceRequest;
 import team.waitingcatch.app.restaurant.dto.blacklist.GetBlackListDemandByRestaurantServiceRequest;
-import team.waitingcatch.app.restaurant.dto.blacklist.GetBlacklistDemandCustomerInfoResponse;
 import team.waitingcatch.app.restaurant.dto.blacklist.GetBlacklistDemandResponse;
 import team.waitingcatch.app.restaurant.entity.BlacklistDemand;
 import team.waitingcatch.app.restaurant.entity.Restaurant;

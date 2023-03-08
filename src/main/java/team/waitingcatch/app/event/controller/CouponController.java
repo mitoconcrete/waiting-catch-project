@@ -121,11 +121,12 @@ public class CouponController {
 	}
 
 	//레스토랑 이벤트 목록 출력 + 해당 이벤트의 쿠폰생성자 출력
-	@GetMapping("/api/customer/restaurants/{restaurantId}/events")
+	@GetMapping("/customer/restaurants/{restaurantId}/events")
 	public GenericResponse<Page<GetEventsResponse>> getRestaurantEvents(
 		@PageableDefault(size = 10, page = 0) Pageable pageable,
+		@PathVariable Long restaurantId,
 		@AuthenticationPrincipal UserDetailsImpl userDetails) {
-		return new GenericResponse<>(eventService.getRestaurantEvents(userDetails.getId(), pageable));
+		return new GenericResponse<>(eventService.getRestaurantEvents(restaurantId, pageable));
 	}
 	/*  쿠폰 생성자  */
 
@@ -220,7 +221,7 @@ public class CouponController {
 	}
 
 	//유저 쿠폰 다운로드
-	@PostMapping("/api/customer/coupons/creators/{creatorid}")
+	@PostMapping("/customer/coupons/creators/{creatorid}")
 	public void downloadCoupon(@PathVariable Long creatorid, @AuthenticationPrincipal UserDetailsImpl userDetails) {
 		CreateUserCouponServiceRequest createUserCouponserviceRequest = new CreateUserCouponServiceRequest(creatorid,
 			userDetails.getUsername());

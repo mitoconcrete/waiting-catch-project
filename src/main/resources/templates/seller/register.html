@@ -36,28 +36,6 @@
                         addr = data.jibunAddress;
                     }
 
-                    // 사용자가 선택한 주소가 도로명 타입일때 참고항목을 조합한다.
-                    // if (data.userSelectedType === 'R') {
-                    //     // 법정동명이 있을 경우 추가한다. (법정리는 제외)
-                    //     // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
-                    //     if (data.bname !== '' && /[동|로|가]$/g.test(data.bname)) {
-                    //         extraAddr += data.bname;
-                    //     }
-                    //     // 건물명이 있고, 공동주택일 경우 추가한다.
-                    //     if (data.buildingName !== '' && data.apartment === 'Y') {
-                    //         extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
-                    //     }
-                    //     // 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
-                    //     if (extraAddr !== '') {
-                    //         extraAddr = ' (' + extraAddr + ')';
-                    //     }
-                    //     // 조합된 참고항목을 해당 필드에 넣는다.
-                    //     document.getElementById("sample6_extraAddress").value = extraAddr;
-                    //
-                    // } else {
-                    //     document.getElementById("sample6_extraAddress").value = '';
-                    // }
-
                     // 우편번호와 주소 정보를 해당 필드에 넣는다.
                     document.getElementById('sample6_postcode').value = data.zonecode;
                     document.getElementById("sample6_address").value = addr;
@@ -213,7 +191,7 @@
                     query: query
                 }),
                 success: function (response) {
-                    alert("판매자 요청 완료")
+                    alert("판매자 요청 완료");
                     window.location.reload();
                 },
                 error: function (response) {
@@ -229,27 +207,24 @@
     <header class="register" style="background-color: white">
         <h1>Register Page</h1>
     </header>
-    <!--<h1>Register Page</h1>-->
-    <!--    <form action="/signup" method="post" class="register-wrap">-->
+
     <h2 style="color: #8B60C7; width: 90%; margin: 5px auto 5px auto">기본 정보</h2>
+
     <div class="input-group flex-nowrap">
         <span class="input-group-text">ID</span>
         <input type="text" id="username" class="form-control" placeholder="Username" aria-label="Username"
                aria-describedby="addon-wrapping">
     </div>
-    <!--        <input type="text" id="username" name="username" class="register-input" placeholder="Username">-->
     <div class="input-group flex-nowrap">
         <span class="input-group-text">이름</span>
         <input type="text" id="name" class="form-control" placeholder="Name" aria-label="Name"
                aria-describedby="addon-wrapping">
     </div>
-    <!--        <input type="text" id="name" name="name" class="register-input" placeholder="name">-->
     <div class="input-group flex-nowrap">
         <span class="input-group-text">Email</span>
         <input type="text" id="email" class="form-control" placeholder="Email" aria-label="Email"
                aria-describedby="addon-wrapping">
     </div>
-    <!--        <input type="email" id="email" name="email" class="register-input" placeholder="Email">-->
     <div class="input-group flex-nowrap">
         <span class="input-group-text">전화번호</span>
         <input type="text" id="phoneNumber" class="form-control" placeholder="PhoneNumber" aria-label="PhoneNumber"
@@ -260,16 +235,16 @@
         <input type="text" id="businessLicenseNo" class="form-control" placeholder="ex) 000-00-00000"
                aria-label="BusinessLicenseNo" aria-describedby="addon-wrapping">
     </div>
-    <!--        <input type="text" id="phoneNumber" name="phoneNumber" class="register-input" placeholder="phoneNumber">-->
+
     <br>
+
     <h2 style="color: #8B60C7; width: 90%; margin: 5px auto 5px auto">레스토랑 정보</h2>
+
     <div class="input-group flex-nowrap">
         <span class="input-group-text">가게명</span>
         <input type="text" id="restaurantName" class="form-control" placeholder="RestaurantName"
                aria-label="RestaurantName" aria-describedby="addon-wrapping">
     </div>
-    <!--        <input type="text" id="restaurantName" name="restaurantName" class="register-input"-->
-    <!--               placeholder="restaurantName">-->
     <div class="input-group flex-nowrap">
         <span class="input-group-text">카테고리</span>
         <input type="text" id="categories" class="form-control" placeholder="Categories" aria-label="Categories"
@@ -281,17 +256,11 @@
         <div class="selectChildCategoryBox"></div>
         <div class="selectGrandChildCategoryBox"></div>
     </div>
-    <!--        <input type="text" id="categories" name="categories" class="register-input" placeholder="categories">-->
     <div class="input-group flex-nowrap">
         <span class="input-group-text">설명</span>
         <input type="text" id="description" class="form-control" placeholder="Description" aria-label="Description"
                aria-describedby="addon-wrapping">
     </div>
-    <!--        <input type="text" id="description" name="description" class="register-input" placeholder="description">-->
-
-    <!--        <input type="text" id="businessLicenseNo" name="businessLicenseNo" class="register-input"-->
-    <!--               placeholder="businessLicenseNo">-->
-
     <div class="input-group flex-nowrap">
         <span class="input-group-text">우편번호</span>
         <input type="text" id="sample6_postcode" class="form-control" placeholder="우편번호" aria-label="Postcode"
@@ -308,13 +277,8 @@
         <input type="text" id="sample6_detailAddress" class="form-control" placeholder="상세주소"
                aria-label="DetailAddress" aria-describedby="addon-wrapping">
     </div>
-    <!--        <input type="text" id="province" name="province" class="register-input" placeholder="province">-->
-    <!--        <input type="text" id="city" name="city" class="register-input" placeholder="city">-->
-    <!--        <input type="text" id="street" name="street" class="register-input" placeholder="street">-->
-    <!--        <input type="text" id="searchKeyWords" name="searchKeyWords" class="register-input"-->
-    <!--               placeholder="searchKeyWords">-->
+
     <button onclick="createSellerRequest()" type="submit" class="login-btn">등록</button>
-    <!--    </form>-->
 </div>
 </body>
 </html>

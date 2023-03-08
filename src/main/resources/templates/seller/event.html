@@ -11,6 +11,7 @@
             crossorigin="anonymous"></script>
     <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
     <link type="text/css" th:href="@{/css/admin-style.css}" rel="stylesheet">
+    <script type="text/javascript" th:src="@{/js/seller.js}"></script>
 </head>
 <body>
 <header>
@@ -19,19 +20,17 @@
     </a>
     <nav>
         <ul>
-            <a href="/">판매자 님</a>
-            <a th:href="@{/api/seller/logout}" th:method="get" enctype="multipart/form-data">
-                <button onclick="sendTokenLogout()" type="button" class="btn">Logout</button>
-            </a>
+            <a href="/seller/templates/seller">판매자 님</a>
+            <a href="#" onclick="sendTokenDeleteSeller();">Logout</a>
         </ul>
     </nav>
 </header>
 <nav class="menus">
     <ul>
         <a href="/seller/templates/lineup">줄서기 현황</a>
-        <a href="/seller/templates/seller" style="color: #8B60C7">매장 관리</a>
+        <a href="/seller/templates/seller">매장 관리</a>
         <a href="/seller/templates/menu">메뉴</a>
-        <a href="/seller/templates/event">이벤트</a>
+        <a href="/seller/templates/event" style="color: #8B60C7">이벤트</a>
         <a href="/seller/templates/blacklist-demands">블랙리스트</a>
     </ul>
 </nav>
@@ -44,59 +43,57 @@
         </a>
     </div>
 
-    <div class="container">
-        <div>
-            <table class="table table-striped">
-                <thead>
-                <tr>
-                    <th>이벤트 이름</th>
-                    <th>시작 시간</th>
-                    <th>종료 시간</th>
-                    <th>하위 쿠폰목록</th>
-                    <th>쿠폰생성자</th>
-                    <th>이벤트 수정</th>
-                    <th>이벤트 삭제</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="event : ${events}">
-                    <td th:text="${event.name}"></td>
-                    <td th:text="${event.eventStartDate}"></td>
-                    <td th:text="${event.eventEndDate}"></td>
-                    <td>
-                        <ul>
-                            <li th:each="couponCreator : ${event.couponCreators}">
-                                <span th:text="${couponCreator.name}"></span>
-                                <span th:text="${couponCreator.discountPrice}"></span>
-                                <span th:text="${couponCreator.discountType}"></span>
-                                <span th:text="${couponCreator.expireDate}"></span>
-                                <a th:href="@{/seller/templates/events/{eventId}/coupon-creators/{creatorId}(eventId=${event.eventId},creatorId=${couponCreator.id})}">
-                                    <button type="button" class="btn">수정</button>
-                                </a>
-                            </li>
-                        </ul>
-                    </td>
-                    <td>
-                        <a th:href="@{/seller/templates/events/{eventId}/coupon-creators(eventId=${event.eventId})}">
-                            <button type="button" class="btn">추가</button>
-                        </a>
-                    </td>
-                    <td>
-                        <a th:href="@{/seller/templates/events/{eventId}/update(eventId=${event.eventId})}">
-                            <button type="button" class="btn">수정</button>
-                        </a>
-                    </td>
-                    <td>
-                        <a th:href="@{/seller/templates/events/{eventId}(eventId=${event.eventId})}"
-                           th:method="delete">
-                            <button type="button" class="btn">삭제</button>
-                        </a>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-    </div> <!-- /container -->
+    <div>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>이벤트 이름</th>
+                <th>시작 시간</th>
+                <th>종료 시간</th>
+                <th>하위 쿠폰목록</th>
+                <th>쿠폰생성자</th>
+                <th>이벤트 수정</th>
+                <th>이벤트 삭제</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="event : ${events}">
+                <td th:text="${event.name}"></td>
+                <td th:text="${event.eventStartDate}"></td>
+                <td th:text="${event.eventEndDate}"></td>
+                <td>
+                    <ul>
+                        <li th:each="couponCreator : ${event.couponCreators}">
+                            <span th:text="${couponCreator.name}"></span>
+                            <span th:text="${couponCreator.discountPrice}"></span>
+                            <span th:text="${couponCreator.discountType}"></span>
+                            <span th:text="${couponCreator.expireDate}"></span>
+                            <a th:href="@{/seller/templates/events/{eventId}/coupon-creators/{creatorId}(eventId=${event.eventId},creatorId=${couponCreator.id})}">
+                                <button type="button" class="btn">수정</button>
+                            </a>
+                        </li>
+                    </ul>
+                </td>
+                <td>
+                    <a th:href="@{/seller/templates/events/{eventId}/coupon-creators(eventId=${event.eventId})}">
+                        <button type="button" class="btn">추가</button>
+                    </a>
+                </td>
+                <td>
+                    <a th:href="@{/seller/templates/events/{eventId}/update(eventId=${event.eventId})}">
+                        <button type="button" class="btn">수정</button>
+                    </a>
+                </td>
+                <td>
+                    <a th:href="@{/seller/templates/events/{eventId}(eventId=${event.eventId})}"
+                       th:method="delete">
+                        <button type="button" class="btn">삭제</button>
+                    </a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 
 
     <!--페이징 시작-->
@@ -148,5 +145,13 @@
 
 
 </div>
+<script th:inline="javascript">
+    const token = [[${accessToken}]];
+    if (token) {
+        document.cookie =
+            'Authorization' + "=" + token + "; " +
+            "path=/; expires=" + (new Date().getTime() + 30 * 60000) + ";";
+    }
+</script>
 </body>
 </html>
