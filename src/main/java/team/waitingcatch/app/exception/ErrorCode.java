@@ -31,6 +31,8 @@ public enum ErrorCode {
 	LINEUP_ALEADY_CANCELED("이미 취소된 줄서기입니다."),
 	LINEUP_ALEADY_ARRIVED("이미 완료된 줄서기입니다."),
 
+	ALREADY_REVIEWD("이미 리뷰하셨습니다."),
+
 	EXCEED_MAX_LINEUP_COUNT("줄서기는 동시에 최대 " + LineupServiceImpl.MAX_LINEUP_COUNT + "곳만 가능합니다."),
 	EXCEED_MAX_CALL_COUNT("호출은 최대" + Lineup.MAX_CALL_COUNT + "번까지 가능합니다."),
 
