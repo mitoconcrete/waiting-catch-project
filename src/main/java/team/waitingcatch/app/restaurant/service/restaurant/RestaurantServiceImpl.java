@@ -1,13 +1,13 @@
 package team.waitingcatch.app.restaurant.service.restaurant;
 
-import static team.waitingcatch.app.common.enums.ImageDirectoryEnum.RESTAURANT;
-import static team.waitingcatch.app.exception.ErrorCode.NOT_FOUND_RESTAURANT;
-import static team.waitingcatch.app.exception.ErrorCode.NOT_FOUND_RESTAURANT_INFO;
+import static team.waitingcatch.app.common.enums.ImageDirectoryEnum.*;
+import static team.waitingcatch.app.exception.ErrorCode.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
@@ -17,12 +17,15 @@ import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import team.waitingcatch.app.common.util.DistanceCalculator;
 import team.waitingcatch.app.common.util.image.ImageUploader;
 import team.waitingcatch.app.restaurant.dto.requestseller.ApproveSignUpSellerManagementEntityPassToRestaurantEntityRequest;
 import team.waitingcatch.app.restaurant.dto.restaurant.DeleteRestaurantByAdminServiceRequest;
+import team.waitingcatch.app.restaurant.dto.restaurant.GetRestaurantInfo;
 import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantBasicInfoResponse;
 import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantBasicInfoServiceRequest;
 import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantDetailedInfoResponse;
@@ -36,12 +39,15 @@ import team.waitingcatch.app.restaurant.dto.restaurant.SearchRestaurantServiceRe
 import team.waitingcatch.app.restaurant.dto.restaurant.SearchRestaurantsResponse;
 import team.waitingcatch.app.restaurant.dto.restaurant.UpdateRestaurantEntityRequest;
 import team.waitingcatch.app.restaurant.dto.restaurant.UpdateRestaurantServiceRequest;
+import team.waitingcatch.app.restaurant.dto.restaurant.UpdateRestaurantWithoutImageEntityRequest;
 import team.waitingcatch.app.restaurant.entity.Restaurant;
 import team.waitingcatch.app.restaurant.entity.RestaurantInfo;
 import team.waitingcatch.app.restaurant.repository.RestaurantInfoRepository;
 import team.waitingcatch.app.restaurant.repository.RestaurantRepository;
+import team.waitingcatch.app.user.entitiy.User;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 @Transactional
 public class RestaurantServiceImpl implements RestaurantService, InternalRestaurantService {
@@ -49,6 +55,8 @@ public class RestaurantServiceImpl implements RestaurantService, InternalRestaur
 	private final RestaurantInfoRepository restaurantInfoRepository;
 	private final ImageUploader imageUploader;
 	private final DistanceCalculator distanceCalculator;
+
+	// private final BasicImageUploader basicImageUploader;
 
 	@Override
 	@Transactional(readOnly = true)
@@ -191,12 +199,23 @@ public class RestaurantServiceImpl implements RestaurantService, InternalRestaur
 		RestaurantInfo restaurantInfo = restaurantInfoRepository.findByRestaurantIdWithRestaurant(restaurant.getId())
 			.orElseThrow(() -> new NoSuchElementException(NOT_FOUND_RESTAURANT_INFO.getMessage()));
 
-		List<String> imagePaths = imageUploader.uploadList(serviceRequest.getImages(), RESTAURANT.getValue());
-		UpdateRestaurantEntityRequest updateRestaurantEntityRequest = new UpdateRestaurantEntityRequest(
-			serviceRequest, imagePaths);
+		for (MultipartFile multipartFile : serviceRequest.getImages()) {
+			if (Objects.equals(multipartFile.getOriginalFilename(), "")) {
+				UpdateRestaurantWithoutImageEntityRequest updateRestaurantEntityRequest = new UpdateRestaurantWithoutImageEntityRequest(
+					serviceRequest);
+				restaurant.updateRestaurantWithoutImage(updateRestaurantEntityRequest);
+				restaurantInfo.updateRestaurantInfoWithoutImage(updateRestaurantEntityRequest);
+			} else {
+				List<String> imagePaths = imageUploader.uploadList(serviceRequest.getImages(),
+					RESTAURANT.getValue());
 
-		restaurant.updateRestaurant(updateRestaurantEntityRequest);
-		restaurantInfo.updateRestaurantInfo(updateRestaurantEntityRequest);
+				UpdateRestaurantEntityRequest updateRestaurantEntityRequest = new UpdateRestaurantEntityRequest(
+					serviceRequest, imagePaths);
+				restaurant.updateRestaurant(updateRestaurantEntityRequest);
+				restaurantInfo.updateRestaurantInfo(updateRestaurantEntityRequest);
+			}
+		}
+
 	}
 
 	@Override
@@ -265,4 +284,13 @@ public class RestaurantServiceImpl implements RestaurantService, InternalRestaur
 
 		return restaurant;
 	}
+
+	@Override
+	public GetRestaurantInfo getRestaurantInfo(User user) {
+		Restaurant restaurant = restaurantRepository.findByUser(user);
+		RestaurantInfo restaurantInfo = restaurantInfoRepository.findByRestaurant(restaurant);
+		return new GetRestaurantInfo(restaurant.getPhoneNumber(), restaurant.getCapacity(), restaurant.getDescription(),
+			restaurantInfo.getOpenTime(), restaurantInfo.getCloseTime());
+	}
+
 }
