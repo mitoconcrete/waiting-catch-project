@@ -11,7 +11,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 
-import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantsWithinRadiusJpaResponse;
 import team.waitingcatch.app.restaurant.dto.restaurant.SearchRestaurantJpaResponse;
 
 @SpringBootTest
@@ -36,23 +35,23 @@ class RestaurantInfoRepositoryTest {
 		// assertEquals(5, jpaResponses.size());
 	}
 
-	@Test
-	void findRestaurantsByDistance() {
-		Pageable pageable = mock(Pageable.class);
-
-		when(pageable.getPageSize()).thenReturn(5);
-
-		Slice<RestaurantsWithinRadiusJpaResponse> restaurants =
-			restaurantInfoRepository.findRestaurantsByDistance(
-				null,
-				37.339141,
-				127.082427,
-				3,
-				pageable
-			);
-
-		// assertEquals(3, restaurants.size());
-	}
+	// @Test
+	// void findRestaurantsByDistance() {
+	// 	Pageable pageable = mock(Pageable.class);
+	//
+	// 	when(pageable.getPageSize()).thenReturn(5);
+	//
+	// 	Slice<RestaurantsWithinRadiusJpaResponse> restaurants =
+	// 		restaurantInfoRepository.findRestaurantsByDistance(
+	// 			null,
+	// 			37.339141,
+	// 			127.082427,
+	// 			3,
+	// 			pageable
+	// 		);
+	//
+	// 	// assertEquals(3, restaurants.size());
+	// }
 
 	@Test
 	void findRestaurantsByLatitudeAndLongitude() {
@@ -61,7 +60,7 @@ class RestaurantInfoRepositoryTest {
 		when(pageable.getPageSize()).thenReturn(5);
 
 		restaurantInfoRepository.findRestaurantsByLatitudeAndLongitude(
-			0L, 0, 0, 0, 0, pageable
+			null, 0, 0, 0, 0, 0, 0, pageable
 		);
 	}
 

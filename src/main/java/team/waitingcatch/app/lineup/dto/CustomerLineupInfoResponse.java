@@ -8,12 +8,14 @@ import lombok.Getter;
 public class CustomerLineupInfoResponse {
 	private final String name;
 	private final String phoneNumber;
+	private final long restaurantId;
 	private final String restaurantName;
 
 	@QueryProjection
-	public CustomerLineupInfoResponse(String name, String phoneNumber, String restaurantName) {
+	public CustomerLineupInfoResponse(String name, String phoneNumber, long restaurantId, String restaurantName) {
 		this.name = name;
 		this.phoneNumber = phoneNumber;
+		this.restaurantId = restaurantId;
 		this.restaurantName = restaurantName;
 	}
 }

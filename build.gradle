@@ -5,7 +5,7 @@ plugins {
 }
 
 group = 'team.watingcatch'
-version = '1.0.0-SNAPSHOT'
+version = '1.0.1-SNAPSHOT'
 sourceCompatibility = '11'
 
 configurations {
@@ -61,7 +61,7 @@ dependencies {
 
     //hikaricp connection pool
     implementation group: 'com.zaxxer', name: 'HikariCP', version: '5.0.1'
-
+    a
     implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
 }
 

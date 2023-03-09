@@ -62,8 +62,8 @@ public class SellerManagementServiceImpl implements SellerManagementService, Int
 
 	//판매자 요청 등록 하는 메소드
 	public void demandSignUpSeller(DemandSignUpSellerServiceRequest demandSignupSellerServiceRequest) {
-		boolean user = userRepository.existsByUsername(demandSignupSellerServiceRequest.getUsername());
-		if (user) {
+		boolean isExists = userRepository.existsByUsername(demandSignupSellerServiceRequest.getUsername());
+		if (isExists) {
 			throw new AlreadyExistsException(ALREADY_EXISTS_USERNAME);
 		}
 
@@ -96,104 +96,91 @@ public class SellerManagementServiceImpl implements SellerManagementService, Int
 			pageable, sellerManagement.getTotalElements());
 	}
 
-	public boolean approveSignUpSeller(ApproveSignUpSellerServiceRequest
-		approveSignUpSellerServiceRequest) {
-		SellerManagement sellerManagement = sellerManagementRepository.findById(
-				approveSignUpSellerServiceRequest.getId())
+	public boolean approveSignUpSeller(ApproveSignUpSellerServiceRequest serviceRequest) {
+		SellerManagement sellerManagement = sellerManagementRepository.findById(serviceRequest.getId())
 			.orElseThrow(() -> new NoSuchElementException(NOT_FOUND_SELLER_REQUEST.getMessage()));
 
 		boolean checkReject = sellerManagement.checkReject();
 		boolean checkApprove = sellerManagement.checkApprove();
+
 		if (!checkReject || !checkApprove) {
 			return false;
-		} else {
-
-			sellerManagement.approveUpdateStatus();
-			//비밀번호
-			String uuidPassword = UUID.randomUUID().toString().substring(1, 8);
-			//회원가입
-			CreateUserServiceRequest
-				userCreateServiceRequest
-				= new CreateUserServiceRequest(UserRoleEnum.SELLER, sellerManagement.getName(),
-				sellerManagement.getEmail(),
-				sellerManagement.getUsername(), uuidPassword, null, sellerManagement.getPhoneNumber());
-			userService.createUser(userCreateServiceRequest);
-
-			User seller = internalUserService._getUserByUsername(sellerManagement.getUsername());
-			// 레스토랑 만들기
-			List<Long> categoryIds = sellerManagement.getCategories().stream()
-				.map(Long::parseLong)
-				.collect(Collectors.toList());
-
-			List<String> categoryNames = categoryService._getCategoryNames(categoryIds);
-			List<String> searchKeywords = new ArrayList<>();
-			for (String categoryName : categoryNames) {
-				searchKeywords.add(categoryName);
-			}
-
-			ApproveSignUpSellerManagementEntityPassToRestaurantEntityRequest
-				approveSignUpSellerManagementEntityPassToRestaurantEntityRequest
-				= new ApproveSignUpSellerManagementEntityPassToRestaurantEntityRequest(sellerManagement, seller,
-				searchKeywords);
-
-			Restaurant restaurant = new Restaurant(approveSignUpSellerManagementEntityPassToRestaurantEntityRequest);
-			restaurantRepository.save(restaurant);
-
-			ConnectCategoryRestaurantServiceRequest serviceRequest = new ConnectCategoryRestaurantServiceRequest(
-				restaurant,
-				sellerManagement.getCategories());
-			categoryService._connectCategoryRestaurant(serviceRequest);
-
-			RestaurantInfo restaurantInfo = new RestaurantInfo(restaurant);
-			restaurantInfoRepository.save(restaurantInfo);
-
-			WaitingNumber waitingNumber = WaitingNumber.of(restaurant);
-			waitingNumberRepository.save(waitingNumber);
-
-			// 저장된 번호를 유저에게 메일로 전달한다.
-			SimpleMailMessage message = new SimpleMailMessage();
-			message.setFrom(smtpSenderEmail);
-			message.setTo(sellerManagement.getEmail());
-			message.setSubject("WaitingCatching 판매자 동록 승인 메일");
-			message.setText("안녕하세요. WaitingCatching 판매자 동록 승인 메일 입니다. 회원님의 아이디 및 임시 비밀번호는 " +
-				"ID: " + sellerManagement.getUsername() + "," + uuidPassword + "입니다."
-				+ "\n로그인 후에 비밀번호를 변경을 해주세요.");
-			emailSender.send(message);
-			return true;
 		}
+
+		sellerManagement.approveUpdateStatus();
+		//비밀번호
+		String uuidPassword = UUID.randomUUID().toString().substring(1, 8);
+		//회원가입
+		CreateUserServiceRequest
+			userCreateServiceRequest
+			= new CreateUserServiceRequest(UserRoleEnum.SELLER, sellerManagement.getName(),
+			sellerManagement.getEmail(),
+			sellerManagement.getUsername(), uuidPassword, null, sellerManagement.getPhoneNumber());
+		userService.createUser(userCreateServiceRequest);
+
+		User seller = internalUserService._getUserByUsername(sellerManagement.getUsername());
+		// 레스토랑 만들기
+		List<Long> categoryIds = sellerManagement.getCategories().stream()
+			.map(Long::parseLong)
+			.collect(Collectors.toList());
+
+		List<String> searchKeywords = categoryService._getCategoryNames(categoryIds);
+
+		var entityRequest = new ApproveSignUpSellerManagementEntityPassToRestaurantEntityRequest(sellerManagement,
+			seller, searchKeywords);
+
+		Restaurant restaurant = new Restaurant(entityRequest);
+		restaurantRepository.save(restaurant);
+
+		var request = new ConnectCategoryRestaurantServiceRequest(
+			restaurant, sellerManagement.getCategories());
+		categoryService._connectCategoryRestaurant(request);
+
+		RestaurantInfo restaurantInfo = new RestaurantInfo(restaurant);
+		restaurantInfoRepository.save(restaurantInfo);
+
+		WaitingNumber waitingNumber = WaitingNumber.of(restaurant);
+		waitingNumberRepository.save(waitingNumber);
+
+		SimpleMailMessage message = new SimpleMailMessage();
+		message.setFrom(smtpSenderEmail);
+		message.setTo(sellerManagement.getEmail());
+		message.setSubject("[WAITING CATCH] 판매자 동록 승인");
+		message.setText("안녕하세요 WAITING CATCH 입니다.\n 회원님의 아이디 및 임시 비밀번호를 안내드립니다.\n" +
+			"ID: " + sellerManagement.getUsername() + "\nPW:" + uuidPassword + "\n로그인 후 비밀번호를 꼭 변경해 주세요.");
+		emailSender.send(message);
+		return true;
 	}
 
 	public boolean rejectSignUpSeller(RejectSignUpSellerServiceRequest rejectSignUpSellerServiceRequest) {
 		SellerManagement sellerManagement = sellerManagementRepository.findById(
 				rejectSignUpSellerServiceRequest.getId())
-			.orElseThrow(() -> new IllegalArgumentException("Not found request seller sign-up"));
+			.orElseThrow(() -> new NoSuchElementException(NOT_FOUND_SELLER_REQUEST.getMessage()));
 
 		boolean checkReject = sellerManagement.checkReject();
 		boolean checkApprove = sellerManagement.checkApprove();
 
 		if (!checkReject || !checkApprove) {
 			return false;
-		} else {
-			sellerManagement.rejectUpdateStatus();
-
-			SimpleMailMessage message = new SimpleMailMessage();
-			message.setFrom(smtpSenderEmail);
-			message.setTo(sellerManagement.getEmail());
-			message.setSubject("WaitingCatching 판매자 동록 거절 메일");
-			message.setText("안녕하세요. WaitingCatching 판매자 동록 거절 메일 입니다. 회원님의 정보에 오류가"
-				+ "있는것으로 판단되므로 확인하고 다시 재신청 부탁드리겠습니다. 감사합니다.");
-			emailSender.send(message);
-			return true;
 		}
+
+		sellerManagement.rejectUpdateStatus();
+
+		SimpleMailMessage message = new SimpleMailMessage();
+		message.setFrom(smtpSenderEmail);
+		message.setTo(sellerManagement.getEmail());
+		message.setSubject("[WAITING CATCH] 판매자 등록 반려");
+		message.setText("안녕하세요 WAITING CATCH 입니다.\n 회원님의 정보에 오류가 있는 것으로 판단되어 요청이 반려되었습니다."
+			+ "\n확인 후 재신청 부탁드립니다. 감사합니다.");
+		emailSender.send(message);
+		return true;
 	}
 
 	@Override
 	@Transactional(readOnly = true)
-	public GetDemandSignUpSellerResponse getRequestSellerByRestaurant(
-		GetRequestSellerByRestaurantRequest getRequestSellerByRestaurantRequest) {
+	public GetDemandSignUpSellerResponse getRequestSellerByRestaurant(GetRequestSellerByRestaurantRequest request) {
 		SellerManagement sellerManagement = sellerManagementRepository.findTopByUsernameAndEmailOrderByCreatedDateDesc(
-			getRequestSellerByRestaurantRequest.getRequestSellerName(), getRequestSellerByRestaurantRequest.getEmail());
+			request.getRequestSellerName(), request.getEmail());
 		return new GetDemandSignUpSellerResponse(sellerManagement);
 	}
-
 }

@@ -1,5 +1,10 @@
 package team.waitingcatch.app.user.controller;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URISyntaxException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -22,11 +27,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+
 import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.common.dto.GenericResponse;
 import team.waitingcatch.app.common.util.JwtUtil;
+import team.waitingcatch.app.redis.service.ValidCodeService;
+import team.waitingcatch.app.user.dto.CheckValidCodeRequest;
 import team.waitingcatch.app.user.dto.CreateUserControllerRequest;
 import team.waitingcatch.app.user.dto.CreateUserServiceRequest;
+import team.waitingcatch.app.user.dto.CreateValidCodeRequest;
 import team.waitingcatch.app.user.dto.DeleteUserRequest;
 import team.waitingcatch.app.user.dto.FindPasswordRequest;
 import team.waitingcatch.app.user.dto.GetCustomerByIdAndRoleServiceRequest;
@@ -50,6 +60,8 @@ public class UserController {
 
 	private final JwtUtil jwtUtil;
 	private final UserService userService;
+
+	private final ValidCodeService validCodeService;
 
 	// global
 	@PostMapping({"/general/customer/signin", "/general/seller/signin", "/general/admin/signin"})
@@ -156,6 +168,23 @@ public class UserController {
 			message = "이메일 형식을 맞춰주세요.") String email, HttpServletResponse response) {
 		LoginServiceResponse responsePayload = userService.createAccessTokenByEmail(email);
 		response.addHeader(JwtUtil.AUTHORIZATION_HEADER, responsePayload.getAccessToken());
+	}
+
+	@PostMapping("/general/valid-code/create")
+	@ResponseStatus(HttpStatus.CREATED)
+	public GenericResponse<CreateValidCodeResponse> createValidCode(
+		@RequestBody @Valid CreateValidCodeRequest createValidCodeRequest) throws
+		UnsupportedEncodingException,
+		URISyntaxException,
+		NoSuchAlgorithmException,
+		InvalidKeyException,
+		JsonProcessingException {
+		return new GenericResponse<>(validCodeService.createValidCodeByPhoneNumber(createValidCodeRequest));
+	}
+
+	@PostMapping("/general/valid-code/check")
+	public void checkValidCode(@RequestBody @Valid CheckValidCodeRequest checkValidCodeRequest) {
+		validCodeService.checkValidCode(checkValidCodeRequest);
 	}
 
 	private void _createUserService(UserRoleEnum role, CreateUserControllerRequest controllerRequest) {

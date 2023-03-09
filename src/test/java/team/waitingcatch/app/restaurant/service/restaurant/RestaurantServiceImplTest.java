@@ -1,12 +1,8 @@
 package team.waitingcatch.app.restaurant.service.restaurant;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -24,6 +20,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
+import org.springframework.web.multipart.MultipartFile;
 
 import team.waitingcatch.app.common.Address;
 import team.waitingcatch.app.common.util.DistanceCalculator;
@@ -43,6 +40,7 @@ import team.waitingcatch.app.restaurant.dto.restaurant.SearchRestaurantServiceRe
 import team.waitingcatch.app.restaurant.dto.restaurant.SearchRestaurantsResponse;
 import team.waitingcatch.app.restaurant.dto.restaurant.UpdateRestaurantEntityRequest;
 import team.waitingcatch.app.restaurant.dto.restaurant.UpdateRestaurantServiceRequest;
+import team.waitingcatch.app.restaurant.dto.restaurant.UpdateRestaurantWithoutImageEntityRequest;
 import team.waitingcatch.app.restaurant.entity.Restaurant;
 import team.waitingcatch.app.restaurant.entity.RestaurantInfo;
 import team.waitingcatch.app.restaurant.repository.RestaurantInfoRepository;
@@ -128,7 +126,8 @@ class RestaurantServiceImplTest {
 		// when(restaurant.getAddress().getCity()).thenReturn("A");
 
 		when(restaurantRepository.findById(any(Long.class))).thenReturn(Optional.of(restaurant));
-		when(restaurantInfoRepository.findByRestaurantId(any(Long.class))).thenReturn(Optional.of(restaurantInfo));
+		when(restaurantInfoRepository.findByRestaurantIdWithRestaurant(any(Long.class))).thenReturn(
+			Optional.of(restaurantInfo));
 
 		// when
 		RestaurantDetailedInfoResponse response = restaurantService.getRestaurantDetailedInfo(request);
@@ -189,11 +188,13 @@ class RestaurantServiceImplTest {
 		when(request.getLongitude()).thenReturn(0.0);
 		when(jpaResponse.getName()).thenReturn("aaa");
 		when(jpaResponse.getSearchKeyword()).thenReturn(search);
-		when(jpaResponse.getLatitude()).thenReturn(0.0);
-		when(jpaResponse.getLongitude()).thenReturn(0.0);
-		when(distanceCalculator.distanceInKilometerByHaversine(0.0, 0.0, 0.0, 0.0)).thenReturn(0.0);
+		// when(jpaResponse.getLatitude()).thenReturn(0.0);
+		// when(jpaResponse.getLongitude()).thenReturn(0.0);
+		// when(distanceCalculator.distanceInKilometerByHaversine(0.0, 0.0, 0.0, 0.0)).thenReturn(0.0);
 		when(restaurantInfoRepository.findRestaurantsByLatitudeAndLongitude(
-			any(Long.class),
+			any(Double.class),
+			any(double.class),
+			any(double.class),
 			any(double.class),
 			any(double.class),
 			any(double.class),
@@ -266,25 +267,28 @@ class RestaurantServiceImplTest {
 	@DisplayName("레스토랑 수정")
 	void updateRestaurant() throws IOException {
 		// given
+		MultipartFile file1 = mock(MultipartFile.class);
+		MultipartFile file2 = mock(MultipartFile.class);
+		List<MultipartFile> imageUrls = new ArrayList<>();
+		imageUrls.add(file1);
+		imageUrls.add(file2);
 		UpdateRestaurantServiceRequest request = mock(UpdateRestaurantServiceRequest.class);
 		Restaurant restaurant = mock(Restaurant.class);
+		when(request.getImages()).thenReturn(imageUrls);
 		RestaurantInfo restaurantInfo = mock(RestaurantInfo.class);
-		List<String> imageUrls = new ArrayList<>();
-		String imageUrl1 = "aaa";
-		String imageUrl2 = "bbb";
-		imageUrls.add(imageUrl1);
-		imageUrls.add(imageUrl2);
-
-		when(restaurantRepository.findByUserId(any(Long.class))).thenReturn(Optional.of(restaurant));
-		when(restaurantInfoRepository.findByRestaurantId(any(Long.class))).thenReturn(Optional.of(restaurantInfo));
+		when(file1.getOriginalFilename()).thenReturn("");
+		when(file2.getOriginalFilename()).thenReturn("asd");
+		when(restaurantInfoRepository.findByUserIdWithRestaurant(anyLong())).thenReturn(Optional.of(restaurantInfo));
+		when(restaurantInfo.getRestaurant()).thenReturn(restaurant);
 		when(imageUploader.uploadList(any(List.class), any(String.class))).thenReturn(imageUrls);
-
 		// when
 		restaurantService.updateRestaurant(request);
-
-		// then
 		verify(restaurant, times(1)).updateRestaurant(any(UpdateRestaurantEntityRequest.class));
 		verify(restaurantInfo, times(1)).updateRestaurantInfo(any(UpdateRestaurantEntityRequest.class));
+		verify(restaurant, times(1)).updateRestaurantWithoutImage
+			(any(UpdateRestaurantWithoutImageEntityRequest.class));
+		verify(restaurantInfo, times(1)).updateRestaurantInfoWithoutImage(
+			any(UpdateRestaurantWithoutImageEntityRequest.class));
 	}
 
 	@Test
@@ -312,10 +316,11 @@ class RestaurantServiceImplTest {
 
 		when(restaurantInfo.getRestaurant()).thenReturn(restaurant);
 		when(restaurant.getName()).thenReturn("aaa");
-		when(restaurantInfoRepository.findByRestaurantId(any(Long.class))).thenReturn(Optional.of(restaurantInfo));
+		when(restaurantInfoRepository.findByRestaurantIdWithRestaurant(any(Long.class))).thenReturn(
+			Optional.of(restaurantInfo));
 
 		// when
-		RestaurantInfo restaurantInfo1 = restaurantService._getRestaurantInfoByRestaurantIdWithRestaurant(
+		RestaurantInfo restaurantInfo1 = restaurantService._getRestaurantInfoWithRestaurantByRestaurantId(
 			any(Long.class));
 
 		// then
@@ -364,7 +369,8 @@ class RestaurantServiceImplTest {
 		// given
 		RestaurantInfo restaurantInfo = mock(RestaurantInfo.class);
 
-		when(restaurantInfoRepository.findByRestaurantId(any(Long.class))).thenReturn(Optional.of(restaurantInfo));
+		when(restaurantInfoRepository.findByRestaurantIdWithRestaurant(any(Long.class))).thenReturn(
+			Optional.of(restaurantInfo));
 
 		// when
 		restaurantService._openLineup(any(Long.class));
@@ -379,7 +385,8 @@ class RestaurantServiceImplTest {
 		// given
 		RestaurantInfo restaurantInfo = mock(RestaurantInfo.class);
 
-		when(restaurantInfoRepository.findByRestaurantId(any(Long.class))).thenReturn(Optional.of(restaurantInfo));
+		when(restaurantInfoRepository.findByRestaurantIdWithRestaurant(any(Long.class))).thenReturn(
+			Optional.of(restaurantInfo));
 
 		// when
 		restaurantService._closeLineup(any(Long.class));
