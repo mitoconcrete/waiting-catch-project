@@ -1,9 +1,12 @@
 package team.waitingcatch.app.restaurant.repository.querydsl;
 
-import static com.querydsl.core.types.dsl.Expressions.*;
-import static com.querydsl.core.types.dsl.MathExpressions.*;
-import static team.waitingcatch.app.restaurant.entity.QRestaurant.*;
-import static team.waitingcatch.app.restaurant.entity.QRestaurantInfo.*;
+import static com.querydsl.core.types.dsl.Expressions.asNumber;
+import static com.querydsl.core.types.dsl.MathExpressions.acos;
+import static com.querydsl.core.types.dsl.MathExpressions.cos;
+import static com.querydsl.core.types.dsl.MathExpressions.radians;
+import static com.querydsl.core.types.dsl.MathExpressions.sin;
+import static team.waitingcatch.app.restaurant.entity.QRestaurant.restaurant;
+import static team.waitingcatch.app.restaurant.entity.QRestaurantInfo.restaurantInfo;
 
 import java.util.List;
 
@@ -105,6 +108,40 @@ public class RestaurantInfoRepositoryCustomImpl implements RestaurantInfoReposit
 			hasNext = true;
 		}
 		return new SliceImpl<>(fetch, pageable, hasNext);
+	}
+
+	@Override
+	public Slice<RestaurantsWithinRadiusJpaResponse> findRestaurantsByLatitudeAndLongitude(
+		Long id, double maxLatitude, double maxLongitude, double minLatitude, double minLongitude, Pageable pageable) {
+		List<RestaurantsWithinRadiusJpaResponse> content = jpaQueryFactory
+			.select(new QRestaurantsWithinRadiusJpaResponse(
+				restaurant.id,
+				restaurant.name,
+				restaurant.imagePaths,
+				restaurantInfo.rate,
+				restaurant.searchKeywords,
+				restaurant.position,
+				restaurantInfo.currentWaitingNumber,
+				restaurantInfo.isLineupActive
+			))
+			.from(restaurantInfo)
+			.join(restaurantInfo.restaurant, restaurant)
+			.where(ltId(id),
+				restaurant.position.latitude.loe(maxLatitude),
+				restaurant.position.latitude.goe(minLatitude),
+				restaurant.position.longitude.loe(maxLongitude),
+				restaurant.position.longitude.goe(minLongitude))
+			.orderBy(restaurant.id.desc())
+			.limit(pageable.getPageSize() + 1)
+			.fetch();
+
+		boolean hasNext = false;
+
+		if (content.size() == pageable.getPageSize() + 1) {
+			content.remove(pageable.getPageSize());
+			hasNext = true;
+		}
+		return new SliceImpl<>(content, pageable, hasNext);
 	}
 
 	private BooleanExpression ltId(Long id) {
