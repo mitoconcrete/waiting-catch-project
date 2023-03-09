@@ -41,7 +41,7 @@ jobs:
         run: touch ./src/test/resources/application.properties
 
       - name: Inject application.properties script in github
-        run: echo "${{ secrets.APPLICATION_PROPERTIES }}" > ./src/test/resources/application.properties
+        run: echo "${{ secrets.APPLICATION_PROPERTIES }}" >> ./src/test/resources/application.properties
 
       - name: Adjust changed properties.
         run: cat ./src/test/resources/application.properties
