@@ -1,8 +1,12 @@
 package team.waitingcatch.app.restaurant.service.restaurant;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -167,7 +171,7 @@ class RestaurantServiceImplTest {
 	}
 
 	@Test
-	@DisplayName("반경 3km 이내의 레스토랑 조회")
+	@DisplayName(("반경 3km 이내의 레스토랑 조회"))
 	void getRestaurantsWithin3kmRadius() {
 		// given
 		RestaurantsWithinRadiusServiceRequest request = mock(RestaurantsWithinRadiusServiceRequest.class);
@@ -188,11 +192,12 @@ class RestaurantServiceImplTest {
 		when(jpaResponse.getLatitude()).thenReturn(0.0);
 		when(jpaResponse.getLongitude()).thenReturn(0.0);
 		when(distanceCalculator.distanceInKilometerByHaversine(0.0, 0.0, 0.0, 0.0)).thenReturn(0.0);
-		when(restaurantInfoRepository.findRestaurantsByDistance(
+		when(restaurantInfoRepository.findRestaurantsByLatitudeAndLongitude(
 			any(Long.class),
 			any(double.class),
 			any(double.class),
-			any(int.class),
+			any(double.class),
+			any(double.class),
 			any()))
 			.thenReturn(restaurantsWithinRadiusJpaResponseSlice);
 
@@ -201,8 +206,45 @@ class RestaurantServiceImplTest {
 
 		// then
 		assertEquals("aaa", responses.getContent().get(0).getName());
-
 	}
+
+	// @Test
+	// @DisplayName("반경 3km 이내의 레스토랑 조회")
+	// void getRestaurantsWithin3kmRadius() {
+	// 	// given
+	// 	RestaurantsWithinRadiusServiceRequest request = mock(RestaurantsWithinRadiusServiceRequest.class);
+	// 	List<RestaurantsWithinRadiusJpaResponse> content = new ArrayList<>();
+	// 	RestaurantsWithinRadiusJpaResponse jpaResponse = mock(RestaurantsWithinRadiusJpaResponse.class);
+	// 	content.add(jpaResponse);
+	// 	Pageable pageable = mock(Pageable.class);
+	// 	Slice<RestaurantsWithinRadiusJpaResponse> restaurantsWithinRadiusJpaResponseSlice =
+	// 		new SliceImpl<>(content, pageable, true);
+	// 	List<String> search = new ArrayList<>();
+	// 	search.add("한식");
+	// 	search.add("중식");
+	//
+	// 	when(request.getLatitude()).thenReturn(0.0);
+	// 	when(request.getLongitude()).thenReturn(0.0);
+	// 	when(jpaResponse.getName()).thenReturn("aaa");
+	// 	when(jpaResponse.getSearchKeyword()).thenReturn(search);
+	// 	when(jpaResponse.getLatitude()).thenReturn(0.0);
+	// 	when(jpaResponse.getLongitude()).thenReturn(0.0);
+	// 	when(distanceCalculator.distanceInKilometerByHaversine(0.0, 0.0, 0.0, 0.0)).thenReturn(0.0);
+	// 	when(restaurantInfoRepository.findRestaurantsByDistance(
+	// 		any(Long.class),
+	// 		any(double.class),
+	// 		any(double.class),
+	// 		any(int.class),
+	// 		any()))
+	// 		.thenReturn(restaurantsWithinRadiusJpaResponseSlice);
+	//
+	// 	// when
+	// 	Slice<RestaurantsWithinRadiusResponse> responses = restaurantService.getRestaurantsWithinRadius(request);
+	//
+	// 	// then
+	// 	assertEquals("aaa", responses.getContent().get(0).getName());
+	//
+	// }
 
 	@Test
 	@DisplayName("레스토랑 삭제")

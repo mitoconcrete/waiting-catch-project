@@ -1,7 +1,8 @@
 package team.waitingcatch.app.restaurant.service.restaurant;
 
-import static team.waitingcatch.app.common.enums.ImageDirectoryEnum.*;
-import static team.waitingcatch.app.exception.ErrorCode.*;
+import static team.waitingcatch.app.common.enums.ImageDirectoryEnum.RESTAURANT;
+import static team.waitingcatch.app.exception.ErrorCode.NOT_FOUND_RESTAURANT;
+import static team.waitingcatch.app.exception.ErrorCode.NOT_FOUND_RESTAURANT_INFO;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -92,27 +93,61 @@ public class RestaurantServiceImpl implements RestaurantService, InternalRestaur
 	@Transactional(readOnly = true)
 	public Slice<RestaurantsWithinRadiusResponse> getRestaurantsWithinRadius(
 		RestaurantsWithinRadiusServiceRequest request) {
+		// 현재 좌표
+		double latitude = request.getLatitude();
+		double longitude = request.getLongitude();
+		// 좌표 이동 값
+		double deltaLatitude =
+			(1 / (6371 * (Math.PI / 180))) / 1000 * (request.getDistance() * 1000);
+		double deltaLongitude =
+			(1 / (6371 * (Math.PI / 180) * Math.cos(Math.toRadians(latitude)))) / 1000 * (request.getDistance() * 1000);
+
+		// 현재 위치 기준 최대, 최소 좌표
+		double maxLatitude = latitude + deltaLatitude;
+		double minLatitude = latitude - deltaLatitude;
+		double maxLongitude = longitude + deltaLongitude;
+		double minLongitude = longitude - deltaLongitude;
+
 		Slice<RestaurantsWithinRadiusJpaResponse> jpaResponses =
-			restaurantInfoRepository.findRestaurantsByDistance(
-				request.getId(),
-				request.getLatitude(),
-				request.getLongitude(),
-				request.getDistance(),
-				request.getPageable()
+			restaurantInfoRepository.findRestaurantsByLatitudeAndLongitude(
+				request.getId(), maxLatitude, maxLongitude, minLatitude, minLongitude, request.getPageable()
 			);
-		List<RestaurantsWithinRadiusResponse> content = new ArrayList<>();
-		for (RestaurantsWithinRadiusJpaResponse response : jpaResponses) {
-			double distance = distanceCalculator.distanceInKilometerByHaversine(
-				request.getLongitude(),
-				request.getLatitude(),
-				response.getLongitude(),
-				response.getLatitude()
-			);
-			content.add(new RestaurantsWithinRadiusResponse(response, distance));
-		}
+
+		List<RestaurantsWithinRadiusResponse> content = jpaResponses.stream()
+			.map(restaurant -> new RestaurantsWithinRadiusResponse(restaurant,
+				distanceCalculator.distanceInKilometerByHaversine(
+					longitude, latitude, restaurant.getLongitude(), restaurant.getLatitude())))
+			.filter(restaurant -> restaurant.getDistance() <= request.getDistance())
+			.collect(Collectors.toList());
 
 		return new SliceImpl<>(content, jpaResponses.getPageable(), jpaResponses.hasNext());
 	}
+
+	// @Override
+	// @Transactional(readOnly = true)
+	// public Slice<RestaurantsWithinRadiusResponse> getRestaurantsWithinRadius(
+	// 	RestaurantsWithinRadiusServiceRequest request) {
+	// 	Slice<RestaurantsWithinRadiusJpaResponse> jpaResponses =
+	// 		restaurantInfoRepository.findRestaurantsByDistance(
+	// 			request.getId(),
+	// 			request.getLatitude(),
+	// 			request.getLongitude(),
+	// 			request.getDistance(),
+	// 			request.getPageable()
+	// 		);
+	// 	List<RestaurantsWithinRadiusResponse> content = new ArrayList<>();
+	// 	for (RestaurantsWithinRadiusJpaResponse response : jpaResponses) {
+	// 		double distance = distanceCalculator.distanceInKilometerByHaversine(
+	// 			request.getLongitude(),
+	// 			request.getLatitude(),
+	// 			response.getLongitude(),
+	// 			response.getLatitude()
+	// 		);
+	// 		content.add(new RestaurantsWithinRadiusResponse(response, distance));
+	// 	}
+	//
+	// 	return new SliceImpl<>(content, jpaResponses.getPageable(), jpaResponses.hasNext());
+	// }
 
 	@Override
 	@Transactional(readOnly = true)

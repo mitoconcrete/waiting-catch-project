@@ -1,6 +1,7 @@
 package team.waitingcatch.app.restaurant.repository;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -51,6 +52,17 @@ class RestaurantInfoRepositoryTest {
 			);
 
 		// assertEquals(3, restaurants.size());
+	}
+
+	@Test
+	void findRestaurantsByLatitudeAndLongitude() {
+		Pageable pageable = mock(Pageable.class);
+
+		when(pageable.getPageSize()).thenReturn(5);
+
+		restaurantInfoRepository.findRestaurantsByLatitudeAndLongitude(
+			0L, 0, 0, 0, 0, pageable
+		);
 	}
 
 }
