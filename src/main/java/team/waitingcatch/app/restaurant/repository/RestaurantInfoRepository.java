@@ -13,10 +13,12 @@ import team.waitingcatch.app.restaurant.repository.querydsl.RestaurantInfoReposi
 public interface RestaurantInfoRepository extends JpaRepository<RestaurantInfo, Long>, RestaurantInfoRepositoryCustom {
 	@Query("select ri from RestaurantInfo ri join ri.restaurant r where r.user.id = :userId")
 	Optional<RestaurantInfo> findByUserId(@Param("userId") Long userId);
-	
+
 	@Query("select ri from RestaurantInfo ri join fetch ri.restaurant where ri.restaurant.id = :restaurantId")
 	Optional<RestaurantInfo> findByRestaurantIdWithRestaurant(@Param("restaurantId") Long restaurantId);
 
 	@Query("select ri from RestaurantInfo ri join fetch ri.restaurant r where r.user.id = :userId")
 	Optional<RestaurantInfo> findByUserIdWithRestaurant(@Param("userId") Long userId);
+
+	RestaurantInfo findByRestaurant(Restaurant restaurant);
 }
