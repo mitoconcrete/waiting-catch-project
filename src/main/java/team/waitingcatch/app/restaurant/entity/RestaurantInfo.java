@@ -14,6 +14,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import team.waitingcatch.app.common.entity.TimeStamped;
 import team.waitingcatch.app.restaurant.dto.restaurant.UpdateRestaurantEntityRequest;
+import team.waitingcatch.app.restaurant.dto.restaurant.UpdateRestaurantWithoutImageEntityRequest;
 
 @Entity
 @Getter
@@ -82,6 +83,12 @@ public class RestaurantInfo extends TimeStamped {
 	}
 
 	public void updateRestaurantInfo(UpdateRestaurantEntityRequest updateRestaurantEntityRequest) {
+		this.openTime = updateRestaurantEntityRequest.getOpenTime();
+		this.closeTime = updateRestaurantEntityRequest.getCloseTime();
+	}
+
+	public void updateRestaurantInfoWithoutImage(
+		UpdateRestaurantWithoutImageEntityRequest updateRestaurantEntityRequest) {
 		this.openTime = updateRestaurantEntityRequest.getOpenTime();
 		this.closeTime = updateRestaurantEntityRequest.getCloseTime();
 	}
