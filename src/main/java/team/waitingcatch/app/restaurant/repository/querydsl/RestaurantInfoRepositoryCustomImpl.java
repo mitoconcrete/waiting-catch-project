@@ -14,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 
+import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.NumberExpression;
@@ -66,53 +67,71 @@ public class RestaurantInfoRepositoryCustomImpl implements RestaurantInfoReposit
 		return new SliceImpl<>(fetch, pageable, hasNext);
 	}
 
+	// @Override
+	// public Slice<RestaurantsWithinRadiusJpaResponse> findRestaurantsByDistance(Long id, double latitude,
+	// 	double longitude,
+	// 	int distance, Pageable pageable) {
+	// 	NumberExpression<Double> radiansCurrentLat = radians(asNumber(latitude));
+	// 	NumberExpression<Double> radiansCurrentLot = radians(asNumber(longitude));
+	// 	NumberExpression<Double> radiansLat = radians(restaurant.position.latitude);
+	// 	NumberExpression<Double> radiansLot = radians(restaurant.position.longitude);
+	//
+	// 	List<RestaurantsWithinRadiusJpaResponse> fetch = jpaQueryFactory
+	// 		.select(new QRestaurantsWithinRadiusJpaResponse(
+	// 			restaurant.id,
+	// 			restaurant.name,
+	// 			restaurant.imagePaths,
+	// 			restaurantInfo.rate,
+	// 			restaurant.searchKeywords,
+	// 			restaurant.position,
+	// 			restaurantInfo.currentWaitingNumber,
+	// 			restaurantInfo.isLineupActive
+	// 		))
+	// 		.from(restaurantInfo)
+	// 		.join(restaurantInfo.restaurant, restaurant)
+	// 		.where(
+	// 			ltId(id),
+	// 			acos(cos(radiansCurrentLat)
+	// 				.multiply(cos(radiansLat))
+	// 				.multiply(cos(radiansLot.subtract(radiansCurrentLot)))
+	// 				.add(sin(radiansCurrentLat).multiply(sin(radiansLat))))
+	// 				.multiply(asNumber(6371))
+	// 				.lt(asNumber(distance))
+	// 				.and(restaurant.isDeleted.isFalse()))
+	// 		.orderBy(restaurant.id.desc())
+	// 		.limit(pageable.getPageSize() + 1)
+	// 		.fetch();
+	//
+	// 	boolean hasNext = false;
+	//
+	// 	if (fetch.size() == pageable.getPageSize() + 1) {
+	// 		fetch.remove(pageable.getPageSize());
+	// 		hasNext = true;
+	// 	}
+	// 	return new SliceImpl<>(fetch, pageable, hasNext);
+	// }
+
 	@Override
-	public Slice<RestaurantsWithinRadiusJpaResponse> findRestaurantsByDistance(Long id, double latitude,
-		double longitude,
-		int distance, Pageable pageable) {
+	public Slice<RestaurantsWithinRadiusJpaResponse> findRestaurantsByLatitudeAndLongitude(
+		Double lastDistance, double latitude, double longitude, double maxLatitude, double maxLongitude,
+		double minLatitude, double minLongitude, Pageable pageable) {
 		NumberExpression<Double> radiansCurrentLat = radians(asNumber(latitude));
 		NumberExpression<Double> radiansCurrentLot = radians(asNumber(longitude));
 		NumberExpression<Double> radiansLat = radians(restaurant.position.latitude);
 		NumberExpression<Double> radiansLot = radians(restaurant.position.longitude);
+		// NumberExpression<Double> distanceBetween = Expressions.numberPath(Double.class, "distanceBetween");
+		NumberExpression<Double> distanceBetween = (acos(cos(radiansCurrentLat)
+			.multiply(cos(radiansLat))
+			.multiply(cos(radiansLot.subtract(radiansCurrentLot)))
+			.add(sin(radiansCurrentLat).multiply(sin(radiansLat))))
+			.multiply(asNumber(6371)));
 
-		List<RestaurantsWithinRadiusJpaResponse> fetch = jpaQueryFactory
-			.select(new QRestaurantsWithinRadiusJpaResponse(
-				restaurant.id,
-				restaurant.name,
-				restaurant.imagePaths,
-				restaurantInfo.rate,
-				restaurant.searchKeywords,
-				restaurant.position,
-				restaurantInfo.currentWaitingNumber,
-				restaurantInfo.isLineupActive
-			))
-			.from(restaurantInfo)
-			.join(restaurantInfo.restaurant, restaurant)
-			.where(
-				ltId(id),
-				acos(cos(radiansCurrentLat)
-					.multiply(cos(radiansLat))
-					.multiply(cos(radiansLot.subtract(radiansCurrentLot)))
-					.add(sin(radiansCurrentLat).multiply(sin(radiansLat))))
-					.multiply(asNumber(6371))
-					.lt(asNumber(distance))
-					.and(restaurant.isDeleted.isFalse()))
-			.orderBy(restaurant.id.desc())
-			.limit(pageable.getPageSize() + 1)
-			.fetch();
+		BooleanBuilder gtDistance = new BooleanBuilder();
 
-		boolean hasNext = false;
-
-		if (fetch.size() == pageable.getPageSize() + 1) {
-			fetch.remove(pageable.getPageSize());
-			hasNext = true;
+		if (lastDistance != null) {
+			gtDistance.and(distanceBetween.gt(lastDistance));
 		}
-		return new SliceImpl<>(fetch, pageable, hasNext);
-	}
 
-	@Override
-	public Slice<RestaurantsWithinRadiusJpaResponse> findRestaurantsByLatitudeAndLongitude(
-		Long id, double maxLatitude, double maxLongitude, double minLatitude, double minLongitude, Pageable pageable) {
 		List<RestaurantsWithinRadiusJpaResponse> content = jpaQueryFactory
 			.select(new QRestaurantsWithinRadiusJpaResponse(
 				restaurant.id,
@@ -122,16 +141,25 @@ public class RestaurantInfoRepositoryCustomImpl implements RestaurantInfoReposit
 				restaurant.searchKeywords,
 				restaurant.position,
 				restaurantInfo.currentWaitingNumber,
-				restaurantInfo.isLineupActive
+				restaurantInfo.isLineupActive,
+				// (acos(cos(radiansCurrentLat)
+				// 	.multiply(cos(radiansLat))
+				// 	.multiply(cos(radiansLot.subtract(radiansCurrentLot)))
+				// 	.add(sin(radiansCurrentLat).multiply(sin(radiansLat))))
+				// 	.multiply(asNumber(6371))).as("distanceBetween")
+				distanceBetween
 			))
 			.from(restaurantInfo)
 			.join(restaurantInfo.restaurant, restaurant)
-			.where(ltId(id),
+			.where(
+				// ltId(id),
 				restaurant.position.latitude.loe(maxLatitude),
 				restaurant.position.latitude.goe(minLatitude),
 				restaurant.position.longitude.loe(maxLongitude),
-				restaurant.position.longitude.goe(minLongitude))
-			.orderBy(restaurant.id.desc())
+				restaurant.position.longitude.goe(minLongitude),
+				gtDistance)
+			// .orderBy(restaurant.id.desc())
+			.orderBy(distanceBetween.asc())
 			.limit(pageable.getPageSize() + 1)
 			.fetch();
 
@@ -150,4 +178,11 @@ public class RestaurantInfoRepositoryCustomImpl implements RestaurantInfoReposit
 		}
 		return restaurant.id.lt(id);
 	}
+
+	// private BooleanExpression gtDistance(Double lastDistance, NumberPath<Double> distanceBetween) {
+	// 	if (lastDistance == null) {
+	// 		return null;
+	// 	}
+	// 	return distanceBetween.gt(lastDistance);
+	// }
 }

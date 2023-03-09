@@ -18,11 +18,12 @@ public class RestaurantsWithinRadiusJpaResponse {
 	private final double longitude;
 	private final int currentWaitingNumber;
 	private final boolean isLineupActive;
+	private final Double distanceBetween;
 
 	@QueryProjection
 	public RestaurantsWithinRadiusJpaResponse(Long id, String name, List<String> images, float rate,
 		List<String> searchKeyword,
-		Position position, int currentWaitingNumber, boolean isLineupActive) {
+		Position position, int currentWaitingNumber, boolean isLineupActive, Double distanceBetween) {
 		this.id = id;
 		this.name = name;
 		this.images = images;
@@ -32,5 +33,6 @@ public class RestaurantsWithinRadiusJpaResponse {
 		this.longitude = position.getLongitude();
 		this.currentWaitingNumber = currentWaitingNumber;
 		this.isLineupActive = isLineupActive;
+		this.distanceBetween = distanceBetween;
 	}
 }
