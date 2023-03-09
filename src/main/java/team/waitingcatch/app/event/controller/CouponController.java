@@ -126,7 +126,7 @@ public class CouponController {
 		@PageableDefault(size = 10, page = 0) Pageable pageable,
 		@PathVariable Long restaurantId,
 		@AuthenticationPrincipal UserDetailsImpl userDetails) {
-		return new GenericResponse<>(eventService.getRestaurantEvents(restaurantId, pageable));
+		return new GenericResponse<>(eventService.getRestaurantEventsByRestaurantId(restaurantId, pageable));
 	}
 	/*  쿠폰 생성자  */
 

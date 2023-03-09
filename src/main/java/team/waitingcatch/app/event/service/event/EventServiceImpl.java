@@ -100,6 +100,14 @@ public class EventServiceImpl implements EventService, InternalEventService {
 
 	@Override
 	@Transactional(readOnly = true)
+	public Page<GetEventsResponse> getRestaurantEventsByRestaurantId(Long restaurantId, Pageable pageable) {
+		Restaurant restaurant = internalRestaurantService._getRestaurantById(restaurantId);
+		Page<Event> events = eventRepository.findByRestaurantAndIsDeletedFalse(restaurant, pageable);
+		return _getEventsResponse(events, pageable);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
 	public Page<GetEventsResponse> getGlobalEvents(Pageable pageable) {
 		Page<Event> events = eventRepository.findByRestaurantIsNullAndIsDeletedFalse(pageable);
 		return _getEventsResponse(events, pageable);
