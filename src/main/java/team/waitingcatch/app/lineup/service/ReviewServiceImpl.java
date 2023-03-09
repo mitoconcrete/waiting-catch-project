@@ -13,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.common.util.image.ImageUploader;
-import team.waitingcatch.app.exception.ErrorCode;
 import team.waitingcatch.app.exception.IllegalRequestException;
 import team.waitingcatch.app.lineup.dto.CreateReviewEntityRequest;
 import team.waitingcatch.app.lineup.dto.CreateReviewServiceRequest;
@@ -42,7 +41,7 @@ public class ReviewServiceImpl implements ReviewService, InternalReviewService {
 	@Override
 	public void createReview(CreateReviewServiceRequest serviceRequest) throws IOException {
 		Lineup lineup = internalLineupService._getById(serviceRequest.getLineupId());
-		if (!lineup.isReviewed()) {
+		if (lineup.isReviewed()) {
 			throw new IllegalRequestException(ALREADY_REVIEWD);
 		}
 
