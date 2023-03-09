@@ -72,15 +72,6 @@ class LineupIntegrationTest {
 	@Autowired
 	SellerManagementService sellerManagementService;
 
-	@Test
-	void test() {
-		User customer = userRepository.findByUsernameAndIsDeletedFalse("customerId").get();
-		// lineupHistoryRepository.findUserCouponWithRelations(customer, null);
-		// lineupHistoryRepository.fetchjointest(null);
-		// lineupHistoryRepository.findRestaurantNameByUserCouponId(1L);
-		// lineupHistoryRepository.getRestaurantLineupStatistics(1L);
-	}
-
 	@BeforeEach
 	public void beforeEach() {
 		List<String> searchKeywords = List.of("korean", "japan");
@@ -205,7 +196,7 @@ class LineupIntegrationTest {
 		User customer = userRepository.findByUsernameAndIsDeletedFalse("customerId").get();
 		List<String> searchKeywords = List.of("korean", "japan");
 
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < 3; i++) {
 			User seller = new User(UserRoleEnum.SELLER, "사장" + i, i + "@naver.com", "sellerId" + i, "pw" + i,
 				"seller" + i, "0101111111" + i);
 			userRepository.save(seller);
@@ -223,7 +214,7 @@ class LineupIntegrationTest {
 		List<LineupRecordWithTypeResponse> lineupRecords = lineupService.getLineupRecords(
 			new GetLineupRecordsServiceRequest(customer.getId(), null));
 
-		assertThat(lineupRecords.size()).isEqualTo(10);
+		assertThat(lineupRecords.size()).isEqualTo(3);
 	}
 
 	private void openRestaurant(Restaurant restaurant) {

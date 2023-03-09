@@ -19,7 +19,7 @@ public interface LineupRepositoryCustom {
 
 	CallCustomerInfoResponse findCallCustomerInfoById(Long lineupId);
 
-	List<CustomerLineupInfoResponse> findCustomerLineupInfoByIsReviewedFalse();
+	Slice<CustomerLineupInfoResponse> findCustomerLineupInfoByIsReviewedFalse(Pageable pageable);
 
 	Slice<Lineup> findAll(Long id, Pageable pageable);
 }

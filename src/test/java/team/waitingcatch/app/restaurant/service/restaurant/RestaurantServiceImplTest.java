@@ -128,7 +128,7 @@ class RestaurantServiceImplTest {
 		// when(restaurant.getAddress().getCity()).thenReturn("A");
 
 		when(restaurantRepository.findById(any(Long.class))).thenReturn(Optional.of(restaurant));
-		when(restaurantInfoRepository.findByRestaurantId(any(Long.class))).thenReturn(Optional.of(restaurantInfo));
+		when(restaurantInfoRepository.findByRestaurantIdWithRestaurant(any(Long.class))).thenReturn(Optional.of(restaurantInfo));
 
 		// when
 		RestaurantDetailedInfoResponse response = restaurantService.getRestaurantDetailedInfo(request);
@@ -278,7 +278,7 @@ class RestaurantServiceImplTest {
 		imageUrls.add(imageUrl2);
 
 		when(restaurantRepository.findByUserId(any(Long.class))).thenReturn(Optional.of(restaurant));
-		when(restaurantInfoRepository.findByRestaurantId(any(Long.class))).thenReturn(Optional.of(restaurantInfo));
+		when(restaurantInfoRepository.findByRestaurantIdWithRestaurant(any(Long.class))).thenReturn(Optional.of(restaurantInfo));
 		when(imageUploader.uploadList(any(List.class), any(String.class))).thenReturn(imageUrls);
 
 		// when
@@ -314,10 +314,10 @@ class RestaurantServiceImplTest {
 
 		when(restaurantInfo.getRestaurant()).thenReturn(restaurant);
 		when(restaurant.getName()).thenReturn("aaa");
-		when(restaurantInfoRepository.findByRestaurantId(any(Long.class))).thenReturn(Optional.of(restaurantInfo));
+		when(restaurantInfoRepository.findByRestaurantIdWithRestaurant(any(Long.class))).thenReturn(Optional.of(restaurantInfo));
 
 		// when
-		RestaurantInfo restaurantInfo1 = restaurantService._getRestaurantInfoByRestaurantIdWithRestaurant(
+		RestaurantInfo restaurantInfo1 = restaurantService._getRestaurantInfoWithRestaurantByRestaurantId(
 			any(Long.class));
 
 		// then
@@ -366,7 +366,7 @@ class RestaurantServiceImplTest {
 		// given
 		RestaurantInfo restaurantInfo = mock(RestaurantInfo.class);
 
-		when(restaurantInfoRepository.findByRestaurantId(any(Long.class))).thenReturn(Optional.of(restaurantInfo));
+		when(restaurantInfoRepository.findByRestaurantIdWithRestaurant(any(Long.class))).thenReturn(Optional.of(restaurantInfo));
 
 		// when
 		restaurantService._openLineup(any(Long.class));
@@ -381,7 +381,7 @@ class RestaurantServiceImplTest {
 		// given
 		RestaurantInfo restaurantInfo = mock(RestaurantInfo.class);
 
-		when(restaurantInfoRepository.findByRestaurantId(any(Long.class))).thenReturn(Optional.of(restaurantInfo));
+		when(restaurantInfoRepository.findByRestaurantIdWithRestaurant(any(Long.class))).thenReturn(Optional.of(restaurantInfo));
 
 		// when
 		restaurantService._closeLineup(any(Long.class));

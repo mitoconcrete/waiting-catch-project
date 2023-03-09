@@ -91,18 +91,28 @@ public class LineupRepositoryCustomImpl implements LineupRepositoryCustom {
 	}
 
 	@Override
-	public List<CustomerLineupInfoResponse> findCustomerLineupInfoByIsReviewedFalse() {
-		return queryFactory
+	public Slice<CustomerLineupInfoResponse> findCustomerLineupInfoByIsReviewedFalse(Pageable pageable) {
+		List<CustomerLineupInfoResponse> content = queryFactory
 			.select(new QCustomerLineupInfoResponse(
 				user.name,
 				user.phoneNumber,
+				restaurant.id,
 				restaurant.name
 			))
 			.from(lineup)
 			.join(lineup.user, user)
 			.join(lineup.restaurant, restaurant)
 			.where(lineup.isReviewed.isFalse(), lineup.isDeleted.isFalse())
+			.limit(pageable.getPageSize() + 1)
 			.fetch();
+
+		boolean hasNext = false;
+		if (content.size() > pageable.getPageSize()) {
+			content.remove(pageable.getPageSize());
+			hasNext = true;
+		}
+
+		return new SliceImpl<>(content, pageable, hasNext);
 	}
 
 	@Override
