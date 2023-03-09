@@ -58,12 +58,14 @@ import team.waitingcatch.app.restaurant.service.requestseller.SellerManagementSe
 import team.waitingcatch.app.restaurant.service.restaurant.MapApiService;
 import team.waitingcatch.app.restaurant.service.restaurant.RestaurantService;
 import team.waitingcatch.app.user.dto.DeleteUserRequest;
+import team.waitingcatch.app.user.dto.GetCustomerByIdAndRoleServiceRequest;
 import team.waitingcatch.app.user.dto.LoginRequest;
 import team.waitingcatch.app.user.dto.LoginServiceResponse;
 import team.waitingcatch.app.user.dto.LogoutRequest;
 import team.waitingcatch.app.user.dto.UpdateUserControllerRequest;
 import team.waitingcatch.app.user.dto.UpdateUserServiceRequest;
 import team.waitingcatch.app.user.entitiy.UserDetailsImpl;
+import team.waitingcatch.app.user.enums.UserRoleEnum;
 import team.waitingcatch.app.user.service.UserService;
 
 @Controller
@@ -236,12 +238,16 @@ public class SellerController {
 	}
 
 	@GetMapping("/seller/templates/info")
-	public String updateSellerInfoSub(HttpServletResponse response, Model model) {
+	public String updateSellerInfoSub(HttpServletResponse response, Model model,
+		@AuthenticationPrincipal UserDetailsImpl userDetails) {
 		Collection<String> headerNames = response.getHeaderNames();
 		if (headerNames.contains("Authorization")) {
 			String token = response.getHeader("Authorization");
 			model.addAttribute("accessToken", token);
 		}
+		GetCustomerByIdAndRoleServiceRequest request = new GetCustomerByIdAndRoleServiceRequest(userDetails.getId(),
+			UserRoleEnum.SELLER);
+		model.addAttribute("userInfo", userService.getByUserIdAndRole(request));
 		return "seller/seller-info";
 	}
 

@@ -281,8 +281,6 @@ public class RestaurantServiceImpl implements RestaurantService, InternalRestaur
 	public GetRestaurantInfo getRestaurantInfo(User user) {
 		Restaurant restaurant = restaurantRepository.findByUser(user);
 		RestaurantInfo restaurantInfo = restaurantInfoRepository.findByRestaurant(restaurant);
-		System.out.println("restaurantInfo.getOpenTime() = " + restaurantInfo.getOpenTime());
-		System.out.println("restaurant = " + restaurant.getDescription());
 		return new GetRestaurantInfo(restaurant.getPhoneNumber(), restaurant.getCapacity(), restaurant.getDescription(),
 			restaurantInfo.getOpenTime(), restaurantInfo.getCloseTime());
 	}

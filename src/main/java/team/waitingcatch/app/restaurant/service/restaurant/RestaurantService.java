@@ -41,4 +41,5 @@ public interface RestaurantService {
 	Page<RestaurantResponse> getRestaurantsByRestaurantName(String searchVal, Pageable pageable);
 
 	GetRestaurantInfo getRestaurantInfo(User user);
+
 }
