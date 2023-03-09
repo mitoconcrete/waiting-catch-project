@@ -75,7 +75,7 @@
 
 ![DB ERD](https://user-images.githubusercontent.com/117354616/223636822-17929aa3-822a-4e49-aef2-846eef6625c0.png)
 
-## :rocket: API 명세서
+## :rocket: API Document
 
 [고객 API 명세서](https://docs.google.com/spreadsheets/d/1Hhjp6eKlJxv6ZLsFz1xe50t-xMe478o5_Je7RIvn1YA/edit#gid=0) : 고객에 관한
 API<br>
@@ -84,7 +84,7 @@ API<br>
 [관리자 API 명세서](https://docs.google.com/spreadsheets/d/1Hhjp6eKlJxv6ZLsFz1xe50t-xMe478o5_Je7RIvn1YA/edit#gid=1180646390) :
 관리자에 관한 API<br>
 
-## :rocket: Rule
+## :rocket: Rules
 
 ### Git-flow
 
