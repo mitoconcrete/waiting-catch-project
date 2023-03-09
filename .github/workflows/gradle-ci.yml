@@ -37,15 +37,6 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      - name: Create application.properties
-        run: touch ./src/test/resources/application.properties
-
-      - name: Inject application.properties script in github
-        run: echo "${{ secrets.APPLICATION_PROPERTIES }}" > ./src/test/resources/application.properties
-
-      - name: Adjust changed properties.
-        run: cat ./src/test/resources/application.properties
-
       - name: Build with Gradle
         run: ./gradlew build -x test
 
