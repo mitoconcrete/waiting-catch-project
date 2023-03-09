@@ -22,11 +22,9 @@ public class UpdateRestaurantControllerRequest {
 	@Size(min = 10, max = 1000)
 	private String description;
 
-	@NotNull
 	@Pattern(regexp = "^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$")
 	private String openTime;
 
-	@NotNull
 	@Pattern(regexp = "^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$")
 	private String closeTime;
 

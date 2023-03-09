@@ -259,8 +259,10 @@ public class SellerController {
 	}
 
 	@GetMapping("/seller/templates/update-restaurant")
-	public String updateRestaurantSub(HttpServletResponse response, Model model) {
+	public String updateRestaurantSub(HttpServletResponse response, Model model,
+		@AuthenticationPrincipal UserDetailsImpl userDetails) {
 		Collection<String> headerNames = response.getHeaderNames();
+		model.addAttribute("info", restaurantService.getRestaurantInfo(userDetails.getUser()));
 		if (headerNames.contains("Authorization")) {
 			String token = response.getHeader("Authorization");
 			model.addAttribute("accessToken", token);
