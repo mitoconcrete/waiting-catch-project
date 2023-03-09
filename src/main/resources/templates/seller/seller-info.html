@@ -11,13 +11,13 @@
 <form th:action="@{/api/seller/info/view}" method="post" enctype="multipart/form-data">
     <input type="hidden" name="_method" value="PUT"/>
     <label for="name">name</label>
-    <input type="text" id="name" name="name"><br>
+    <input type="text" id="name" name="name" th:value="${userInfo.name}"><br>
     <label for="email">Email</label>
-    <input type="email" id="email" name="email"><br>
+    <input type="email" id="email" name="email" th:value="${userInfo.email}"><br>
     <label for="phoneNumber">phoneNumber</label>
-    <input type="text" id="phoneNumber" name="phoneNumber"><br>
+    <input type="text" id="phoneNumber" name="phoneNumber" th:value="${userInfo.phoneNumber}"><br>
     <label for="nickName">nickName</label>
-    <input type="text" id="nickName" name="nickName"><br>
+    <input type="text" id="nickName" name="nickName" th:value="${userInfo.nickname}"><br>
     <button type="submit">등록</button>
 </form>
 <script th:inline="javascript">

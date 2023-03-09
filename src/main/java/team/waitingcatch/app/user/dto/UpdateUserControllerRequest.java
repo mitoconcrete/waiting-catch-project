@@ -25,7 +25,6 @@ public class UpdateUserControllerRequest {
 		message = "올바른 형식을 입력하세요.")
 	private String phoneNumber;
 
-	@NotNull
-	@Size(min = 4, max = 10, message = "4자 이상 10자 이내여야합니다.")
+	@Size(max = 10, message = "닉네임은 10자 이내여야합니다.")
 	private String nickName;
 }

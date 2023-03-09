@@ -10,19 +10,20 @@
 <h1>레스토랑 수정</h1>
 <form th:action="@{/api/seller/update-restaurant}" method="post" enctype="multipart/form-data">
     <input type="hidden" name="_method" value="PUT"/>
-    <label for="phoneNumber">phoneNumber</label>
-    <input type="text" id="phoneNumber" name="phoneNumber"><br>
-    <label for="capacity">capacity</label>
-    <input type="text" id="capacity" name="capacity"><br>
-    <label for="description">description</label>
-    <input type="text" id="description" name="description"><br>
-    <label for="openTime">openTime</label>
-    <input type="text" id="openTime" name="openTime"><br>
-    <label for="closeTime">closeTime</label>
-    <input type="text" id="closeTime" name="closeTime"><br>
-    <label for="image">이미지 선택</label>
-    <input type="file" id="image" name="image"><br>
-    <button type="submit">등록</button>
+        <label for="phoneNumber">phoneNumber</label>
+        <input type="text" id="phoneNumber" name="phoneNumber" th:value="${info.phoneNumber}"><br>
+        <label for="capacity"  >capacity</label>
+        <input type="text" id="capacity" name="capacity" th:value="${info.capacity}"><br>
+        <label for="description" >description</label>
+        <input type="text" id="description" name="description" th:value="${info.description}"><br>
+        <label for="openTime" >openTime</label>
+        <input type="text" id="openTime" name="openTime" th:value="${info.openTime}"><br>
+        <label for="closeTime" >closeTime</label>
+        <input type="text" id="closeTime" name="closeTime" th:value="${info.closeTime}"><br>
+        <label for="image">이미지 선택</label>
+        <input type="file" id="image" name="image"><br>
+        <button type="submit">등록</button>
+    </div>
 </form>
 <script th:inline="javascript">
     const token = [[${accessToken}]];

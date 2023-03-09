@@ -38,4 +38,5 @@ public interface UserService {
 	void updatePassword(UpdatePasswordServiceRequest payload);
 
 	Page<UserInfoResponse> getCustomersByUserName(String searchVal, Pageable pageable);
+
 }
