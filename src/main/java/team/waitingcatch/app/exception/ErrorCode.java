@@ -50,7 +50,10 @@ public enum ErrorCode {
 	NOT_FOUND_TOKEN("토큰을 찾을 수 없습니다"),
 
 	ILLEGAL_ACCESS("잘못된 접근입니다"),
-	INTERNAL_ERROR("내부 오류");
+	INTERNAL_ERROR("내부 오류"),
+
+	INVALID_VALID_CODE("유효하지 않은 인가코드 입니다."),
+	INCORRECT_VALID_CODE("인가코드가 일치하지 않습니다.");
 
 	private final String message;
 
