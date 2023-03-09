@@ -47,18 +47,18 @@ public class LineupSchedulerService {
 	@Scheduled(cron = "0 0 5 * * *")
 	public void transferLineupToLineupHistory() {
 		int page = 0;
-		Slice<Lineup> slice = lineupRepository.findAll(PageRequest.of(page, SIZE));
+		Slice<Lineup> slice;
 
-		while (slice.hasNext()) {
+		do {
+			slice = lineupRepository.findAll(PageRequest.of(page++, SIZE));
 			List<LineupHistory> lineupList = slice.getContent()
 				.stream()
 				.map(LineupHistory::of)
 				.collect(Collectors.toList());
 
 			lineupHistoryRepository.saveAll(lineupList);
-			slice = lineupRepository.findAll(PageRequest.of(++page, SIZE));
-		}
-		lineupRepository.deleteAll();
+			lineupRepository.deleteAll(slice);
+		} while (slice.hasNext());
 	}
 
 	@Scheduled(cron = "0 30 21 * * *")
