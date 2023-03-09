@@ -49,7 +49,10 @@ public enum ErrorCode {
 	NOT_FOUND_TOKEN("토큰을 찾을 수 없습니다"),
 
 	ILLEGAL_ACCESS("잘못된 접근입니다"),
-	INTERNAL_ERROR("내부 오류");
+	INTERNAL_ERROR("내부 오류"),
+
+	NOT_FOUND_VALID_CODE("해당 번호로 발급된 인가코드가 존재하지 않습니다."),
+	INCORRECT_VALID_CODE("인가코드가 일치하지 않습니다.");
 
 	private final String message;
 
