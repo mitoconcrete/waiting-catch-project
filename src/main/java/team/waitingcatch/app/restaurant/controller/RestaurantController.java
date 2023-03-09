@@ -76,12 +76,12 @@ public class RestaurantController {
 
 	@GetMapping("/general/restaurants")
 	public GenericResponse<Slice<RestaurantsWithinRadiusResponse>> getRestaurantsWithinRadius(
-		@RequestParam(required = false) Long id,
+		@RequestParam(required = false) Double lastDistance,
 		@RequestParam double latitude,
 		@RequestParam double longitude,
 		Pageable pageable) {
 		RestaurantsWithinRadiusServiceRequest request =
-			new RestaurantsWithinRadiusServiceRequest(id, latitude, longitude, BASIC_DISTANCE, pageable);
+			new RestaurantsWithinRadiusServiceRequest(lastDistance, latitude, longitude, BASIC_DISTANCE, pageable);
 		return new GenericResponse<>(restaurantService.getRestaurantsWithinRadius(request));
 	}
 

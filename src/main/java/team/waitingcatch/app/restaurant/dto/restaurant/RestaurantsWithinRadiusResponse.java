@@ -15,7 +15,7 @@ public class RestaurantsWithinRadiusResponse {
 	private final int currentWaitingNumber;
 	private final boolean isLineupActive;
 
-	public RestaurantsWithinRadiusResponse(RestaurantsWithinRadiusJpaResponse jpaResponse, double distance) {
+	public RestaurantsWithinRadiusResponse(RestaurantsWithinRadiusJpaResponse jpaResponse) {
 		this.id = jpaResponse.getId();
 		this.name = jpaResponse.getName();
 		this.imageUrl = jpaResponse.getImages();
@@ -23,7 +23,7 @@ public class RestaurantsWithinRadiusResponse {
 		for (int i = 0; i < jpaResponse.getSearchKeyword().size(); i++) {
 			this.category = jpaResponse.getSearchKeyword().get(i).split(" ");
 		}
-		this.distance = distance;
+		this.distance = jpaResponse.getDistanceBetween();
 		this.currentWaitingNumber = jpaResponse.getCurrentWaitingNumber();
 		this.isLineupActive = jpaResponse.isLineupActive();
 	}
