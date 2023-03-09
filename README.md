@@ -72,8 +72,7 @@
 ![관리자](https://user-images.githubusercontent.com/83831110/220535096-f96b90c8-b67e-441e-b53a-c779b6d5c343.JPG)
 
 ## :rocket: ERD
-
-![DB ERD](https://user-images.githubusercontent.com/117354616/223636822-17929aa3-822a-4e49-aef2-846eef6625c0.png)
+![ERD](https://user-images.githubusercontent.com/117354616/223995399-17b3c6ed-d2a5-45c3-92df-6f2a3a8c3c0d.png)
 
 ## :rocket: API Document
 
