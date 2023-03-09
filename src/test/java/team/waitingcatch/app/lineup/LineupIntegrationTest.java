@@ -72,15 +72,6 @@ class LineupIntegrationTest {
 	@Autowired
 	SellerManagementService sellerManagementService;
 
-	@Test
-	void test() {
-		User customer = userRepository.findByUsernameAndIsDeletedFalse("customerId").get();
-		// lineupHistoryRepository.findUserCouponWithRelations(customer, null);
-		// lineupHistoryRepository.fetchjointest(null);
-		// lineupHistoryRepository.findRestaurantNameByUserCouponId(1L);
-		// lineupHistoryRepository.getRestaurantLineupStatistics(1L);
-	}
-
 	@BeforeEach
 	public void beforeEach() {
 		List<String> searchKeywords = List.of("korean", "japan");

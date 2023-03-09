@@ -60,7 +60,7 @@ public class RestaurantServiceImpl implements RestaurantService, InternalRestaur
 	@Transactional(readOnly = true)
 	public RestaurantDetailedInfoResponse getRestaurantDetailedInfo(RestaurantDetailedInfoServiceRequest request) {
 		Restaurant restaurant = _getRestaurantById(request.getRestaurantId());
-		RestaurantInfo restaurantInfo = restaurantInfoRepository.findByRestaurantId(restaurant.getId()).orElseThrow(
+		RestaurantInfo restaurantInfo = restaurantInfoRepository.findByRestaurantIdWithRestaurant(restaurant.getId()).orElseThrow(
 			() -> new IllegalArgumentException(NOT_FOUND_RESTAURANT.getMessage())
 		);
 		return new RestaurantDetailedInfoResponse(restaurant, restaurantInfo);
@@ -154,7 +154,7 @@ public class RestaurantServiceImpl implements RestaurantService, InternalRestaur
 		Restaurant restaurant = restaurantRepository.findByUserId(serviceRequest.getSellerId())
 			.orElseThrow(() -> new NoSuchElementException(NOT_FOUND_RESTAURANT.getMessage()));
 
-		RestaurantInfo restaurantInfo = restaurantInfoRepository.findByRestaurantId(restaurant.getId())
+		RestaurantInfo restaurantInfo = restaurantInfoRepository.findByRestaurantIdWithRestaurant(restaurant.getId())
 			.orElseThrow(() -> new NoSuchElementException(NOT_FOUND_RESTAURANT_INFO.getMessage()));
 
 		List<String> imagePaths = imageUploader.uploadList(serviceRequest.getImages(), RESTAURANT.getValue());
@@ -178,7 +178,7 @@ public class RestaurantServiceImpl implements RestaurantService, InternalRestaur
 	}
 
 	public RestaurantInfo _getRestaurantInfoByRestaurantId(Long restaurantId) {
-		return restaurantInfoRepository.findByRestaurantId(restaurantId)
+		return restaurantInfoRepository.findByRestaurantIdWithRestaurant(restaurantId)
 			.orElseThrow(() -> new NoSuchElementException(NOT_FOUND_RESTAURANT.getMessage()));
 	}
 
@@ -189,8 +189,14 @@ public class RestaurantServiceImpl implements RestaurantService, InternalRestaur
 	}
 
 	@Override
-	public RestaurantInfo _getRestaurantInfoWithRestaurantByRestaurantId(Long id) {
-		return restaurantInfoRepository.findByRestaurantId(id)
+	public RestaurantInfo _getRestaurantInfoWithRestaurantByRestaurantId(Long restaurantId) {
+		return restaurantInfoRepository.findByRestaurantIdWithRestaurant(restaurantId)
+			.orElseThrow(() -> new NoSuchElementException(NOT_FOUND_RESTAURANT_INFO.getMessage()));
+	}
+
+	@Override
+	public RestaurantInfo _getRestaurantInfoWithRestaurantByUserId(Long userId) {
+		return restaurantInfoRepository.findByUserIdWithRestaurant(userId)
 			.orElseThrow(() -> new NoSuchElementException(NOT_FOUND_RESTAURANT_INFO.getMessage()));
 	}
 
@@ -203,14 +209,14 @@ public class RestaurantServiceImpl implements RestaurantService, InternalRestaur
 	}
 
 	public void _openLineup(Long restaurantId) {
-		RestaurantInfo restaurantInfo = restaurantInfoRepository.findByRestaurantId(restaurantId)
+		RestaurantInfo restaurantInfo = restaurantInfoRepository.findByRestaurantIdWithRestaurant(restaurantId)
 			.orElseThrow(() -> new NoSuchElementException(NOT_FOUND_RESTAURANT_INFO.getMessage()));
 		restaurantInfo.openLineup();
 	}
 
 	@Override
 	public void _closeLineup(Long restaurantId) {
-		RestaurantInfo restaurantInfo = restaurantInfoRepository.findByRestaurantId(restaurantId)
+		RestaurantInfo restaurantInfo = restaurantInfoRepository.findByRestaurantIdWithRestaurant(restaurantId)
 			.orElseThrow(() -> new NoSuchElementException(NOT_FOUND_RESTAURANT_INFO.getMessage()));
 		restaurantInfo.closeLineup();
 	}

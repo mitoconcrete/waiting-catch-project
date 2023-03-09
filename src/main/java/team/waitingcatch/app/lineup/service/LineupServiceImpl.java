@@ -6,6 +6,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
@@ -50,6 +51,7 @@ import team.waitingcatch.app.restaurant.service.restaurant.InternalRestaurantSer
 @RequiredArgsConstructor
 public class LineupServiceImpl implements LineupService, InternalLineupService {
 	public static final int MAX_DISTANCE = 3;
+	public static final int MAX_LINEUP_COUNT = 3;
 
 	private final LineupRepository lineupRepository;
 
@@ -90,6 +92,14 @@ public class LineupServiceImpl implements LineupService, InternalLineupService {
 
 		if (isBlacklist) {
 			throw new IllegalRequestException(ILLEGAL_ACCESS);
+		}
+
+		List<Lineup> lineups = lineupRepository.findAllByUserIdAndStatuses(
+			serviceRequest.getUser().getId(),
+			Arrays.asList(ArrivalStatusEnum.WAIT, ArrivalStatusEnum.CALL));
+
+		if (lineups.size() >= MAX_LINEUP_COUNT) {
+			throw new IllegalArgumentException(EXCEED_MAX_LINEUP_COUNT.getMessage());
 		}
 
 		double userLatitude = serviceRequest.getLatitude();
@@ -185,17 +195,22 @@ public class LineupServiceImpl implements LineupService, InternalLineupService {
 		}
 
 		ArrivalStatusEnum updatedStatus = restaurantInCustomer.updateStatus(serviceRequest.getStatus());
-		
+
 		if (updatedStatus == ArrivalStatusEnum.CALL) {
 			sendSms(restaurantInCustomer.getId(), updatedStatus);
 		} else if (updatedStatus == ArrivalStatusEnum.CANCEL) {
 			restaurantInfo.subtractLineupCount();
 			sendSms(restaurantInCustomer.getId(), updatedStatus);
 		} else if (updatedStatus == ArrivalStatusEnum.ARRIVE) {
-			lineupRepository.findAllByUserId(restaurantInCustomer.getUserId())
-				.stream()
-				.filter(lineup -> lineup.getStatus() == (ArrivalStatusEnum.WAIT))
+			List<Lineup> lineups = lineupRepository.findAllByUserId(restaurantInCustomer.getUserId());
+			lineups.stream()
+				.filter(lineup -> (
+					lineup.getStatus() == ArrivalStatusEnum.WAIT || lineup.getStatus() == ArrivalStatusEnum.CALL))
 				.forEach(lineup -> lineup.updateStatus(ArrivalStatusEnum.CANCEL));
+
+			if (!lineups.isEmpty()) {
+				sendSms(restaurantInCustomer.getId(), updatedStatus);
+			}
 		} else {
 			throw new IllegalRequestException(INTERNAL_ERROR);
 		}
@@ -203,12 +218,27 @@ public class LineupServiceImpl implements LineupService, InternalLineupService {
 
 	private void sendSms(Long lineupId, ArrivalStatusEnum status) {
 		CallCustomerInfoResponse customerInfo = lineupRepository.findCallCustomerInfoById(lineupId);
-		String content = "[WAITING CATCH]" + System.lineSeparator()
-				+ customerInfo.getRestaurantName() + "에서 대기번호 " + customerInfo.getWaitingNumber() + "번 고객님을 "
-				+ status.getValue() + "하셨어요.";
+
+		StringBuilder stringBuilder = new StringBuilder();
+
+		stringBuilder.append("[WAITING CATCH]")
+			.append(System.lineSeparator())
+			.append(customerInfo.getRestaurantName());
+
+		if (status == ArrivalStatusEnum.ARRIVE) {
+			stringBuilder.append("에 도착하셨네요.")
+				.append(System.lineSeparator())
+				.append("아직 줄서기 중인 곳은 취소 처리해 드릴게요.");
+		} else {
+			stringBuilder.append("에서 대기번호 ")
+				.append(customerInfo.getWaitingNumber())
+				.append("번 고객님을 ")
+				.append(status.getValue())
+				.append("하셨어요.");
+		}
 
 		MessageRequest messageRequest = new MessageRequest(customerInfo.getPhoneNumber(), "WAITING CATCH",
-			content);
+			stringBuilder.toString());
 
 		try {
 			smsService.sendSms(messageRequest);
