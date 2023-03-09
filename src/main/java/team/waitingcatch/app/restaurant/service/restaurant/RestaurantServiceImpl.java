@@ -39,6 +39,7 @@ import team.waitingcatch.app.restaurant.dto.restaurant.SearchRestaurantServiceRe
 import team.waitingcatch.app.restaurant.dto.restaurant.SearchRestaurantsResponse;
 import team.waitingcatch.app.restaurant.dto.restaurant.UpdateRestaurantEntityRequest;
 import team.waitingcatch.app.restaurant.dto.restaurant.UpdateRestaurantServiceRequest;
+import team.waitingcatch.app.restaurant.dto.restaurant.UpdateRestaurantWithoutImageEntityRequest;
 import team.waitingcatch.app.restaurant.entity.Restaurant;
 import team.waitingcatch.app.restaurant.entity.RestaurantInfo;
 import team.waitingcatch.app.restaurant.repository.RestaurantInfoRepository;
@@ -54,6 +55,8 @@ public class RestaurantServiceImpl implements RestaurantService, InternalRestaur
 	private final RestaurantInfoRepository restaurantInfoRepository;
 	private final ImageUploader imageUploader;
 	private final DistanceCalculator distanceCalculator;
+
+	// private final BasicImageUploader basicImageUploader;
 
 	@Override
 	@Transactional(readOnly = true)
@@ -196,19 +199,19 @@ public class RestaurantServiceImpl implements RestaurantService, InternalRestaur
 
 		RestaurantInfo restaurantInfo = restaurantInfoRepository.findByRestaurantId(restaurant.getId())
 			.orElseThrow(() -> new NoSuchElementException(NOT_FOUND_RESTAURANT_INFO.getMessage()));
+
 		for (MultipartFile multipartFile : serviceRequest.getImages()) {
 			if (Objects.equals(multipartFile.getOriginalFilename(), "")) {
-				List<String> imagePaths = restaurant.getImagePaths();
-				UpdateRestaurantEntityRequest updateRestaurantEntityRequest = new UpdateRestaurantEntityRequest(
-					serviceRequest, imagePaths);
-
-				restaurant.updateRestaurant(updateRestaurantEntityRequest);
-				restaurantInfo.updateRestaurantInfo(updateRestaurantEntityRequest);
+				UpdateRestaurantWithoutImageEntityRequest updateRestaurantEntityRequest = new UpdateRestaurantWithoutImageEntityRequest(
+					serviceRequest);
+				restaurant.updateRestaurantWithoutImage(updateRestaurantEntityRequest);
+				restaurantInfo.updateRestaurantInfoWithoutImage(updateRestaurantEntityRequest);
 			} else {
-				List<String> imagePaths = imageUploader.uploadList(serviceRequest.getImages(), RESTAURANT.getValue());
+				List<String> imagePaths = imageUploader.uploadList(serviceRequest.getImages(),
+					RESTAURANT.getValue());
+
 				UpdateRestaurantEntityRequest updateRestaurantEntityRequest = new UpdateRestaurantEntityRequest(
 					serviceRequest, imagePaths);
-
 				restaurant.updateRestaurant(updateRestaurantEntityRequest);
 				restaurantInfo.updateRestaurantInfo(updateRestaurantEntityRequest);
 			}
