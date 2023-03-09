@@ -202,6 +202,7 @@ public class LineupServiceImpl implements LineupService, InternalLineupService {
 			restaurantInfo.subtractLineupCount();
 			sendSms(restaurantInCustomer.getId(), updatedStatus);
 		} else if (updatedStatus == ArrivalStatusEnum.ARRIVE) {
+			restaurantInfo.subtractLineupCount();
 			List<Lineup> lineups = lineupRepository.findAllByUserId(restaurantInCustomer.getUserId());
 			lineups.stream()
 				.filter(lineup -> (
