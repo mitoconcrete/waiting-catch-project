@@ -34,7 +34,10 @@ public interface EventService {
 	//모든 광역 이벤트 목록을 가져온다.
 	Page<GetEventsResponse> getGlobalEvents(Pageable pageable);
 
-	//선택한 매장의 이벤트목록을 가져온다.
+	//셀러나 어드민이 선택한 매장의 이벤트목록을 가져온다.
 	Page<GetEventsResponse> getRestaurantEvents(Long restaurantId, Pageable pageable);
+
+	//유저가 선택한 매장의 이벤트 목록을 가저온다
+	Page<GetEventsResponse> getRestaurantEventsByRestaurantId(Long restaurantId, Pageable pageable);
 
 }
