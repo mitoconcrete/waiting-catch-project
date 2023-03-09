@@ -189,11 +189,13 @@ class RestaurantServiceImplTest {
 		when(request.getLongitude()).thenReturn(0.0);
 		when(jpaResponse.getName()).thenReturn("aaa");
 		when(jpaResponse.getSearchKeyword()).thenReturn(search);
-		when(jpaResponse.getLatitude()).thenReturn(0.0);
-		when(jpaResponse.getLongitude()).thenReturn(0.0);
-		when(distanceCalculator.distanceInKilometerByHaversine(0.0, 0.0, 0.0, 0.0)).thenReturn(0.0);
+		// when(jpaResponse.getLatitude()).thenReturn(0.0);
+		// when(jpaResponse.getLongitude()).thenReturn(0.0);
+		// when(distanceCalculator.distanceInKilometerByHaversine(0.0, 0.0, 0.0, 0.0)).thenReturn(0.0);
 		when(restaurantInfoRepository.findRestaurantsByLatitudeAndLongitude(
-			any(Long.class),
+			any(Double.class),
+			any(double.class),
+			any(double.class),
 			any(double.class),
 			any(double.class),
 			any(double.class),

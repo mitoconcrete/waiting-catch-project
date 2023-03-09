@@ -110,14 +110,13 @@ public class RestaurantServiceImpl implements RestaurantService, InternalRestaur
 
 		Slice<RestaurantsWithinRadiusJpaResponse> jpaResponses =
 			restaurantInfoRepository.findRestaurantsByLatitudeAndLongitude(
-				request.getId(), maxLatitude, maxLongitude, minLatitude, minLongitude, request.getPageable()
+				request.getLastDistance(), latitude, longitude, maxLatitude, maxLongitude,
+				minLatitude, minLongitude, request.getPageable()
 			);
 
 		List<RestaurantsWithinRadiusResponse> content = jpaResponses.stream()
-			.map(restaurant -> new RestaurantsWithinRadiusResponse(restaurant,
-				distanceCalculator.distanceInKilometerByHaversine(
-					longitude, latitude, restaurant.getLongitude(), restaurant.getLatitude())))
-			.filter(restaurant -> restaurant.getDistance() <= request.getDistance())
+			.filter(restaurant -> restaurant.getDistanceBetween() <= request.getDistance())
+			.map(RestaurantsWithinRadiusResponse::new)
 			.collect(Collectors.toList());
 
 		return new SliceImpl<>(content, jpaResponses.getPageable(), jpaResponses.hasNext());
