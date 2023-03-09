@@ -189,7 +189,7 @@ public class RestaurantServiceImpl implements RestaurantService, InternalRestaur
 	}
 
 	@Override
-	public RestaurantInfo _getRestaurantInfoByRestaurantIdWithRestaurant(Long id) {
+	public RestaurantInfo _getRestaurantInfoWithRestaurantByRestaurantId(Long id) {
 		return restaurantInfoRepository.findByRestaurantId(id)
 			.orElseThrow(() -> new NoSuchElementException(NOT_FOUND_RESTAURANT_INFO.getMessage()));
 	}

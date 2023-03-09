@@ -273,7 +273,7 @@ class RestaurantServiceImplTest {
 		when(restaurantInfoRepository.findByRestaurantId(any(Long.class))).thenReturn(Optional.of(restaurantInfo));
 
 		// when
-		RestaurantInfo restaurantInfo1 = restaurantService._getRestaurantInfoByRestaurantIdWithRestaurant(
+		RestaurantInfo restaurantInfo1 = restaurantService._getRestaurantInfoWithRestaurantByRestaurantId(
 			any(Long.class));
 
 		// then

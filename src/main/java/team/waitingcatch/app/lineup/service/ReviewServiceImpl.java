@@ -38,7 +38,7 @@ public class ReviewServiceImpl implements ReviewService, InternalReviewService {
 
 	@Override
 	public void createReview(CreateReviewServiceRequest serviceRequest) throws IOException {
-		RestaurantInfo restaurantInfo = internalRestaurantService._getRestaurantInfoByRestaurantIdWithRestaurant(
+		RestaurantInfo restaurantInfo = internalRestaurantService._getRestaurantInfoWithRestaurantByRestaurantId(
 			serviceRequest.getRestaurantId());
 		Restaurant restaurant = restaurantInfo.getRestaurant();
 

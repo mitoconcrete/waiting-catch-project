@@ -77,7 +77,7 @@ public class LineupServiceImpl implements LineupService, InternalLineupService {
 	@Override
 	public void startWaiting(StartWaitingServiceRequest serviceRequest) {
 		long restaurantId = serviceRequest.getRestaurantId();
-		RestaurantInfo restaurantInfo = internalRestaurantService._getRestaurantInfoByRestaurantIdWithRestaurant(
+		RestaurantInfo restaurantInfo = internalRestaurantService._getRestaurantInfoWithRestaurantByRestaurantId(
 			restaurantId);
 		Restaurant restaurant = restaurantInfo.getRestaurant();
 
@@ -134,7 +134,7 @@ public class LineupServiceImpl implements LineupService, InternalLineupService {
 		Long restaurantId = lineupRepository.findRestaurantIdById(lineupId)
 			.orElseThrow(() -> new NoSuchElementException(NOT_FOUND_LINEUP.getMessage()));
 
-		RestaurantInfo restaurantInfo = internalRestaurantService._getRestaurantInfoByRestaurantIdWithRestaurant(
+		RestaurantInfo restaurantInfo = internalRestaurantService._getRestaurantInfoWithRestaurantByRestaurantId(
 			restaurantId);
 		restaurantInfo.subtractLineupCount();
 	}
@@ -175,16 +175,22 @@ public class LineupServiceImpl implements LineupService, InternalLineupService {
 	@Override
 	public void updateArrivalStatus(UpdateArrivalStatusServiceRequest serviceRequest) {
 		Lineup restaurantInCustomer = _getByIdWithUser(serviceRequest.getLineupId());
-		Restaurant restaurantBySeller = internalRestaurantService._getRestaurantByUserId(serviceRequest.getSellerId());
+
+		RestaurantInfo restaurantInfo = internalRestaurantService._getRestaurantInfoWithRestaurantByUserId(
+			serviceRequest.getSellerId());
+		Restaurant restaurantBySeller = restaurantInfo.getRestaurant();
+
 		if (!restaurantInCustomer.isSameRestaurant(restaurantBySeller)) {
 			throw new IllegalRequestException(NOT_IN_RESTAURANT);
 		}
 
 		ArrivalStatusEnum updatedStatus = restaurantInCustomer.updateStatus(serviceRequest.getStatus());
+		
 		if (updatedStatus == ArrivalStatusEnum.CALL) {
-			sendSmsToCustomer(restaurantInCustomer.getId(), updatedStatus);
+			sendSms(restaurantInCustomer.getId(), updatedStatus);
 		} else if (updatedStatus == ArrivalStatusEnum.CANCEL) {
-			sendSmsToCustomer(restaurantInCustomer.getId(), updatedStatus);
+			restaurantInfo.subtractLineupCount();
+			sendSms(restaurantInCustomer.getId(), updatedStatus);
 		} else if (updatedStatus == ArrivalStatusEnum.ARRIVE) {
 			lineupRepository.findAllByUserId(restaurantInCustomer.getUserId())
 				.stream()
@@ -195,7 +201,7 @@ public class LineupServiceImpl implements LineupService, InternalLineupService {
 		}
 	}
 
-	private void sendSmsToCustomer(Long lineupId, ArrivalStatusEnum status) {
+	private void sendSms(Long lineupId, ArrivalStatusEnum status) {
 		CallCustomerInfoResponse customerInfo = lineupRepository.findCallCustomerInfoById(lineupId);
 		String content = "[WAITING CATCH]" + System.lineSeparator()
 				+ customerInfo.getRestaurantName() + "에서 대기번호 " + customerInfo.getWaitingNumber() + "번 고객님을 "
