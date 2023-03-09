@@ -51,7 +51,7 @@ public enum ErrorCode {
 	ILLEGAL_ACCESS("잘못된 접근입니다"),
 	INTERNAL_ERROR("내부 오류"),
 
-	NOT_FOUND_VALID_CODE("해당 번호로 발급된 인가코드가 존재하지 않습니다."),
+	INVALID_VALID_CODE("유효하지 않은 인가코드 입니다."),
 	INCORRECT_VALID_CODE("인가코드가 일치하지 않습니다.");
 
 	private final String message;

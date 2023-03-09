@@ -67,7 +67,7 @@ public class ValidCodeServiceImpl implements ValidCodeService {
 	@Override
 	public void checkValidCode(CheckValidCodeRequest payload) {
 		ValidCode validCode = validCodeRepository.findById(payload.getPhoneNumber()).orElseThrow(
-			() -> new NoSuchElementException(NOT_FOUND_VALID_CODE.getMessage()));
+			() -> new NoSuchElementException(INVALID_VALID_CODE.getMessage()));
 		if (!validCode.isMatchValidCode(payload.getValidCode())) {
 			throw new IllegalArgumentException(INCORRECT_VALID_CODE.getMessage());
 		}

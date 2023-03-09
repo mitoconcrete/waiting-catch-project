@@ -104,7 +104,7 @@ class ValidCodeServiceImplTest {
 		when(checkPayload.getValidCode()).thenReturn(instance.getValidCode());
 		// when & then
 		assertThatThrownBy(() -> validCodeService.checkValidCode(checkPayload)).isInstanceOf(
-			NoSuchElementException.class).hasMessage(ErrorCode.NOT_FOUND_VALID_CODE.getMessage());
+			NoSuchElementException.class).hasMessage(ErrorCode.INVALID_VALID_CODE.getMessage());
 
 		// 아직 지워지지 않았기에, DB에는 계속 남아있음.
 		assertTrue(validCodeRepository.existsById(phoneNumber1));
