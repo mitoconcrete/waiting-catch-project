@@ -4,6 +4,9 @@ import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,7 +40,7 @@ public class LineupSchedulerService {
 
 	private final SmsService smsService;
 
-	private static final int SIZE = 1000;
+	private static final int SIZE = 1;
 
 	@Scheduled(cron = "0 30 4 * * *")
 	public void resetStartWaitingNumber() {
@@ -65,11 +68,29 @@ public class LineupSchedulerService {
 	@Transactional(readOnly = true)
 	public void requestReview() {
 		int page = 0;
-		Slice<CustomerLineupInfoResponse> slice;
+		Slice<CustomerLineupInfoResponse> lineupHistories;
+
+		LocalDateTime localDateTime = LocalDateTime.now().minusDays(1L).minusMinutes(1L);
+		Long lastId = null;
+		do {
+			lineupHistories = lineupHistoryRepository.findLineupHistoryToRequestReviewGreaterThanCreatedDate(lastId,
+				localDateTime, PageRequest.of(page++, SIZE));
+
+			lastId = lineupHistories.getContent().get(lineupHistories.getNumberOfElements() - 1).getLineupId();
+
+			lineupHistoryRepository.bulkUpdateIsReceivedReviewRequest(lineupHistories.getContent()
+				.stream()
+				.map(CustomerLineupInfoResponse::getLineupId)
+				.collect(Collectors.toList()));
+		} while (lineupHistories.hasNext());
+
+		page = 0;
+		Slice<CustomerLineupInfoResponse> lineups;
 
 		do {
-			slice = lineupRepository.findCustomerLineupInfoByIsReviewedFalse(PageRequest.of(page++, SIZE));
-			for (CustomerLineupInfoResponse response : slice) {
+			lineups = lineupRepository.findCustomerLineupInfoByIsReviewedFalse(PageRequest.of(page++, SIZE));
+			List<Long> lineupIds = new ArrayList<>(SIZE);
+			for (CustomerLineupInfoResponse response : lineups) {
 				String content = "[WAITING CATCH]" + System.lineSeparator()
 					+ response.getName() + "님 " + response.getRestaurantName() + "에서의 시간은 어떠셨나요?"
 					+ System.lineSeparator() + "아래 URL에서 다른 분들께 고객님의 경험을 공유해 주세요!" + System.lineSeparator()
@@ -84,7 +105,9 @@ public class LineupSchedulerService {
 						 NoSuchAlgorithmException | InvalidKeyException e) {
 					throw new IllegalArgumentException(e);
 				}
+				lineupIds.add(response.getLineupId());
 			}
-		} while (slice.hasNext());
+			lineupRepository.bulkUpdateIsReceivedReviewRequest(lineupIds);
+		} while (lineups.hasNext());
 	}
 }
