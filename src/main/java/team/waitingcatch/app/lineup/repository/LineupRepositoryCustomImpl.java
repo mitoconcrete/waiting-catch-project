@@ -94,6 +94,7 @@ public class LineupRepositoryCustomImpl implements LineupRepositoryCustom {
 	public Slice<CustomerLineupInfoResponse> findCustomerLineupInfoByIsReviewedFalse(Pageable pageable) {
 		List<CustomerLineupInfoResponse> content = queryFactory
 			.select(new QCustomerLineupInfoResponse(
+				lineup.id,
 				user.name,
 				user.phoneNumber,
 				restaurant.id,
@@ -118,19 +119,7 @@ public class LineupRepositoryCustomImpl implements LineupRepositoryCustom {
 	@Override
 	public Slice<Lineup> findAll(Long id, Pageable pageable) {
 		List<Lineup> content = queryFactory
-			.select(Projections.fields(Lineup.class,
-				lineup.user.id,
-				lineup.restaurant.id,
-				lineup.waitingNumber,
-				lineup.numOfMembers,
-				lineup.status,
-				lineup.callCount,
-				lineup.arrivedAt,
-				lineup.isReviewed,
-				lineup.isDeleted,
-				lineup.createdDate
-			))
-			.from(lineup)
+			.selectFrom(lineup)
 			.where(idGt(id))
 			.limit(pageable.getPageSize() + 1)
 			.fetch();

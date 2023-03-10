@@ -68,6 +68,9 @@ public class Lineup extends TimeStamped {
 	private boolean isReviewed;
 
 	@Column(nullable = false)
+	private boolean isReceivedReviewRequest;
+
+	@Column(nullable = false)
 	private boolean isDeleted;
 
 	@Transient
@@ -119,9 +122,10 @@ public class Lineup extends TimeStamped {
 		this.waitingNumber = entityRequest.getWaitingNumber();
 		this.numOfMembers = entityRequest.getNumOfMembers();
 		this.status = ArrivalStatusEnum.WAIT;
+		this.callCount = 0;
 		this.arrivedAt = null;
 		this.isReviewed = false;
+		this.isReceivedReviewRequest = false;
 		this.isDeleted = false;
-		this.callCount = 0;
 	}
 }

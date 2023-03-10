@@ -28,6 +28,10 @@ public interface LineupRepository extends JpaRepository<Lineup, Long>, LineupRep
 		@Param("statuses") List<ArrivalStatusEnum> statuses);
 
 	@Modifying(clearAutomatically = true, flushAutomatically = true)
+	@Query("update Lineup l set l.isReceivedReviewRequest = true where l.id = :lineupIds")
+	void bulkUpdateIsReceivedReviewRequest(@Param("lineupIds") List<Long> ids);
+
+	@Modifying(clearAutomatically = true, flushAutomatically = true)
 	@Query(value = "update Lineup l set l.isDeleted = true where l.restaurant.id = :restaurantId")
-	void bulkSoftDeleteByRestaurantId(@Param("restaurantId") Long restaurantId);
+	void bulkSoftDeleteByRestaurantId(@Param("restaurantId") long restaurantId);
 }
