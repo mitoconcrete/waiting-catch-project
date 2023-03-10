@@ -45,6 +45,7 @@ public class UserCouponServiceImpl implements UserCouponService, InternalUserCou
 				throw new DuplicateRequestException(DUPLICATE_COUPON);
 			}
 		);
+
 		int couponQuantity = couponCreatorRepository.getHasCouponBalance(couponCreator.getId()).getQuantity();
 		UserCoupon userCoupon = new UserCoupon(user, couponCreator);
 
@@ -52,6 +53,8 @@ public class UserCouponServiceImpl implements UserCouponService, InternalUserCou
 			couponCreator.useCoupon();
 			couponCreatorRepository.save(couponCreator);
 			userCouponRepository.save(userCoupon);
+		} else {
+			throw new DuplicateRequestException(SOLD_OUT_COUPON);
 		}
 
 	}
