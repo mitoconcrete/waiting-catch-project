@@ -132,7 +132,7 @@ public class LineupSchedulerService {
 			String content = "[WAITING CATCH]" + System.lineSeparator()
 				+ response.getName() + "님 " + response.getRestaurantName() + "에서의 시간은 어떠셨나요?"
 				+ System.lineSeparator() + "아래 URL에서 다른 분들께 고객님의 경험을 공유해 주세요." + System.lineSeparator()
-				+ "https://waitingcatch.com/customer/restaurants/" + response.getRestaurantId() + "/reviews"
+				+ "https://waitingcatch.com/my/lineup" + response.getRestaurantId()
 				+ System.lineSeparator() + "그럼 고객님의 솔직한 리뷰를 기다리고 있을게요!";
 
 			MessageRequest messageRequest = new MessageRequest(response.getPhoneNumber(), "WAITING CATCH", content);

@@ -10,6 +10,7 @@ import lombok.Getter;
 
 @Getter
 public class GetReviewResponse {
+	private final long restaurantId;
 	private final long id;
 	private final int rate;
 	private final String content;
@@ -18,9 +19,10 @@ public class GetReviewResponse {
 	private final LocalDateTime modifiedDate;
 
 	@QueryProjection
-	public GetReviewResponse(long id, int rate, String content, List<String> imagePaths, LocalDateTime createdDate,
-		LocalDateTime modifiedDate) {
+	public GetReviewResponse(long restaurantId, long id, int rate, String content, List<String> imagePaths,
+		LocalDateTime createdDate, LocalDateTime modifiedDate) {
 
+		this.restaurantId = restaurantId;
 		this.id = id;
 		this.rate = rate;
 		this.content = content;

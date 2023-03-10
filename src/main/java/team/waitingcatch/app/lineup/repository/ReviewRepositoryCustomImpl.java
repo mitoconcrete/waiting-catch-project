@@ -23,6 +23,7 @@ public class ReviewRepositoryCustomImpl implements ReviewRepositoryCustom {
 	public Slice<GetReviewResponse> findAllByRestaurantId(Long id, long restaurantId, Pageable pageable) {
 		List<GetReviewResponse> content = queryFactory
 			.select(new QGetReviewResponse(
+				review.restaurant.id,
 				review.id,
 				review.rate,
 				review.content,
@@ -45,6 +46,7 @@ public class ReviewRepositoryCustomImpl implements ReviewRepositoryCustom {
 	public Slice<GetReviewResponse> findAllByUserId(Long id, long userId, Pageable pageable) {
 		List<GetReviewResponse> content = queryFactory
 			.select(new QGetReviewResponse(
+				review.restaurant.id,
 				review.id,
 				review.rate,
 				review.content,
