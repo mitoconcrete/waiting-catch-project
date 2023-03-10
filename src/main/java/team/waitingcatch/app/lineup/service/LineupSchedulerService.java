@@ -73,8 +73,7 @@ public class LineupSchedulerService {
 		}
 	}
 
-	@Scheduled(cron = "0 30 21 * * *")
-	@Transactional(readOnly = true)
+	@Scheduled(cron = "0 30 22 * * *")
 	public void requestReview() {
 		int page = 0;
 
