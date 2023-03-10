@@ -5,7 +5,7 @@
 "사용자가 설정한 지역의 레스토랑을 불러와 줄서기를 대신해주고, 그것과 관련된 서비스를 편리하게를 대신 해주는 웹사이트 입니다."<br> 백엔드 로직에 집중하기 위해서 화면은 최대한 간결하게 만들고 설계하였으며 REST API 서버로 대용량 트래픽을 고려한 애플리케이션으로 개발하였습니다. </p>
 <br>
 
-## :rocket: 프로젝트 사용 기술 <br>
+## :rocket: Tech Stack <br>
 
 <div align=center>
  <img src="https://img.shields.io/badge/spring-6DB33F?style=for-the-badge&logo=spring&logoColor=white">
@@ -28,44 +28,27 @@
  <img src="https://img.shields.io/badge/postman-FF6C37?style=for-the-badge&logo=postman&logoColor=white">
 </div>
 
-<br>
+## :rocket: Architecture
 
-## :rocket: 전체 프로젝트의 구조
-
-<br>
-
-![Project Structure](https://user-images.githubusercontent.com/83831110/220520960-4fe34da8-7729-405b-82de-e5594dbfc467.png)
-
-
-<br>
-<br>
+![architecture](https://user-images.githubusercontent.com/117354616/223635129-335aeed8-3ecf-4350-b3fb-fe70b554229a.png)
 
 ## :rocket: WIKI
 
 화면 설계에 대한 Figma 프로토타입 디자인과 Usecase를 보실 수 있습니다. 기술적인 문제에 부딪혀 해결한 이야기에 대한 개인 테크 블로그의 주소도 포함되어 있습니다.
 
-- click! :arrow_forward: [Team notion](https://www.notion.so/S-A-e0603e170f0f4a9da949ad475682a2d9)
-- click! :arrow_forward: [중간 점검](https://www.notion.so/cde90590bd314d06ab48bcee39b53d19)
-- click! :arrow_forward: [Usecase](https://github.com/mitoconcrete/waiting-catch-project/wiki/Use-Case)
-- click! :arrow_forward: [WIKI Home](https://github.com/mitoconcrete/waiting-catch-project/wiki)
-- click! :arrow_forward: [박정훈-기술블로그](https://velog.io/@dudaksdk3214)
-- click! :arrow_forward: [김태훈-기술블로그](https://mitoconcrete.github.io)
-- click! :arrow_forward: [한정규-기술블로그](https://jk891113.tistory.com/)
-- click! :arrow_forward: [송경헌-기술블로그](https://velog.io/@rianbowgift)
-- click! :arrow_forward: [조성제-기술블로그](https://velog.io/@sj_)
+- [Team notion](https://www.notion.so/S-A-e0603e170f0f4a9da949ad475682a2d9)
+- [중간 점검](https://www.notion.so/cde90590bd314d06ab48bcee39b53d19)
+- [Usecase](https://github.com/mitoconcrete/waiting-catch-project/wiki/Use-Case)
+- [WIKI Home](https://github.com/mitoconcrete/waiting-catch-project/wiki)
 
-<br>
-
-## 👥 팀원 구성
-- 중간 프로젝트 점검 기간 (2023-02-07 ~ 2023-02-24)
-- 최종 프로젝트 기간 (2023-02-07 ~ 2023-03-13)
+## 👥 Members
 - 김태훈(리더) : 유저 - 시큐리티, 로그인, 로그아웃<br>
 - 박정훈(부리더) : 레스토랑 - 판매자신청, 블랙리스트,레스토랑수정<br>
 - 한정규 : 레스토랑 - 메뉴, 카테고리, 검색<br>
 - 조성제 : 줄서기 - 호출, 리뷰<br>
 - 송경헌 : 이벤트 - 쿠폰 유저 발급쿠폰<br>
 
-## :rocket: 프로젝트 주요 관심사
+## :rocket: Focus
 
 :heavy_check_mark: 대용량 트래픽의 상황에서 지속적인 서버 성능을 개선하기 위해 노력하였습니다.    
 :heavy_check_mark: 꾸준한 코드 리팩토링을 진행 중입니다.      
@@ -74,17 +57,42 @@
 :heavy_check_mark: 성공만 하는 테스트보단 실패할 만한 단위 테스트를 작성하였습니다.    
 :heavy_check_mark: 반복적인 작업은 자동화하여 개발의 효율을 높이기 위해 노력하였습니다.
 
+## :rocket: Layout
+
+### 고객 페이지
+
+![Capture](https://user-images.githubusercontent.com/83831110/220533919-bda97501-0330-4db4-a49e-16511947230c.png)
+
+### 판매자 페이지<br>
+
+![판매자](https://user-images.githubusercontent.com/83831110/220533662-5c232a94-2fc2-4dc3-9587-2d2c88c4694e.JPG)
+
+### 관리자 페이지<br>
+
+![관리자](https://user-images.githubusercontent.com/83831110/220535096-f96b90c8-b67e-441e-b53a-c779b6d5c343.JPG)
+
+## :rocket: ERD
+![ERD](https://user-images.githubusercontent.com/117354616/223995399-17b3c6ed-d2a5-45c3-92df-6f2a3a8c3c0d.png)
+
+## :rocket: API Document
+
+[고객 API 명세서](https://docs.google.com/spreadsheets/d/1Hhjp6eKlJxv6ZLsFz1xe50t-xMe478o5_Je7RIvn1YA/edit#gid=0) : 고객에 관한
+API<br>
+[판매자 API 명세서](https://docs.google.com/spreadsheets/d/1Hhjp6eKlJxv6ZLsFz1xe50t-xMe478o5_Je7RIvn1YA/edit#gid=787721886) :
+판매자에 관한 API<br>
+[관리자 API 명세서](https://docs.google.com/spreadsheets/d/1Hhjp6eKlJxv6ZLsFz1xe50t-xMe478o5_Je7RIvn1YA/edit#gid=1180646390) :
+관리자에 관한 API<br>
+
+## :rocket: Rules
+
+### Git-flow
+
+**Git-flow 브랜치 전략**에 따라 기능별로 브랜치를 나누어 작업하고 있고
+모든 브랜치에 대해 pull request를 통한 리뷰 완료 후 merge를 하고 있습니다.
+
 <br>
 
-### :diamond_shape_with_a_dot_inside: Git-Flow 브랜치 전략
-
-**Git-Flow 브랜치 전략**에 따라 기능별로 브랜치를 나누어 작업하고 있고
-모든 브랜치에 대해 pull request를 통한 리뷰 완료 후 Merge를 하고 있습니다.
-
-<br>
-
-![깃허브전략](https://user-images.githubusercontent.com/83831110/220528904-f3387e71-30cc-437e-8e9c-5ce8576112ea.svg)
-
+![깃허브 전략](https://user-images.githubusercontent.com/83831110/220528904-f3387e71-30cc-437e-8e9c-5ce8576112ea.svg)
 
 <br>
 
@@ -92,9 +100,7 @@
 :white_check_mark: develop : 다음 출시 버전을 개발하는 브랜치입니다. feature에서 리뷰 완료한 브랜치를 Merge하고 있습니다.    
 :white_check_mark: feature : 기능을 개발하고 hotfix 버그 수정도 같이하는 브랜치입니다.
 
-<br>
-
-### :diamond_shape_with_a_dot_inside: PR 규칙
+### PR
 
 - 브랜치는 develop을 기반으로 생성하고, 도메인 단위로 생성하고 PR을 요청합니다. feature/도메인명 (영어로)<br>
 - [Github Project](https://github.com/users/mitoconcrete/projects/6/views/1)를 사용 : New: 새로운 기능, Ready: 만들어야 하는 기능, In
@@ -103,22 +109,17 @@
 - 모든 PR은 반드시 지정한 리뷰어에게 코드 리뷰를 받아야만 합니다.
 - 리뷰어 중 모든 리뷰어의  `Approve`를 받아야 `Merge pull request`를 할 수 있습니다.
 - 모든 PR은 Github Action의 CI/CD를 통과하고 통과가 되어야 `Merge pull request`된다.
-  <br>
 
-### :diamond_shape_with_a_dot_inside: 리뷰
+### Review
 
-정해진 커밋 컨벤션과 코딩 컨벤션을 지켜 일관성을 유지합니다.<br>
-합의되지 않은 코드는 리뷰를 통해 필터링합니다. 팀원 전원의 승인이 있어야, Merge가 가능합니다.<br>
-오전(10시 - 13시)은 PR에 대해 팀원 전원이 리뷰합니다. <br>
-리뷰는 우선순위를 정하여, 다른 작업에 영향을 줄 수 있는 것 부터 차례대로 진행합니다. <br>리뷰는 아침 회의에서 결정된 우선순위대로 진행하며, 리뷰 이후에 Merge를 한 번에 진행합니다.
+- 정해진 커밋 컨벤션과 코딩 컨벤션을 지켜 일관성을 유지합니다.
+- 합의되지 않은 코드는 리뷰를 통해 필터링합니다. 
+- 팀원 전원의 승인이 있어야, Merge가 가능합니다.
+- 오전(10시 - 13시)은 PR에 대해 팀원 전원이 리뷰합니다.
+- 리뷰는 우선순위를 정하여, 다른 작업에 영향을 줄 수 있는 것 부터 차례대로 진행합니다.
+- 리뷰는 아침 회의에서 결정된 우선순위대로 진행하며, 리뷰 이후에 Merge를 한 번에 진행합니다.
 
-### :diamond_shape_with_a_dot_inside: Commit message Prefix
-
-<details>
-<summary>Commit message Prefix</summary>
-<div markdown="1">       
-
-## Commit Message
+### Commit Message Convention
 
 - `[feat]` : 새로운 기능 추가
 - `[fix]` : 버그 수정
@@ -134,77 +135,44 @@
 - `[remove]` : 사용하지 않는 파일 혹은 폴더를 삭제하는 경우
 
 </div>
-</details>
 
-### :diamond_shape_with_a_dot_inside: 코드 컨벤션
-
+### Coding Convention
+[Naver Hackday Java Coding Convention](https://naver.github.io/hackday-conventions-java)
 <details>
-<summary>코드 컨벤션 내용</summary>
+<summary>Details</summary>
 <div markdown="1">    
- <h2>코드 컨벤션</h2>
-- 카멜 케이스를 사용한다.<br>
-- 패키지명은 소문자를 사용한다.<br>
-- 주석은 한 줄로 정리 가능하다면 `//`를 사용하고, 엔터를 통해 줄이 넘어가야 하는 경우, `/**/`를 사용합니다.<br>
-- Service 사용 시, 인터페이스를 주입받는 식으로 사용한다.<br>
-- Service 인자로 받는 것은 Dto 여야하고, 때려죽어도 바뀔 일이 없는 값은 컨트롤러 Dto를 그대로 가져와서 사용한다.<br>
-- ~~dto는 매개변수의 숫자와 관계없이 생성하여 전달합니다.~~dto는 매개변수 2개 이상일 경우에만 생성하여 사용한다.<br>
-- 단, InternalService는 dto를 사용하지 않는다.<br>
-**- 메소드 명은 `동사 + 명사`의 조합으로 사용한다.** <br>
+
+- 주석은 한 줄로 정리 가능하다면 `//`를 사용하고 엔터를 통해 줄이 넘어가야 하는 경우 `/**/`를 사용한다.
+- Service 는 인터페이스를 사용한다.
+- Service 인자로 받는 것은 DTO 여야하고, 때려죽어도 바뀔 일이 없는 값은 컨트롤러 DTO를 그대로 가져와서 사용한다.
+- DTO는 매개변수의 숫자와 관계없이 생성하여 전달합니다. 
+- DTO는 매개변수 2개 이상일 경우에만 생성하여 사용한다.
+- 단, InternalService는 DTO를 사용하지 않는다.
+- 메서드 명은 `동사 + 명사`의 조합으로 사용한다.
 - DTO 네이밍은 메서드 네이밍 + 레이어네임(Service, Controller) + Response/Request 로 한다.(DTO 뺀다)
-`~~ControllerRequest, ~~ServiceResponse, ~~ServiceRequest`<br>
-
-- 본인이 생각했을 때 때려죽어도 바뀔 일이 없는 것은 레이어 네임을 제외한다.
-  `~~Request, ~~Response`<br>
-- 서비스 레이어 내부에서 사용할 엔티티를 return 하는 메서드를 서비스 내에 _로 정의하여 사용한다.<br>
-  ㄴ _getUser, _getReservation → Entity를 반환<br>
-  ㄴ getUser, getReservation → Dto를 반환 getUserB<br>
-- 하나의 매개변수가 선언되어 있는 경우 : get, create, update, delete + by + 매개변수 명<br>
-- 2개 이상 복수의 매개변수가 선언되어 있는 경우 :  get, create, update, delete + 전달되는 매개변수를 한 단어로 축약하여 사용<br>
-- 복수 변수명 : ~s(o), ~List(x)<br>
-
--슬랙 연결 방법 /github subscribe mitoconcrete/waiting-catch-project<br>
-<br>
+  - ex) `XxxControllerRequest, XxxServiceResponse, XxxServiceRequest`
+- 본인이 생각했을 때 바뀔 일이 없는 것은 레이어 네임을 제외한다.
+  - ex) `XxxRequest, XxxResponse`
+- 서비스 레이어 내부에서 사용할 엔티티를 return 하는 메서드를 서비스 내에 _로 정의하여 사용한다.
+  - ex) _getUser, _getReservation → Entity를 반환
+  - ex) getUser, getReservation → Dto를 반환
+- 하나의 매개변수가 선언되어 있는 경우 : get, create, update, delete + by + 매개변수 명
+- 2개 이상 복수의 매개변수가 선언되어 있는 경우 :  get, create, update, delete + 전달되는 매개변수를 한 단어로 축약하여 사용한다.
+- 복수 변수명 : ~s(o), ~List(x)
 
 </div>
 </details>
 
-### :diamond_shape_with_a_dot_inside: nGrinder 성능테스트
+### Performance Test
 
 :white_check_mark: 네이버에서 개발한 오픈소스 플랫폼인 **nGrinder**를 이용해 성능 테스트를 진행 중입니다.
 
-<br>
-<br>
+## :rocket: 개인 블로그
 
-## :rocket: 화면 구성도
-
-## 고객 페이지
-
-![Capture](https://user-images.githubusercontent.com/83831110/220533919-bda97501-0330-4db4-a49e-16511947230c.png)
-
-## 판매자 페이지<br>
-
-![판매자](https://user-images.githubusercontent.com/83831110/220533662-5c232a94-2fc2-4dc3-9587-2d2c88c4694e.JPG)
-
-## 관리자 페이지<br>
-
-![관리자](https://user-images.githubusercontent.com/83831110/220535096-f96b90c8-b67e-441e-b53a-c779b6d5c343.JPG)
-
-## :rocket: DB ERD 구조
-
-## DB ERD<br>
-
-![DB ERD](https://user-images.githubusercontent.com/117354616/223431689-3293724f-d500-48b2-840a-1065c68aff3c.png)
-
-<br>
-<br>
-
-## :rocket: API 명세서
-
-[고객 API 명세서](https://docs.google.com/spreadsheets/d/1Hhjp6eKlJxv6ZLsFz1xe50t-xMe478o5_Je7RIvn1YA/edit#gid=0) : 고객에 관한
-API<br>
-[판매자 API 명세서](https://docs.google.com/spreadsheets/d/1Hhjp6eKlJxv6ZLsFz1xe50t-xMe478o5_Je7RIvn1YA/edit#gid=787721886) :
-판매자에 관한 API<br>
-[관리자 API 명세서](https://docs.google.com/spreadsheets/d/1Hhjp6eKlJxv6ZLsFz1xe50t-xMe478o5_Je7RIvn1YA/edit#gid=1180646390) :
-관리자에 관한 API<br>
+- [박정훈](https://velog.io/@dudaksdk3214)
+- [김태훈](https://mitoconcrete.github.io)
+- [한정규](https://jk891113.tistory.com/)
+- [송경헌](https://velog.io/@rianbowgift)
+- [조성제](https://velog.io/@sj_)
 
 [![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Ff-lab-edu%2Fevent-recommender-festa&count_bg=%2379C83D&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=hits&edge_flat=false)](https://hits.seeyoufarm.com)

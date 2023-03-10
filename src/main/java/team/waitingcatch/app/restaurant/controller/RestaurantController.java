@@ -3,6 +3,8 @@ package team.waitingcatch.app.restaurant.controller;
 import java.io.IOException;
 import java.util.List;
 
+import javax.validation.constraints.NotBlank;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -10,6 +12,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -41,6 +44,7 @@ import team.waitingcatch.app.user.entitiy.UserDetailsImpl;
 @RequestMapping("/api")
 @RestController
 @RequiredArgsConstructor
+@Validated
 public class RestaurantController {
 	private final RestaurantService restaurantService;
 	public static final int BASIC_DISTANCE = 3;
@@ -61,7 +65,7 @@ public class RestaurantController {
 	@GetMapping("/general/restaurants/search")
 	public GenericResponse<Slice<SearchRestaurantsResponse>> searchRestaurantsByKeyword(
 		@RequestParam(required = false) Long id,
-		@RequestParam String keyword,
+		@RequestParam @NotBlank(message = "키워드를 입력하세요.") String keyword,
 		@RequestParam double latitude,
 		@RequestParam double longitude,
 		Pageable pageable) {
@@ -72,12 +76,12 @@ public class RestaurantController {
 
 	@GetMapping("/general/restaurants")
 	public GenericResponse<Slice<RestaurantsWithinRadiusResponse>> getRestaurantsWithinRadius(
-		@RequestParam(required = false) Long id,
+		@RequestParam(required = false) Double lastDistance,
 		@RequestParam double latitude,
 		@RequestParam double longitude,
 		Pageable pageable) {
 		RestaurantsWithinRadiusServiceRequest request =
-			new RestaurantsWithinRadiusServiceRequest(id, latitude, longitude, BASIC_DISTANCE, pageable);
+			new RestaurantsWithinRadiusServiceRequest(lastDistance, latitude, longitude, BASIC_DISTANCE, pageable);
 		return new GenericResponse<>(restaurantService.getRestaurantsWithinRadius(request));
 	}
 

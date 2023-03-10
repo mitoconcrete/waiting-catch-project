@@ -9,11 +9,11 @@ public interface InternalRestaurantService {
 
 	Restaurant _getRestaurantByUserId(Long userId);
 
-	RestaurantInfo _getRestaurantInfoByRestaurantId(Long restaurantId);
-
 	RestaurantInfo _getRestaurantInfoByUserId(Long userId);
 
-	RestaurantInfo _getRestaurantInfoByRestaurantIdWithRestaurant(Long id);
+	RestaurantInfo _getRestaurantInfoWithRestaurantByRestaurantId(Long id);
+
+	RestaurantInfo _getRestaurantInfoWithRestaurantByUserId(Long userId);
 
 	void _createRestaurant(ApproveSignUpSellerManagementEntityPassToRestaurantEntityRequest request);
 

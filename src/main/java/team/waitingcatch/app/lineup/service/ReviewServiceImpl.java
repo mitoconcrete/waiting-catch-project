@@ -1,6 +1,7 @@
 package team.waitingcatch.app.lineup.service;
 
 import static team.waitingcatch.app.common.enums.ImageDirectoryEnum.*;
+import static team.waitingcatch.app.exception.ErrorCode.*;
 
 import java.io.IOException;
 import java.util.List;
@@ -12,6 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.common.util.image.ImageUploader;
+import team.waitingcatch.app.exception.ErrorCode;
+import team.waitingcatch.app.exception.IllegalRequestException;
 import team.waitingcatch.app.lineup.dto.CreateReviewEntityRequest;
 import team.waitingcatch.app.lineup.dto.CreateReviewServiceRequest;
 import team.waitingcatch.app.lineup.dto.GetReviewResponse;
@@ -38,7 +41,12 @@ public class ReviewServiceImpl implements ReviewService, InternalReviewService {
 
 	@Override
 	public void createReview(CreateReviewServiceRequest serviceRequest) throws IOException {
-		RestaurantInfo restaurantInfo = internalRestaurantService._getRestaurantInfoByRestaurantIdWithRestaurant(
+		Lineup lineup = internalLineupService._getById(serviceRequest.getLineupId());
+		if (!lineup.isReviewed()) {
+			throw new IllegalRequestException(ALREADY_REVIEWD);
+		}
+
+		RestaurantInfo restaurantInfo = internalRestaurantService._getRestaurantInfoWithRestaurantByRestaurantId(
 			serviceRequest.getRestaurantId());
 		Restaurant restaurant = restaurantInfo.getRestaurant();
 
@@ -50,7 +58,6 @@ public class ReviewServiceImpl implements ReviewService, InternalReviewService {
 		restaurantInfo.updateAverageRate(entityRequest.getRate());
 
 		if (serviceRequest.getType() == StoredLineupTableNameEnum.LINEUP) {
-			Lineup lineup = internalLineupService._getById(serviceRequest.getLineupId());
 			lineup.updateIsReviewed();
 		} else {
 			LineupHistory lineupHistory = internalLineupHistoryService._getById(serviceRequest.getLineupId());

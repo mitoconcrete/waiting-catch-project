@@ -154,9 +154,9 @@ public class UserServiceImpl implements UserService, InternalUserService {
 		SimpleMailMessage message = new SimpleMailMessage();
 		message.setFrom(smtpSenderEmail);
 		message.setTo(user.getEmail());
-		message.setSubject("임시패스워드 안내");
-		message.setText("안녕하세요. 임시비밀번호 안내 관련 이메일 입니다. 회원님의 임시 비밀번호는 " +
-			temporaryPassword + "입니다." + "\n로그인 후에 비밀번호를 변경을 해주세요.");
+		message.setSubject("[WAITING CATCH] 임시 비밀번호 안내");
+		message.setText("안녕하세요 회원님 WAITING CATCH 입니다.\n회원님의 임시 비밀번호를 안내드립니다.\n" + temporaryPassword
+			+ "\n로그인 후 비밀번호를 꼭 변경해 주세요.");
 		emailSender.send(message);
 	}
 

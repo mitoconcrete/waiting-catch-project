@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 // @Service
 @RequiredArgsConstructor
 public class BasicImageUploader implements ImageUploader {
+
 	@Value("${profile.image.dir}")
 	private String imageDir;
 

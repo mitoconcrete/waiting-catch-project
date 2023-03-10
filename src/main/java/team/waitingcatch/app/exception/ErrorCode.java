@@ -31,6 +31,9 @@ public enum ErrorCode {
 	LINEUP_ALEADY_CANCELED("이미 취소된 줄서기입니다."),
 	LINEUP_ALEADY_ARRIVED("이미 완료된 줄서기입니다."),
 
+	ALREADY_REVIEWD("이미 리뷰하셨습니다."),
+
+	EXCEED_MAX_LINEUP_COUNT("줄서기는 동시에 최대 " + LineupServiceImpl.MAX_LINEUP_COUNT + "곳만 가능합니다."),
 	EXCEED_MAX_CALL_COUNT("호출은 최대" + Lineup.MAX_CALL_COUNT + "번까지 가능합니다."),
 
 	NOT_FOUND_WAITING_NUMBER("존재하지 않는 대기 번호입니다."),
@@ -49,7 +52,10 @@ public enum ErrorCode {
 	NOT_FOUND_TOKEN("토큰을 찾을 수 없습니다"),
 
 	ILLEGAL_ACCESS("잘못된 접근입니다"),
-	INTERNAL_ERROR("내부 오류");
+	INTERNAL_ERROR("내부 오류"),
+
+	INVALID_VALID_CODE("유효하지 않은 인가코드 입니다."),
+	INCORRECT_VALID_CODE("인가코드가 일치하지 않습니다.");
 
 	private final String message;
 

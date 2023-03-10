@@ -1,13 +1,13 @@
 package team.waitingcatch.app.restaurant.service.restaurant;
 
-import static team.waitingcatch.app.common.enums.ImageDirectoryEnum.RESTAURANT;
-import static team.waitingcatch.app.exception.ErrorCode.NOT_FOUND_RESTAURANT;
-import static team.waitingcatch.app.exception.ErrorCode.NOT_FOUND_RESTAURANT_INFO;
+import static team.waitingcatch.app.common.enums.ImageDirectoryEnum.*;
+import static team.waitingcatch.app.exception.ErrorCode.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
@@ -17,12 +17,15 @@ import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import team.waitingcatch.app.common.util.DistanceCalculator;
 import team.waitingcatch.app.common.util.image.ImageUploader;
 import team.waitingcatch.app.restaurant.dto.requestseller.ApproveSignUpSellerManagementEntityPassToRestaurantEntityRequest;
 import team.waitingcatch.app.restaurant.dto.restaurant.DeleteRestaurantByAdminServiceRequest;
+import team.waitingcatch.app.restaurant.dto.restaurant.GetRestaurantInfo;
 import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantBasicInfoResponse;
 import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantBasicInfoServiceRequest;
 import team.waitingcatch.app.restaurant.dto.restaurant.RestaurantDetailedInfoResponse;
@@ -36,12 +39,15 @@ import team.waitingcatch.app.restaurant.dto.restaurant.SearchRestaurantServiceRe
 import team.waitingcatch.app.restaurant.dto.restaurant.SearchRestaurantsResponse;
 import team.waitingcatch.app.restaurant.dto.restaurant.UpdateRestaurantEntityRequest;
 import team.waitingcatch.app.restaurant.dto.restaurant.UpdateRestaurantServiceRequest;
+import team.waitingcatch.app.restaurant.dto.restaurant.UpdateRestaurantWithoutImageEntityRequest;
 import team.waitingcatch.app.restaurant.entity.Restaurant;
 import team.waitingcatch.app.restaurant.entity.RestaurantInfo;
 import team.waitingcatch.app.restaurant.repository.RestaurantInfoRepository;
 import team.waitingcatch.app.restaurant.repository.RestaurantRepository;
+import team.waitingcatch.app.user.entitiy.User;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 @Transactional
 public class RestaurantServiceImpl implements RestaurantService, InternalRestaurantService {
@@ -60,10 +66,8 @@ public class RestaurantServiceImpl implements RestaurantService, InternalRestaur
 	@Override
 	@Transactional(readOnly = true)
 	public RestaurantDetailedInfoResponse getRestaurantDetailedInfo(RestaurantDetailedInfoServiceRequest request) {
-		Restaurant restaurant = _getRestaurantById(request.getRestaurantId());
-		RestaurantInfo restaurantInfo = restaurantInfoRepository.findByRestaurantId(restaurant.getId()).orElseThrow(
-			() -> new IllegalArgumentException(NOT_FOUND_RESTAURANT.getMessage())
-		);
+		RestaurantInfo restaurantInfo = _getRestaurantInfoByRestaurantId(request.getRestaurantId());
+		Restaurant restaurant = restaurantInfo.getRestaurant();
 		return new RestaurantDetailedInfoResponse(restaurant, restaurantInfo);
 	}
 
@@ -110,44 +114,17 @@ public class RestaurantServiceImpl implements RestaurantService, InternalRestaur
 
 		Slice<RestaurantsWithinRadiusJpaResponse> jpaResponses =
 			restaurantInfoRepository.findRestaurantsByLatitudeAndLongitude(
-				request.getId(), maxLatitude, maxLongitude, minLatitude, minLongitude, request.getPageable()
+				request.getLastDistance(), latitude, longitude, maxLatitude, maxLongitude,
+				minLatitude, minLongitude, request.getPageable()
 			);
 
 		List<RestaurantsWithinRadiusResponse> content = jpaResponses.stream()
-			.map(restaurant -> new RestaurantsWithinRadiusResponse(restaurant,
-				distanceCalculator.distanceInKilometerByHaversine(
-					longitude, latitude, restaurant.getLongitude(), restaurant.getLatitude())))
-			.filter(restaurant -> restaurant.getDistance() <= request.getDistance())
+			.filter(restaurant -> restaurant.getDistanceBetween() <= request.getDistance())
+			.map(RestaurantsWithinRadiusResponse::new)
 			.collect(Collectors.toList());
 
 		return new SliceImpl<>(content, jpaResponses.getPageable(), jpaResponses.hasNext());
 	}
-
-	// @Override
-	// @Transactional(readOnly = true)
-	// public Slice<RestaurantsWithinRadiusResponse> getRestaurantsWithinRadius(
-	// 	RestaurantsWithinRadiusServiceRequest request) {
-	// 	Slice<RestaurantsWithinRadiusJpaResponse> jpaResponses =
-	// 		restaurantInfoRepository.findRestaurantsByDistance(
-	// 			request.getId(),
-	// 			request.getLatitude(),
-	// 			request.getLongitude(),
-	// 			request.getDistance(),
-	// 			request.getPageable()
-	// 		);
-	// 	List<RestaurantsWithinRadiusResponse> content = new ArrayList<>();
-	// 	for (RestaurantsWithinRadiusJpaResponse response : jpaResponses) {
-	// 		double distance = distanceCalculator.distanceInKilometerByHaversine(
-	// 			request.getLongitude(),
-	// 			request.getLatitude(),
-	// 			response.getLongitude(),
-	// 			response.getLatitude()
-	// 		);
-	// 		content.add(new RestaurantsWithinRadiusResponse(response, distance));
-	// 	}
-	//
-	// 	return new SliceImpl<>(content, jpaResponses.getPageable(), jpaResponses.hasNext());
-	// }
 
 	@Override
 	@Transactional(readOnly = true)
@@ -180,24 +157,34 @@ public class RestaurantServiceImpl implements RestaurantService, InternalRestaur
 		return restaurant.deleteRestaurant();
 
 	}
-	// 현재 있는 것은
 
-	//업데이트시 -> 현재 있는것은 1.있는것 2. 있는것 3. 새로 4.새로
-	//업데이트시 -> 현재 있는것은 1.새로 2. 새로 3. 새로 4.새로
+	/*
+		현재 있는 것은
+		업데이트시 -> 현재 있는것은 1.있는것 2. 있는것 3. 새로 4.새로
+		업데이트시 -> 현재 있는것은 1.새로 2. 새로 3. 새로 4.새로
+	 */
 	@Override
 	public void updateRestaurant(UpdateRestaurantServiceRequest serviceRequest) throws IOException {
-		Restaurant restaurant = restaurantRepository.findByUserId(serviceRequest.getSellerId())
-			.orElseThrow(() -> new NoSuchElementException(NOT_FOUND_RESTAURANT.getMessage()));
+		RestaurantInfo restaurantInfo = _getRestaurantInfoWithRestaurantByUserId(serviceRequest.getSellerId());
+		Restaurant restaurant = restaurantInfo.getRestaurant();
 
-		RestaurantInfo restaurantInfo = restaurantInfoRepository.findByRestaurantId(restaurant.getId())
-			.orElseThrow(() -> new NoSuchElementException(NOT_FOUND_RESTAURANT_INFO.getMessage()));
+		for (MultipartFile multipartFile : serviceRequest.getImages()) {
+			if (Objects.equals(multipartFile.getOriginalFilename(), "")) {
+				UpdateRestaurantWithoutImageEntityRequest updateRestaurantEntityRequest = new UpdateRestaurantWithoutImageEntityRequest(
+					serviceRequest);
+				restaurant.updateRestaurantWithoutImage(updateRestaurantEntityRequest);
+				restaurantInfo.updateRestaurantInfoWithoutImage(updateRestaurantEntityRequest);
+			} else {
+				List<String> imagePaths = imageUploader.uploadList(serviceRequest.getImages(),
+					RESTAURANT.getValue());
 
-		List<String> imagePaths = imageUploader.uploadList(serviceRequest.getImages(), RESTAURANT.getValue());
-		UpdateRestaurantEntityRequest updateRestaurantEntityRequest = new UpdateRestaurantEntityRequest(
-			serviceRequest, imagePaths);
+				UpdateRestaurantEntityRequest updateRestaurantEntityRequest = new UpdateRestaurantEntityRequest(
+					serviceRequest, imagePaths);
+				restaurant.updateRestaurant(updateRestaurantEntityRequest);
+				restaurantInfo.updateRestaurantInfo(updateRestaurantEntityRequest);
+			}
+		}
 
-		restaurant.updateRestaurant(updateRestaurantEntityRequest);
-		restaurantInfo.updateRestaurantInfo(updateRestaurantEntityRequest);
 	}
 
 	@Override
@@ -213,7 +200,7 @@ public class RestaurantServiceImpl implements RestaurantService, InternalRestaur
 	}
 
 	public RestaurantInfo _getRestaurantInfoByRestaurantId(Long restaurantId) {
-		return restaurantInfoRepository.findByRestaurantId(restaurantId)
+		return restaurantInfoRepository.findByRestaurantIdWithRestaurant(restaurantId)
 			.orElseThrow(() -> new NoSuchElementException(NOT_FOUND_RESTAURANT.getMessage()));
 	}
 
@@ -224,8 +211,14 @@ public class RestaurantServiceImpl implements RestaurantService, InternalRestaur
 	}
 
 	@Override
-	public RestaurantInfo _getRestaurantInfoByRestaurantIdWithRestaurant(Long id) {
-		return restaurantInfoRepository.findByRestaurantId(id)
+	public RestaurantInfo _getRestaurantInfoWithRestaurantByRestaurantId(Long restaurantId) {
+		return restaurantInfoRepository.findByRestaurantIdWithRestaurant(restaurantId)
+			.orElseThrow(() -> new NoSuchElementException(NOT_FOUND_RESTAURANT_INFO.getMessage()));
+	}
+
+	@Override
+	public RestaurantInfo _getRestaurantInfoWithRestaurantByUserId(Long userId) {
+		return restaurantInfoRepository.findByUserIdWithRestaurant(userId)
 			.orElseThrow(() -> new NoSuchElementException(NOT_FOUND_RESTAURANT_INFO.getMessage()));
 	}
 
@@ -252,12 +245,21 @@ public class RestaurantServiceImpl implements RestaurantService, InternalRestaur
 
 	@Override
 	public Restaurant _deleteRestaurantBySellerId(Long sellerId) {
-		Restaurant restaurant = _getRestaurantByUserId(sellerId);
-		RestaurantInfo restaurantInfo = _getRestaurantInfoByUserId(sellerId);
+		RestaurantInfo restaurantInfo = _getRestaurantInfoWithRestaurantByUserId(sellerId);
+		Restaurant restaurant = restaurantInfo.getRestaurant();
 
 		restaurant.deleteRestaurant();
 		restaurantInfo.deleteRestaurantInfo();
 
 		return restaurant;
 	}
+
+	@Override
+	public GetRestaurantInfo getRestaurantInfo(User user) {
+		RestaurantInfo restaurantInfo = _getRestaurantInfoWithRestaurantByUserId(user.getId());
+		Restaurant restaurant = restaurantInfo.getRestaurant();
+		return new GetRestaurantInfo(restaurant.getPhoneNumber(), restaurant.getCapacity(), restaurant.getDescription(),
+			restaurantInfo.getOpenTime(), restaurantInfo.getCloseTime());
+	}
+
 }
