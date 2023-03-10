@@ -65,14 +65,14 @@ create table coupon_creator
 
 create table event
 (
-    event_id         bigint       not null auto_increment,
+    event_id         bigint      not null auto_increment,
     restaurant_id    bigint,
     name             varchar(30) not null,
-    event_end_date   datetime(6)  not null,
-    event_start_date datetime(6)  not null,
-    is_deleted       bit(1)       not null,
-    created_date     datetime(6)  not null,
-    modified_date    datetime(6)  not null,
+    event_end_date   datetime(6) not null,
+    event_start_date datetime(6) not null,
+    is_deleted       bit(1)      not null,
+    created_date     datetime(6) not null,
+    modified_date    datetime(6) not null,
     primary key (event_id)
 ) engine = InnoDB
   DEFAULT CHARSET = utf8mb4
@@ -80,18 +80,19 @@ create table event
 
 create table lineup
 (
-    lineup_id      bigint      not null auto_increment,
-    restaurant_id  bigint      not null,
-    user_id        bigint      not null,
-    waiting_number integer     not null,
-    num_of_members integer     not null,
-    status         varchar(20) not null,
-    call_count     integer     not null,
-    arrived_at     datetime(6),
-    is_reviewed    bit(1)      not null,
-    is_deleted     bit(1)      not null,
-    created_date   datetime(6) not null,
-    modified_date  datetime(6) not null,
+    lineup_id                  bigint      not null auto_increment,
+    restaurant_id              bigint      not null,
+    user_id                    bigint      not null,
+    waiting_number             integer     not null,
+    num_of_members             integer     not null,
+    status                     varchar(20) not null,
+    call_count                 integer     not null,
+    arrived_at                 datetime(6),
+    is_reviewed                bit(1)      not null,
+    is_received_review_request bit(1)      not null,
+    is_deleted                 bit(1)      not null,
+    created_date               datetime(6) not null,
+    modified_date              datetime(6) not null,
     primary key (lineup_id)
 ) engine = InnoDB
   DEFAULT CHARSET = utf8mb4
@@ -99,19 +100,20 @@ create table lineup
 
 create table lineup_history
 (
-    lineup_history_id bigint      not null auto_increment,
-    restaurant_id     bigint      not null,
-    user_id           bigint      not null,
-    waiting_number    integer     not null,
-    num_of_members    integer     not null,
-    status            varchar(20) not null,
-    call_count        integer     not null,
-    started_at        datetime(6) not null,
-    arrived_at        datetime(6),
-    is_reviewed       bit(1)      not null,
-    is_deleted        bit(1)      not null,
-    created_date      datetime(6) not null,
-    modified_date     datetime(6) not null,
+    lineup_history_id          bigint      not null auto_increment,
+    restaurant_id              bigint      not null,
+    user_id                    bigint      not null,
+    waiting_number             integer     not null,
+    num_of_members             integer     not null,
+    status                     varchar(20) not null,
+    call_count                 integer     not null,
+    started_at                 datetime(6) not null,
+    arrived_at                 datetime(6),
+    is_reviewed                bit(1)      not null,
+    is_received_review_request bit(1)      not null,
+    is_deleted                 bit(1)      not null,
+    created_date               datetime(6) not null,
+    modified_date              datetime(6) not null,
     primary key (lineup_history_id)
 ) engine = InnoDB
   DEFAULT CHARSET = utf8mb4
@@ -123,7 +125,7 @@ create table menu
     restaurant_id bigint      not null,
     name          varchar(50) not null,
     price         integer     not null,
-    image_path        varchar(255),
+    image_path    varchar(255),
     is_deleted    bit(1)      not null,
     created_date  datetime(6) not null,
     modified_date datetime(6) not null,
@@ -198,14 +200,14 @@ create table seller_management
     categories           varchar(255) not null,
     description          varchar(200) not null,
     name                 varchar(30)  not null,
-    business_license_no  varchar(12) not null,
+    business_license_no  varchar(12)  not null,
     username             varchar(20)  not null,
     email                varchar(255) not null,
     phone_number         varchar(13)  not null,
-    address              varchar(50) not null,
-    detail_address       varchar(30) not null,
+    address              varchar(50)  not null,
+    detail_address       varchar(30)  not null,
     zip_code             varchar(5)   not null,
-    status               varchar(20) not null,
+    status               varchar(20)  not null,
     latitude             double       not null,
     longitude            double       not null,
     created_date         datetime(6)  not null,
@@ -224,7 +226,7 @@ create table user
     name          varchar(30)  not null,
     email         varchar(255) not null,
     phone_number  varchar(13)  not null,
-    role          varchar(20) not null,
+    role          varchar(20)  not null,
     is_banned     bit(1)       not null,
     is_deleted    bit(1)       not null,
     created_date  datetime(6)  not null,
