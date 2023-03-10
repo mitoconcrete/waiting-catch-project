@@ -1,8 +1,13 @@
 package team.waitingcatch.app.restaurant.service.restaurant;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -121,11 +126,12 @@ class RestaurantServiceImplTest {
 
 		when(restaurant.getName()).thenReturn("aaaa");
 		when(restaurant.getSearchKeywords()).thenReturn(search);
+		when(restaurantInfo.getRestaurant()).thenReturn(restaurant);
 		// when(restaurant.getAddress()).thenReturn(address);
 		// when(restaurant.getAddress().getProvince()).thenReturn("a");
 		// when(restaurant.getAddress().getCity()).thenReturn("A");
 
-		when(restaurantRepository.findById(any(Long.class))).thenReturn(Optional.of(restaurant));
+		// when(restaurantRepository.findById(any(Long.class))).thenReturn(Optional.of(restaurant));
 		when(restaurantInfoRepository.findByRestaurantIdWithRestaurant(any(Long.class))).thenReturn(
 			Optional.of(restaurantInfo));
 
@@ -400,8 +406,9 @@ class RestaurantServiceImplTest {
 		Restaurant restaurant = mock(Restaurant.class);
 		RestaurantInfo restaurantInfo = mock(RestaurantInfo.class);
 
-		when(restaurantRepository.findByUserId(any(Long.class))).thenReturn(Optional.of(restaurant));
-		when(restaurantInfoRepository.findByUserId(any(Long.class))).thenReturn(Optional.of(restaurantInfo));
+		when(restaurantInfo.getRestaurant()).thenReturn(restaurant);
+		when(restaurantInfoRepository.findByUserIdWithRestaurant(any(Long.class))).thenReturn(
+			Optional.of(restaurantInfo));
 
 		// when
 		restaurant = restaurantService._deleteRestaurantBySellerId(any(Long.class));
