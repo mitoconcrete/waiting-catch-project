@@ -51,9 +51,10 @@ public class LineupSchedulerService {
 	public void transferLineupToLineupHistory() {
 		int page = 0;
 		Slice<Lineup> slice;
+		Long lastId = null;
 
 		do {
-			slice = lineupRepository.findAll(PageRequest.of(page++, SIZE));
+			slice = lineupRepository.findAll(lastId, PageRequest.of(page++, SIZE));
 			List<LineupHistory> lineupList = slice.getContent()
 				.stream()
 				.map(LineupHistory::of)
@@ -61,6 +62,8 @@ public class LineupSchedulerService {
 
 			lineupHistoryRepository.saveAll(lineupList);
 			lineupRepository.deleteAll(slice);
+
+			lastId = slice.getContent().get(slice.getNumberOfElements() - 1).getId();
 		} while (slice.hasNext());
 	}
 
