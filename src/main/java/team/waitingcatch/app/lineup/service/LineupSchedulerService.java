@@ -73,7 +73,7 @@ public class LineupSchedulerService {
 		}
 	}
 
-	@Scheduled(cron = "0 30 23 * * *")
+	@Scheduled(cron = "0 45 23 * * *")
 	public void requestReview() {
 		int page = 0;
 
