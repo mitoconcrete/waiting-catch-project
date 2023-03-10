@@ -13,6 +13,6 @@ public interface LineupHistoryRepositoryCustom {
 	Slice<LineupRecordResponse> findLineupRecordsByUserIdAndStatus(Long id, long userId, ArrivalStatusEnum statusCond,
 		Pageable pageable);
 
-	Slice<CustomerLineupInfoResponse> findLineupHistoryToRequestReviewGreaterThanCreatedDate(Long id,
-		LocalDateTime localDateTime, Pageable pageable);
+	Slice<CustomerLineupInfoResponse> findLineupHistoryForRequestReview(Long id, LocalDateTime localDateTime,
+		Pageable pageable);
 }

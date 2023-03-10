@@ -80,7 +80,7 @@ public class LineupSchedulerService {
 		LocalDateTime localDateTime = LocalDateTime.now().minusDays(1L).minusMinutes(1L);
 		Long lastId = null;
 
-		Slice<CustomerLineupInfoResponse> lineupHistories = lineupHistoryRepository.findLineupHistoryToRequestReviewGreaterThanCreatedDate(
+		Slice<CustomerLineupInfoResponse> lineupHistories = lineupHistoryRepository.findLineupHistoryForRequestReview(
 			lastId, localDateTime, PageRequest.of(page++, SIZE));
 
 		boolean isLastSlice = !lineupHistories.hasContent();
@@ -100,14 +100,14 @@ public class LineupSchedulerService {
 				LocalDateTime.now());
 
 			lastId = lineupHistories.getContent().get(lineupHistories.getNumberOfElements() - 1).getLineupId();
-			lineupHistories = lineupHistoryRepository.findLineupHistoryToRequestReviewGreaterThanCreatedDate(
+			lineupHistories = lineupHistoryRepository.findLineupHistoryForRequestReview(
 				lastId, localDateTime, PageRequest.of(page++, SIZE));
 		}
 
 		page = 0;
 		lastId = null;
 
-		Slice<CustomerLineupInfoResponse> lineups = lineupRepository.findCustomerLineupInfoByIsReviewedFalse(lastId,
+		Slice<CustomerLineupInfoResponse> lineups = lineupRepository.findCustomerLineupInfoForReviewRequest(lastId,
 			PageRequest.of(page++, SIZE));
 
 		isLastSlice = !lineups.hasContent();
@@ -123,7 +123,7 @@ public class LineupSchedulerService {
 			lineupRepository.bulkUpdateIsReceivedReviewRequest(lineupIds, LocalDateTime.now());
 
 			lastId = lineups.getContent().get(lineups.getNumberOfElements() - 1).getLineupId();
-			lineups = lineupRepository.findCustomerLineupInfoByIsReviewedFalse(lastId, PageRequest.of(page++, SIZE));
+			lineups = lineupRepository.findCustomerLineupInfoForReviewRequest(lastId, PageRequest.of(page++, SIZE));
 		}
 	}
 
@@ -132,7 +132,7 @@ public class LineupSchedulerService {
 			String content = "[WAITING CATCH]" + System.lineSeparator()
 				+ response.getName() + "님 " + response.getRestaurantName() + "에서의 시간은 어떠셨나요?"
 				+ System.lineSeparator() + "아래 URL에서 다른 분들께 고객님의 경험을 공유해 주세요." + System.lineSeparator()
-				+ "https://waitingcatch.com/customer/restaurants/" + response.getRestaurantId() + "/reviews"
+				+ "https://waitingcatch.com/my/lineup" + response.getRestaurantId()
 				+ System.lineSeparator() + "그럼 고객님의 솔직한 리뷰를 기다리고 있을게요!";
 
 			MessageRequest messageRequest = new MessageRequest(response.getPhoneNumber(), "WAITING CATCH", content);

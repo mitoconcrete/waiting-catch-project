@@ -93,7 +93,7 @@ public class LineupRepositoryCustomImpl implements LineupRepositoryCustom {
 	}
 
 	@Override
-	public Slice<CustomerLineupInfoResponse> findCustomerLineupInfoByIsReviewedFalse(Long id, Pageable pageable) {
+	public Slice<CustomerLineupInfoResponse> findCustomerLineupInfoForReviewRequest(Long id, Pageable pageable) {
 		List<CustomerLineupInfoResponse> content = queryFactory
 			.select(new QCustomerLineupInfoResponse(
 				lineup.id,
@@ -107,6 +107,7 @@ public class LineupRepositoryCustomImpl implements LineupRepositoryCustom {
 			.join(lineup.restaurant, restaurant)
 			.where(
 				idGt(id),
+				lineup.status.eq(ArrivalStatusEnum.ARRIVE),
 				lineup.isReviewed.isFalse(),
 				lineup.isDeleted.isFalse()
 			)
