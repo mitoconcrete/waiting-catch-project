@@ -25,8 +25,9 @@ import team.waitingcatch.app.user.entitiy.User;
 
 @Entity
 @Table(indexes = {
-	@Index(name = "ix_lineup_history_user_id", columnList = "user_Id"),
-	@Index(name = "ix_lineup_history_restaurant_id", columnList = "restaurant_id")
+	@Index(name = "ix_lineup_history_user_id", columnList = "user_id"),
+	@Index(name = "ix_lineup_history_restaurant_id", columnList = "restaurant_id"),
+	@Index(name = "ix_lineup_history_user_id_restaurant_id", columnList = "user_id, restaurant_id")
 })
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

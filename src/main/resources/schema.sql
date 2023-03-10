@@ -310,7 +310,8 @@ alter table lineup
         foreign key (user_id)
             references user (user_id),
     add index fk_lineup_user_id (user_id),
-    add index fk_lineup_restaurant_id (restaurant_id);
+    add index fk_lineup_restaurant_id (restaurant_id),
+    add index ix_lineup_user_id_restaurant_id (user_id, restaurant_id);
 
 alter table lineup_history
     add constraint fk_lineup_history_restaurant_id
@@ -320,7 +321,8 @@ alter table lineup_history
         foreign key (user_id)
             references user (user_id),
     add index fk_lineup_history_user_id (user_id),
-    add index fk_lineup_history_restaurant_id (restaurant_id);
+    add index fk_lineup_history_restaurant_id (restaurant_id),
+    add index ix_lineup_history_user_id_restaurant_id (user_id, restaurant_id);
 
 alter table menu
     add constraint fk_menu_restaurant_id
