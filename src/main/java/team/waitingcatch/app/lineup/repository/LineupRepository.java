@@ -1,5 +1,6 @@
 package team.waitingcatch.app.lineup.repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,6 +29,10 @@ public interface LineupRepository extends JpaRepository<Lineup, Long>, LineupRep
 		@Param("statuses") List<ArrivalStatusEnum> statuses);
 
 	@Modifying(clearAutomatically = true, flushAutomatically = true)
+	@Query("update Lineup l set l.isReceivedReviewRequest = true, l.modifiedDate = :now where l.id in (:lineupIds)")
+	void bulkUpdateIsReceivedReviewRequest(@Param("lineupIds") List<Long> ids, @Param("now") LocalDateTime now);
+
+	@Modifying(clearAutomatically = true, flushAutomatically = true)
 	@Query(value = "update Lineup l set l.isDeleted = true where l.restaurant.id = :restaurantId")
-	void bulkSoftDeleteByRestaurantId(@Param("restaurantId") Long restaurantId);
+	void bulkSoftDeleteByRestaurantId(@Param("restaurantId") long restaurantId);
 }

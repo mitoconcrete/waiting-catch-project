@@ -2,7 +2,9 @@ package team.waitingcatch.app.lineup.repository;
 
 import static team.waitingcatch.app.lineup.entity.QLineupHistory.*;
 import static team.waitingcatch.app.restaurant.entity.QRestaurant.*;
+import static team.waitingcatch.app.user.entitiy.QUser.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.data.domain.Pageable;
@@ -13,7 +15,9 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import lombok.RequiredArgsConstructor;
+import team.waitingcatch.app.lineup.dto.CustomerLineupInfoResponse;
 import team.waitingcatch.app.lineup.dto.LineupRecordResponse;
+import team.waitingcatch.app.lineup.dto.QCustomerLineupInfoResponse;
 import team.waitingcatch.app.lineup.dto.QLineupRecordResponse;
 import team.waitingcatch.app.lineup.enums.ArrivalStatusEnum;
 
@@ -38,7 +42,12 @@ public class LineupHistoryRepositoryCustomImpl implements LineupHistoryRepositor
 			))
 			.from(lineupHistory)
 			.join(lineupHistory.restaurant, restaurant)
-			.where(idLt(id), lineupHistory.user.id.eq(userId), statusEq(statusCond), lineupHistory.isDeleted.isFalse())
+			.where(
+				idLt(id),
+				lineupHistory.user.id.eq(userId),
+				statusEq(statusCond),
+				lineupHistory.isDeleted.isFalse()
+			)
 			.orderBy(lineupHistory.id.desc())
 			.limit(pageable.getPageSize() + 1)
 			.fetch();
@@ -51,6 +60,41 @@ public class LineupHistoryRepositoryCustomImpl implements LineupHistoryRepositor
 
 		return new SliceImpl<>(content, pageable, hasNext);
 	}
+
+	@Override
+	public Slice<CustomerLineupInfoResponse> findLineupHistoryToRequestReviewGreaterThanCreatedDate(Long id,
+		LocalDateTime localDateTime, Pageable pageable) {
+
+		List<CustomerLineupInfoResponse> content = queryFactory
+			.select(new QCustomerLineupInfoResponse(
+				lineupHistory.id,
+				user.name,
+				user.phoneNumber,
+				restaurant.id,
+				restaurant.name
+			))
+			.from(lineupHistory)
+			.join(lineupHistory.user, user)
+			.join(lineupHistory.restaurant, restaurant)
+			.where(
+				idGt(id),
+				lineupHistory.isReviewed.isFalse(),
+				lineupHistory.isDeleted.isFalse(),
+				lineupHistory.createdDate.gt(localDateTime)
+			)
+			.orderBy(lineupHistory.id.asc())
+			.limit(pageable.getPageSize() + 1)
+			.fetch();
+
+		boolean hasNext = false;
+		if (content.size() > pageable.getPageSize()) {
+			content.remove(pageable.getPageSize());
+			hasNext = true;
+		}
+
+		return new SliceImpl<>(content, pageable, hasNext);
+	}
+
 
 	// @Override
 	// public Map<String, List<LineupHistoryStatisticsResponse>> getRestaurantLineupStatistics(long restaurantId) {
@@ -70,6 +114,10 @@ public class LineupHistoryRepositoryCustomImpl implements LineupHistoryRepositor
 
 	private BooleanExpression idLt(Long id) {
 		return id != null ? lineupHistory.id.lt(id) : null;
+	}
+
+	private BooleanExpression idGt(Long id) {
+		return id != null ? lineupHistory.id.gt(id) : null;
 	}
 
 	private BooleanExpression statusEq(ArrivalStatusEnum statusCond) {
