@@ -62,6 +62,8 @@ dependencies {
     //hikaricp connection pool
     implementation group: 'com.zaxxer', name: 'HikariCP', version: '5.0.1'
     implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
+
+
 }
 
 tasks.named('test') {

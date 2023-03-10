@@ -33,6 +33,7 @@ import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.common.dto.GenericResponse;
 import team.waitingcatch.app.common.util.JwtUtil;
 import team.waitingcatch.app.redis.service.ValidCodeService;
+import team.waitingcatch.app.user.dto.AccessTokenResonse;
 import team.waitingcatch.app.user.dto.CheckValidCodeRequest;
 import team.waitingcatch.app.user.dto.CreateUserControllerRequest;
 import team.waitingcatch.app.user.dto.CreateUserServiceRequest;
@@ -65,10 +66,12 @@ public class UserController {
 
 	// global
 	@PostMapping({"/general/customer/signin", "/general/seller/signin", "/general/admin/signin"})
-	public void login(@RequestBody @Valid LoginRequest loginRequest, HttpServletResponse response) {
+	public AccessTokenResonse login(@RequestBody @Valid LoginRequest loginRequest, HttpServletResponse response) {
 		LoginServiceResponse loginServiceResponse = userService.login(loginRequest);
 		// 엑세스 토큰을 서비스로 부터 반환 받아 헤더에 넣어준다.
 		response.setHeader(JwtUtil.AUTHORIZATION_HEADER, loginServiceResponse.getAccessToken());
+		return new AccessTokenResonse(loginServiceResponse.getAccessToken());
+
 	}
 
 	@PostMapping({"/customer/signout", "/seller/signout", "/admin/signout"})
