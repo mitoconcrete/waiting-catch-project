@@ -59,8 +59,8 @@ public class SmsService {
 		List<MessageRequest> messages = new ArrayList<>();
 		messages.add(messageRequest);
 
-		SmsRequest smsRequest = new SmsRequest("SMS", "COMM", "82", senderPhone,
-			"Waiting Catch", messageRequest.getContent(), messages);
+		SmsRequest smsRequest = new SmsRequest("LMS", "COMM", "82", senderPhone, messageRequest.getContent(),
+			messages);
 
 		ObjectMapper objectMapper = new ObjectMapper();
 		String body = objectMapper.writeValueAsString(smsRequest);
