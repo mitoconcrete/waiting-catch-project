@@ -12,7 +12,6 @@ public class SmsRequest {
 	private final String contentType;
 	private final String countryCode;
 	private final String from;
-	private final String subject;
 	private final String content;
 	private final List<MessageRequest> messages;
 }
