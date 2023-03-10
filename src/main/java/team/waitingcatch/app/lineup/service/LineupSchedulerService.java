@@ -80,7 +80,7 @@ public class LineupSchedulerService {
 		LocalDateTime localDateTime = LocalDateTime.now().minusDays(1L).minusMinutes(1L);
 		Long lastId = null;
 
-		Slice<CustomerLineupInfoResponse> lineupHistories = lineupHistoryRepository.findLineupHistoryToRequestReviewGreaterThanCreatedDate(
+		Slice<CustomerLineupInfoResponse> lineupHistories = lineupHistoryRepository.findLineupHistoryForRequestReview(
 			lastId, localDateTime, PageRequest.of(page++, SIZE));
 
 		boolean isLastSlice = !lineupHistories.hasContent();
@@ -100,14 +100,14 @@ public class LineupSchedulerService {
 				LocalDateTime.now());
 
 			lastId = lineupHistories.getContent().get(lineupHistories.getNumberOfElements() - 1).getLineupId();
-			lineupHistories = lineupHistoryRepository.findLineupHistoryToRequestReviewGreaterThanCreatedDate(
+			lineupHistories = lineupHistoryRepository.findLineupHistoryForRequestReview(
 				lastId, localDateTime, PageRequest.of(page++, SIZE));
 		}
 
 		page = 0;
 		lastId = null;
 
-		Slice<CustomerLineupInfoResponse> lineups = lineupRepository.findCustomerLineupInfoByIsReviewedFalse(lastId,
+		Slice<CustomerLineupInfoResponse> lineups = lineupRepository.findCustomerLineupInfoForReviewRequest(lastId,
 			PageRequest.of(page++, SIZE));
 
 		isLastSlice = !lineups.hasContent();
@@ -123,7 +123,7 @@ public class LineupSchedulerService {
 			lineupRepository.bulkUpdateIsReceivedReviewRequest(lineupIds, LocalDateTime.now());
 
 			lastId = lineups.getContent().get(lineups.getNumberOfElements() - 1).getLineupId();
-			lineups = lineupRepository.findCustomerLineupInfoByIsReviewedFalse(lastId, PageRequest.of(page++, SIZE));
+			lineups = lineupRepository.findCustomerLineupInfoForReviewRequest(lastId, PageRequest.of(page++, SIZE));
 		}
 	}
 

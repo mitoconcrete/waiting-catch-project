@@ -62,7 +62,7 @@ public class LineupHistoryRepositoryCustomImpl implements LineupHistoryRepositor
 	}
 
 	@Override
-	public Slice<CustomerLineupInfoResponse> findLineupHistoryToRequestReviewGreaterThanCreatedDate(Long id,
+	public Slice<CustomerLineupInfoResponse> findLineupHistoryForRequestReview(Long id,
 		LocalDateTime localDateTime, Pageable pageable) {
 
 		List<CustomerLineupInfoResponse> content = queryFactory
@@ -78,6 +78,7 @@ public class LineupHistoryRepositoryCustomImpl implements LineupHistoryRepositor
 			.join(lineupHistory.restaurant, restaurant)
 			.where(
 				idGt(id),
+				lineupHistory.status.eq(ArrivalStatusEnum.ARRIVE),
 				lineupHistory.isReviewed.isFalse(),
 				lineupHistory.isDeleted.isFalse(),
 				lineupHistory.createdDate.gt(localDateTime)
