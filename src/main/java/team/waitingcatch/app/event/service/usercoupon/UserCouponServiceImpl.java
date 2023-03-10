@@ -52,6 +52,8 @@ public class UserCouponServiceImpl implements UserCouponService, InternalUserCou
 			couponCreator.useCoupon();
 			couponCreatorRepository.save(couponCreator);
 			userCouponRepository.save(userCoupon);
+		} else {
+			throw new DuplicateRequestException(SOLD_OUT_COUPON);
 		}
 
 	}
