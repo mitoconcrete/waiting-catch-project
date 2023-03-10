@@ -73,7 +73,7 @@ public class LineupSchedulerService {
 		}
 	}
 
-	@Scheduled(cron = "0 30 22 * * *")
+	@Scheduled(cron = "0 45 22 * * *")
 	public void requestReview() {
 		int page = 0;
 
@@ -135,7 +135,7 @@ public class LineupSchedulerService {
 				+ "https://waitingcatch.com/customer/restaurants/" + response.getRestaurantId() + "/reviews"
 				+ "그럼 고객님의 솔직한 리뷰를 기다리고 있을게요\uD83D\uDE42";
 
-			MessageRequest messageRequest = new MessageRequest(response.getName(), "WAITING CATCH", content);
+			MessageRequest messageRequest = new MessageRequest(response.getPhoneNumber(), "WAITING CATCH", content);
 
 			try {
 				smsService.sendSms(messageRequest);
