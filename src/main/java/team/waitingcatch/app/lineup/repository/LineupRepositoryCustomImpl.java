@@ -64,7 +64,8 @@ public class LineupRepositoryCustomImpl implements LineupRepositoryCustom {
 				lineup.status,
 				lineup.callCount,
 				lineup.createdDate,
-				lineup.arrivedAt))
+				lineup.arrivedAt
+			))
 			.from(lineup)
 			.join(lineup.user, user)
 			.where(lineup.restaurant.id.eq(
@@ -82,7 +83,8 @@ public class LineupRepositoryCustomImpl implements LineupRepositoryCustom {
 			.select(new QCallCustomerInfoResponse(
 				user.phoneNumber,
 				restaurant.name,
-				lineup.waitingNumber))
+				lineup.waitingNumber
+			))
 			.from(lineup)
 			.join(lineup.user, user)
 			.join(lineup.restaurant, restaurant)
@@ -91,7 +93,7 @@ public class LineupRepositoryCustomImpl implements LineupRepositoryCustom {
 	}
 
 	@Override
-	public Slice<CustomerLineupInfoResponse> findCustomerLineupInfoByIsReviewedFalse(Pageable pageable) {
+	public Slice<CustomerLineupInfoResponse> findCustomerLineupInfoByIsReviewedFalse(Long id, Pageable pageable) {
 		List<CustomerLineupInfoResponse> content = queryFactory
 			.select(new QCustomerLineupInfoResponse(
 				lineup.id,
@@ -103,7 +105,12 @@ public class LineupRepositoryCustomImpl implements LineupRepositoryCustom {
 			.from(lineup)
 			.join(lineup.user, user)
 			.join(lineup.restaurant, restaurant)
-			.where(lineup.isReviewed.isFalse(), lineup.isDeleted.isFalse())
+			.where(
+				idGt(id),
+				lineup.isReviewed.isFalse(),
+				lineup.isDeleted.isFalse()
+			)
+			.orderBy(lineup.id.asc())
 			.limit(pageable.getPageSize() + 1)
 			.fetch();
 
