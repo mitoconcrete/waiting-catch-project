@@ -6,13 +6,17 @@ import lombok.Getter;
 
 @Getter
 public class CustomerLineupInfoResponse {
+	private final long lineupId;
 	private final String name;
 	private final String phoneNumber;
 	private final long restaurantId;
 	private final String restaurantName;
 
 	@QueryProjection
-	public CustomerLineupInfoResponse(String name, String phoneNumber, long restaurantId, String restaurantName) {
+	public CustomerLineupInfoResponse(long lineupId, String name, String phoneNumber, long restaurantId,
+		String restaurantName) {
+
+		this.lineupId = lineupId;
 		this.name = name;
 		this.phoneNumber = phoneNumber;
 		this.restaurantId = restaurantId;

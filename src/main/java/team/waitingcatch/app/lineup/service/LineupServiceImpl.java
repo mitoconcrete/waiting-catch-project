@@ -207,7 +207,10 @@ public class LineupServiceImpl implements LineupService, InternalLineupService {
 			lineups.stream()
 				.filter(lineup -> (
 					lineup.getStatus() == ArrivalStatusEnum.WAIT || lineup.getStatus() == ArrivalStatusEnum.CALL))
-				.forEach(lineup -> lineup.updateStatus(ArrivalStatusEnum.CANCEL));
+				.forEach(lineup -> {
+					lineup.updateStatus(ArrivalStatusEnum.CANCEL);
+					restaurantInfo.subtractLineupCount();
+				});
 
 			if (!lineups.isEmpty()) {
 				sendSms(restaurantInCustomer.getId(), updatedStatus);
