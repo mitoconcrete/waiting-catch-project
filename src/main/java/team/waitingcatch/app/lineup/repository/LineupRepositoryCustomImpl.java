@@ -109,6 +109,7 @@ public class LineupRepositoryCustomImpl implements LineupRepositoryCustom {
 				idGt(id),
 				lineup.status.eq(ArrivalStatusEnum.ARRIVE),
 				lineup.isReviewed.isFalse(),
+				lineup.isReceivedReviewRequest.isFalse(),
 				lineup.isDeleted.isFalse()
 			)
 			.orderBy(lineup.id.asc())
