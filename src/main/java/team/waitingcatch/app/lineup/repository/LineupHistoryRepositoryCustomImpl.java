@@ -80,6 +80,7 @@ public class LineupHistoryRepositoryCustomImpl implements LineupHistoryRepositor
 				idGt(id),
 				lineupHistory.status.eq(ArrivalStatusEnum.ARRIVE),
 				lineupHistory.isReviewed.isFalse(),
+				lineupHistory.isReceivedReviewRequest.isFalse(),
 				lineupHistory.isDeleted.isFalse(),
 				lineupHistory.createdDate.gt(localDateTime)
 			)
