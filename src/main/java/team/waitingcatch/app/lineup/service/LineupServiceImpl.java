@@ -11,9 +11,13 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
+import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Recover;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -72,7 +76,7 @@ public class LineupServiceImpl implements LineupService, InternalLineupService {
 		internalRestaurantService._closeLineup(restaurantId);
 	}
 
-	// @Retryable(maxAttempts = 0, backoff = @Backoff(100), value = OptimisticLockingFailureException.class)
+	@Retryable(maxAttempts = 1, backoff = @Backoff(100), value = OptimisticLockingFailureException.class)
 	@Override
 	public void startWaiting(StartWaitingServiceRequest serviceRequest) {
 		long restaurantId = serviceRequest.getRestaurantId();
@@ -119,15 +123,15 @@ public class LineupServiceImpl implements LineupService, InternalLineupService {
 		restaurantInfo.addLineupCount();
 	}
 
-	// @Recover
-	// private void recover(OptimisticLockingFailureException e) {
-	// 	throw new IllegalArgumentException(CONNCURRENT_REQUEST_FAILURE.getMessage());
-	// }
-	//
-	// @Recover
-	// private void recover(RuntimeException e) {
-	// 	throw new IllegalArgumentException(e.getMessage());
-	// }
+	@Recover
+	private void recover(OptimisticLockingFailureException e) {
+		throw new IllegalArgumentException(CONNCURRENT_REQUEST_FAILURE.getMessage());
+	}
+
+	@Recover
+	private void recover(RuntimeException e) {
+		throw new IllegalArgumentException(e.getMessage());
+	}
 
 	@Override
 	public void cancelWaiting(CancelWaitingRequest request) {
