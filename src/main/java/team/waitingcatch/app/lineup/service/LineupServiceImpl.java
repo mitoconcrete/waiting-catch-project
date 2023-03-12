@@ -15,7 +15,6 @@ import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
-import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Recover;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
@@ -76,7 +75,7 @@ public class LineupServiceImpl implements LineupService, InternalLineupService {
 		internalRestaurantService._closeLineup(restaurantId);
 	}
 
-	@Retryable(maxAttempts = 1, backoff = @Backoff(100), value = OptimisticLockingFailureException.class)
+	@Retryable(OptimisticLockingFailureException.class)
 	@Override
 	public void startWaiting(StartWaitingServiceRequest serviceRequest) {
 		long restaurantId = serviceRequest.getRestaurantId();
