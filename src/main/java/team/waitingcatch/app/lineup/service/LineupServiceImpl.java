@@ -75,8 +75,8 @@ public class LineupServiceImpl implements LineupService, InternalLineupService {
 		Long restaurantId = internalRestaurantService._getRestaurantByUserId(sellerId).getId();
 		internalRestaurantService._closeLineup(restaurantId);
 	}
-	
-	@Retryable(maxAttempts = 10, backoff = @Backoff(100), value = OptimisticLockingFailureException.class)
+
+	@Retryable(maxAttempts = 1, backoff = @Backoff(100), value = OptimisticLockingFailureException.class)
 	@Override
 	public void startWaiting(StartWaitingServiceRequest serviceRequest) {
 		long restaurantId = serviceRequest.getRestaurantId();
