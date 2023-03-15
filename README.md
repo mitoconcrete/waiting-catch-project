@@ -168,7 +168,7 @@ API<br>
 
 ### Performance Test
 
-:white_check_mark: 네이버에서 개발한 오픈소스 플랫폼인 **nGrinder**를 이용해 성능 테스트를 진행 중입니다.
+![test](https://user-images.githubusercontent.com/83831110/225209113-3583d62d-c42f-4789-a7d5-cf0a8a3db5a4.png)
 
 ## :rocket: 개인 블로그
 
@@ -180,5 +180,4 @@ API<br>
 
 [![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Ff-lab-edu%2Fevent-recommender-festa&count_bg=%2379C83D&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=hits&edge_flat=false)](https://hits.seeyoufarm.com)
 
-## Test performance result and Improved the performance
-![test](https://user-images.githubusercontent.com/83831110/225209113-3583d62d-c42f-4789-a7d5-cf0a8a3db5a4.png)
+
