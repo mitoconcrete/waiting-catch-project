@@ -80,12 +80,6 @@ public class SellerController {
 	private final RestaurantService restaurantService;
 	private final MapApiService mapApiService;
 	/*     로그인 프론트     */
-
-	@GetMapping("/")
-	public String index() {
-		return "seller/lineup";
-	}
-
 	@GetMapping("/general/templates/seller/login")
 	public String login() {
 		return "seller/login";
