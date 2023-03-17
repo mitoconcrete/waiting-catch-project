@@ -168,15 +168,15 @@ API<br>
 
 ### Performance Test
 
-![test](https://user-images.githubusercontent.com/83831110/225209113-3583d62d-c42f-4789-a7d5-cf0a8a3db5a4.png)
+![image](https://user-images.githubusercontent.com/83831110/225832810-57e22f13-0ad1-47c0-9387-8b4ef50bcaad.png)
 
-## :rocket: 개인 블로그
+## :rocket: Tech blog
 
-- [박정훈](https://velog.io/@dudaksdk3214)
-- [김태훈](https://mitoconcrete.github.io)
-- [한정규](https://jk891113.tistory.com/)
-- [송경헌](https://velog.io/@rianbowgift)
-- [조성제](https://velog.io/@sj_)
+- [JeongHun Park](https://velog.io/@dudaksdk3214)
+- [Taehoon Kim](https://mitoconcrete.github.io)
+- [JeongGyu Han](https://jk891113.tistory.com/)
+- [GyeongHeon Song](https://velog.io/@rianbowgift)
+- [SeongJe Jo](https://velog.io/@sj_)
 
 [![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Ff-lab-edu%2Fevent-recommender-festa&count_bg=%2379C83D&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=hits&edge_flat=false)](https://hits.seeyoufarm.com)
 
