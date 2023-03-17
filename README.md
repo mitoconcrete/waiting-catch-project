@@ -2,7 +2,7 @@
  ⏲️ WAITING CATCH! ⏲️
 </h1>
 <p align="center">
-"사용자가 설정한 지역의 레스토랑을 불러와 줄서기를 대신해주고, 그것과 관련된 서비스를 편리하게를 대신 해주는 웹사이트 입니다."<br> 백엔드 로직에 집중하기 위해서 화면은 최대한 간결하게 만들고 설계하였으며 REST API 서버로 대용량 트래픽을 고려한 애플리케이션으로 개발하였습니다. </p>
+"This is a website that calls up restaurants in the area set by the user to stand in line, and conveniently provides related services."<br> To focus on the backend logic, the screen was designed and designed to be as simple as possible, and REST It was developed as an application considering high-capacity traffic as an API server.</p>
 <div> Domain Address : https://waitingcatch.com/</div>
 <div> Demonstration video : https://youtu.be/uOpzesWwNm8</div>
 <div> Power point for presentation : https://www.canva.com/design/DAFbYAA8FFQ/iGdTpqngDDxry0dIod3ujw/view?utm_content=DAFbYAA8FFQ&utm_campaign=designshare&utm_medium=link&utm_source=publishsharelink
@@ -45,46 +45,45 @@
 - [WIKI Home](https://github.com/mitoconcrete/waiting-catch-project/wiki)
 
 ## 👥 Members
-- 김태훈(리더) : 유저 - 시큐리티, 로그인, 로그아웃<br>
-- 박정훈(부리더) : 레스토랑 - 판매자신청, 블랙리스트,레스토랑수정<br>
-- 한정규 : 레스토랑 - 메뉴, 카테고리, 검색<br>
-- 조성제 : 줄서기 - 호출, 리뷰<br>
-- 송경헌 : 이벤트 - 쿠폰 유저 발급쿠폰<br>
+- Taehoon Kim(Leader) : User - Security, Login, Logout<br>
+- Jeonghun Park(Vice Leader) : Restaurant - Request seller, Blacklist, update restaurant<br>
+- Jeonggyu Han : Restaurant - Menu, Category, Search<br>
+- Seongje Jo : Lineup - Call, Review<br>
+- GyeongHeon Song : Event - Coupon<br>
 
 ## :rocket: Focus
 
-:heavy_check_mark: 대용량 트래픽의 상황에서 지속적인 서버 성능을 개선하기 위해 노력하였습니다.    
-:heavy_check_mark: 꾸준한 코드 리팩토링을 진행 중입니다.      
-:heavy_check_mark: 이유와 근거가 명확한 기술의 사용을 지향합니다.    
-:heavy_check_mark: 객체지향적 개념을 이해하고 이를 코드에 녹여내어 의미 있는 설계를 지향하였습니다.    
-:heavy_check_mark: 성공만 하는 테스트보단 실패할 만한 단위 테스트를 작성하였습니다.    
-:heavy_check_mark: 반복적인 작업은 자동화하여 개발의 효율을 높이기 위해 노력하였습니다.
+:heavy_check_mark: Efforts were made to continuously improve server performance in situations of high volume traffic.    
+:heavy_check_mark: We are constantly refactoring our code.      
+:heavy_check_mark: Aims to use technology with clear reasons and evidence.    
+:heavy_check_mark: We aimed for meaningful design by understanding object-oriented concepts and incorporating them into the code.    
+:heavy_check_mark: Write unit tests that fail rather than succeed.    
+:heavy_check_mark: We tried to increase the efficiency of development by automating repetitive tasks.
 
 ## :rocket: Layout
 
-### 고객 페이지
+### Customer page
 
-![Capture](https://user-images.githubusercontent.com/83831110/220533919-bda97501-0330-4db4-a49e-16511947230c.png)
+![customer](https://user-images.githubusercontent.com/83831110/220533919-bda97501-0330-4db4-a49e-16511947230c.png)
 
-### 판매자 페이지<br>
+### Seller page<br>
 
-![판매자](https://user-images.githubusercontent.com/83831110/220533662-5c232a94-2fc2-4dc3-9587-2d2c88c4694e.JPG)
+![seller](https://user-images.githubusercontent.com/83831110/220533662-5c232a94-2fc2-4dc3-9587-2d2c88c4694e.JPG)
 
-### 관리자 페이지<br>
+### Admin page<br>
 
-![관리자](https://user-images.githubusercontent.com/83831110/220535096-f96b90c8-b67e-441e-b53a-c779b6d5c343.JPG)
+![admin](https://user-images.githubusercontent.com/83831110/220535096-f96b90c8-b67e-441e-b53a-c779b6d5c343.JPG)
 
 ## :rocket: ERD
 ![ERD](https://user-images.githubusercontent.com/117354616/223995399-17b3c6ed-d2a5-45c3-92df-6f2a3a8c3c0d.png)
 
 ## :rocket: API Document
 
-[고객 API 명세서](https://docs.google.com/spreadsheets/d/1Hhjp6eKlJxv6ZLsFz1xe50t-xMe478o5_Je7RIvn1YA/edit#gid=0) : 고객에 관한
-API<br>
-[판매자 API 명세서](https://docs.google.com/spreadsheets/d/1Hhjp6eKlJxv6ZLsFz1xe50t-xMe478o5_Je7RIvn1YA/edit#gid=787721886) :
-판매자에 관한 API<br>
-[관리자 API 명세서](https://docs.google.com/spreadsheets/d/1Hhjp6eKlJxv6ZLsFz1xe50t-xMe478o5_Je7RIvn1YA/edit#gid=1180646390) :
-관리자에 관한 API<br>
+[Customer API document](https://docs.google.com/spreadsheets/d/1Hhjp6eKlJxv6ZLsFz1xe50t-xMe478o5_Je7RIvn1YA/edit#gid=0) : customer API<br>
+[Seller API document](https://docs.google.com/spreadsheets/d/1Hhjp6eKlJxv6ZLsFz1xe50t-xMe478o5_Je7RIvn1YA/edit#gid=787721886) :
+Seller API<br>
+[Admin API document](https://docs.google.com/spreadsheets/d/1Hhjp6eKlJxv6ZLsFz1xe50t-xMe478o5_Je7RIvn1YA/edit#gid=1180646390) :
+Admin API<br>
 
 ## :rocket: Rules
 
