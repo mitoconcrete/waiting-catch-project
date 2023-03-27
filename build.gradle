@@ -5,7 +5,7 @@ plugins {
 }
 
 group = 'team.watingcatch'
-version = '1.0.12-SNAPSHOT'
+version = '1.0.13-SNAPSHOT'
 sourceCompatibility = '11'
 
 configurations {
