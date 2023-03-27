@@ -76,7 +76,7 @@ public class LineupServiceImpl implements LineupService, InternalLineupService {
 		internalRestaurantService._closeLineup(restaurantId);
 	}
 
-	@Retryable(maxAttempts = 3, backoff = @Backoff(1000), value = OptimisticLockingFailureException.class)
+	@Retryable(maxAttempts = 3, backoff = @Backoff(500), value = OptimisticLockingFailureException.class)
 	@Override
 	public void startWaiting(StartWaitingServiceRequest serviceRequest) {
 		long restaurantId = serviceRequest.getRestaurantId();
@@ -88,16 +88,15 @@ public class LineupServiceImpl implements LineupService, InternalLineupService {
 			throw new IllegalArgumentException(CLOSED_LINEUP.getMessage());
 		}
 
-		boolean isBlacklist = internalBlacklistService._existsByRestaurantIdAndUserId(restaurantId,
-			serviceRequest.getUser().getId());
+		Long userId = serviceRequest.getUser().getId();
+		boolean isBlacklist = internalBlacklistService._existsByRestaurantIdAndUserId(restaurantId, userId);
 
 		if (isBlacklist) {
 			throw new IllegalRequestException(ILLEGAL_ACCESS);
 		}
 
-		List<Lineup> lineups = lineupRepository.findAllByUserIdAndStatuses(
-			serviceRequest.getUser().getId(),
-			Arrays.asList(ArrivalStatusEnum.WAIT, ArrivalStatusEnum.CALL));
+		List<Lineup> lineups = lineupRepository.findAllByUserIdAndStatuses(userId,
+			List.of(ArrivalStatusEnum.WAIT, ArrivalStatusEnum.CALL));
 
 		if (lineups.size() >= MAX_LINEUP_COUNT) {
 			throw new IllegalArgumentException(EXCEED_MAX_LINEUP_COUNT.getMessage());
