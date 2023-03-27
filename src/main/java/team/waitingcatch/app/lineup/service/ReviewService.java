@@ -11,7 +11,7 @@ import team.waitingcatch.app.lineup.dto.GetReviewResponse;
 public interface ReviewService {
 	void createReview(CreateReviewServiceRequest serviceRequest) throws IOException;
 
-	void deleteReview(Long reviewId);
+	void deleteReview(long reviewId);
 
 	Slice<GetReviewResponse> getReviewsByRestaurantId(Long id, long restaurantId, Pageable pageable);
 
