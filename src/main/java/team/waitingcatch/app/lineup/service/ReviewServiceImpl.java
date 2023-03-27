@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.common.util.image.ImageUploader;
+import team.waitingcatch.app.exception.ErrorCode;
 import team.waitingcatch.app.exception.IllegalRequestException;
 import team.waitingcatch.app.lineup.dto.CreateReviewEntityRequest;
 import team.waitingcatch.app.lineup.dto.CreateReviewServiceRequest;
@@ -65,9 +66,9 @@ public class ReviewServiceImpl implements ReviewService, InternalReviewService {
 	}
 
 	@Override
-	public void deleteReview(Long reviewId) {
+	public void deleteReview(long reviewId) {
 		Review review = reviewRepository.findById(reviewId)
-			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 리뷰입니다."));
+			.orElseThrow(() -> new IllegalArgumentException(NOT_FOUND_REVIEW.getMessage()));
 		review.softDelete();
 	}
 
