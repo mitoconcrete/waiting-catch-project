@@ -22,7 +22,6 @@ public class RestaurantDetailedInfoResponse {
 		this.id = restaurant.getId();
 		this.category = restaurant.getSearchKeywords();
 		this.name = restaurant.getName();
-		// this.address = restaurant.getProvince() + " " + restaurant.getCity() + " " + restaurant.getStreet();
 		this.address = restaurant.getAddress();
 		this.phoneNumber = restaurant.getPhoneNumber();
 		this.description = restaurant.getDescription();

@@ -6,7 +6,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;

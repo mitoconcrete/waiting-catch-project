@@ -21,8 +21,8 @@ public class SearchRestaurantJpaResponse {
 
 	@QueryProjection
 	public SearchRestaurantJpaResponse(Long id, String name, List<String> images, float rate,
-		List<String> searchKeyword,
-		Position position, int currentWaitingNumber, boolean isLineupActive) {
+		List<String> searchKeyword, Position position, int currentWaitingNumber, boolean isLineupActive) {
+
 		this.id = id;
 		this.name = name;
 		this.images = images;

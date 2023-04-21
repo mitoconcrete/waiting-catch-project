@@ -10,9 +10,6 @@ public interface RestaurantInfoRepositoryCustom {
 	Slice<SearchRestaurantJpaResponse> findRestaurantsBySearchKeywordsContaining(Long id, String keyword,
 		Pageable pageable);
 
-	// Slice<RestaurantsWithinRadiusJpaResponse> findRestaurantsByDistance(Long id, double latitude, double longitude,
-	// 	int distance, Pageable pageable);
-
 	Slice<RestaurantsWithinRadiusJpaResponse> findRestaurantsByLatitudeAndLongitude(
 		Double lastDistance, double latitude, double longitude, double maxLatitude, double maxLongitude,
 		double minLatitude, double minLongitude, Pageable pageable);
