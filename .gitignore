@@ -30,4 +30,3 @@ build/
 ### Querydsl ###
 /src/main/generated/
 /src/test/generated_tests/
-
