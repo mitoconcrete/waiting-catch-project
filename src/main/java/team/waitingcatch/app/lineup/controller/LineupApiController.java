@@ -27,6 +27,7 @@ import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.common.dto.GenericResponse;
 import team.waitingcatch.app.lineup.dto.CancelWaitingRequest;
 import team.waitingcatch.app.lineup.dto.GetLineupHistoryRecordsServiceRequest;
+import team.waitingcatch.app.lineup.dto.GetLineupPriorityServiceRequest;
 import team.waitingcatch.app.lineup.dto.GetLineupRecordsServiceRequest;
 import team.waitingcatch.app.lineup.dto.LineupRecordWithTypeResponse;
 import team.waitingcatch.app.lineup.dto.StartLineupControllerRequest;
@@ -71,6 +72,11 @@ public class LineupApiController {
 	@DeleteMapping("/customer/restaurants/lineup/{lineupId}")
 	public void cancelWaiting(@PathVariable long lineupId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
 		lineupService.cancelWaiting(new CancelWaitingRequest(lineupId, userDetails.getId()));
+	}
+
+	@GetMapping("/customer/restaurants/{restaurantId}/lineup")
+	public long getPriority(@PathVariable long restaurantId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+		return lineupService.getPriority(new GetLineupPriorityServiceRequest(restaurantId, userDetails.getId()));
 	}
 
 	@GetMapping("/seller/lineup")
