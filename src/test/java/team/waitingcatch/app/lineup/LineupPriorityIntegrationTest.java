@@ -12,6 +12,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.test.annotation.DirtiesContext;
 
 import team.waitingcatch.app.common.Position;
@@ -58,8 +59,13 @@ class LineupPriorityIntegrationTest {
 	@Autowired
 	LineupService lineupService;
 
+	@Autowired
+	RedisTemplate<?, ?> redisTemplateWithTransaction;
+
 	@BeforeEach
 	public void beforeEach() {
+		redisTemplateWithTransaction.getConnectionFactory().getConnection().flushAll();
+
 		List<String> searchKeywords = List.of("korean", "japan");
 
 		User customer = new User(UserRoleEnum.USER, "유저1", "aaa@gmail.com", "customerId", "pw12", "sj",
