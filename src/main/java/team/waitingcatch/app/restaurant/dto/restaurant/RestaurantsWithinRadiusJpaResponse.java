@@ -22,8 +22,9 @@ public class RestaurantsWithinRadiusJpaResponse {
 
 	@QueryProjection
 	public RestaurantsWithinRadiusJpaResponse(Long id, String name, List<String> images, float rate,
-		List<String> searchKeyword,
-		Position position, int currentWaitingNumber, boolean isLineupActive, Double distanceBetween) {
+		List<String> searchKeyword, Position position, int currentWaitingNumber, boolean isLineupActive,
+		Double distanceBetween) {
+
 		this.id = id;
 		this.name = name;
 		this.images = images;

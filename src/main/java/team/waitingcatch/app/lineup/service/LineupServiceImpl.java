@@ -6,7 +6,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
@@ -15,6 +14,8 @@ import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Recover;
 import org.springframework.retry.annotation.Retryable;
@@ -31,6 +32,7 @@ import team.waitingcatch.app.exception.IllegalRequestException;
 import team.waitingcatch.app.lineup.dto.CallCustomerInfoResponse;
 import team.waitingcatch.app.lineup.dto.CancelWaitingRequest;
 import team.waitingcatch.app.lineup.dto.GetLineupHistoryRecordsServiceRequest;
+import team.waitingcatch.app.lineup.dto.GetLineupPriorityServiceRequest;
 import team.waitingcatch.app.lineup.dto.GetLineupRecordsServiceRequest;
 import team.waitingcatch.app.lineup.dto.LineupRecordResponse;
 import team.waitingcatch.app.lineup.dto.LineupRecordWithTypeResponse;
@@ -61,6 +63,8 @@ public class LineupServiceImpl implements LineupService, InternalLineupService {
 	private final InternalWaitingNumberService internalWaitingNumberService;
 	private final InternalBlacklistService internalBlacklistService;
 
+	private final RedisTemplate<String, String> redisTemplate;
+
 	private final DistanceCalculator distanceCalculator;
 	private final SmsService smsService;
 
@@ -76,7 +80,7 @@ public class LineupServiceImpl implements LineupService, InternalLineupService {
 		internalRestaurantService._closeLineup(restaurantId);
 	}
 
-	@Retryable(maxAttempts = 3, backoff = @Backoff(500), value = OptimisticLockingFailureException.class)
+	@Retryable(maxAttempts = 3, backoff = @Backoff(100), value = OptimisticLockingFailureException.class)
 	@Override
 	public void startWaiting(StartWaitingServiceRequest serviceRequest) {
 		long restaurantId = serviceRequest.getRestaurantId();
@@ -120,6 +124,9 @@ public class LineupServiceImpl implements LineupService, InternalLineupService {
 		Lineup lineup = Lineup.of(entityRequest);
 		lineupRepository.save(lineup);
 		restaurantInfo.addLineupCount();
+
+		ZSetOperations<String, String> zSetOperations = redisTemplate.opsForZSet();
+		zSetOperations.add(String.valueOf(restaurantId), String.valueOf(userId), waitingNumber);
 	}
 
 	@Recover
@@ -135,8 +142,10 @@ public class LineupServiceImpl implements LineupService, InternalLineupService {
 	@Override
 	public void cancelWaiting(CancelWaitingRequest request) {
 		long lineupId = request.getLineupId();
+		long userId = request.getUserId();
 		Lineup lineup = _getByIdWithUser(lineupId);
-		if (!lineup.isSameUserId(request.getUserId())) {
+
+		if (!lineup.isSameUserId(userId)) {
 			throw new IllegalRequestException(ILLEGAL_ACCESS);
 		}
 		lineup.updateStatus(ArrivalStatusEnum.CANCEL);
@@ -147,6 +156,21 @@ public class LineupServiceImpl implements LineupService, InternalLineupService {
 		RestaurantInfo restaurantInfo = internalRestaurantService._getRestaurantInfoWithRestaurantByRestaurantId(
 			restaurantId);
 		restaurantInfo.subtractLineupCount();
+
+		ZSetOperations<String, String> zSetOperations = redisTemplate.opsForZSet();
+		zSetOperations.remove(String.valueOf(restaurantId), String.valueOf(userId));
+	}
+
+	@Override
+	public long getPriority(GetLineupPriorityServiceRequest serviceRequest) {
+		ZSetOperations<String, String> zSetOperations = redisTemplate.opsForZSet();
+		Long rank = zSetOperations.rank(String.valueOf(serviceRequest.getRestaurantId()),
+			String.valueOf(serviceRequest.getUserId()));
+
+		if (rank == null) {
+			throw new IllegalRequestException(ILLEGAL_ACCESS);
+		}
+		return rank;
 	}
 
 	@Transactional(readOnly = true)
@@ -196,20 +220,29 @@ public class LineupServiceImpl implements LineupService, InternalLineupService {
 
 		ArrivalStatusEnum updatedStatus = restaurantInCustomer.updateStatus(serviceRequest.getStatus());
 
+		long restaurantId = restaurantBySeller.getId();
+		long userId = restaurantInCustomer.getUserId();
+
+		ZSetOperations<String, String> zSetOperations = redisTemplate.opsForZSet();
+
 		if (updatedStatus == ArrivalStatusEnum.CALL) {
 			sendSms(restaurantInCustomer.getId(), updatedStatus);
 		} else if (updatedStatus == ArrivalStatusEnum.CANCEL) {
 			restaurantInfo.subtractLineupCount();
+			zSetOperations.remove(String.valueOf(restaurantId), userId);
 			sendSms(restaurantInCustomer.getId(), updatedStatus);
 		} else if (updatedStatus == ArrivalStatusEnum.ARRIVE) {
 			restaurantInfo.subtractLineupCount();
-			List<Lineup> lineups = lineupRepository.findAllByUserId(restaurantInCustomer.getUserId());
+			zSetOperations.remove(String.valueOf(restaurantId), userId);
+
+			List<Lineup> lineups = lineupRepository.findAllByUserId(userId);
 			lineups.stream()
 				.filter(lineup -> (
 					lineup.getStatus() == ArrivalStatusEnum.WAIT || lineup.getStatus() == ArrivalStatusEnum.CALL))
 				.forEach(lineup -> {
 					lineup.updateStatus(ArrivalStatusEnum.CANCEL);
 					restaurantInfo.subtractLineupCount();
+					zSetOperations.remove(String.valueOf(lineup.getRestaurantId()), lineup.getUserId());
 				});
 
 			if (!lineups.isEmpty()) {

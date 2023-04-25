@@ -7,6 +7,7 @@ import org.springframework.data.domain.Slice;
 
 import team.waitingcatch.app.lineup.dto.CancelWaitingRequest;
 import team.waitingcatch.app.lineup.dto.GetLineupHistoryRecordsServiceRequest;
+import team.waitingcatch.app.lineup.dto.GetLineupPriorityServiceRequest;
 import team.waitingcatch.app.lineup.dto.GetLineupRecordsServiceRequest;
 import team.waitingcatch.app.lineup.dto.LineupRecordWithTypeResponse;
 import team.waitingcatch.app.lineup.dto.StartWaitingServiceRequest;
@@ -21,6 +22,8 @@ public interface LineupService {
 	void startWaiting(StartWaitingServiceRequest serviceRequest);
 
 	void cancelWaiting(CancelWaitingRequest request);
+
+	long getPriority(GetLineupPriorityServiceRequest serviceRequest);
 
 	List<TodayLineupResponse> getTodayLineups(Long sellerId);
 
