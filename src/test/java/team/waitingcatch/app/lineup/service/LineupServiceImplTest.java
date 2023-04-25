@@ -17,10 +17,13 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ZSetOperations;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
@@ -65,6 +68,9 @@ class LineupServiceImplTest {
 
 	@Mock
 	InternalBlacklistService internalBlacklistService;
+
+	@Spy
+	RedisTemplate<String, String> redisTemplateWithTransaction;
 
 	@Mock
 	DistanceCalculator distanceCalculator;
@@ -187,10 +193,14 @@ class LineupServiceImplTest {
 
 		when(internalWaitingNumberService.getWaitingNumber(1L)).thenReturn(1);
 
+		ZSetOperations<String, String> zSetOperations = mock(ZSetOperations.class);
+		when(redisTemplateWithTransaction.opsForZSet()).thenReturn(zSetOperations);
+
 		lineupServiceImpl.startWaiting(serviceRequest);
 
 		verify(lineupRepository).save(any(Lineup.class));
 		verify(restaurantInfo).addLineupCount();
+		verify(zSetOperations).add(anyString(), anyString(), anyDouble());
 	}
 
 	private void stubIsLineupActive(StartWaitingServiceRequest serviceRequest, RestaurantInfo restaurantInfo,
@@ -273,9 +283,13 @@ class LineupServiceImplTest {
 		RestaurantInfo restaurantInfo = mock(RestaurantInfo.class);
 		when(internalRestaurantService._getRestaurantInfoWithRestaurantByRestaurantId(1L)).thenReturn(restaurantInfo);
 
+		ZSetOperations<String, String> zSetOperations = mock(ZSetOperations.class);
+		when(redisTemplateWithTransaction.opsForZSet()).thenReturn(zSetOperations);
+
 		lineupServiceImpl.cancelWaiting(request);
 
 		verify(restaurantInfo).subtractLineupCount();
+		verify(zSetOperations).remove(anyString(), anyString());
 	}
 
 	private void stub_getByIdWithUser(Lineup lineup) {
@@ -400,9 +414,13 @@ class LineupServiceImplTest {
 		CallCustomerInfoResponse customerInfo = mock(CallCustomerInfoResponse.class);
 		stubCustomerInfo(lineup, customerInfo);
 
+		ZSetOperations<String, String> zSetOperations = mock(ZSetOperations.class);
+		when(redisTemplateWithTransaction.opsForZSet()).thenReturn(zSetOperations);
+
 		lineupServiceImpl.updateArrivalStatus(serviceRequest);
 
 		verify(restaurantInfo).subtractLineupCount();
+		verify(zSetOperations).remove(anyString(), anyString());
 		verify(smsService).sendSms(any(MessageRequest.class));
 	}
 
@@ -431,9 +449,13 @@ class LineupServiceImplTest {
 		CallCustomerInfoResponse customerInfo = mock(CallCustomerInfoResponse.class);
 		stubCustomerInfo(lineup, customerInfo);
 
+		ZSetOperations<String, String> zSetOperations = mock(ZSetOperations.class);
+		when(redisTemplateWithTransaction.opsForZSet()).thenReturn(zSetOperations);
+
 		lineupServiceImpl.updateArrivalStatus(serviceRequest);
 
 		verify(restaurantInfo).subtractLineupCount();
+		verify(zSetOperations).remove(anyString(), anyString());
 		verify(smsService).sendSms(any(MessageRequest.class));
 	}
 
