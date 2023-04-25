@@ -18,7 +18,7 @@ public class WaitingNumberServiceImpl implements InternalWaitingNumberService {
 	private final WaitingNumberRepository waitingNumberRepository;
 
 	@Override
-	public int getWaitingNumber(Long restaurantId) {
+	public int getWaitingNumber(long restaurantId) {
 		WaitingNumber waitingNumber = waitingNumberRepository.findByRestaurantId(restaurantId)
 			.orElseThrow(() -> new NoSuchElementException(NOT_FOUND_WAITING_NUMBER.getMessage()));
 		waitingNumber.updateNextNumber();

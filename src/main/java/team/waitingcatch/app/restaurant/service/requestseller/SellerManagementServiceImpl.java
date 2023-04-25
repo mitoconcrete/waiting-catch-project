@@ -2,7 +2,6 @@ package team.waitingcatch.app.restaurant.service.requestseller;
 
 import static team.waitingcatch.app.exception.ErrorCode.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;

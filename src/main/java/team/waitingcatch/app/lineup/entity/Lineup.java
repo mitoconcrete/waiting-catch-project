@@ -116,6 +116,10 @@ public class Lineup extends TimeStamped {
 		return user.getId();
 	}
 
+	public Long getRestaurantId() {
+		return restaurant.getId();
+	}
+
 	private Lineup(StartLineupEntityRequest entityRequest) {
 		this.user = entityRequest.getUser();
 		this.restaurant = entityRequest.getRestaurant();

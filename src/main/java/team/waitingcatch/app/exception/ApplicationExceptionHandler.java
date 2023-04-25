@@ -1,6 +1,6 @@
 package team.waitingcatch.app.exception;
 
-import static team.waitingcatch.app.exception.ErrorCode.INTERNAL_ERROR;
+import static team.waitingcatch.app.exception.ErrorCode.*;
 
 import java.util.NoSuchElementException;
 

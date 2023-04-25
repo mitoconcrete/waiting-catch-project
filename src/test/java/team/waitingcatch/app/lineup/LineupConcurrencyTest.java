@@ -37,7 +37,6 @@ import team.waitingcatch.app.user.repository.UserRepository;
 
 @SpringBootTest
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
-@Transactional
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class LineupConcurrencyTest {
 	static {
@@ -66,8 +65,9 @@ public class LineupConcurrencyTest {
 
 	@Test
 	@DisplayName("더미 데이터 저장")
-	@Commit
 	@Order(1)
+	@Transactional
+	@Commit
 	void insertDummyDataBeforeConcurrentWaitingTest() {
 		List<String> searchKeywords = List.of("korean", "japan");
 
@@ -100,7 +100,6 @@ public class LineupConcurrencyTest {
 
 	@Test
 	@DisplayName("줄서기 동시성 테스트")
-	@Commit
 	@Order(2)
 	void concurrentWaiting() throws InterruptedException {
 		Long sellerId1 = userRepository.findByUsernameAndIsDeletedFalse("sellerIdA").get().getId();
@@ -147,9 +146,9 @@ public class LineupConcurrencyTest {
 		Long restaurantId1 = restaurantRepository.findByUserId(sellerId1).get().getId();
 		Long restaurantId2 = restaurantRepository.findByUserId(sellerId2).get().getId();
 
-		assertThat((int)lineupRepository.findByRestaurantId(restaurantId1).stream().distinct().count())
+		assertThat((int)lineupRepository.findAllByRestaurantId(restaurantId1).stream().distinct().count())
 			.isGreaterThan(2);
-		assertThat((int)lineupRepository.findByRestaurantId(restaurantId2).stream().distinct().count())
+		assertThat((int)lineupRepository.findAllByRestaurantId(restaurantId2).stream().distinct().count())
 			.isGreaterThan(2);
 	}
 

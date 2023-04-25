@@ -13,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import team.waitingcatch.app.common.util.image.ImageUploader;
-import team.waitingcatch.app.exception.ErrorCode;
 import team.waitingcatch.app.exception.IllegalRequestException;
 import team.waitingcatch.app.lineup.dto.CreateReviewEntityRequest;
 import team.waitingcatch.app.lineup.dto.CreateReviewServiceRequest;
