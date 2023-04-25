@@ -63,7 +63,7 @@ public class LineupServiceImpl implements LineupService, InternalLineupService {
 	private final InternalWaitingNumberService internalWaitingNumberService;
 	private final InternalBlacklistService internalBlacklistService;
 
-	private final RedisTemplate<String, String> redisTemplate;
+	private final RedisTemplate<String, String> redisTemplateWithTransaction;
 
 	private final DistanceCalculator distanceCalculator;
 	private final SmsService smsService;
@@ -125,7 +125,7 @@ public class LineupServiceImpl implements LineupService, InternalLineupService {
 		lineupRepository.save(lineup);
 		restaurantInfo.addLineupCount();
 
-		ZSetOperations<String, String> zSetOperations = redisTemplate.opsForZSet();
+		ZSetOperations<String, String> zSetOperations = redisTemplateWithTransaction.opsForZSet();
 		zSetOperations.add(String.valueOf(restaurantId), String.valueOf(userId), waitingNumber);
 	}
 
@@ -157,13 +157,13 @@ public class LineupServiceImpl implements LineupService, InternalLineupService {
 			restaurantId);
 		restaurantInfo.subtractLineupCount();
 
-		ZSetOperations<String, String> zSetOperations = redisTemplate.opsForZSet();
+		ZSetOperations<String, String> zSetOperations = redisTemplateWithTransaction.opsForZSet();
 		zSetOperations.remove(String.valueOf(restaurantId), String.valueOf(userId));
 	}
 
 	@Override
 	public long getPriority(GetLineupPriorityServiceRequest serviceRequest) {
-		ZSetOperations<String, String> zSetOperations = redisTemplate.opsForZSet();
+		ZSetOperations<String, String> zSetOperations = redisTemplateWithTransaction.opsForZSet();
 		Long rank = zSetOperations.rank(String.valueOf(serviceRequest.getRestaurantId()),
 			String.valueOf(serviceRequest.getUserId()));
 
@@ -220,22 +220,22 @@ public class LineupServiceImpl implements LineupService, InternalLineupService {
 
 		ArrivalStatusEnum updatedStatus = restaurantInCustomer.updateStatus(serviceRequest.getStatus());
 
-		long restaurantId = restaurantBySeller.getId();
-		long userId = restaurantInCustomer.getUserId();
+		String restaurantId = String.valueOf(restaurantBySeller.getId());
+		String userId = String.valueOf(restaurantInCustomer.getUserId());
 
-		ZSetOperations<String, String> zSetOperations = redisTemplate.opsForZSet();
+		ZSetOperations<String, String> zSetOperations = redisTemplateWithTransaction.opsForZSet();
 
 		if (updatedStatus == ArrivalStatusEnum.CALL) {
 			sendSms(restaurantInCustomer.getId(), updatedStatus);
 		} else if (updatedStatus == ArrivalStatusEnum.CANCEL) {
 			restaurantInfo.subtractLineupCount();
-			zSetOperations.remove(String.valueOf(restaurantId), userId);
+			zSetOperations.remove(restaurantId, userId);
 			sendSms(restaurantInCustomer.getId(), updatedStatus);
 		} else if (updatedStatus == ArrivalStatusEnum.ARRIVE) {
 			restaurantInfo.subtractLineupCount();
-			zSetOperations.remove(String.valueOf(restaurantId), userId);
+			zSetOperations.remove(restaurantId, userId);
 
-			List<Lineup> lineups = lineupRepository.findAllByUserId(userId);
+			List<Lineup> lineups = lineupRepository.findAllByUserId(Long.parseLong(userId));
 			lineups.stream()
 				.filter(lineup -> (
 					lineup.getStatus() == ArrivalStatusEnum.WAIT || lineup.getStatus() == ArrivalStatusEnum.CALL))

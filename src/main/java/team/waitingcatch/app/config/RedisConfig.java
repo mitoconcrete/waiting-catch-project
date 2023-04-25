@@ -30,6 +30,15 @@ public class RedisConfig {
 		redisTemplate.setKeySerializer(new StringRedisSerializer());
 		redisTemplate.setValueSerializer(new StringRedisSerializer());
 		redisTemplate.setConnectionFactory(redisConnectionFactory());
+		return redisTemplate;
+	}
+
+	@Bean
+	public RedisTemplate<?, ?> redisTemplateWithTransaction() {
+		RedisTemplate<?, ?> redisTemplate = new RedisTemplate<>();
+		redisTemplate.setKeySerializer(new StringRedisSerializer());
+		redisTemplate.setValueSerializer(new StringRedisSerializer());
+		redisTemplate.setConnectionFactory(redisConnectionFactory());
 		redisTemplate.setEnableTransactionSupport(true);
 		return redisTemplate;
 	}
