@@ -19,6 +19,7 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import team.waitingcatch.app.common.entity.TimeStamped;
@@ -34,6 +35,7 @@ import team.waitingcatch.app.user.entitiy.User;
 	@Index(name = "ix_lineup_restaurant_id", columnList = "restaurant_id")
 })
 @Getter
+@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Lineup extends TimeStamped {
 	@Id

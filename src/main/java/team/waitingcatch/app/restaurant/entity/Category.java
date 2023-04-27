@@ -7,6 +7,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import team.waitingcatch.app.restaurant.dto.category.CreateCategoryRequest;
@@ -14,6 +15,7 @@ import team.waitingcatch.app.restaurant.dto.category.UpdateCategoryServiceReques
 
 @Entity
 @Getter
+@EqualsAndHashCode
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Category {
 	@Id

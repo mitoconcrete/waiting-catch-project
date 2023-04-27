@@ -11,6 +11,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import team.waitingcatch.app.common.entity.TimeStamped;
@@ -22,6 +23,7 @@ import team.waitingcatch.app.restaurant.dto.menu.UpdateMenuEntityRequest;
 	@Index(name = "ix_menu_restaurant_id", columnList = "restaurant_id")
 })
 @Getter
+@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Menu extends TimeStamped {
 	@Id

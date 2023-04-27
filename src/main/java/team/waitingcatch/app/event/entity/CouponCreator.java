@@ -16,6 +16,7 @@ import javax.persistence.Table;
 import javax.persistence.Version;
 
 import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import team.waitingcatch.app.common.entity.TimeStamped;
@@ -28,6 +29,7 @@ import team.waitingcatch.app.event.enums.CouponTypeEnum;
 @Entity
 @Table
 @Getter
+@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CouponCreator extends TimeStamped {
 	@Id

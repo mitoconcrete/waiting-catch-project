@@ -13,6 +13,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import team.waitingcatch.app.common.entity.TimeStamped;
@@ -21,6 +22,7 @@ import team.waitingcatch.app.user.enums.UserRoleEnum;
 @Entity
 @SQLDelete(sql = "UPDATE user SET is_deleted = true WHERE user_id = ?")
 @Getter
+@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User extends TimeStamped {
 	@Id

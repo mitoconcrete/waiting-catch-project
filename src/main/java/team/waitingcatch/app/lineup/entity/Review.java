@@ -16,6 +16,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import team.waitingcatch.app.common.entity.TimeStamped;
@@ -28,8 +29,10 @@ import team.waitingcatch.app.user.entitiy.User;
 @Table(indexes = {
 	@Index(name = "pk_review_review_id", columnList = "review_id", unique = true),
 	@Index(name = "ix_review_user_id", columnList = "user_id"),
-	@Index(name = "ix_review_restaurant_id", columnList = "restaurant_id")})
+	@Index(name = "ix_review_restaurant_id", columnList = "restaurant_id")
+})
 @Getter
+@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Review extends TimeStamped {
 	@Id

@@ -13,6 +13,7 @@ import javax.persistence.Table;
 import javax.persistence.Version;
 
 import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import team.waitingcatch.app.restaurant.entity.Restaurant;
@@ -20,8 +21,10 @@ import team.waitingcatch.app.restaurant.entity.Restaurant;
 @Entity
 @Table(indexes = {
 	@Index(name = "pk_waiting_number_waiting_number_id", columnList = "waiting_number_id", unique = true),
-	@Index(name = "ix_waiting_number_restaurant_id", columnList = "restaurant_id", unique = true)})
+	@Index(name = "ix_waiting_number_restaurant_id", columnList = "restaurant_id", unique = true)
+})
 @Getter
+@EqualsAndHashCode
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class WaitingNumber {
 	@Id

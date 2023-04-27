@@ -13,6 +13,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import team.waitingcatch.app.common.Position;
@@ -21,9 +22,10 @@ import team.waitingcatch.app.common.util.StringListConverter;
 import team.waitingcatch.app.restaurant.dto.requestseller.DemandSignUpSellerServiceRequest;
 import team.waitingcatch.app.restaurant.enums.AcceptedStatusEnum;
 
-@Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
+@Getter
+@EqualsAndHashCode(callSuper = true)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class SellerManagement extends TimeStamped {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

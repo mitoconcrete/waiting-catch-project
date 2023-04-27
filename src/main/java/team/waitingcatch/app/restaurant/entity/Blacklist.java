@@ -14,6 +14,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import team.waitingcatch.app.common.entity.TimeStamped;
@@ -27,6 +28,7 @@ import team.waitingcatch.app.user.entitiy.User;
 	@Index(name = "ix_blacklist_user_id", columnList = "user_id")
 })
 @Getter
+@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Blacklist extends TimeStamped {
 	@Id
