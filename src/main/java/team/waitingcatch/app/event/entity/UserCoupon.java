@@ -10,14 +10,17 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import team.waitingcatch.app.common.entity.TimeStamped;
 import team.waitingcatch.app.user.entitiy.User;
 
 @Entity
 @Getter
+@EqualsAndHashCode(of = "id", callSuper = false)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class UserCoupon {
+public class UserCoupon extends TimeStamped {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "user_coupon_id")
@@ -42,5 +45,4 @@ public class UserCoupon {
 	public void useCoupon() {
 		this.isUsed = true;
 	}
-
 }

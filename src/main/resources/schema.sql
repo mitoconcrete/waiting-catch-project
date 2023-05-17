@@ -238,10 +238,12 @@ create table user
 
 create table user_coupon
 (
-    user_coupon_id    bigint not null auto_increment,
-    coupon_creator_id bigint not null,
-    user_id           bigint not null,
-    is_used           bit(1) not null,
+    user_coupon_id    bigint      not null auto_increment,
+    coupon_creator_id bigint      not null,
+    user_id           bigint      not null,
+    is_used           bit(1)      not null,
+    created_date      datetime(6) not null,
+    modified_date     datetime(6) not null,
     primary key (user_coupon_id)
 ) engine = InnoDB
   DEFAULT CHARSET = utf8mb4
