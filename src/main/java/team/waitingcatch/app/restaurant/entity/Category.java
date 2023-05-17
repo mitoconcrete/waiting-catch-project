@@ -15,7 +15,7 @@ import team.waitingcatch.app.restaurant.dto.category.UpdateCategoryServiceReques
 
 @Entity
 @Getter
-@EqualsAndHashCode
+@EqualsAndHashCode(of = "id")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Category {
 	@Id

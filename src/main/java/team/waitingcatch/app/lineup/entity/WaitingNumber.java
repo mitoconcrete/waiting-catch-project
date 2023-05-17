@@ -24,7 +24,7 @@ import team.waitingcatch.app.restaurant.entity.Restaurant;
 	@Index(name = "ix_waiting_number_restaurant_id", columnList = "restaurant_id", unique = true)
 })
 @Getter
-@EqualsAndHashCode
+@EqualsAndHashCode(of = "id")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class WaitingNumber {
 	@Id

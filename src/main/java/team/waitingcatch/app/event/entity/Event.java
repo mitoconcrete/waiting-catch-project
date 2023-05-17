@@ -24,7 +24,7 @@ import team.waitingcatch.app.restaurant.entity.Restaurant;
 
 @Entity
 @Getter
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(of = "id", callSuper = false)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Event extends TimeStamped {
 	@Id

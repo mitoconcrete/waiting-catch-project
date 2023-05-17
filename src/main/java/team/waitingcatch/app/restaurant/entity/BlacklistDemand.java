@@ -30,7 +30,7 @@ import team.waitingcatch.app.user.entitiy.User;
 	@Index(name = "ix_blacklist_demand_user_id", columnList = "user_id")
 })
 @Getter
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(of = "id", callSuper = false)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class BlacklistDemand extends TimeStamped {
 	@Id

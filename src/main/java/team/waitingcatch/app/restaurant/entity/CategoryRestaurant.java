@@ -22,7 +22,7 @@ import lombok.NoArgsConstructor;
 	@Index(name = "ix_category_restaurant_restaurant_id", columnList = "restaurant_id")
 })
 @Getter
-@EqualsAndHashCode
+@EqualsAndHashCode(of = "id")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CategoryRestaurant {
 	@Id

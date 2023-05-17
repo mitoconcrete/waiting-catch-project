@@ -29,7 +29,7 @@ import team.waitingcatch.app.event.enums.CouponTypeEnum;
 @Entity
 @Table
 @Getter
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(of = "id", callSuper = false)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CouponCreator extends TimeStamped {
 	@Id

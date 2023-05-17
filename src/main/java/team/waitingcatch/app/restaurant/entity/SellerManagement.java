@@ -24,7 +24,7 @@ import team.waitingcatch.app.restaurant.enums.AcceptedStatusEnum;
 
 @Entity
 @Getter
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(of = "id", callSuper = false)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class SellerManagement extends TimeStamped {
 	@Id

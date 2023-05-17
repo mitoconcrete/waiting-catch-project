@@ -13,7 +13,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import lombok.AccessLevel;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import team.waitingcatch.app.common.entity.TimeStamped;
@@ -22,7 +21,6 @@ import team.waitingcatch.app.user.enums.UserRoleEnum;
 @Entity
 @SQLDelete(sql = "UPDATE user SET is_deleted = true WHERE user_id = ?")
 @Getter
-@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User extends TimeStamped {
 	@Id
@@ -103,5 +101,32 @@ public class User extends TimeStamped {
 	public boolean isPasswordMatch(String password) {
 		PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 		return passwordEncoder.matches(password, this.password);
+	}
+
+	public boolean equals(final Object o) {
+		if (o == this)
+			return true;
+		if (!(o instanceof User))
+			return false;
+		final User other = (User)o;
+		if (!other.canEqual((Object)this))
+			return false;
+		final Object this$id = this.getId();
+		final Object other$id = other.getId();
+		if (this$id == null ? other$id != null : !this$id.equals(other$id))
+			return false;
+		return true;
+	}
+
+	protected boolean canEqual(final Object other) {
+		return other instanceof User;
+	}
+
+	public int hashCode() {
+		final int PRIME = 59;
+		int result = 1;
+		final Object $id = this.getId();
+		result = result * PRIME + ($id == null ? 43 : $id.hashCode());
+		return result;
 	}
 }

@@ -19,7 +19,7 @@ import team.waitingcatch.app.restaurant.dto.restaurant.UpdateRestaurantWithoutIm
 
 @Entity
 @Getter
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(of = "id", callSuper = false)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class RestaurantInfo extends TimeStamped {
 	@Id

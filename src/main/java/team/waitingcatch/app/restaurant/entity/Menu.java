@@ -23,7 +23,7 @@ import team.waitingcatch.app.restaurant.dto.menu.UpdateMenuEntityRequest;
 	@Index(name = "ix_menu_restaurant_id", columnList = "restaurant_id")
 })
 @Getter
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(of = "id", callSuper = false)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Menu extends TimeStamped {
 	@Id

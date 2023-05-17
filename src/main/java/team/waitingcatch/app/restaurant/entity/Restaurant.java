@@ -30,7 +30,7 @@ import team.waitingcatch.app.user.entitiy.User;
 
 @Entity
 @Getter
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(of = "id", callSuper = false)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Restaurant extends TimeStamped {
 	@Id

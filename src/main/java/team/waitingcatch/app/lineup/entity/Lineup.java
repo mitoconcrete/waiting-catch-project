@@ -35,7 +35,7 @@ import team.waitingcatch.app.user.entitiy.User;
 	@Index(name = "ix_lineup_restaurant_id", columnList = "restaurant_id")
 })
 @Getter
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(of = "id", callSuper = false)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Lineup extends TimeStamped {
 	@Id

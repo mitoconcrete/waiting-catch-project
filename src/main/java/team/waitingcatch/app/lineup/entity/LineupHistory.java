@@ -31,7 +31,7 @@ import team.waitingcatch.app.user.entitiy.User;
 	@Index(name = "ix_lineup_history_user_id_restaurant_id", columnList = "user_id, restaurant_id")
 })
 @Getter
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(of = "id", callSuper = false)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class LineupHistory extends TimeStamped {
 	@Id
