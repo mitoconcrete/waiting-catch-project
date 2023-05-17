@@ -3,11 +3,13 @@ package team.waitingcatch.app.common;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Embeddable
 @Getter
+@EqualsAndHashCode
 @NoArgsConstructor
 public class Position {
 	@Column(nullable = false)
