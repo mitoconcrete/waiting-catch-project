@@ -3,7 +3,7 @@
 </h1>
 <p align="center">
 "This is a website that calls up restaurants in the area set by the user to stand in line, and conveniently provides related services."<br> To focus on the backend logic, the screen was designed and designed to be as simple as possible, and REST It was developed as an application considering high-capacity traffic as an API server.</p>
-<div> Domain Address : https://waitingcatch.com/</div>
+<div> Domain Address : https://waitingcatch.shop/</div>
 <div> Demonstration video : https://youtu.be/uOpzesWwNm8</div>
 <div> Power point for presentation : https://www.canva.com/design/DAFbYAA8FFQ/iGdTpqngDDxry0dIod3ujw/view?utm_content=DAFbYAA8FFQ&utm_campaign=designshare&utm_medium=link&utm_source=publishsharelink
 <br>
