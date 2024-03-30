@@ -3,9 +3,9 @@
 </h1>
 <p align="center">
 "사용자가 설정한 지역의 레스토랑을 불러와 줄서기를 대신해주고, 그것과 관련된 서비스를 편리하게를 대신 해주는 웹사이트 입니다."<br> 백엔드 로직에 집중하기 위해서 화면은 최대한 간결하게 만들고 설계하였으며 REST API 서버로 대용량 트래픽을 고려한 애플리케이션으로 개발하였습니다. </p>
-<div> 도메인주소 : https://app.waiting-catch.com/</div>
-<div> 시연 비디오 : https://youtu.be/uOpzesWwNm8</div>
-<div> 프레젠테이션자료 : https://www.canva.com/design/DAFbYAA8FFQ/iGdTpqngDDxry0dIod3ujw/view?utm_content=DAFbYAA8FFQ&utm_campaign=designshare&utm_medium=link&utm_source=publishsharelink
+<div> ![서비스 주소](https://app.waiting-catch.com)</div>
+<div> ![시연 비디오](https://youtu.be/uOpzesWwNm8)</div>
+<div> ![프레젠테이션자료](https://www.canva.com/design/DAFbYAA8FFQ/iGdTpqngDDxry0dIod3ujw/view?utm_content=DAFbYAA8FFQ&utm_campaign=designshare&utm_medium=link&utm_source=publishsharelink)
 <br>
 
 ## :rocket: Tech Stack <br>
